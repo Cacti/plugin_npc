@@ -1,0 +1,118 @@
+#msg-div {
+position:absolute;
+left:35%;
+top:10px;
+width:350px;
+z-index:20000;
+}
+
+.configuration {
+background-image:url(../images/icons/cog_go.png);
+}
+
+.reporting {
+background-image:url(../images/icons/report_go.png);
+}
+
+.monitoring {
+background-image:url(../images/icons/application_go.png);
+}
+
+.layout {
+background-image:url(../images/icons/layout.png);
+}
+
+.layoutEdit {
+background-image:url(../images/icons/layout_edit.png);
+}
+
+#navcontainer ul
+{
+list-style-type: none;
+text-align: left;
+}
+
+#navcontainer ul li a
+{
+background: transparent url(../images/list-off.gif) left center no-repeat;
+padding-left: 15px;
+text-align: left;
+font: normal 11px "Lucida Grande", "Lucida Sans Unicode", verdana, lucida, sans-serif;
+text-decoration: none;
+color: #999;
+}
+
+#navcontainer ul li a:hover
+{
+background: transparent url(../images/list-on.gif) left center no-repeat;
+color: black;
+}
+
+#navcontainer ul li a#current
+{
+background: transparent url(../images/list-active.gif) left center no-repeat;
+color: #666;
+}
+
+.x-portal .x-panel-dd-spacer {
+    margin-bottom:10px;
+}
+
+.x-portlet {
+    margin-bottom:10px;
+}
+
+/* Clean up the look of the portlets */
+.x-portlet .x-panel-ml {
+    padding-left:2px;
+}
+.x-portlet .x-panel-mr {
+    padding-right:2px;
+}
+.x-portlet .x-panel-bl {
+    padding-left:2px;
+}
+
+.x-portlet .x-panel-br {
+    padding-right:2px;
+}
+.x-portlet .x-panel-body {
+    background:white;
+}
+.x-portlet .x-panel-mc {
+    padding-top:2px;
+}
+.x-portlet .x-panel-bc .x-panel-footer {
+    padding-bottom:2px;
+}
+.x-portlet .x-panel-nofooter .x-panel-bc {
+    height:2px;
+}
+
+.x-grid3-cell-inner, .x-grid3-hd-inner{
+    overflow:hidden;
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    padding:3px 3px 3px 5px;
+    white-space: normal;
+}
+
+.statusPENDING { background-color: #ACACAC; }
+.statusOK { background-color: #33FF00; }
+.statusRECOVERY { background-color: #33FF00; }
+.statusUNKNOWN { background-color: #FF9900; }
+.statusWARNING { background-color: #FFFF00; }
+.statusCRITICAL { background-color: #F83838; }
+
+.serviceTotalsOk { background-color: #33FF00; }
+.serviceTotalsWarning { background-color: #FFFF00;  font-weight: bold; }
+.serviceTotalsUnknown { background-color: #FF9900;  font-weight: bold; }
+.serviceTotalsCritical { background-color: #F83838;  font-weight: bold; }
+.serviceTotalsPending { background-color: #0099FF; }
+.serviceTotalsProblems { background-color: orange;  font-weight: bold; }
+
+.hostTotalsUp { background-color: #33FF00; }
+.hostTotalsDown { background-color: #F83838; }
+.hostTotalsUnreachable { background-color: #F83838; }
+.hostTotalsPending { background-color: #0099FF; }
+
