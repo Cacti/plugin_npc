@@ -67,7 +67,7 @@ npc.app = function() {
                 '<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc"><h3>', t, '</h3>', s, '</div></div></div>',
                 '<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
                 '</div>'].join('');
-    }
+    };
 
     function services() {
         alert('SERVICES!!!');
@@ -146,15 +146,6 @@ npc.app = function() {
             Ext.getCmp('centerTabPanel').doLayout();
         },
 
-        togglePortlet : function(id) {
-            var portlet = Ext.getCmp(id);
-            if(portlet.hidden) {
-                portlet.show();
-            } else {
-                portlet.hide();
-            }
-        },
-
         init: function() {
     
             var viewport = new Ext.Viewport({
@@ -207,7 +198,7 @@ npc.app = function() {
                             items:[{
                                 id:'dashcol1',
                                 columnWidth:.33,
-                                style:'padding:10px 0 10px 10px',
+                                style:'padding:10px 0 10px 10px'
                             },{
                                 id:'dashcol2',
                                 columnWidth:.66,
@@ -222,25 +213,97 @@ npc.app = function() {
             // Add the portlets button to the dashboard toolbar:
             Ext.getCmp('dashboard').getTopToolbar().add('->', {
                 text: 'Portlets',
-                handler: function(){
-                    var win = new Ext.Window({
-                        title: 'Portlets',
-                        layout:'fit',
-                        width:400,
-                        height:300,
-                        modal: true,
-                        closable: true,
-                        collapsible: false,
-                        items: new Ext.FormPanel({
-                            labelWidth: 75,
-                            frame:true,
-                            bodyStyle:'padding:5px 5px 0',
-                            autoWidth:true,
-                            autoHeight:true,
-                            defaultType: 'textfield'
-                        })
+                handler: function() {
+
+                    var eventLog = Ext.getCmp('eventlog-portlet');
+                    var evetLogChecked = eventLog.isVisible();
+
+                    var hostSummary = Ext.getCmp('host-status-summary')
+                    var hostSummaryChecked = hostSummary.isVisible();
+
+                    var serviceSummary = Ext.getCmp('service-status-summary');
+                    var serviceSummaryChecked = serviceSummary.isVisible();
+
+                    var serviceProblems = Ext.getCmp('service-problems-portlet');
+                    var serviceProblemsChecked = serviceProblems.isVisible();
+
+                    var form = new Ext.form.FormPanel({
+                        title: 'Show/hide portlets',
+                        bodyStyle:'padding:5px 5px 0',
+                        layout: 'form',
+                        frame:true,
+                        xtype:'fieldset',
+                        items: [{
+                            boxLabel: 'Event Log',
+                            hideLabel: true,
+                            xtype:'checkbox',
+                            checked: evetLogChecked,
+                            listeners: {
+                                check: function(cb, checked) {
+                                    if (checked) {
+                                        eventLog.show();
+                                    } else {
+                                        eventLog.hide();
+                                    }
+                                }
+                            }
+                        },{
+                            boxLabel: 'Host Status Summary',
+                            hideLabel: true,
+                            xtype:'checkbox',
+                            checked: hostSummaryChecked,
+                            listeners: {
+                                check: function(cb, checked) {
+                                    if (checked) {
+                                        hostSummary.show();
+                                    } else {
+                                        hostSummary.hide();
+                                    }
+                                }
+                            }
+                        },{
+                            boxLabel: 'Service Status Summary',
+                            hideLabel: true,
+                            xtype:'checkbox',
+                            checked: serviceSummaryChecked,
+                            listeners: {
+                                check: function(cb, checked) {
+                                    if (checked) {
+                                        serviceSummary.show();
+                                    } else {
+                                        serviceSummary.hide();
+                                    }
+                                }
+                            }
+                        },{
+                            boxLabel: 'Service Problems',
+                            hideLabel: true,
+                            xtype:'checkbox',
+                            checked: serviceProblemsChecked,
+                            listeners: {
+                                check: function(cb, checked) {
+                                    if (checked) {
+                                        serviceProblems.show();
+                                    } else {
+                                        serviceProblems.hide();
+                                    }
+                                }
+                            }
+                        }]
                     });
-                    win.show(this);
+
+                    var window = new Ext.Window({
+                        title:'Portlets',
+                        modal:true,
+                        closable: true,
+                        width:300,
+                        height:200,
+                        layout:'fit',
+                        plain:true,
+                        bodyStyle:'padding:5px;',
+                        items:form
+                    });
+                    window.show();
                 }
             });
 

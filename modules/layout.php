@@ -95,7 +95,7 @@ class NPC_layout {
             </div>
 
             <div id="west-config">
-                <a href="#" onclick="npc.app.togglePortlet('host-status-summary');return false;">Toggle</a><br />
+                Foo
             </div>
 
           </div>

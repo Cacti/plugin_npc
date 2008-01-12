@@ -99,7 +99,7 @@ Ext.onReady(function(){
         },
         show: function() {
             store.startAutoRefresh(refresh);
-        },
+        }
     };
 
     Ext.getCmp(id).addListener(listeners);

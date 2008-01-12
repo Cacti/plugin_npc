@@ -37,7 +37,7 @@ Ext.onReady(function(){
         sortInfo:{field: 'service_description', direction: "ASC"},
         reader: new Ext.data.JsonReader({
             totalProperty:'totalCount',
-            root:'data',
+            root:'data'
         }, [
             'host_object_id',
             'host_name',
@@ -52,7 +52,6 @@ Ext.onReady(function(){
     var cm = new Ext.grid.ColumnModel([{
         header:"Service",
         dataIndex:'service_description',
-        //sortable:true,
         width:100
     },{
         header:"Status",
