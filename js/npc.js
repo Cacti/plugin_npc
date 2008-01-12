@@ -1,0 +1,249 @@
+// reference local blank image
+Ext.BLANK_IMAGE_URL = 'js/ext/resources/images/default/s.gif';
+ 
+// create namespace
+Ext.namespace('npc');
+ 
+// create application
+npc.app = function() {
+
+    /* Private Variables */
+	
+    var viewport;
+    var msgCt;
+
+    // create some portlet tools using built in Ext tool ids
+    var tools = [{
+        id:'gear',
+        handler: function(){
+            Ext.Msg.alert('Message', 'The Settings tool was clicked.');
+        }
+    },{
+        id:'close',
+        handler: function(e, target, panel){
+            panel.hide();
+        }
+    }];
+
+    /* Private Functions */
+
+    // Override Ext.data.Store to add an auto refresh option
+    Ext.override(Ext.data.Store, {
+        startAutoRefresh : function(interval, params, callback, refreshNow){
+            if(refreshNow){
+                this.reload({callback:callback});
+            }
+            if(this.autoRefreshProcId){
+                clearInterval(this.autoRefreshProcId);
+            }
+            this.autoRefreshProcId = setInterval(this.reload.createDelegate(this, [{callback:callback}]), interval*1000);
+        },
+        stopAutoRefresh : function(){
+            if(this.autoRefreshProcId){
+                clearInterval(this.autoRefreshProcId);
+            }
+        }        
+    });
+
+    Ext.ux.IFrameComponent = Ext.extend(Ext.BoxComponent, {
+        onRender : function(ct, position){
+            this.el = ct.createChild({tag: 'iframe', id: 'iframe-'+ this.id, frameBorder: 0, src: this.url});
+        }
+    });
+
+
+    /** 
+     * createBox returns a formatted box for displaying
+     * messages to the end user.
+     * 
+     * @private
+     * @param (String)  t   The title 
+     * @param (String)  s   The message 
+     * @return 
+     */
+    function createBox(t, s) {
+        return ['<div class="msg">',
+                '<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>',
+                '<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc"><h3>', t, '</h3>', s, '</div></div></div>',
+                '<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
+                '</div>'].join('');
+    }
+
+    function services() {
+        alert('SERVICES!!!');
+    };
+
+
+    /* Public Space */
+    return {
+
+        // public properties, e.g. strings to translate
+
+        // public methods
+
+        toggleRegion : function(region, link){
+            var r = Ext.getCmp(region);
+            if (r.isVisible()) {
+                r.collapse();
+            } else {
+                r.expand();
+            }
+        },
+
+        msg : function(title, format){
+            if(!msgCt){
+                msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
+            }
+            msgCt.alignTo(document, 't-t');
+            var s = String.format.apply(String, Array.prototype.slice.call(arguments, 1));
+            var m = Ext.DomHelper.append(msgCt, {html:createBox(title, s)}, true);
+            m.slideIn('t').pause(5).ghost("t", {remove:true});
+        },
+
+        addTabExt : function(title, url) {
+            if(!Ext.getCmp(title + '-tab')) {
+                var tabPanel = Ext.getCmp('centerTabPanel');
+                tabPanel.add({
+                    title: title + '-tab',
+                    closable: true,
+                    scripts: true,
+                    items: [ new Ext.ux.IFrameComponent({ url: url }) ]
+                }).show();
+                tabPanel.doLayout();
+            }
+        },
+
+        addTab : function(title, id) {
+            var tab = Ext.getCmp(id);
+            var tabPanel = Ext.getCmp('centerTabPanel');
+            if(!tab) {
+                tabPanel.add({
+                    id: id,
+                    title: title,
+                    closable: true,
+                    items: [{}]
+                }).show();
+                tabPanel.doLayout();
+            }
+            tabPanel.setActiveTab(tab);
+        },
+
+        addPortlet : function(id, title, column) {
+            if(!Ext.getCmp('portlet1')) {
+                panel = new Ext.ux.Portlet({
+                    id: id,
+                    title: title,
+                    layout:'fit',
+                    stateEvents: ["move","drop","hide","show","collapse","expand","columnmove","columnresize","sortchange"],
+                    stateful:true,
+                    getState: function(){
+                        return {collapsed:this.collapsed, hidden:this.hidden};
+                    },
+                    tools: tools
+                });
+            }
+            Ext.getCmp(column).items.add( panel );
+            Ext.getCmp('centerTabPanel').doLayout();
+        },
+
+        togglePortlet : function(id) {
+            var portlet = Ext.getCmp(id);
+            if(portlet.hidden) {
+                portlet.show();
+            } else {
+                portlet.hide();
+            }
+        },
+
+        init: function() {
+    
+            var viewport = new Ext.Viewport({
+                layout:'border',
+                items:[{
+                        region:'west',
+                        id:'west-panel',
+                        split:true,
+                        width: 160,
+                        minSize: 160,
+                        maxSize: 300,
+                        collapsible: true,
+                        margins:'0 0 0 5',
+                        layout:'accordion',
+                        layoutConfig:{
+                            animate:true
+                        },
+                        items: [{
+                            title:'Monitoring',
+                            contentEl: 'west-monitoring',
+                            border:false,
+                            iconCls:'monitoring'
+                        },{
+                            title:'Reporting',
+                            html:'<p>Some settings in here.</p>',
+                            border:false,
+                            iconCls:'reporting'
+                        },{
+                            title:'Configuration',
+                            contentEl: 'west-config',
+                            border:false,
+                            iconCls:'configuration'
+                        }]
+                    },
+                    new Ext.TabPanel({
+                        region:'center',
+                        id: 'centerTabPanel',
+                        enableTabScroll:true,
+                        autowidth:true,
+                        deferredRender: false,
+                        activeTab: 0,
+                        items:[{
+                            id:'dashboard',
+                            title:'Dashboard',
+                            iconCls:'layout',
+                            autoScroll: true,
+                            xtype:'portal',
+                            margins:'35 5 5 0',
+                            tbar: [],
+                            items:[{
+                                id:'dashcol1',
+                                columnWidth:.33,
+                                style:'padding:10px 0 10px 10px',
+                            },{
+                                id:'dashcol2',
+                                columnWidth:.66,
+                                style:'padding:10px 0 10px 10px'
+                            }]
+                        }]
+
+                    })
+                ]
+            }); // End viewport
+
+            // Add the portlets button to the dashboard toolbar:
+            Ext.getCmp('dashboard').getTopToolbar().add('->', {
+                text: 'Portlets',
+                handler: function(){
+                    var win = new Ext.Window({
+                        title: 'Portlets',
+                        layout:'fit',
+                        width:400,
+                        height:300,
+                        modal: true,
+                        closable: true,
+                        collapsible: false,
+                        items: new Ext.FormPanel({
+                            labelWidth: 75,
+                            frame:true,
+                            bodyStyle:'padding:5px 5px 0',
+                            autoWidth:true,
+                            autoHeight:true,
+                            defaultType: 'textfield'
+                        })
+                    });
+                    win.show(this);
+                }
+            });
+
+        } // End init
+    };
+}();
