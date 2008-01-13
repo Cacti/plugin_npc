@@ -7,7 +7,7 @@ Ext.onReady(function(){
     var id = 'service-problems-portlet';
 
     // Portlet URL
-    var url = 'npc.php?module=services&action=listServices&state=not_ok&portlet=1';
+    var url = 'npc.php?module=services&action=getServices&state=not_ok&portlet=1';
 
     // Default column
     var column = 'dashcol2';
@@ -34,7 +34,6 @@ Ext.onReady(function(){
     var store = new Ext.data.GroupingStore({
         url:url,
         autoload:true,
-        sortInfo:{field: 'service_description', direction: "ASC"},
         reader: new Ext.data.JsonReader({
             totalProperty:'totalCount',
             root:'data'
@@ -60,8 +59,7 @@ Ext.onReady(function(){
         width:45
     },{
         header:"Host",
-        dataIndex:'host_name',
-        hidden: true
+        dataIndex:'host_name'
     },{
         header:"Plugin Output",
         dataIndex:'output',
@@ -89,8 +87,7 @@ Ext.onReady(function(){
             pageSize: pageSize,
             store: store,
             displayInfo: true,
-            displayMsg: 'Displaying events {0} - {1} of {2}',
-            emptyMsg: "No events to display"
+            displayMsg: ''
         })
     });
 

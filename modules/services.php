@@ -2,6 +2,8 @@
 
 class NPC_services {
 
+    private $rowCount;
+
     /**
      * getHostSummary
      * 
@@ -11,7 +13,7 @@ class NPC_services {
      */
     function getServiceSummary() {
 
-        $results = $this->getServiceStatus();
+        $results = $this->serviceStatus();
 
         $status = array('critical' => 0,
                         'warning'  => 0,
@@ -53,7 +55,7 @@ class NPC_services {
      *
      * @return array  Service list
      */
-    function listServices($params = array()) {
+    function getServices($params = array()) {
 
         $output = array();
 
@@ -122,32 +124,57 @@ class NPC_services {
         }
 
 
-        $results = $this->getServiceStatus($start, $limit);
+        $results = $this->serviceStatus($start, $limit, null, $state);
 
         $x = 0;
         for ($i=0; $i < count($results); $i++) {
             foreach ($results[$i] as $key => $value) {
-                if (in_array($results[$i]['current_state'], $state)) {
-                    if(in_array($key, $columns )) {
-                        if ($key == 'last_check' || $key == 'next_check' || $key == 'last_state_change') {
-                            $value = strtotime($value);
-                        }
-                        $output[$x][$key] = $value;
-                    } 
-                }
+                if (in_array($key, $columns )) {
+                    if ($key == 'last_check' || $key == 'next_check' || $key == 'last_state_change') {
+                        $value = strtotime($value);
+                    }
+                    $output[$x][$key] = $value;
+                } 
             }
-            if(isset($output[$x])) { $x++; }
+            if (isset($output[$x])) { $x++; }
         }
 
-        return(array(count($output), $output));
+        return(array($this->rowCount, $output));
     }
 
-    function showService() {
+    function getServiceDetail() {
 
     }
 
-    function getServiceStatus($start=null, $limit=null, $service_id=null) {
+    function servicePerfData($service_id=null) {
 
+        $sql = "
+            SELECT 
+                ROUND(MIN(sc.execution_time), 3) AS min_execution, 
+                ROUND(MAX(sc.execution_time), 3) AS max_execution, 
+                ROUND(AVG(sc.execution_time), 3) AS avg_execution, 
+                ROUND(MIN(sc.latency), 3) AS min_latency, 
+                ROUND(MAX(sc.latency), 3) AS max_latency, 
+                ROUND(AVG(sc.latency), 3) AS avg_latency
+            FROM 
+                npc_servicechecks sc, 
+                npc_services s, 
+                npc_objects o 
+            WHERE 
+                sc.service_object_id = o.object_id 
+                AND o.is_active = 1 
+                AND sc.service_object_id = s.service_object_id 
+                AND s.active_checks_enabled = 1
+        ";
+
+        if ($service_id) {
+            $sql .= " AND s.service_id = $service_id";
+        }
+
+        return(db_fetch_assoc($sql));
+    }
+
+    function serviceStatus($start=null, $limit=null, $service_id=null, $state=array()) {
 
         $sql = "
             SELECT 
@@ -174,9 +201,17 @@ class NPC_services {
             $where .= " AND npc_services.service_id = $service_id";
         }
 
+        if (isset($state[0])) {
+            $where .= " AND npc_servicestatus.current_state in (";
+            foreach ($state as $val) {
+                $in .= $val . ',';
+            }
+            $where .= substr($in, 0, -1) . ')';
+        }
+                
         $sql = $sql . $where . " ORDER BY instance_name ASC, host_name ASC, service_description ASC ";
 
-        $count = count(db_fetch_assoc($sql));
+        $this->rowCount = count(db_fetch_assoc($sql));
 
         if ($start && $limit) {
             $sql = $sql . " LIMIT $start,$limit";

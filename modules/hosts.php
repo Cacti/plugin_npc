@@ -2,6 +2,8 @@
 
 class NPC_hosts {
 
+    private $rowCount;
+
     /**
      * getHostSummary
      * 
@@ -11,7 +13,7 @@ class NPC_hosts {
      */
     function getHostSummary() {
 
-        $results = $this->getHostStatus();
+        $results = $this->hostStatus();
 
         $status = array('down' => 0, 
                         'unreachable' => 0,
@@ -41,7 +43,35 @@ class NPC_hosts {
         return(array(1, array($status)));
     }
 
-    function getHostStatus($params = array()) {
+    function hostPerfData($service_id=null) {
+
+        $sql = "
+            SELECT 
+                ROUND(MIN(hc.execution_time), 3) AS min_execution, 
+                ROUND(MAX(hc.execution_time), 3) AS max_execution, 
+                ROUND(AVG(hc.execution_time), 3) AS avg_execution, 
+                ROUND(MIN(hc.latency), 3) AS min_latency, 
+                ROUND(MAX(hc.latency), 3) AS max_latency, 
+                ROUND(AVG(hc.latency), 3) AS avg_latency
+            FROM 
+                npc_hostchecks hc, 
+                npc_hosts h, 
+                npc_objects o 
+            WHERE 
+                hc.host_object_id = o.object_id 
+                AND o.is_active = 1 
+                AND hc.host_object_id = h.host_object_id 
+                AND h.active_checks_enabled = 1
+        ";
+
+        if ($host_id) {
+            $sql .= " AND h.host_id = $host_id";
+        }
+
+        return(db_fetch_assoc($sql));
+    }
+
+    function hostStatus($params = array()) {
 
         $sql = "
             SELECT 

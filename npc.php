@@ -39,13 +39,13 @@ if ($module == 'layout') {
     $obj->$action($params);
 } else {
 
-    list($count, $results) = $obj->$action($params);
+    list ($count, $results) = $obj->$action($params);
 
-    if (!is_array($results)) {
+    if (!is_array($results[0])) {
         $results = array($results);
     }
 
-    if(!isset($count)) {
+    if (!isset($count)) {
         $count = 1;
     }
 

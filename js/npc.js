@@ -4,7 +4,7 @@ Ext.BLANK_IMAGE_URL = 'js/ext/resources/images/default/s.gif';
 // create namespace
 Ext.namespace('npc');
  
-// create application
+// create application module
 npc.app = function() {
 
     /* Private Variables */
@@ -81,7 +81,7 @@ npc.app = function() {
 
         // public methods
 
-        toggleRegion : function(region, link){
+        toggleRegion: function(region, link){
             var r = Ext.getCmp(region);
             if (r.isVisible()) {
                 r.collapse();
@@ -90,7 +90,7 @@ npc.app = function() {
             }
         },
 
-        msg : function(title, format){
+        msg: function(title, format){
             if(!msgCt){
                 msgCt = Ext.DomHelper.insertFirst(document.body, {id:'msg-div'}, true);
             }
@@ -100,7 +100,7 @@ npc.app = function() {
             m.slideIn('t').pause(5).ghost("t", {remove:true});
         },
 
-        addTabExt : function(title, url) {
+        addTabExt: function(title, url) {
             if(!Ext.getCmp(title + '-tab')) {
                 var tabPanel = Ext.getCmp('centerTabPanel');
                 tabPanel.add({
@@ -113,7 +113,7 @@ npc.app = function() {
             }
         },
 
-        addTab : function(title, id) {
+        addTab: function(title, id) {
             var tab = Ext.getCmp(id);
             var tabPanel = Ext.getCmp('centerTabPanel');
             if(!tab) {
@@ -128,7 +128,7 @@ npc.app = function() {
             tabPanel.setActiveTab(tab);
         },
 
-        addPortlet : function(id, title, column) {
+        addPortlet: function(id, title, column) {
             if(!Ext.getCmp('portlet1')) {
                 panel = new Ext.ux.Portlet({
                     id: id,
@@ -174,7 +174,7 @@ npc.app = function() {
                             border:false,
                             iconCls:'reporting'
                         },{
-                            title:'Configuration',
+                            title:'N2Cacti',
                             contentEl: 'west-config',
                             border:false,
                             iconCls:'configuration'
@@ -197,11 +197,11 @@ npc.app = function() {
                             tbar: [],
                             items:[{
                                 id:'dashcol1',
-                                columnWidth:.33,
+                                columnWidth:.50,
                                 style:'padding:10px 0 10px 10px'
                             },{
                                 id:'dashcol2',
-                                columnWidth:.66,
+                                columnWidth:.50,
                                 style:'padding:10px 0 10px 10px'
                             }]
                         }]

@@ -4,7 +4,7 @@ npc.app.showServices = function(title, filter){
     var id = title.replace(/[-' ']/g,'') + '-tab';
 
     // Grid URL
-    var url = 'npc.php?module=services&action=listServices&state=' + filter;
+    var url = 'npc.php?module=services&action=getServices&state=' + filter;
 
     // Default # of rows to display
     var pageSize = 30;
@@ -139,14 +139,11 @@ npc.app.showServices = function(title, filter){
             enableGroupingMenu: false,
             enableNoGroups: true,
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Services" : "Service"]})' 
-            //scrollOffset:0
         }),
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,
             store: store,
-            displayInfo: true,
-            displayMsg: 'Displaying events {0} - {1} of {2}',
-            emptyMsg: "No events to display"
+            displayInfo: true
         })
     });
 

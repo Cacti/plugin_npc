@@ -90,8 +90,7 @@ Ext.onReady(function(){
             pageSize: 10,
             store: store,
             displayInfo: true,
-            displayMsg: 'Displaying events {0} - {1} of {2}',
-            emptyMsg: "No events to display"
+            displayMsg: ''
         })
     });
 
