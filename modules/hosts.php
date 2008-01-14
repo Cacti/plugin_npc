@@ -2,6 +2,13 @@
 
 class NPC_hosts {
 
+    var $id = null;
+
+    private $currentState = array('0' => 'up',
+                                  '1' => 'down',
+                                  '2' => 'unreachable',
+                                  '-1' => 'pending');
+
     private $rowCount;
 
     /**
@@ -21,29 +28,13 @@ class NPC_hosts {
                         'pending' => 0);
 
         for($i = 0; $i < count($results); $i++) {
-            switch($results[$i]['current_state']) {
-                case '0':
-                    $status['up']++;
-                    break;
-
-                case '1':
-                    $status['down']++;
-                    break;
-
-                case '2':
-                    $status['unreachable']++;
-                    break;
-
-                case '-1':
-                    $status['pending']++;
-                    break;
-            }
+            $status[$this->currentState[$results[$i]['current_state']]]++;
         }
 
         return(array(1, array($status)));
     }
 
-    function hostPerfData($service_id=null) {
+    function hostPerfData() {
 
         $sql = "
             SELECT 
@@ -64,14 +55,14 @@ class NPC_hosts {
                 AND h.active_checks_enabled = 1
         ";
 
-        if ($host_id) {
-            $sql .= " AND h.host_id = $host_id";
+        if ($this->id) {
+            $sql .= " AND h.host_id = " . $this->id;
         }
 
         return(db_fetch_assoc($sql));
     }
 
-    function hostStatus($params = array()) {
+    function hostStatus() {
 
         $sql = "
             SELECT 
@@ -95,8 +86,8 @@ class NPC_hosts {
                 npc_hosts.config_type='1'
         ";
 
-        if (isset($params['host_id'])) {
-            $sql .= " AND npc_hosts.host_id = " . $params['host_id'];
+        if ($this->host_id) {
+            $sql .= " AND npc_hosts.host_id = " . $this->host_id;
         }
 
         return(db_fetch_assoc($sql));

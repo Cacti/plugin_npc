@@ -26,7 +26,6 @@ npc.app = function() {
     }];
 
     /* Private Functions */
-
     // Override Ext.data.Store to add an auto refresh option
     Ext.override(Ext.data.Store, {
         startAutoRefresh : function(interval, params, callback, refreshNow){
@@ -80,6 +79,24 @@ npc.app = function() {
         // public properties, e.g. strings to translate
 
         // public methods
+
+        serviceGridClick: function(grid, rowIndex, e) {
+            var record = grid.getStore().getAt(rowIndex);
+            var id = 'soi' + record.data.service_object_id + '-tab';
+            var tab = Ext.getCmp(id);
+            var tabPanel = Ext.getCmp('centerTabPanel');
+            if (!tab) {
+                tabPanel.add({
+                    id: id,
+                    title: record.data.host_name + ': ' + record.data.service_description,
+                    closable: true,
+                    autoLoad: { url: 'npc.php?module=services&action=getServices&p_id=' + record.data.service_id },
+                    items: [{}]
+                }).show();
+                tabPanel.doLayout();
+            }
+            tabPanel.setActiveTab(tab);
+        },
 
         toggleRegion: function(region, link){
             var r = Ext.getCmp(region);

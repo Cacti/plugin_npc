@@ -76,12 +76,6 @@ class NPC_layout {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/service-problems-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/monitoring-performance-portlet.js"></script>
 
-          <script type="text/javascript">
-            Ext.onReady(function() {
-                console.log(npc.app);
-            });
-          </script>
-
         </head>
 
          <body>

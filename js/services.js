@@ -4,7 +4,7 @@ npc.app.showServices = function(title, filter){
     var id = title.replace(/[-' ']/g,'') + '-tab';
 
     // Grid URL
-    var url = 'npc.php?module=services&action=getServices&state=' + filter;
+    var url = 'npc.php?module=services&action=getServices&p_state=' + filter;
 
     // Default # of rows to display
     var pageSize = 30;
@@ -189,7 +189,7 @@ npc.app.showServices = function(title, filter){
                 title: record.data.host_name + ': ' + record.data.service_description,
                 closable: true,
                 autoLoad: {
-                    url: 'npc.php?module=services&action=showService&id=' + record.data.service_object_id,
+                    url: 'npc.php?module=services&action=showService&p_id=' + record.data.service_object_id,
                     scripts: true
                 },
                 items: [{}]

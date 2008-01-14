@@ -22,17 +22,21 @@ if (isset($_REQUEST['action'])) {
     $action = 'drawFrame';
 }
 
-if (is_array($_REQUEST)) {
-    foreach($_REQUEST as $key => $value) {
-        $params[$key] = $value;
-    }
-}
-
 // Include the requested module
 require_once("plugins/npc/modules/$module.php");
 
 $class = 'NPC_' . $module;
 $obj = new $class;
+if (is_array($_REQUEST)) {
+    foreach($_REQUEST as $key => $value) {
+        $params[$key] = $value;
+        if (preg_match("/p_/", $key) || $key == "start" || $key == "limit") {
+            $parm = preg_replace("/p_/", '', $key);
+            $obj->$parm = $value;
+        }
+    }
+}
+
 
 // Display any results in JSON format
 if ($module == 'layout') {

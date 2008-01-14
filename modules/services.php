@@ -2,7 +2,41 @@
 
 class NPC_services {
 
+    var $start = 0;
+    var $limit = 20;
+    var $state = "any";
+    var $portlet = 0;
+    var $id = null;
+
+    var $portletCols = array('host_object_id',
+                             'host_name',
+                             'service_id',
+                             'service_description',
+                             'current_state',
+                             'output');
+
+    var $defaultCols = array('host_object_id',
+                             'host_name',
+                             'service_id',
+                             'service_description',
+                             'current_state',
+                             'last_check',
+                             'next_check',
+                             'last_state_change',
+                             'current_check_attempt',
+                             'max_check_attempts',
+                             'output');
+
+    private $states = array('ok'       => '0',
+                            'warning'  => '1',
+                            'critical' => '2',
+                            'unkown'   => '3',
+                            'pending'  => '-1',
+                            'any'      => '0,1,2,3,-1',
+                            'not_ok'   => '1,2,3');
+
     private $rowCount;
+
 
     /**
      * getHostSummary
@@ -55,86 +89,31 @@ class NPC_services {
      *
      * @return array  Service list
      */
-    function getServices($params = array()) {
+    function getServices() {
 
         $output = array();
 
-        if (isset($params['start'])) {
-            $start = $params['start'];
+        if ($this->portlet) {
+            $columns = $this->portletCols;
+        } elseif ($this->id) {
+            $columns = 0;
         } else {
-            $start = 0;
+            $columns = $this->defaultCols;
         }
 
-        if (isset($params['limit'])) {
-            $limit = $params['limit'];
-        } else {
-            $limit = 20;
-        }
-
-        if (!isset($params['state'])) {
-            $params['state'] = "any";
-        }
-
-        switch($params['state']) {
-            case "ok":
-                $state = array(0);
-                break;
-            case "warning":
-                $state = array(1);
-                break;
-            case "critical":
-                $state = array(2);
-                break;
-            case "unknown":
-                $state = array(3);
-                break;
-            case "pending":
-                $state = array(-1);
-                break;
-            case "any":
-                $state = array(0, 1, 2, 3, -1);
-                break;
-            case "not_ok":
-                $state = array(1, 2, 3);
-                break;
-        }
-
-
-        if (isset($params['portlet'])) {
-            $columns = array('host_object_id',
-                             'host_name',
-                             'service_object_id',
-                             'service_description',
-                             'current_state',
-                             'output'
-                       );
-        } else {
-            $columns = array('host_object_id',
-                             'host_name',
-                             'service_object_id',
-                             'service_description',
-                             'current_state',
-                             'last_check',
-                             'next_check',
-                             'last_state_change',
-                             'current_check_attempt',
-                             'max_check_attempts',
-                             'output'
-                       );
-        }
-
-
-        $results = $this->serviceStatus($start, $limit, null, $state);
+        $results = $this->serviceStatus();
 
         $x = 0;
         for ($i=0; $i < count($results); $i++) {
             foreach ($results[$i] as $key => $value) {
-                if (in_array($key, $columns )) {
-                    if ($key == 'last_check' || $key == 'next_check' || $key == 'last_state_change') {
-                        $value = strtotime($value);
-                    }
+                if ($key == 'last_check' || $key == 'next_check' || $key == 'last_state_change') {
+                    $value = strtotime($value);
+                }
+                if (!$columns) {
                     $output[$x][$key] = $value;
-                } 
+                } else if (in_array($key, $columns )) {
+                    $output[$x][$key] = $value;
+                }
             }
             if (isset($output[$x])) { $x++; }
         }
@@ -142,11 +121,7 @@ class NPC_services {
         return(array($this->rowCount, $output));
     }
 
-    function getServiceDetail() {
-
-    }
-
-    function servicePerfData($service_id=null) {
+    function servicePerfData() {
 
         $sql = "
             SELECT 
@@ -167,14 +142,14 @@ class NPC_services {
                 AND s.active_checks_enabled = 1
         ";
 
-        if ($service_id) {
-            $sql .= " AND s.service_id = $service_id";
+        if ($this->id) {
+            $sql .= " AND s.service_id = " . $this->id;
         }
 
         return(db_fetch_assoc($sql));
     }
 
-    function serviceStatus($start=null, $limit=null, $service_id=null, $state=array()) {
+    function serviceStatus() {
 
         $sql = "
             SELECT 
@@ -182,7 +157,7 @@ class NPC_services {
                 npc_instances.instance_name,
                 npc_services.host_object_id,
                 obj1.name1 AS host_name,
-                npc_services.service_object_id,
+                npc_services.service_id,
                 obj1.name2 AS service_description,
                 npc_servicestatus.* 
             FROM 
@@ -197,25 +172,17 @@ class NPC_services {
 
         $where = " WHERE npc_services.config_type='1' ";
 
-        if ($service_id) {
-            $where .= " AND npc_services.service_id = $service_id";
+        if ($this->id) {
+            $where .= " AND npc_services.service_id = " . $this->id;
         }
 
-        if (isset($state[0])) {
-            $where .= " AND npc_servicestatus.current_state in (";
-            foreach ($state as $val) {
-                $in .= $val . ',';
-            }
-            $where .= substr($in, 0, -1) . ')';
-        }
+        $where .= " AND npc_servicestatus.current_state in (" . $this->states[$this->state] . ")";
                 
         $sql = $sql . $where . " ORDER BY instance_name ASC, host_name ASC, service_description ASC ";
 
         $this->rowCount = count(db_fetch_assoc($sql));
 
-        if ($start && $limit) {
-            $sql = $sql . " LIMIT $start,$limit";
-        }
+        $sql = $sql . " LIMIT " . $this->start . "," . $this->limit;
 
         return(db_fetch_assoc($sql));
     }

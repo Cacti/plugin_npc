@@ -6,6 +6,10 @@ require_once($config["include_path"] . "/auth.php");
 
 class NPC_eventlog {
 
+    var $start = 0;
+    var $limit = 20;
+    var $id = null;
+
     /**
      * getLogEntries
      * 
@@ -18,27 +22,15 @@ class NPC_eventlog {
      */
     function getLogEntries($params) {
 
-        if (isset($params['start'])) {
-            $start = $params['start'];
-        } else {
-            $start = 0;
-        }
-
-        if (isset($params['limit'])) {
-            $limit = $params['limit'];
-        } else {
-            $limit = 20;
-        }
-
         $count = db_fetch_cell("SELECT count(*) FROM npc_logentries");
 
         $sql = "SELECT logentry_id, unix_timestamp(entry_time) as entry_time, logentry_data from npc_logentries ";
 
-        if (isset($params['id'])) {
-            $sql .= " WHERE npc_logentries.logentry_id = " . $params['id'];
+        if ($this->id) {
+            $sql .= " WHERE npc_logentries.logentry_id = " . $this->id;
         }
 
-        $sql .= " ORDER BY entry_time DESC, entry_time_usec DESC LIMIT $start,$limit";
+        $sql .= " ORDER BY entry_time DESC, entry_time_usec DESC LIMIT " . $this->start . "," . $this->limit;
 
         return(array($count, db_fetch_assoc($sql)));
     }
