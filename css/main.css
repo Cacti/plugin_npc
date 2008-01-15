@@ -97,6 +97,17 @@ color: #666;
     white-space: normal;
 }
 
+
+
+.status-bar {
+    height:18px;
+    float:left;
+    width:0;
+    border-top:1px solid #D1E4FD;
+    border-bottom:1px solid #7FA9E4;
+    border-right:1px solid #7FA9E4;
+}
+
 .statusPENDING { background-color: #ACACAC; }
 .statusOK { background-color: #33FF00; }
 .statusRECOVERY { background-color: #33FF00; }
@@ -104,12 +115,12 @@ color: #666;
 .statusWARNING { background-color: #FFFF00; }
 .statusCRITICAL { background-color: #F83838; }
 
-.serviceTotalsOk { background-color: #33FF00; }
-.serviceTotalsWarning { background-color: #FFFF00;  font-weight: bold; }
-.serviceTotalsUnknown { background-color: #FF9900;  font-weight: bold; }
-.serviceTotalsCritical { background-color: #F83838;  font-weight: bold; }
-.serviceTotalsPending { background-color: #0099FF; }
-.serviceTotalsProblems { background-color: orange;  font-weight: bold; }
+.serviceTotalsOk { background: #33FF00; }
+.serviceTotalsWarning { background: #FFFF00;  font-weight: bold; }
+.serviceTotalsUnknown { background: #FF9900;  font-weight: bold; }
+.serviceTotalsCritical { background: #F83838;  font-weight: bold; }
+.serviceTotalsPending { background: #0099FF; }
+.serviceTotalsProblems { background: orange;  font-weight: bold; }
 
 .hostTotalsUp { background-color: #33FF00; }
 .hostTotalsDown { background-color: #F83838; }

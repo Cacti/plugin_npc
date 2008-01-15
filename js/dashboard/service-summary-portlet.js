@@ -15,28 +15,32 @@ Ext.onReady(function(){
     // Refresh rate
     var refresh = npc.app.params.npc_portlet_refresh;
 
-    function renderStatus(val, meta){
-        if(val > 0){
-            switch(meta.id) {
-                case 'serviceTotalsOk':
-                    bg = '33FF00';
-                    break;    
-                case 'serviceTotalsCritical':
-                    bg = 'F83838';
-                    break;    
-                case 'serviceTotalsWarning':
-                    bg = 'FFFF00';
-                    break;
-                case 'serviceTotalsUnknown':
-                    bg = 'FF9900';
-                    break;
-                case 'serviceTotalsPending':
-                    bg = '0099FF';
-                    break;
+    function renderStatus(value, meta, record){
+        if(value > 0){
+
+            var services = record.data.ok+record.data.critical+record.data.warning+record.data.unknown+record.data.pending;
+            var percentage = value / services ;
+            var w = Math.floor(percentage*120);
+            var txt = value + ' Service';
+
+            if (value > 1) {
+                txt = value + ' Services';
             }
-            meta.attr = 'style="background-color: #' + bg + ';"';
+
+            var html = '<div class="x-progress-wrap">'+
+                '<div class="x-progress-inner">'+
+                    '<div class="status-bar ' + meta.id + '" style="width:'+w+'px">'+
+                    '</div>'+
+                    '<div class="x-progress-text x-progress-text-back">'+
+                        '<div align="center">' + txt + '</div>'+
+                    '</div>'+
+                '</div>'+
+            '</div>';
+
+            return html;
         }
-        return val;
+
+        return value;
     }
 
     var store = new Ext.data.JsonStore({
@@ -51,35 +55,30 @@ Ext.onReady(function(){
         id: 'serviceTotalsCritical',
         header:"Critical",
         dataIndex:'critical',
-        width:60,
         renderer: renderStatus,
         align:'center'
     },{
         id: 'serviceTotalsWarning',
         header:"Warning",
         dataIndex:'warning',
-        width:60,
         renderer: renderStatus,
         align:'center'
     }, {
         id: 'serviceTotalsUnknown',
         header:"Unknown",
         dataIndex:'unknown',
-        width:50,
         renderer: renderStatus,
         align:'center'
     }, {
         id: 'serviceTotalsOk',
         header:"Ok",
         dataIndex:'ok',
-        width:40,
         renderer: renderStatus,
         align:'center'
     }, {
         id: 'serviceTotalsPending',
         header:"Pending",
         dataIndex:'pending',
-        width:50,
         renderer: renderStatus,
         align:'center'
     }]);

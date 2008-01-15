@@ -96,15 +96,22 @@
 .x-btn-center{
 	background-image:url(../images/slate/button/btn-sprite.gif);
 }
-.x-btn-text-icon .x-btn-with-menu .x-btn-center em {
-	background:transparent url(../images/slate/toolbar/btn-arrow.gif) no-repeat scroll right 3px;
-}
 .x-btn-over button{
 	color:#fff;
 }
 .x-btn-focus button{
 	color:#fff;
 }
+.x-btn-text-icon .x-btn-with-menu .x-btn-center em {
+	background:transparent url(../images/slate/toolbar/btn-arrow.gif) no-repeat scroll right 3px;
+}
+.x-btn-with-menu .x-btn-center em {
+	background:transparent url(../images/slate/toolbar/btn-arrow.gif) no-repeat scroll right 0pt;
+}
+.x-btn-menu-arrow-wrap .x-btn-center button{
+	background:transparent url(../images/slate/button/btn-arrow.gif) no-repeat left 3px;
+}
+
 
 /* Layout classes */
 
@@ -355,10 +362,14 @@ body.x-body-masked .x-window-mc, body.x-body-masked .x-window-plain .x-window-mc
 }
 
 
-/* misc */
+/* HTML Editor */
 .x-html-editor-wrap {
     border-color:#abc;
 }
+.x-html-editor-tb .x-btn-text {
+	background:transparent url(../images/slate/editor/tb-sprite.gif) no-repeat scroll 0%;
+}
+
 
 /* Borders go last for specificity */
 .x-panel-noborder .x-panel-body-noborder {
@@ -419,10 +430,10 @@ body.x-body-masked .x-window-mc, body.x-body-masked .x-window-plain .x-window-mc
 	border:1px solid #9ab; 
 }
 .x-trigger-wrap-focus .x-form-trigger {
-	border-bottom:1px solid #5D97B9;
+	border-bottom:1px solid #4a7192;
 }
 .x-form-focus,textarea.x-form-focus {
-	border:1px solid #5D97B9;
+	border:1px solid #4a7192;
 }
 
 .x-form-field-wrap .x-form-trigger {
@@ -587,6 +598,63 @@ td.x-date-mp-sel a{
 	border:1px solid;
 	border-color:#abc #055 #055 #abc;
 }
+
+/* Resizable Handle */
+.x-resizable-over .x-resizable-handle-east,.x-resizable-pinned .x-resizable-handle-east{
+	background:url(../images/slate/sizer/e-handle.gif);background-position:left;
+}
+.x-resizable-over .x-resizable-handle-west,.x-resizable-pinned .x-resizable-handle-west{
+	background:url(../images/slate/sizer/e-handle.gif);background-position:left;
+}
+.x-resizable-over .x-resizable-handle-south,.x-resizable-pinned .x-resizable-handle-south{
+	background:url(../images/slate/sizer/s-handle.gif);background-position:top;
+}
+.x-resizable-over .x-resizable-handle-north,.x-resizable-pinned .x-resizable-handle-north{
+	background:url(../images/slate/sizer/s-handle.gif);background-position:top;
+}
+.x-resizable-over .x-resizable-handle-southeast,.x-resizable-pinned .x-resizable-handle-southeast{
+	background:url(../images/slate/sizer/se-handle.gif);background-position:top left;
+}
+.x-resizable-over .x-resizable-handle-northwest,.x-resizable-pinned .x-resizable-handle-northwest{
+	background:url(../images/slate/sizer/nw-handle.gif);background-position:bottom right;
+}
+.x-resizable-over .x-resizable-handle-northeast,.x-resizable-pinned .x-resizable-handle-northeast{
+	background:url(../images/slate/sizer/ne-handle.gif);background-position:bottom left;
+}
+.x-resizable-over .x-resizable-handle-southwest,.x-resizable-pinned .x-resizable-handle-southwest{
+	background:url(../images/slate/sizer/sw-handle.gif);background-position:top right;
+}
+
+/* Tips */
+.x-tip .x-tip-close{
+	background-image:url(../images/slate/qtip/close.gif);
+}
+.x-tip .x-tip-tc{
+	background:transparent url(../images/slate/qtip/tip-sprite.gif) no-repeat 0 -62px;
+}
+.x-tip .x-tip-tl{
+	background:transparent url(../images/slate/qtip/tip-sprite.gif) no-repeat 0 0;
+}
+.x-tip .x-tip-tr{
+	background:transparent url(../images/slate/qtip/tip-sprite.gif) no-repeat right 0;
+}
+.x-tip .x-tip-bc{
+	background:transparent url(../images/slate/qtip/tip-sprite.gif) no-repeat 0 -121px;
+}
+.x-tip .x-tip-bl{
+	background:transparent url(../images/slate/qtip/tip-sprite.gif) no-repeat 0 -59px;
+}
+.x-tip .x-tip-br{
+	background:transparent url(../images/slate/qtip/tip-sprite.gif) no-repeat right -59px;
+}
+.x-tip .x-tip-ml{
+	background:#fff url(../images/slate/qtip/tip-sprite.gif) no-repeat 0 -124px;
+}
+.x-tip .x-tip-mr{
+	background:transparent url(../images/slate/qtip/tip-sprite.gif) no-repeat right -124px;
+}
+
+
 
 
 /* Miscellaneous */
