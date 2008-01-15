@@ -53,9 +53,9 @@ npc.app.serviceDetail = function(record) {
 
     function renderCurrentState(editor, v){
         console.log(v);
-        //if(val > 0){
-        //    return String.format('<p class="{0}">{1}</p>', p.id, val);
-       // }
+        if(val > 0){
+            return String.format('<p class="{0}">{1}</p>', p.id, val);
+        }
         return v;
     }
 
@@ -125,7 +125,7 @@ npc.app.serviceDetail = function(record) {
         autoHeight: true,
         width: 400,
         style:'padding:10px 0 10px 10px',
-        onlyFields: ['host_name','check_command'],
+        onlyFields: ['current_state','check_command'],
         customRenderers: { 
             'current_state': renderCurrentState
         },

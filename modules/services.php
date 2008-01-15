@@ -118,18 +118,19 @@ class NPC_services {
     }
 
     // A getter to reformat the service data into 
-    // rows of key value pairs.
+    // rows of key value pairs. This is to assist the
+    // client in drawing a vertical grid.
     function getServiceDetail() {
         $results = $this->serviceStatus();
 
         $x = 0;
         for ($i=0; $i < count($results); $i++) {
             foreach ($results[$i] as $key => $value) {
-                $output[$x][$key] = $value;
-                $x++
+                $output[$x] = array('name' => $key, 'value' => $value);
+                $x++;
             }
         }
-        return(array($this->rowCount, $output));
+        return(array(count($output), $output));
     }
 
     function servicePerfData() {

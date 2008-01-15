@@ -15,9 +15,24 @@ Ext.onReady(function(){
     // Refresh rate
     var refresh = npc.app.params.npc_portlet_refresh;
 
-    function renderStatus(val, p){
+    function renderStatus(val, meta){
+        console.log(meta);
         if(val > 0){
-            return String.format('<p class="{0}">{1}</p>', p.id, val);
+            switch(meta.id) {
+                case 'hostTotalsUp':
+                    bg = '33FF00';
+                    break;
+                case 'hostTotalsDown':
+                    bg = 'F83838';
+                    break;
+                case 'hostTotalsUnreachable':
+                    bg = 'F83838';
+                    break;
+                case 'hostTotalsPending':
+                    bg = '0099FF';
+                    break;
+            }
+            meta.attr = 'style="background-color: #' + bg + ';"';
         }
         return val;
     }
