@@ -16,7 +16,6 @@ Ext.onReady(function(){
     var refresh = npc.app.params.npc_portlet_refresh;
 
     function renderStatus(val, meta){
-        console.log(meta);
         if(val > 0){
             switch(meta.id) {
                 case 'hostTotalsUp':
