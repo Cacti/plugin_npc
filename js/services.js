@@ -17,16 +17,19 @@ npc.app.showServices = function(title, filter){
         tabPanel.setActiveTab(tab);
         return;
     } else {
-        this.addTab(title, id);
+        tabPanel.add({
+            id: id,
+            title: title,
+            closable: true,
+            items: [{}]
+        }).show();
+        tabPanel.doLayout();
+        tabPanel.setActiveTab(tab);
         tab = Ext.getCmp(id);
     }
 
     function renderAttempt(val, p, record){
         return String.format('{0}/{1}', val, record.data.max_check_attempts);
-    }
-
-    function renderDate(val){
-        return String.format(val.dateFormat(npc.app.params.npc_date_format + ' ' + npc.app.params.npc_time_format));
     }
 
     function renderStatus(val){
@@ -45,22 +48,6 @@ npc.app.showServices = function(title, filter){
         return String.format('<p align="center"><img src="images/nagios/{0}"></p>', img);
     }
 
-    function renderDuration(val, p, record){
-
-        var t = record.data.last_check.dateFormat('U') - val.dateFormat('U');
-
-        var one_day = 86400;
-        var one_hour = 3600;
-        var one_min = 60;
-
-        var days = Math.floor(t / one_day);
-        var hours = Math.floor((t % one_day) / one_hour);
-        var minutes = Math.floor(((t % one_day) % one_hour) / one_min);
-        var seconds = Math.floor((((t % one_day) % one_hour) % one_min));
-
-        return String.format('{0}d {1}h {2}m {3}s', days, hours, minutes, seconds);
-    }
-
     var store = new Ext.data.GroupingStore({
         url:url,
         autoload:true,
@@ -77,9 +64,9 @@ npc.app.showServices = function(title, filter){
             'current_state',
             'current_check_attempt',
             'max_check_attempts',
-            {name: 'last_check', type: 'date', dateFormat: 'timestamp'},
-            {name: 'next_check', type: 'date', dateFormat: 'timestamp'},
-            {name: 'last_state_change', type: 'date', dateFormat: 'timestamp'}
+            {name: 'last_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'next_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'last_state_change', type: 'date', dateFormat: 'Y-m-d H:i:s'}
         ]),
         groupField:'host_name'
     });
@@ -97,17 +84,17 @@ npc.app.showServices = function(title, filter){
     },{
         header:"Last Check",
         dataIndex:'last_check',
-        renderer: renderDate,
+        renderer: npc.app.formatDate,
         width:110
     },{
         header:"Next Check",
         dataIndex:'next_check',
-        renderer: renderDate,
+        renderer: npc.app.formatDate,
         width:110
     },{
         header:"Duration",
         dataIndex:'last_state_change',
-        renderer: renderDuration,
+        renderer: npc.app.getDuration,
         width:110
     },{
         header:"Attempt",

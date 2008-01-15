@@ -24,7 +24,7 @@ class NPC_eventlog {
 
         $count = db_fetch_cell("SELECT count(*) FROM npc_logentries");
 
-        $sql = "SELECT logentry_id, unix_timestamp(entry_time) as entry_time, logentry_data from npc_logentries ";
+        $sql = "SELECT logentry_id, entry_time, logentry_data from npc_logentries ";
 
         if ($this->id) {
             $sql .= " WHERE npc_logentries.logentry_id = " . $this->id;

@@ -81,21 +81,27 @@ npc.app = function() {
         // public methods
 
         serviceGridClick: function(grid, rowIndex, e) {
-            var record = grid.getStore().getAt(rowIndex);
-            var id = 'soi' + record.data.service_object_id + '-tab';
-            var tab = Ext.getCmp(id);
-            var tabPanel = Ext.getCmp('centerTabPanel');
-            if (!tab) {
-                tabPanel.add({
-                    id: id,
-                    title: record.data.host_name + ': ' + record.data.service_description,
-                    closable: true,
-                    autoLoad: { url: 'npc.php?module=services&action=getServices&p_id=' + record.data.service_id },
-                    items: [{}]
-                }).show();
-                tabPanel.doLayout();
-            }
-            tabPanel.setActiveTab(tab);
+            npc.app.serviceDetail(grid.getStore().getAt(rowIndex));
+        },
+
+        getDuration: function(val, p, record) {
+
+            var t = record.data.last_check.dateFormat('U') - val.dateFormat('U');
+
+            var one_day = 86400;
+            var one_hour = 3600;
+            var one_min = 60;
+    
+            var days = Math.floor(t / one_day);
+            var hours = Math.floor((t % one_day) / one_hour);
+            var minutes = Math.floor(((t % one_day) % one_hour) / one_min);
+            var seconds = Math.floor((((t % one_day) % one_hour) % one_min));
+
+            return String.format('{0}d {1}h {2}m {3}s', days, hours, minutes, seconds);
+        },
+
+        formatDate: function(val) {
+            return String.format(val.dateFormat(npc.app.params.npc_date_format + ' ' + npc.app.params.npc_time_format));
         },
 
         toggleRegion: function(region, link){
@@ -128,21 +134,6 @@ npc.app = function() {
                 }).show();
                 tabPanel.doLayout();
             }
-        },
-
-        addTab: function(title, id) {
-            var tab = Ext.getCmp(id);
-            var tabPanel = Ext.getCmp('centerTabPanel');
-            if(!tab) {
-                tabPanel.add({
-                    id: id,
-                    title: title,
-                    closable: true,
-                    items: [{}]
-                }).show();
-                tabPanel.doLayout();
-            }
-            tabPanel.setActiveTab(tab);
         },
 
         addPortlet: function(id, title, column) {

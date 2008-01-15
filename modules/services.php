@@ -106,9 +106,6 @@ class NPC_services {
         $x = 0;
         for ($i=0; $i < count($results); $i++) {
             foreach ($results[$i] as $key => $value) {
-                if ($key == 'last_check' || $key == 'next_check' || $key == 'last_state_change') {
-                    $value = strtotime($value);
-                }
                 if (!$columns) {
                     $output[$x][$key] = $value;
                 } else if (in_array($key, $columns )) {
@@ -117,7 +114,21 @@ class NPC_services {
             }
             if (isset($output[$x])) { $x++; }
         }
+        return(array($this->rowCount, $output));
+    }
 
+    // A getter to reformat the service data into 
+    // rows of key value pairs.
+    function getServiceDetail() {
+        $results = $this->serviceStatus();
+
+        $x = 0;
+        for ($i=0; $i < count($results); $i++) {
+            foreach ($results[$i] as $key => $value) {
+                $output[$x][$key] = $value;
+                $x++
+            }
+        }
         return(array($this->rowCount, $output));
     }
 

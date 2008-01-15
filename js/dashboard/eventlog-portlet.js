@@ -50,7 +50,7 @@ Ext.onReady(function(){
         root:'data',
         fields:[
             'logentry_id',
-            {name: 'entry_time', type: 'date', dateFormat: 'timestamp'},
+            {name: 'entry_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
             'logentry_data'
         ],
         autoload:true
