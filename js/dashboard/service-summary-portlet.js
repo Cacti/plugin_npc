@@ -16,31 +16,22 @@ Ext.onReady(function(){
     var refresh = npc.app.params.npc_portlet_refresh;
 
     function renderStatus(value, meta, record){
-        if(value > 0){
 
-            var services = record.data.ok+record.data.critical+record.data.warning+record.data.unknown+record.data.pending;
-            var percentage = value / services ;
-            var w = Math.floor(percentage*120);
-            var txt = value + ' Service';
+        var services = record.data.ok+record.data.critical+record.data.warning+record.data.unknown+record.data.pending;
+        var percentage = value / services ;
+        var w = Math.floor(percentage*100);
 
-            if (value > 1) {
-                txt = value + ' Services';
-            }
+        var html = '<div class="x-progress-wrap">'+
+                       '<div style="text-align: center;" class="x-progress-inner">'+
+                           '<div class="status-bar ' + meta.id + '" style="width:' + w + '%">'+
+                           '</div>'+
+                           '<div class="status-bar-text status-bar-text-back">'+
+                               '<div>' + value + '</div>'+
+                           '</div>'+
+                       '</div>'+
+                   '</div>';
 
-            var html = '<div class="x-progress-wrap">'+
-                '<div class="x-progress-inner">'+
-                    '<div class="status-bar ' + meta.id + '" style="width:'+w+'px">'+
-                    '</div>'+
-                    '<div class="x-progress-text x-progress-text-back">'+
-                        '<div align="center">' + txt + '</div>'+
-                    '</div>'+
-                '</div>'+
-            '</div>';
-
-            return html;
-        }
-
-        return value;
+        return html;
     }
 
     var store = new Ext.data.JsonStore({
@@ -56,37 +47,42 @@ Ext.onReady(function(){
         header:"Critical",
         dataIndex:'critical',
         renderer: renderStatus,
+        width:80,
         align:'center'
     },{
         id: 'serviceTotalsWarning',
         header:"Warning",
         dataIndex:'warning',
         renderer: renderStatus,
+        width:80,
         align:'center'
     }, {
         id: 'serviceTotalsUnknown',
         header:"Unknown",
         dataIndex:'unknown',
         renderer: renderStatus,
+        width:80,
         align:'center'
     }, {
         id: 'serviceTotalsOk',
         header:"Ok",
         dataIndex:'ok',
         renderer: renderStatus,
+        width:80,
         align:'center'
     }, {
         id: 'serviceTotalsPending',
         header:"Pending",
         dataIndex:'pending',
         renderer: renderStatus,
+        width:80,
         align:'center'
     }]);
 
     var grid = new Ext.grid.GridPanel({
         id: id + '-grid',
         autoHeight:true,
-        autoWidth:true,
+        width:400,
         store:store,
         cm:cm,
         view: new Ext.grid.GridView({

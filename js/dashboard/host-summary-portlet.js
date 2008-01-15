@@ -15,25 +15,23 @@ Ext.onReady(function(){
     // Refresh rate
     var refresh = npc.app.params.npc_portlet_refresh;
 
-    function renderStatus(val, meta){
-        if(val > 0){
-            switch(meta.id) {
-                case 'hostTotalsUp':
-                    bg = '33FF00';
-                    break;
-                case 'hostTotalsDown':
-                    bg = 'F83838';
-                    break;
-                case 'hostTotalsUnreachable':
-                    bg = 'F83838';
-                    break;
-                case 'hostTotalsPending':
-                    bg = '0099FF';
-                    break;
-            }
-            meta.attr = 'style="background-color: #' + bg + ';"';
-        }
-        return val;
+    function renderStatus(value, meta, record){
+
+        var count = record.data.down + record.data.unreachable + record.data.up + record.data.pending;
+        var percentage = value / count ;
+        var w = Math.floor(percentage*100);
+
+        var html = '<div class="x-progress-wrap">'+
+                       '<div style="text-align: center;" class="x-progress-inner">'+
+                           '<div class="status-bar ' + meta.id + '" style="width:' + w + '%">'+
+                           '</div>'+
+                           '<div class="status-bar-text status-bar-text-back">'+
+                               '<div>' + value + '</div>'+
+                           '</div>'+
+                       '</div>'+
+                   '</div>';
+
+        return html;
     }
 
     var store = new Ext.data.JsonStore({
@@ -48,34 +46,36 @@ Ext.onReady(function(){
         id: 'hostTotalsDown',
         header:"Down",
         dataIndex:'down',
-        width:60,
         renderer: renderStatus,
+        width:100,
         align:'center'
     },{
         id: 'hostTotalsUnreachable',
         header:"Unreachable",
         dataIndex:'unreachable',
         renderer: renderStatus,
+        width:100,
         align:'center'
     }, {
         id: 'hostTotalsUp',
         header:"Up",
         dataIndex:'up',
-        width:50,
         renderer: renderStatus,
+        width:100,
         align:'center'
     }, {
         id: 'hostTotalsPending',
         header:"Pending",
         dataIndex:'pending',
         renderer: renderStatus,
+        width:100,
         align:'center'
     }]);
 
     var grid = new Ext.grid.GridPanel({
         id:'host-status-summary-grid',
         autoHeight:true,
-        autoWidth:true,
+        width:400,
         store:store,
         cm:cm,
         view: new Ext.grid.GridView({
