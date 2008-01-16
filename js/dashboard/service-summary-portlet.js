@@ -15,23 +15,28 @@ Ext.onReady(function(){
     // Refresh rate
     var refresh = npc.app.params.npc_portlet_refresh;
 
-    function renderStatus(value, meta, record){
-
-        var services = record.data.ok+record.data.critical+record.data.warning+record.data.unknown+record.data.pending;
-        var percentage = value / services ;
-        var w = Math.floor(percentage*100);
-
-        var html = '<div class="x-progress-wrap">'+
-                       '<div style="text-align: center;" class="x-progress-inner">'+
-                           '<div class="status-bar ' + meta.id + '" style="width:' + w + '%">'+
-                           '</div>'+
-                           '<div class="status-bar-text status-bar-text-back">'+
-                               '<div>' + value + '</div>'+
-                           '</div>'+
-                       '</div>'+
-                   '</div>';
-
-        return html;
+    function renderStatus(val, meta){  
+        if(val > 0){  
+            switch(meta.id) {  
+                case 'serviceTotalsOk':  
+                    bg = '33FF00';  
+                    break;  
+                case 'serviceTotalsCritical':  
+                    bg = 'F83838';  
+                    break;  
+                case 'serviceTotalsWarning':  
+                    bg = 'FFFF00';  
+                    break;  
+                case 'serviceTotalsUnknown':  
+                    bg = 'FF9900';  
+                    break;  
+                case 'serviceTotalsPending':  
+                    bg = '0099FF';  
+                    break;  
+            }  
+            meta.attr = 'style="background-color: #' + bg + ';"';  
+        }  
+        return String.format('<b>{0}</b>', val);
     }
 
     var store = new Ext.data.JsonStore({
