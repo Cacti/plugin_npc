@@ -84,9 +84,10 @@ npc.app = function() {
             npc.app.serviceDetail(grid.getStore().getAt(rowIndex));
         },
 
-        getDuration: function(val, p, record) {
+        getDuration: function(val) {
 
-            var t = record.data.last_check.dateFormat('U') - val.dateFormat('U');
+            var d = new Date();
+            var t = d.dateFormat('U') - val.dateFormat('U');
 
             var one_day = 86400;
             var one_hour = 3600;
@@ -137,21 +138,24 @@ npc.app = function() {
         },
 
         addPortlet: function(id, title, column) {
-            if(!Ext.getCmp('portlet1')) {
+            if(!Ext.getCmp(id)) {
                 panel = new Ext.ux.Portlet({
                     id: id,
                     title: title,
+                    column: column,
                     layout:'fit',
-                    stateEvents: ["move","drop","hide","show","collapse","expand","columnmove","columnresize","sortchange"],
+                    stateEvents: ["move","position","drop","hide","show","collapse","expand","columnmove","columnresize","sortchange"],
                     stateful:true,
                     getState: function(){
-                        return {collapsed:this.collapsed, hidden:this.hidden};
+                        return {collapsed:this.collapsed, hidden:this.hidden, column:this.ownerCt.id};
                     },
                     tools: tools
                 });
+                Ext.getCmp(panel.column).items.add(panel);
+
+                //var p = Ext.getCmp('dashboard').items.itemAt(0).items.itemAt(1);
+                Ext.getCmp('centerTabPanel').doLayout();
             }
-            Ext.getCmp(column).items.add( panel );
-            Ext.getCmp('centerTabPanel').doLayout();
         },
 
         init: function() {

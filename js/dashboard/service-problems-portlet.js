@@ -34,6 +34,7 @@ Ext.onReady(function(){
     var store = new Ext.data.GroupingStore({
         url:url,
         autoload:true,
+        sortInfo:{field: 'service_description', direction: "ASC"},
         reader: new Ext.data.JsonReader({
             totalProperty:'totalCount',
             root:'data'
@@ -81,7 +82,8 @@ Ext.onReady(function(){
             hideGroupedColumn: true,
             enableGroupingMenu: false,
             enableNoGroups: true,
-            groupTextTpl: '{text}'
+            groupTextTpl: '{text}',
+            scrollOffset:0
         }),
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,

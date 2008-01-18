@@ -4,7 +4,7 @@ Ext.onReady(function(){
     var name = 'Monitoring Performance';
 
     // Portlet ID
-    var id = 'monitoring-performance-portlet';
+    var id = 'mon-perf-portlet';
 
     // Portlet URL
     var url = 'npc.php?module=dashboard&action=getPerfSummary';
@@ -50,8 +50,9 @@ Ext.onReady(function(){
         cm:cm,
         stripeRows: true,
         view: new Ext.grid.GridView({
-             forceFit:true,
-             autoFill:true
+            forceFit:true,
+            autoFill:true,
+            scrollOffset:0
         })
     });
 

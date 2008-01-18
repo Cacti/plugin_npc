@@ -15,6 +15,22 @@ npc.app.serviceDetail = function(record) {
     // Set the URL
     var url = 'npc.php?module=services&action=getServices&p_id=' + record.data.service_id;
 
+    var ssi = {
+        "current_state":{header:"Current State",renderer:renderState},
+        "last_state_change":{header:"State Duration",renderer:npc.app.getDuration},
+        "check_command":{header:"Check Command",renderer:renderCheckCommand}
+    };
+
+    function renderState(v) {
+        return String.format('<b>&nbsp;{0}</b>', v);
+    }
+
+    function renderCheckCommand(v) {
+        var command = v.split("!");
+        console.log(command);
+        return String.format('<a href="#" onclick="npc.app.showCommand(\'Services\', \'any\');return false;">{0}</a>', v);
+    }
+
     // If the tab exists set it active and return or else create it.
     if (tab)  { 
         tabPanel.setActiveTab(tab);
@@ -24,39 +40,33 @@ npc.app.serviceDetail = function(record) {
             id: id, 
             title: title,
             closable: true,
-        tbar: [{
-            id:'tab',
-            text: 'View in New Tab',
-            iconCls: 'new-tab',
-            disabled:true,
-            handler : this.openTab,
-            scope: this
-        },
-        '-',
-        {
-            id:'win',
-            text: 'Go to Post',
-            iconCls: 'new-win',
-            disabled:true,
-            scope: this,
-            handler : function(){
-                window.open(this.gsm.getSelected().data.link);
-            }
-        }],
-
+            autoScroll: true,
+            containerScroll: true,
+            tbar: [{
+                id:'tab',
+                text: 'View in New Tab',
+                iconCls: 'new-tab',
+                disabled:true,
+                handler : this.openTab,
+                scope: this
+            },
+            '-',
+            {
+                id:'win',
+                text: 'Go to Post',
+                iconCls: 'new-win',
+                disabled:true,
+                scope: this,
+                handler : function(){
+                    window.open(this.gsm.getSelected().data.link);
+                }
+            }],
             items: [{}]
         }).show();
+
         tabPanel.doLayout();
         tabPanel.setActiveTab(tab);
         tab = Ext.getCmp(id);
-    }
-
-    function renderCurrentState(editor, v){
-        console.log(v);
-        if(val > 0){
-            return String.format('<p class="{0}">{1}</p>', p.id, val);
-        }
-        return v;
     }
 
     var store = new Ext.data.JsonStore({
@@ -64,113 +74,129 @@ npc.app.serviceDetail = function(record) {
         totalProperty:'totalCount',
         root:'data',
         fields:[
-            'instance_id',
-            'instance_name',
-            'host_object_id',
-            'host_name',
-            'service_id',
-            'service_description',
-            'servicestatus_id',
-            'service_object_id',
-            {name: 'status_update_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            'output',
-            'perfdata',
-            'current_state',
-            'has_been_checked',
-            'should_be_scheduled',
-            'current_check_attempt',
-            'max_check_attempts',
-            {name: 'last_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'next_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            'check_type',
-            {name: 'last_state_change', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'last_hard_state_change', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            'last_hard_state',
-            {name: 'last_time_ok', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'last_time_warning', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'last_time_unknown', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'last_time_critical', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            'state_type',
-            {name: 'last_notification', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'next_notification', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            'no_more_notifications',
-            'notifications_enabled',
-            'problem_has_been_acknowledged',
-            'acknowledgement_type',
-            'current_notification_number',
-            'passive_checks_enabled',
-            'active_checks_enabled',
-            'event_handler_enabled',
-            'flap_detection_enabled',
-            'is_flapping',
-            'percent_state_change',
-            'latency',
-            'execution_time',
-            'scheduled_downtime_depth',
-            'failure_prediction_enabled',
-            'process_performance_data',
-            'obsess_over_service',
-            'modified_service_attributes',
-            'event_handler',
-            'check_command',
-            'normal_check_interval',
-            'retry_check_interval',
-            'check_timeperiod_object_id'
+           'instance_id',
+           'instance_name',
+           'host_object_id',
+           'host_name',
+           'service_id',
+           'service_description',
+           'servicestatus_id',
+           'service_object_id',
+           {name: 'status_update_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+           'output',
+           'perfdata',
+           'current_state',
+           'has_been_checked',
+           'should_be_scheduled',
+           'current_check_attempt',
+           'max_check_attempts',
+           {name: 'last_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+           {name: 'next_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+           'check_type',
+           {name: 'last_state_change', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+           {name: 'last_hard_state_change', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+           'last_hard_state',
+           {name: 'last_time_ok', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+           {name: 'last_time_warning', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+           {name: 'last_time_unknown', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+           {name: 'last_time_critical', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+           'state_type',
+           {name: 'last_notification', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+           {name: 'next_notification', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+           'no_more_notifications',
+           'notifications_enabled',
+           'problem_has_been_acknowledged',
+           'acknowledgement_type',
+           'current_notification_number',
+           'passive_checks_enabled',
+           'active_checks_enabled',
+           'event_handler_enabled',
+           'flap_detection_enabled',
+           'is_flapping',
+           'percent_state_change',
+           'latency',
+           'execution_time',
+           'scheduled_downtime_depth',
+           'failure_prediction_enabled',
+           'process_performance_data',
+           'obsess_over_service',
+           'modified_service_attributes',
+           'event_handler',
+           'check_command',
+           {name: 'check_command', type: 'string'},
+           'normal_check_interval',
+           'retry_check_interval',
+           'check_timeperiod_object_id'
         ],
         autoload:true
     });
-
-    var serviceStateGrid = new Ext.grid.PropertyGrid({
-        title: 'Service State Information',
-        autoHeight: true,
-        width: 400,
-        style:'padding:10px 0 10px 10px',
-        onlyFields: ['current_state','check_command'],
-        customRenderers: { 
-            'current_state': renderCurrentState
-        },
-        stripeRows: true,
-        view: new Ext.grid.GridView({
-            forceFit:true,
-            autoFill:true
-        })
-    });
-
-    // Add the grid to the panel
-    tab.items.add(serviceStateGrid);
-
-    // Refresh the dashboard
-    tabPanel.doLayout();
-
-    // Render the grid
-    serviceStateGrid.render();
 
     // Load the data store
     store.load();
 
     // add an on load listener to update the propertygrid
     store.on('load', function(){
-        serviceStateGrid.setSource(store.getAt(0).data);
+        drawTable(store.getAt(0).data);
     });
 
-    /* Property grid values are editable by default.
-     * Add a beforeedit event handler to cancel the edit
-     * action. Eventualy this can be modified to allow 
-     * editing of certain fields.
-     */
-    serviceStateGrid.on("beforeedit",function(e){
-        //based on a specific field:
-        //if(e.field == "Field Name")
+    function drawTable(o) {
 
-        //based on a specific row
-        //if(e.row == 1)
+        var items = [];
 
-        //based on the value another field of the record
-        //if(e.record.get("Field Name") == "value")
+        for(var k in o){
+            var v = o[k];
+            if (ssi[k]) {
 
-        //cancel the event
-        e.cancel = true;
-    });
+                //if (typeof(v) == 'object' && v.getDate) {
+                //    v = v.dateFormat(npc.app.params.npc_date_format + ' ' + npc.app.params.npc_time_format);
+                //}
 
+                c = ssi[k];
+
+                if(typeof c.renderer == "string"){
+                    c.renderer = Ext.util.Format[c.renderer];
+                }
+
+                if (c.renderer) {
+                    v = c.renderer(o[k]);
+                } else {
+                    v = String.format('<p>&nbsp;{0}</p>', v);
+                }
+
+                if (c.header) {
+                    k = c.header;
+                }
+
+                items.push({width:200, html: String.format('{0}', k)});
+                items.push({wifth:300, html: v});
+            }
+        }
+
+        var table = new Ext.Panel({
+            title: 'Service State Information',
+            style:'padding:10px 0 10px 10px',
+            autoHeight: true,
+            width: 500,
+            //autoScroll: true,
+            layout:'table',
+            stripeRows:true,
+            defaults: {
+                bodyStyle:'padding:2px'
+            },
+            layoutConfig: {
+                columns: 2
+            },
+            items: items
+        });
+
+        // Add the grid to the panel
+        tab.items.add(table);
+
+        // Refresh the dashboard
+        tabPanel.doLayout();
+
+        // Render the table
+        table.render();
+    }
 
 };

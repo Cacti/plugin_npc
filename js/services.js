@@ -104,6 +104,7 @@ npc.app.showServices = function(title, filter){
     },{
         header:"Host",
         dataIndex:'host_name',
+        hidden:true,
         width:75
     },{
         header:"Plugin Output",
@@ -112,7 +113,7 @@ npc.app.showServices = function(title, filter){
     }]);
 
     var grid = new Ext.grid.GridPanel({
-        id: 'services-grid',
+        id: id + '-grid',
         autoHeight:true,
         autoExpandColumn: 'service_description',
         store:store,
