@@ -58,7 +58,7 @@ npc.app.showServices = function(title, filter){
         }, [
             'host_object_id',
             'host_name',
-            'service_object_id',
+            'service_id',
             'service_description',
             'output',
             'current_state',
@@ -166,24 +166,5 @@ npc.app.showServices = function(title, filter){
         store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     }
 
-    grid.on('rowclick', function(grid, rowIndex, e) {
-        var record = grid.getStore().getAt(rowIndex);
-        var id = 'soi' + record.data.service_object_id + '-tab';
-        var tab = Ext.getCmp(id);
-        var tabPanel = Ext.getCmp('centerTabPanel');
-        if (!tab) {
-            tabPanel.add({
-                id: id,
-                title: record.data.host_name + ': ' + record.data.service_description,
-                closable: true,
-                autoLoad: {
-                    url: 'npc.php?module=services&action=showService&p_id=' + record.data.service_object_id,
-                    scripts: true
-                },
-                items: [{}]
-            }).show();
-            tabPanel.doLayout();
-        }
-        tabPanel.setActiveTab(tab);
-    });
+    grid.on('rowclick', npc.app.serviceGridClick);
 };

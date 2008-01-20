@@ -9,17 +9,21 @@ global $config;
 
 $params['config'] = $config;
 
+$module = 'layout';
+$action = 'drawFrame';
+$format = 'json';
+
 // Set the default module and action
 if (isset($_REQUEST['module'])) {
     $module = $_REQUEST['module'];
-} else {
-    $module = 'layout';
 }
 
 if (isset($_REQUEST['action'])) {
     $action = $_REQUEST['action'];
-} else {
-    $action = 'drawFrame';
+}
+
+if (isset($_REQUEST['format'])) {
+    $format = $_REQUEST['format'];
 }
 
 // Include the requested module
@@ -39,7 +43,7 @@ if (is_array($_REQUEST)) {
 
 
 // Display any results in JSON format
-if ($module == 'layout') {
+if ($module == 'layout' || $format == 'html') {
     $obj->$action($params);
 } else {
 

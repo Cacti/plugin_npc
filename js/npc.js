@@ -85,7 +85,6 @@ npc.app = function() {
         },
 
         getDuration: function(val) {
-
             var d = new Date();
             var t = d.dateFormat('U') - val.dateFormat('U');
 

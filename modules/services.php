@@ -35,7 +35,7 @@ class NPC_services {
                             'any'      => '0,1,2,3,-1',
                             'not_ok'   => '1,2,3');
 
-    private $friendlyNames = array('instance_id' => 'instance_id',
+    private $friendlyNames = array('instance_id' => 'Instance Id',
                                    'instance_name' => 'Instance Name',
                                    'host_object_id' => 'Host Object Id',
                                    'host_name' => 'Host Name',
@@ -83,7 +83,7 @@ class NPC_services {
                                    'obsess_over_service' => 'Obsess Over Service',
                                    'modified_service_attributes' => 'Modified Service Attributes',
                                    'event_handler' => 'Event Handler',
-                                   'check_command' => 'check_command',
+                                   'check_command' => 'Check Command',
                                    'normal_check_interval' => 'Normal Check Interval',
                                    'retry_check_interval' => 'Retry Check Interval',
                                    'check_timeperiod_object_id' => 'Check Timeperiod Object Id');
@@ -169,6 +169,29 @@ class NPC_services {
             if (isset($output[$x])) { $x++; }
         }
         return(array($this->rowCount, $output));
+    }
+
+    function getServiceDetail() {
+
+        $results = $this->serviceStatus();  
+    
+        //$x = 0;  
+        for ($i=0; $i < count($results); $i++) {  
+            foreach ($results[$i] as $key => $value) {  
+                //$output[$x] = array('name' => $this->friendlyNames[$key], 'value' => $value);  
+                $output[$i][$this->friendlyNames[$key]] = $value;  
+                //$x++;  
+            }  
+        }  
+        return(array(count($output), $output));  
+    }
+
+    function getServiceStateInfo() {
+
+        require_once("plugins/npc/modules/services.html.php");
+
+        NPC_services_html::serviceStateInfo();
+
     }
 
     function servicePerfData() {

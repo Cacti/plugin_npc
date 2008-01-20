@@ -52,6 +52,7 @@ class NPC_layout {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/npc.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/services.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/serviceDetail.js"></script>
+          
           <script type="text/javascript">
 
             // Add dynamic properties to the params array
@@ -91,6 +92,7 @@ class NPC_layout {
                     <ul id="navlist">
                         <li><a href="#" onclick="npc.app.showServices('Services', 'any');return false;">Services</a></li>
                         <li><a href="#" onclick="npc.app.showServices('Service Problems', 'not_ok');return false;">Service Problems</a></li>
+                        <li><a href="#" onclick="npc.app.showTable('Table Grid', 'not_ok');return false;">Table Grid</a></li>
                         <li><a href="#">Host Detail</a></li>
                         <li><a href="#">Hostgroup Overview</a></li>
                         <li><a href="#">Hostgroup Summary</a></li>
