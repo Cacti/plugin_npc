@@ -73,7 +73,7 @@ npc.app.serviceDetail = function(record) {
                 img = 'tick.png';;
                 break;
         }
-        return String.format('<p align="center"><img src="images/icons/{0}">&nbsp;</p>', img);
+        return String.format('<p align="center"><img src="images/icons/{0}"></p>', img);
     }
 
     // If the tab exists set it active and return or else create it.
@@ -109,26 +109,18 @@ npc.app.serviceDetail = function(record) {
             items: [
                 new Ext.Panel({
                     id:'ssi-main-table',
-                    layout:'table',
-                    autoWidth:true,
-                    border:false,
-                    defaults: {
-                        border:false,
-                        bodyStyle:'padding:10px'
-                    },
-                    layoutConfig: {
-                        columns: 3
-                    },
+                    layout:'column',
+                    //autoWidth:true,
+                    //border:false,
+                    bodyBorder:false,
                     items: [{
-                        id: 'ssi-left'
+                        id: 'ssi-left',
+                        border:false,
+                        columnWidth: .5
                     },{
-                        id: 'ssi-center',
-                        width:100,
-                    },{
-                        id: 'ssi-right'
-                    },{
-                        id: 'ssi-bottom',
-                        colspan: 3
+                        id: 'ssi-right',
+                        border:false,
+                        columnWidth: .5
                     }]
                 })
             ]
@@ -346,7 +338,6 @@ npc.app.serviceDetail = function(record) {
 
         // Add the grid to the panel
         Ext.getCmp('ssi-right').add(smoTable);
-        console.log(Ext.getCmp('ssi-right'));
     }
 
     // add an on load listener to build the tables
