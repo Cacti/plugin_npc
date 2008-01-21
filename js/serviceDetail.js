@@ -17,36 +17,6 @@ npc.app.serviceDetail = function(record) {
     // Set the URL
     var url = 'npc.php?module=services&action=getServices&p_id=' + record.data.service_id;
 
-    var ssiRows = {
-        'Current State': {
-            renderer: renderState
-        },
-        'State Duration': {
-            renderer: npc.app.getDuration
-        },
-        'Check Command': {
-            renderer: renderCheckCommand
-        },
-        'Plugin Output': {},
-        'Current Attempt': {
-            renderer: renderCurrentAttempt
-        },
-        'Last Check': {
-            renderer: npc.app.formatDate
-        },
-        'Next Check': {
-            renderer: npc.app.formatDate
-        },
-        'Event Handler': {
-            renderer: renderEventHandler
-        },
-        'Check Latency': {},
-        'Check Duration': {},
-        'Flapping': {
-            renderer: renderFlapping
-        }
-    };
-
     function renderState(v, meta) {
         var img;
         switch(v) {
@@ -80,17 +50,6 @@ npc.app.serviceDetail = function(record) {
         return String.format('{0}/{1}', v, max);
     }
 
-    function renderEventHandler(v) {
-        var enabled = store.data.items[0].data['event_handler_enabled'];
-        if (v && enabled) {
-            return String.format('(Enabled) {0}', v);
-        } else if (v) {
-            return String.format('(Disabled) {0}', v);
-        }
-
-        return String.format('N/A');
-    }
-
     function renderFlapping(v) {
         switch(v) {
             case '0':
@@ -102,6 +61,19 @@ npc.app.serviceDetail = function(record) {
         }
 
         return String.format('{0}', v);
+    }
+
+    function renderEnabled(v) {
+        var img;
+        switch(v) {
+            case '0':
+                img = 'cross.png';;
+                break;
+            case '1':
+                img = 'tick.png';;
+                break;
+        }
+        return String.format('<p align="center"><img src="images/icons/{0}">&nbsp;</p>', img);
     }
 
     // If the tab exists set it active and return or else create it.
@@ -134,9 +106,33 @@ npc.app.serviceDetail = function(record) {
                     window.open(this.gsm.getSelected().data.link);
                 }
             }],
-            items: [{}]
+            items: [
+                new Ext.Panel({
+                    id:'ssi-main-table',
+                    layout:'table',
+                    autoWidth:true,
+                    border:false,
+                    defaults: {
+                        border:false,
+                        bodyStyle:'padding:10px'
+                    },
+                    layoutConfig: {
+                        columns: 3
+                    },
+                    items: [{
+                        id: 'ssi-left'
+                    },{
+                        id: 'ssi-center',
+                        width:100,
+                    },{
+                        id: 'ssi-right'
+                    },{
+                        id: 'ssi-bottom',
+                        colspan: 3
+                    }]
+                })
+            ]
         }).show();
-
         tabPanel.doLayout();
         tabPanel.setActiveTab(tab);
         tab = Ext.getCmp(id);
@@ -158,9 +154,15 @@ npc.app.serviceDetail = function(record) {
            {name: 'Check Latency', mapping: 'latency'},
            {name: 'Check Duration', mapping: 'execution_time'},
            {name: 'Flapping', mapping: 'is_flapping'},
-           'flap_detection_enabled',
+           {name: 'Active Checks', mapping: 'active_checks_enabled'},
+           {name: 'Passive Checks', mapping: 'passive_checks_enabled'},
+           {name: 'Event Handler', mapping: 'event_handler_enabled'},
+           {name: 'Flap Detection', mapping: 'flap_detection_enabled'},
+           {name: 'Notifications', mapping: 'notifications_enabled'},
+           {name: 'Failure Prediction', mapping: 'failure_prediction_enabled'},
+           {name: 'Process Performance Data', mapping: 'process_performance_data'},
+           {name: 'Obsess Over Service', mapping: 'obsess_over_service'},
            'max_check_attempts',
-           'event_handler_enabled',
            'instance_id',
            'instance_name',
            'host_object_id',
@@ -184,17 +186,11 @@ npc.app.serviceDetail = function(record) {
            {name: 'last_notification', type: 'date', dateFormat: dateFormat},
            {name: 'next_notification', type: 'date', dateFormat: dateFormat},
            'no_more_notifications',
-           'notifications_enabled',
            'problem_has_been_acknowledged',
            'acknowledgement_type',
            'current_notification_number',
-           'passive_checks_enabled',
-           'active_checks_enabled',
            'percent_state_change',
            'scheduled_downtime_depth',
-           'failure_prediction_enabled',
-           'process_performance_data',
-           'obsess_over_service',
            'modified_service_attributes',
            'normal_check_interval',
            'retry_check_interval',
@@ -206,12 +202,62 @@ npc.app.serviceDetail = function(record) {
     // Load the data store
     store.load();
 
-    // add an on load listener to update the propertygrid
-    store.on('load', function(){
-        drawTable(store.getAt(0).data);
-    });
+    var ssiRows = {
+        'Current State': {
+            renderer: renderState
+        },
+        'State Duration': {
+            renderer: npc.app.getDuration
+        },
+        'Check Command': {
+            renderer: renderCheckCommand
+        },
+        'Plugin Output': {},
+        'Current Attempt': {
+            renderer: renderCurrentAttempt
+        },
+        'Last Check': {
+            renderer: npc.app.formatDate
+        },
+        'Next Check': {
+            renderer: npc.app.formatDate
+        },
+        'Event Handler': {},
+        'Check Latency': {},
+        'Check Duration': {},
+        'Flapping': {
+            renderer: renderFlapping
+        }
+    };
 
-    function drawTable(o) {
+    var smoRows = {
+        'Active Checks': {
+            renderer: renderEnabled
+        },
+        'Passive Checks': {
+            renderer: renderEnabled
+        },
+        'Event Handler': {
+            renderer: renderEnabled
+        },
+        'Flap Detection': {
+            renderer: renderEnabled
+        },
+        'Notifications': {
+            renderer: renderEnabled
+        },
+        'Failure Prediction': {
+            renderer: renderEnabled
+        },
+        'Process Performance Data': {
+            renderer: renderEnabled
+        },
+        'Obsess Over Service': {
+            renderer: renderEnabled
+        }
+    };
+
+    function buildSsiTable(o) {
 
         var items = [];
 
@@ -232,15 +278,15 @@ npc.app.serviceDetail = function(record) {
                 }
 
                 items.push({width:200, html: k});
-                items.push({width:300, html: v});
+                items.push({width:400, html: v});
             }
         }
 
-        var table = new Ext.Panel({
+        var ssiTable = new Ext.Panel({
             title: 'Service State Information',
             style:'padding:10px 0 10px 10px',
             autoHeight: true,
-            width: 500,
+            width: 600,
             //autoScroll: true,
             layout:'table',
             stripeRows:true,
@@ -254,12 +300,62 @@ npc.app.serviceDetail = function(record) {
         });
 
         // Add the grid to the panel
-        tab.items.add(table);
+        Ext.getCmp('ssi-left').add(ssiTable);
+    }
+
+    function buildSmoTable(o) {
+
+        var items = [];
+
+        for(var k in o){
+            var v = o[k];
+            if (smoRows[k]) {
+
+                c = smoRows[k];
+
+                if(typeof c.renderer == "string"){
+                    c.renderer = Ext.util.Format[c.renderer];
+                }
+
+                if (c.renderer) {
+                    v = c.renderer(o[k]);
+                } else {
+                    v = String.format('{0}', v);
+                }
+
+                items.push({width:250, html: k});
+                items.push({width:100, html: v});
+            }
+        }
+
+        var smoTable = new Ext.Panel({
+            title: 'Service Monitoring Options',
+            style:'padding:10px 0 10px 10px',
+            autoHeight: true,
+            width: 350,
+            layout:'table',
+            stripeRows:true,
+            defaults: {
+                bodyStyle:'padding:2px'
+            },
+            layoutConfig: {
+                columns: 2
+            },
+            items: items
+        });
+
+        // Add the grid to the panel
+        Ext.getCmp('ssi-right').add(smoTable);
+        console.log(Ext.getCmp('ssi-right'));
+    }
+
+    // add an on load listener to build the tables
+    store.on('load', function(){
+        buildSsiTable(store.getAt(0).data);
+        buildSmoTable(store.getAt(0).data);
 
         // Refresh the dashboard
         tabPanel.doLayout();
+    });
 
-        // Render the table
-        table.render();
-    }
 };
