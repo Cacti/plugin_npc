@@ -148,23 +148,17 @@ npc.app.showServices = function(title, filter){
     grid.store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
-    if (Ext.getCmp(id).isVisible()) {
-        doAutoRefresh();
-    }
+    store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
 
-    // Add listeners to the portlet to stop and start auto refresh
-    // depending on wether or not the portlet is visible.
+    // Stop auto refresh if the tab is closed
     var listeners = {
-        close: function() {
+        destroy: function() {
             store.stopAutoRefresh();
         }
     };
 
+    // Add the listener to the tab
     tab.addListener(listeners);
-
-    function doAutoRefresh() {
-        store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    }
 
     grid.on('rowclick', npc.app.serviceGridClick);
 };

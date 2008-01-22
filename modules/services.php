@@ -73,7 +73,7 @@ class NPC_services {
                                    'active_checks_enabled' => 'Active Checks Enabled',
                                    'event_handler_enabled' => 'Event Handler Enabled',
                                    'flap_detection_enabled' => 'Flap Detection Enabled',
-                                   'is_flapping' => 'Is Flapping',
+                                   'is_flapping' => 'Flapping',
                                    'percent_state_change' => 'Percent State Change',
                                    'latency' => 'Latency',
                                    'execution_time' => 'Execution Time',
@@ -173,25 +173,89 @@ class NPC_services {
 
     function getServiceDetail() {
 
+        $fields = array(
+            'current_state',
+            'output',
+            'last_state_change',
+            'check_command',
+            'current_check_attempt',
+            'last_check',
+            'next_check',
+            'event_handler',
+            'latency',
+            'execution_time',
+            'is_flapping',
+            'active_checks_enabled',
+            'passive_checks_enabled',
+            'event_handler_enabled',
+            'flap_detection_enabled',
+            'notifications_enabled',
+            'failure_prediction_enabled',
+            'process_performance_data',
+            'obsess_over_service'
+        );
+
         $results = $this->serviceStatus();  
     
-        //$x = 0;  
-        for ($i=0; $i < count($results); $i++) {  
-            foreach ($results[$i] as $key => $value) {  
-                //$output[$x] = array('name' => $this->friendlyNames[$key], 'value' => $value);  
-                $output[$i][$this->friendlyNames[$key]] = $value;  
-                //$x++;  
-            }  
+        $x = 0;
+        foreach ($fields as $key) {  
+            $output[$x] = array('name' => $this->friendlyNames[$key], 'value' => $this->renderValue($key, $results[0]));  
+            $x++;  
         }  
         return(array(count($output), $output));  
     }
 
-    function getServiceStateInfo() {
+    function renderValue($key, $results) {
 
-        require_once("plugins/npc/modules/services.html.php");
+        // Set the default return value
+        $return = $results[$key];
 
-        NPC_services_html::serviceStateInfo();
+        $cs = array(
+            '0'  => '<img src="images/nagios/recovery.png">',
+            '1'  => '<img src="images/nagios/warning.png">',
+            '2'  => '<img src="images/nagios/critical.png">',
+            '3'  => '<img src="images/nagios/unknown.png">',
+            '-1' => '<img src="images/nagios/info.png">'
+        );
 
+        if ($key == 'current_state') {
+            $return = $cs[$results[$key]];
+        }
+
+        if ($key == 'current_check_attempt') {
+            $return = $results[$key] . '/' . $results['max_check_attempts'];
+        }
+
+        if ($key == 'is_flapping') {
+            if ($results[$key]) {
+                $return = 'Yes';
+            } else {
+                $return = 'No';
+            }
+        }
+
+        if (preg_match("/_enabled/", $key) || $key == 'process_performance_data' || $key == 'obsess_over_service') {
+            if($results[$key]) {
+                $return = '<img src="images/icons/tick.png">';
+            } else {
+                $return = '<img src="images/icons/cross.png">';
+            }
+        }
+
+        if ($key == 'last_state_change' || $key == 'last_check' || $key == 'next_check') {
+            $format = read_config_option('npc_date_format') . ' ' . read_config_option('npc_time_format');
+            $return = date($format, strtotime($results[$key]));
+        }
+
+        if ($return == '') {
+            $return = 'NA';
+        }
+
+        if (!$return) {
+            $return = 'NA';
+        }
+
+        return($return);
     }
 
     function servicePerfData() {
@@ -222,7 +286,7 @@ class NPC_services {
         return(db_fetch_assoc($sql));
     }
 
-    function serviceStatus() {
+    function serviceStatus($fields=null) {
 
         $sql = "
             SELECT 
