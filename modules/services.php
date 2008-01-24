@@ -79,7 +79,7 @@ class NPC_services {
                                    'percent_state_change' => 'Percent State Change',
                                    'latency' => 'Latency',
                                    'execution_time' => 'Execution Time',
-                                   'scheduled_downtime_depth' => 'Scheduled Downtime Depth',
+                                   'scheduled_downtime_depth' => 'In Scheduled Downtime',
                                    'failure_prediction_enabled' => 'Failure Prediction Enabled',
                                    'process_performance_data' => 'Process Performance Data',
                                    'obsess_over_service' => 'Obsess Over Service',
@@ -187,6 +187,7 @@ class NPC_services {
             'latency',
             'execution_time',
             'is_flapping',
+            'scheduled_downtime_depth',
             'active_checks_enabled',
             'passive_checks_enabled',
             'event_handler_enabled',
@@ -232,7 +233,6 @@ class NPC_services {
             if ($results[$key]) {
                 $return = 'Yes';
             } else {
-                //$return = 'No';
                 $return = 'No';
             }
         }
@@ -248,6 +248,14 @@ class NPC_services {
         if ($key == 'last_state_change' || $key == 'last_check' || $key == 'next_check') {
             $format = read_config_option('npc_date_format') . ' ' . read_config_option('npc_time_format');
             $return = date($format, strtotime($results[$key]));
+        }
+
+        if ($key == 'scheduled_downtime_depth') {
+            if ($results[$key]) {
+                $return = 'Yes';
+            } else {
+                $return = 'No';
+            }
         }
 
         if ($return == '') {
@@ -289,7 +297,7 @@ class NPC_services {
         return(db_fetch_assoc($sql));
     }
 
-    function serviceDowntimeHistory() {
+    function getServiceDowntimeHistory() {
 
         $sql = "
             SELECT
@@ -306,7 +314,7 @@ class NPC_services {
             WHERE obj1.objecttype_id='2' ";
 
         if ($this->id) {
-            $sql .= sprintf(" AND npc_services.service_id = %d", $this->id);
+            $sql .= sprintf(" AND npc_downtimehistory.object_id = %d", $this->id);
         }
 
         $sql .= " ORDER BY scheduled_start_time DESC, "
@@ -318,7 +326,7 @@ class NPC_services {
 
         $sql = sprintf($sql . " LIMIT %d,%d", $this->start, $this->limit);
 
-        return(db_fetch_assoc($sql));
+        return(array($this->rowCount, db_fetch_assoc($sql)));
     }
 
     function getServiceAlertHistory() {
@@ -384,7 +392,6 @@ class NPC_services {
                 npc_instances.instance_name,
                 npc_services.host_object_id,
                 obj1.name1 AS host_name,
-                npc_services.service_id,
                 npc_services.service_object_id,
                 obj1.name2 AS service_description,
                 npc_servicestatus.* 
@@ -401,7 +408,7 @@ class NPC_services {
         $where = " WHERE npc_services.config_type='1' ";
 
         if ($this->id) {
-            $where .= sprintf(" AND npc_services.service_id = %d", $this->id);
+            $where .= sprintf(" AND npc_services.service_object_id = %d", $this->id);
         }
 
         $where .= " AND npc_servicestatus.current_state in (" . $this->states[$this->state] . ")";

@@ -49,10 +49,6 @@ if ($module == 'layout' || $format == 'html') {
 
     list ($count, $results) = $obj->$action($params);
 
-    if (!is_array($results[0])) {
-        $results = array($results);
-    }
-
     if (!isset($count)) {
         $count = 1;
     }

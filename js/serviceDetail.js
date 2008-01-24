@@ -1,7 +1,7 @@
 npc.app.serviceDetail = function(record) {
 
     // Set the id for the service detail tab
-    var id = 'serviceDetail' + record.data.service_id + '-tab';
+    var id = 'serviceDetail' + record.data.service_object_id + '-tab';
 
     // Set thetitle
     var title = record.data.host_name + ': ' + record.data.service_description;
@@ -12,6 +12,8 @@ npc.app.serviceDetail = function(record) {
     // Get the tab
     var tab = Ext.getCmp(id);
 
+    // Default # of rows to display
+    var pageSize = 30;
 
     function renderValue(val, meta, record) {
         return String.format(val);
@@ -57,16 +59,16 @@ npc.app.serviceDetail = function(record) {
                     defaults:{autoScroll: true},
                     items:[{
                         title: 'Service State Information',
-                        id: 'sd-si-tab'
+                        id: id + '-si'
                     },{
                         title: 'Alert History',
-                        id: 'sd-sa-tab'
+                        id: id + '-sa'
                     },{
                         title: 'Notification History',
-                        id: 'sd-sn-tab'
+                        id: id + '-sn'
                     },{
                         title: 'Downtime History',
-                        html:'Downtime history'
+                        id: id + '-sd'
                     },{
                         title: 'Graph',
                         autoLoad: 'graphProxy.php'
@@ -84,8 +86,8 @@ npc.app.serviceDetail = function(record) {
         tab = Ext.getCmp(id);
     }
 
-    var ssiStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=services&action=getServiceStateInfo&p_id=' + record.data.service_id,
+    var siStore = new Ext.data.JsonStore({
+        url: 'npc.php?module=services&action=getServiceStateInfo&p_id=' + record.data.service_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -95,25 +97,24 @@ npc.app.serviceDetail = function(record) {
         autoload:true
     });
 
-    var ssiCm = new Ext.grid.ColumnModel([{
+    var siCm = new Ext.grid.ColumnModel([{
         header:"Parameter",
         dataIndex:'name',
-        width:80
+        width:100
     },{
         header:"Value",
         dataIndex:'value',
-        width:125,
+        width:300,
         renderer: renderValue,
         align:'left'
     }]);
 
-    var ssiGrid = new Ext.grid.GridPanel({
-        id: 'sd-si-grid',
+    var siGrid = new Ext.grid.GridPanel({
         autoHeight:true,
         autoWidth:true,
-        store:ssiStore,
-        cm:ssiCm,
-        autoExpandColumn:'value',
+        store:siStore,
+        cm:siCm,
+        autoExpandColumn:'Value',
         stripeRows: true,
         view: new Ext.grid.GridView({
              forceFit:true,
@@ -142,7 +143,7 @@ npc.app.serviceDetail = function(record) {
     },{
         header:"Date",
         dataIndex:'start_time',
-        width:100,
+        width:120,
         renderer: npc.app.formatDate
     },{
         header:"Message",
@@ -151,17 +152,17 @@ npc.app.serviceDetail = function(record) {
     }]);
 
     var snGrid = new Ext.grid.GridPanel({
-        id: 'sd-sn-grid',
         autoHeight:true,
         autoWidth:true,
         store:snStore,
         cm:snCm,
-        autoExpandColumn:'output',
+        autoExpandColumn:'Message',
         stripeRows: true,
         view: new Ext.grid.GridView({
-             forceFit:true,
-             autoFill:true,
-             scrollOffset:0
+            forceFit:true,
+            autoFill:true,
+            emptyText:'No data found.',
+            scrollOffset:0
         })
     });
 
@@ -207,7 +208,6 @@ npc.app.serviceDetail = function(record) {
     }]);
 
     var saGrid = new Ext.grid.GridPanel({
-        id: 'sd-sa-grid',
         autoHeight:true,
         autoWidth:true,
         store:saStore,
@@ -215,41 +215,106 @@ npc.app.serviceDetail = function(record) {
         autoExpandColumn:'output',
         stripeRows: true,
         view: new Ext.grid.GridView({
-             forceFit:true,
-             autoFill:true,
-             scrollOffset:0
+            forceFit:true,
+            autoFill:true,
+            emptyText:'No data found.',
+            scrollOffset:0
+        }),
+        bbar: new Ext.PagingToolbar({
+            pageSize:pageSize,
+            store:saStore,
+            displayInfo:true
         })
     });
 
-    // Add the ssi grid to the ssi tab
-    Ext.getCmp('sd-si-tab').add(ssiGrid);
-    Ext.getCmp('sd-sn-tab').add(snGrid);
-    Ext.getCmp('sd-sa-tab').add(saGrid);
+    var sdStore = new Ext.data.JsonStore({
+        url: 'npc.php?module=services&action=getServiceDowntimeHistory&p_id=' + record.data.service_object_id,
+        totalProperty:'totalCount',
+        root:'data',
+        fields:[
+            {name: 'entry_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'scheduled_start_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'scheduled_end_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            'author_name',
+            'comment_data'
+        ],
+        autoload:true
+    });
+
+    var sdCm = new Ext.grid.ColumnModel([{
+        header:"Entry Time",
+        dataIndex:'entry_time',
+        renderer: npc.app.formatDate,
+        width:120
+    },{
+        header:"Start Time",
+        dataIndex:'scheduled_start_time',
+        renderer: npc.app.formatDate,
+        width:120
+    },{
+        header:"End Time",
+        dataIndex:'scheduled_end_time',
+        renderer: npc.app.formatDate,
+        width:120
+    },{
+        header:"User",
+        dataIndex:'author_name',
+        width:100
+    },{
+        header:"Comment",
+        dataIndex:'comment_data',
+        width:400
+    }]);
+
+    var sdGrid = new Ext.grid.GridPanel({
+        autoHeight:true,
+        autoWidth:true,
+        store:sdStore,
+        cm:sdCm,
+        autoExpandColumn:'Comment',
+        stripeRows: true,
+        view: new Ext.grid.GridView({
+            forceFit:true,
+            autoFill:true,
+            emptyText:'No data found.',
+            scrollOffset:0
+        })
+    });
+
+    // Add the grids to the tabs
+    Ext.getCmp(id+'-si').add(siGrid);
+    Ext.getCmp(id+'-sn').add(snGrid);
+    Ext.getCmp(id+'-sa').add(saGrid);
+    Ext.getCmp(id+'-sd').add(sdGrid);
 
     // Refresh the dashboard
     tabPanel.doLayout();
 
     // Render the default grid
-    ssiGrid.render();
+    siGrid.render();
     snGrid.render();
     saGrid.render();
+    sdGrid.render();
 
     // Load the data stores
-    ssiStore.load();
-    snStore.load();
-    saStore.load();
+    siStore.load();
+    snStore.load({params:{start:0, limit:pageSize}});
+    saStore.load({params:{start:0, limit:pageSize}});
+    sdStore.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh
-    ssiStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    siStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     snStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     saStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    sdStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
 
     // Add listeners to stop auto refresh on the store if the tab is closed
     var listeners = {
         destroy: function() {
-            ssiStore.stopAutoRefresh();
+            siStore.stopAutoRefresh();
             snStore.stopAutoRefresh();
             saStore.stopAutoRefresh();
+            sdStore.stopAutoRefresh();
         }
     };
 

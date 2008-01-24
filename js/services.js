@@ -7,7 +7,7 @@ npc.app.showServices = function(title, filter){
     var url = 'npc.php?module=services&action=getServices&p_state=' + filter;
 
     // Default # of rows to display
-    var pageSize = 30;
+    var pageSize = 20;
 
     var tab = Ext.getCmp(id);
     var tabPanel = Ext.getCmp('centerTabPanel');

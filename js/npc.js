@@ -111,7 +111,10 @@ npc.app = function() {
         },
 
         formatDate: function(val) {
-            return String.format(val.dateFormat(npc.app.params.npc_date_format + ' ' + npc.app.params.npc_time_format));
+            if(typeof val == "object") {
+                return String.format(val.dateFormat(npc.app.params.npc_date_format + ' ' + npc.app.params.npc_time_format));
+            }
+            return val;
         },
 
         renderStatusImage: function(val){
