@@ -80,6 +80,16 @@ npc.app = function() {
 
         // public methods
 
+        // Unused at the moment
+        getTip: function(el) {
+            new Ext.ToolTip({
+                target: el.id,
+                width: 200,
+                autoLoad: {url: 'npc.php?module=help&action=getTip&p_id='+el.id+'&format=html'},
+                dismissDelay: 15000 // auto hide after 15 seconds
+            });
+        },
+
         serviceGridClick: function(grid, rowIndex, e) {
             npc.app.serviceDetail(grid.getStore().getAt(rowIndex));
         },
@@ -102,6 +112,22 @@ npc.app = function() {
 
         formatDate: function(val) {
             return String.format(val.dateFormat(npc.app.params.npc_date_format + ' ' + npc.app.params.npc_time_format));
+        },
+
+        renderStatusImage: function(val){
+            var img;
+            if (val == 0) {
+                img = 'recovery.png';
+            } else if (val == 1) {
+                img = 'warning.png';
+            } else if (val == 2) {
+                img = 'critical.png';
+            } else if (val == 3) {
+                img = 'unknown.png';
+            } else if (val == -1) {
+                img = 'info.png';
+            }
+            return String.format('<p align="center"><img src="images/nagios/{0}"></p>', img);
         },
 
         toggleRegion: function(region, link){

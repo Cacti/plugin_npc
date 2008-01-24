@@ -11,6 +11,7 @@ class NPC_services {
     var $portletCols = array('host_object_id',
                              'host_name',
                              'service_id',
+                             'service_object_id',
                              'service_description',
                              'current_state',
                              'output');
@@ -18,6 +19,7 @@ class NPC_services {
     var $defaultCols = array('host_object_id',
                              'host_name',
                              'service_id',
+                             'service_object_id',
                              'service_description',
                              'current_state',
                              'last_check',
@@ -171,7 +173,7 @@ class NPC_services {
         return(array($this->rowCount, $output));
     }
 
-    function getServiceDetail() {
+    function getServiceStateInfo() {
 
         $fields = array(
             'current_state',
@@ -196,7 +198,7 @@ class NPC_services {
         );
 
         $results = $this->serviceStatus();  
-    
+
         $x = 0;
         foreach ($fields as $key) {  
             $output[$x] = array('name' => $this->friendlyNames[$key], 'value' => $this->renderValue($key, $results[0]));  
@@ -230,6 +232,7 @@ class NPC_services {
             if ($results[$key]) {
                 $return = 'Yes';
             } else {
+                //$return = 'No';
                 $return = 'No';
             }
         }
@@ -280,10 +283,97 @@ class NPC_services {
         ";
 
         if ($this->id) {
-            $sql .= " AND s.service_id = " . $this->id;
+            $sql .= sprintf(" AND s.service_id = %d", $this->id);
         }
 
         return(db_fetch_assoc($sql));
+    }
+
+    function serviceDowntimeHistory() {
+
+        $sql = "
+            SELECT
+                npc_instances.instance_id,
+                npc_instances.instance_name,
+                npc_downtimehistory.object_id,
+                obj1.name1 AS host_name,
+                obj1.name2 AS service_description,
+                npc_downtimehistory.*
+            FROM 
+                `npc_downtimehistory`
+                LEFT JOIN npc_objects as obj1 ON npc_downtimehistory.object_id=obj1.object_id
+                LEFT JOIN npc_instances ON npc_downtimehistory.instance_id=npc_instances.instance_id
+            WHERE obj1.objecttype_id='2' ";
+
+        if ($this->id) {
+            $sql .= sprintf(" AND npc_services.service_id = %d", $this->id);
+        }
+
+        $sql .= " ORDER BY scheduled_start_time DESC, "
+              . " actual_start_time DESC, "
+              . " actual_start_time_usec DESC, "
+              . " downtimehistory_id DESC ";
+
+        $this->rowCount = count(db_fetch_assoc($sql));
+
+        $sql = sprintf($sql . " LIMIT %d,%d", $this->start, $this->limit);
+
+        return(db_fetch_assoc($sql));
+    }
+
+    function getServiceAlertHistory() {
+
+        $sql = "
+            SELECT 
+                npc_instances.instance_id,
+                npc_instances.instance_name,
+                npc_statehistory.object_id,
+                obj1.name1 AS host_name,
+                obj1.name2 AS service_description,
+                npc_statehistory.* 
+            FROM 
+                `npc_statehistory` 
+                LEFT JOIN npc_objects as obj1 ON npc_statehistory.object_id=obj1.object_id 
+                LEFT JOIN npc_instances ON npc_statehistory.instance_id=npc_instances.instance_id 
+            WHERE 
+                obj1.objecttype_id='2' ";
+
+        if ($this->id) {
+            $sql .= sprintf(" AND npc_statehistory.object_id = %d", $this->id);
+        }
+
+        $sql .= sprintf(" ORDER BY state_time DESC, state_time_usec DESC LIMIT %d,%d", $this->start, $this->limit);
+
+        $this->rowCount = count(db_fetch_assoc($sql));
+
+        return(array($this->rowCount, db_fetch_assoc($sql)));
+    }
+
+    function getServiceNotifications() {
+
+        $sql = "
+            SELECT
+                npc_instances.instance_id,
+                npc_instances.instance_name,
+                npc_notifications.object_id AS service_object_id,
+                obj1.name1 AS host_name,
+                obj1.name2 AS service_description,
+                npc_notifications.*
+            FROM 
+                `npc_notifications`
+            LEFT JOIN npc_objects as obj1 ON npc_notifications.object_id=obj1.object_id
+            LEFT JOIN npc_instances ON npc_notifications.instance_id=npc_instances.instance_id
+            WHERE obj1.objecttype_id='2' ";
+
+        if ($this->id) {
+            $sql .= sprintf(" AND npc_notifications.object_id = %d", $this->id);
+        }
+
+        $sql .= sprintf(" ORDER BY start_time DESC, start_time_usec DESC LIMIT %d,%d", $this->start, $this->limit);
+
+        $this->rowCount = count(db_fetch_assoc($sql));
+
+        return(array($this->rowCount, db_fetch_assoc($sql)));
     }
 
     function serviceStatus($fields=null) {
@@ -295,6 +385,7 @@ class NPC_services {
                 npc_services.host_object_id,
                 obj1.name1 AS host_name,
                 npc_services.service_id,
+                npc_services.service_object_id,
                 obj1.name2 AS service_description,
                 npc_servicestatus.* 
             FROM 
@@ -310,7 +401,7 @@ class NPC_services {
         $where = " WHERE npc_services.config_type='1' ";
 
         if ($this->id) {
-            $where .= " AND npc_services.service_id = " . $this->id;
+            $where .= sprintf(" AND npc_services.service_id = %d", $this->id);
         }
 
         $where .= " AND npc_servicestatus.current_state in (" . $this->states[$this->state] . ")";
@@ -319,10 +410,9 @@ class NPC_services {
 
         $this->rowCount = count(db_fetch_assoc($sql));
 
-        $sql = $sql . " LIMIT " . $this->start . "," . $this->limit;
+        $sql = sprintf($sql . " LIMIT %d,%d", $this->start, $this->limit);
 
         return(db_fetch_assoc($sql));
     }
-
 }
 ?>

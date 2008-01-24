@@ -15,15 +15,15 @@ $format = 'json';
 
 // Set the default module and action
 if (isset($_REQUEST['module'])) {
-    $module = $_REQUEST['module'];
+    $module = get_request_var_request('module');
 }
 
 if (isset($_REQUEST['action'])) {
-    $action = $_REQUEST['action'];
+    $action = get_request_var_request('action');
 }
 
 if (isset($_REQUEST['format'])) {
-    $format = $_REQUEST['format'];
+    $format = get_request_var_request('format');
 }
 
 // Include the requested module
@@ -33,7 +33,7 @@ $class = 'NPC_' . $module;
 $obj = new $class;
 if (is_array($_REQUEST)) {
     foreach($_REQUEST as $key => $value) {
-        $params[$key] = $value;
+        $params[$key] = get_request_var_request($value);
         if (preg_match("/p_/", $key) || $key == "start" || $key == "limit") {
             $parm = preg_replace("/p_/", '', $key);
             $obj->$parm = $value;

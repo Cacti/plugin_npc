@@ -65,12 +65,12 @@ function npc_config_arrays () {
     );
 
     $npc_time_format = array(
-        "H:i" => "23:00",
-        "h:ia" => "11:00pm",
-        "h:iA" => "11:00PM",
-        "H.i" => "23.00",
-        "h.ia" => "i11.00pm",
-        "h.iA" => "11.00PM"
+        "H:i:s"  => "23:07",
+        "h:i:sa" => "11:07pm",
+        "h:i:sA" => "11:07PM",
+        "H.i.s"  => "23.07",
+        "h.i.sa" => "11.07pm",
+        "h.i.sA" => "11.07PM"
     );
 }
 

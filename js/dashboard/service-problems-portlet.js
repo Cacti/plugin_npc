@@ -41,6 +41,7 @@ Ext.onReady(function(){
         }, [
             'host_object_id',
             'host_name',
+            'service_object_id',
             'service_id',
             'service_description',
             'current_state',

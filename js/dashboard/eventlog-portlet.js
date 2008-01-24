@@ -40,10 +40,6 @@ Ext.onReady(function(){
         return String.format('<img src="images/icons/information.png">');
     }
 
-    function renderDate(val) {
-        return String.format(val.dateFormat(npc.app.params.npc_date_format + ' ' + npc.app.params.npc_time_format));
-    }
-
     var store = new Ext.data.JsonStore({
         url:url,
         totalProperty:'totalCount',
@@ -64,7 +60,7 @@ Ext.onReady(function(){
         header:"Date",
         dataIndex:'entry_time',
         width:125,
-        renderer: renderDate,
+        renderer:npc.app.formatDate,
         align:'left'
     }, {
         header:"Log Entry",

@@ -32,22 +32,6 @@ npc.app.showServices = function(title, filter){
         return String.format('{0}/{1}', val, record.data.max_check_attempts);
     }
 
-    function renderStatus(val){
-        var img;
-        if (val == 0) {
-            img = 'recovery.png';
-        } else if (val == 1) {
-            img = 'warning.png';
-        } else if (val == 2) {
-            img = 'critical.png';
-        } else if (val == 3) {
-            img = 'unknown.png';
-        } else if (val == -1) {
-            img = 'info.png';
-        }
-        return String.format('<p align="center"><img src="images/nagios/{0}"></p>', img);
-    }
-
     var store = new Ext.data.GroupingStore({
         url:url,
         autoload:true,
@@ -59,6 +43,7 @@ npc.app.showServices = function(title, filter){
             'host_object_id',
             'host_name',
             'service_id',
+            'service_object_id',
             'service_description',
             'output',
             'current_state',
@@ -79,7 +64,7 @@ npc.app.showServices = function(title, filter){
     },{
         header:"Status",
         dataIndex:'current_state',
-        renderer:renderStatus,
+        renderer:npc.app.renderStatusImage,
         width:45
     },{
         header:"Last Check",
