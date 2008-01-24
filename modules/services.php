@@ -350,9 +350,8 @@ class NPC_services {
             $sql .= sprintf(" AND npc_statehistory.object_id = %d", $this->id);
         }
 
-        $sql .= sprintf(" ORDER BY state_time DESC, state_time_usec DESC LIMIT %d,%d", $this->start, $this->limit);
-
         $this->rowCount = count(db_fetch_assoc($sql));
+        $sql .= sprintf(" ORDER BY state_time DESC, state_time_usec DESC LIMIT %d,%d", $this->start, $this->limit);
 
         return(array($this->rowCount, db_fetch_assoc($sql)));
     }
@@ -377,9 +376,8 @@ class NPC_services {
             $sql .= sprintf(" AND npc_notifications.object_id = %d", $this->id);
         }
 
-        $sql .= sprintf(" ORDER BY start_time DESC, start_time_usec DESC LIMIT %d,%d", $this->start, $this->limit);
-
         $this->rowCount = count(db_fetch_assoc($sql));
+        $sql .= sprintf(" ORDER BY start_time DESC, start_time_usec DESC LIMIT %d,%d", $this->start, $this->limit);
 
         return(array($this->rowCount, db_fetch_assoc($sql)));
     }

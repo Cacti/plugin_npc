@@ -13,7 +13,7 @@ npc.app.serviceDetail = function(record) {
     var tab = Ext.getCmp(id);
 
     // Default # of rows to display
-    var pageSize = 30;
+    var pageSize = 20;
 
     function renderValue(val, meta, record) {
         return String.format(val);
@@ -62,6 +62,7 @@ npc.app.serviceDetail = function(record) {
                         id: id + '-si'
                     },{
                         title: 'Alert History',
+                        autoHeight:true,
                         id: id + '-sa'
                     },{
                         title: 'Notification History',
@@ -161,8 +162,13 @@ npc.app.serviceDetail = function(record) {
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
-            emptyText:'No data found.',
+            emptyText:'No notifications.',
             scrollOffset:0
+        }),
+        bbar: new Ext.PagingToolbar({
+            pageSize:pageSize,
+            store:snStore,
+            displayInfo:true
         })
     });
 
@@ -217,7 +223,7 @@ npc.app.serviceDetail = function(record) {
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
-            emptyText:'No data found.',
+            emptyText:'No alerts.',
             scrollOffset:0
         }),
         bbar: new Ext.PagingToolbar({
@@ -276,8 +282,13 @@ npc.app.serviceDetail = function(record) {
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
-            emptyText:'No data found.',
+            emptyText:'No downtime.',
             scrollOffset:0
+        }),
+        bbar: new Ext.PagingToolbar({
+            pageSize:pageSize,
+            store:sdStore,
+            displayInfo:true
         })
     });
 
