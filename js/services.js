@@ -117,7 +117,11 @@ npc.app.showServices = function(title, filter){
             pageSize: pageSize,
             store: store,
             displayInfo: true
-        })
+        }),
+        plugins:[new Ext.ux.grid.Search({
+            mode:'remote',
+            iconCls:false
+        })]
     });
 
     // Add the grid to the panel

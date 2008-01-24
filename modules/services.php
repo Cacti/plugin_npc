@@ -5,7 +5,9 @@ class NPC_services {
     var $start = 0;
     var $limit = 20;
     var $state = "any";
-    var $portlet = 0;
+    var $portlet = null;
+    var $search = null;
+    var $fields = null;
     var $id = null;
 
     var $portletCols = array('host_object_id',
@@ -161,15 +163,35 @@ class NPC_services {
 
         $x = 0;
         for ($i=0; $i < count($results); $i++) {
+
+            $match = 0;
             foreach ($results[$i] as $key => $value) {
+                if ($this->search) {
+                    $fields = json_decode($this->fields);
+                    foreach ($fields as $field) {
+                        $string = strtoupper($this->search);
+                        if ($field == $key && preg_match("/$string/", strtoupper($value))) {
+                            $match = 1;    
+                        }
+                    }
+                }
+
                 if (!$columns) {
                     $output[$x][$key] = $value;
                 } else if (in_array($key, $columns )) {
                     $output[$x][$key] = $value;
                 }
             }
-            if (isset($output[$x])) { $x++; }
+
+            if (isset($output[$x])) { 
+                $x++; 
+                if ($this->search && !$match) {
+                    $x--;
+		            unset($output[$x]);
+                }
+            }
         }
+
         return(array($this->rowCount, $output));
     }
 
@@ -394,7 +416,7 @@ class NPC_services {
                 obj1.name2 AS service_description,
                 npc_servicestatus.* 
             FROM 
-                `npc_servicestatus` 
+                npc_servicestatus 
             LEFT JOIN npc_objects as obj1 
                 ON npc_servicestatus.service_object_id=obj1.object_id 
             LEFT JOIN npc_services 
@@ -409,7 +431,8 @@ class NPC_services {
             $where .= sprintf(" AND npc_services.service_object_id = %d", $this->id);
         }
 
-        $where .= " AND npc_servicestatus.current_state in (" . $this->states[$this->state] . ")";
+        $where .= " AND npc_servicestatus.current_state in (" . $this->states[$this->state] . ") ";
+
                 
         $sql = $sql . $where . " ORDER BY instance_name ASC, host_name ASC, service_description ASC ";
 
