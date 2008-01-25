@@ -75,13 +75,15 @@ if(Ext.DatePicker){
        maxText           : "日期必須小於最大容許日期",
        disabledDaysText  : "",
        disabledDatesText : "",
-       monthNames	 : Date.monthNames,
-       dayNames		 : Date.dayNames,       
+       monthNames        : Date.monthNames,
+       dayNames          : Date.dayNames,       
        nextText          : "下個月 (Ctrl+右方向鍵)",
        prevText          : "上個月 (Ctrl+左方向鍵)",
        monthYearText     : "選擇月份 (Ctrl+上/下方向鍵選擇年份)",
        todayTip          : "{0} (空白鍵)",
-       format            : "y/m/d"
+       format            : "y/m/d",
+       okText            : "确定",
+       cancelText        : "取消"
     });
 }
 

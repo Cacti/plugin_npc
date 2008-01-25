@@ -71,26 +71,28 @@ if(Ext.DatePicker){
       maxText           : "日期在最大日期之后",
       disabledDaysText  : "",
       disabledDatesText : "",
-      monthNames	: Date.monthNames,
-      dayNames		: Date.dayNames,      
+      monthNames        : Date.monthNames,
+      dayNames          : Date.dayNames,
       nextText          : '下月 (Control+Right)',
       prevText          : '上月 (Control+Left)',
       monthYearText     : '选择一个月 (Control+Up/Down 来改变年)',
       todayTip          : "{0} (空格键选择)",
-      format            : "y年m月d日"
+      format            : "y年m月d日",
+      okText            : "确定",
+      cancelText        : "取消"
    });
 }
 
 if(Ext.PagingToolbar){
    Ext.apply(Ext.PagingToolbar.prototype, {
       beforePageText : "页",
-   	  afterPageText  : "页共 {0} 页", 
+      afterPageText  : "页共 {0} 页",
       firstText      : "第一页",
       prevText       : "前一页",
       nextText       : "下一页",
       lastText       : "最后页",
       refreshText    : "刷新",
-	  displayMsg     : "显示 {0} - {1}，共 {2} 条",
+      displayMsg     : "显示 {0} - {1}，共 {2} 条",
       emptyMsg       : '没有数据需要显示'
    });
 }

@@ -5,6 +5,7 @@
  * 10 October 2007
  * By Nedko Penev 
  * 26 October 2007
+ *
  * (utf-8 encoding)
  */
 

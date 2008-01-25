@@ -1,7 +1,7 @@
-/*
+﻿/*
  * France (France) translation
- * By Perrich
- * 06-08-2007, 09:07 PM
+ * By Thylia
+ * 09-11-2007, 02:22 PM
  */
 
 Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">En cours de chargement...</div>';
@@ -11,7 +11,7 @@ if(Ext.View){
 }
 
 if(Ext.grid.Grid){
-   Ext.grid.Grid.prototype.ddText = "{0} ligne(s) sélectionné(s)";
+   Ext.grid.Grid.prototype.ddText = "{0} ligne(s) sélectionnée(s)";
 }
 
 if(Ext.TabPanelItem){
@@ -41,6 +41,29 @@ Date.monthNames = [
    "Décembre"
 ];
 
+Date.getShortMonthName = function(month) {
+  return Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  Jan : 0,
+  Feb : 1,
+  Mar : 2,
+  Apr : 3,
+  May : 4,
+  Jun : 5,
+  Jul : 6,
+  Aug : 7,
+  Sep : 8,
+  Oct : 9,
+  Nov : 10,
+  Dec : 11
+};
+
+Date.getMonthNumber = function(name) {
+  return Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
 Date.dayNames = [
    "Dimanche",
    "Lundi",
@@ -50,6 +73,10 @@ Date.dayNames = [
    "Vendredi",
    "Samedi"
 ];
+
+Date.getShortDayName = function(day) {
+  return Date.dayNames[day].substring(0, 3);
+};
 
 if(Ext.MessageBox){
    Ext.MessageBox.buttonText = {
@@ -71,15 +98,15 @@ if(Ext.util.Format){
 if(Ext.DatePicker){
    Ext.apply(Ext.DatePicker.prototype, {
       todayText         : "Aujourd'hui",
-      minText           : "Cette date est plus petite que la date minimum",
-      maxText           : "Cette date est plus grande que la date maximum",
+      minText           : "Cette date est antérieure à la date minimum",
+      maxText           : "Cette date est postérieure à la date maximum",
       disabledDaysText  : "",
       disabledDatesText : "",
-      monthNames	: Date.monthNames,
-      dayNames		: Date.dayNames,
-      nextText          : 'Prochain mois (CTRL+Fléche droite)',
-      prevText          : "Mois précédent (CTRL+Fléche gauche)",
-      monthYearText     : "Choisissez un mois (CTRL+Fléche haut ou bas pour changer d\'année.)",
+      monthNames		: Date.monthNames,
+      dayNames			: Date.dayNames,
+      nextText          : 'Mois suivant (CTRL+Flèche droite)',
+      prevText          : "Mois précédent (CTRL+Flèche gauche)",
+      monthYearText     : "Choisissez un mois (CTRL+Flèche haut ou bas pour changer d'année.)",
       todayTip          : "{0} (Barre d'espace)",
       okText            : "&#160;OK&#160;",
       cancelText        : "Annuler",
@@ -124,8 +151,8 @@ if(Ext.form.DateField){
    Ext.apply(Ext.form.DateField.prototype, {
       disabledDaysText  : "Désactivé",
       disabledDatesText : "Désactivé",
-      minText           : "La date de ce champ doit être avant le {0}",
-      maxText           : "La date de ce champ doit être après le {0}",
+      minText           : "La date de ce champ ne peut être antérieure au {0}",
+      maxText           : "La date de ce champ ne peut être postérieure au {0}",
       invalidText       : "{0} n'est pas une date valide - elle doit être au format suivant: {1}",
       format            : "d/m/y",
       altFormats        : "d/m/Y|d-m-y|d-m-Y|d/m|d-m|dm|dmy|dmY|d|Y-m-d"
@@ -226,6 +253,16 @@ if(Ext.form.HtmlEditor){
    });
 }
 
+if(Ext.form.TimeField){
+   Ext.apply(Ext.form.TimeField.prototype, {
+      minText     : "L'heure de ce champ ne peut être antérieure au {0}",
+      maxText     : "L'heure de ce champ ne peut être postérieure au {0}",
+      invalidText : "{0} n'est pas une heure valide",
+      format      : "H:i",
+      altFormats  : "g:ia|g:iA|g:i a|g:i A|h:i|g:i|H:i|ga|h a|g a|g A|gi|hi|Hi|gia|hia|g|H"
+   });
+}
+
 if(Ext.grid.GridView){
    Ext.apply(Ext.grid.GridView.prototype, {
       sortAscText  : "Tri croissant",
@@ -233,6 +270,14 @@ if(Ext.grid.GridView){
       lockText     : "Verrouiller la colonne",
       unlockText   : "Déverrouiller la colonne",
       columnsText  : "Colonnes"
+   });
+}
+
+if(Ext.grid.GroupingView){
+   Ext.apply(Ext.grid.GroupingView.prototype, {
+      emptyGroupText : '(Aucun)',
+      groupByText    : 'Grouper par ce champ',
+      showGroupsText : 'Afficher par groupes'
    });
 }
 

@@ -1,7 +1,7 @@
 ﻿/*
  * Russian translation
  * By ZooKeeper (utf-8 encoding)
- * 12 October 2007
+ * 6 November 2007
  */
 
 Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">Идет загрузка...</div>';
@@ -41,6 +41,10 @@ Date.monthNames = [
   "Декабрь"
 ];
 
+Date.getShortMonthName = function(month) {
+  return Date.monthNames[month].substring(0, 3);
+};
+
 Date.monthNumbers = {
   Jan : 0,
   Feb : 1,
@@ -56,6 +60,10 @@ Date.monthNumbers = {
   Dec : 11
 };
 
+Date.getMonthNumber = function(name) {
+  return Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
 Date.dayNames = [
   "Воскресенье",
   "Понедельник",
@@ -65,6 +73,10 @@ Date.dayNames = [
   "Пятница",
   "Суббота"
 ];
+
+Date.getShortDayName = function(day) {
+  return Date.dayNames[day].substring(0, 3);
+};
 
 if(Ext.MessageBox){
   Ext.MessageBox.buttonText = {
@@ -251,11 +263,26 @@ if(Ext.grid.GridView){
   });
 }
 
+if(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : '(Пусто)',
+    groupByText    : 'Группировать по этому полю',
+    showGroupsText : 'Отображать по группам'
+  });
+}
+
 if(Ext.grid.PropertyColumnModel){
   Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
     nameText   : "Название",
     valueText  : "Значение",
-    dateFormat : "j.m.Y"
+    dateFormat : "d.m.Y"
+  });
+}
+
+if(Ext.SplitLayoutRegion){
+  Ext.apply(Ext.SplitLayoutRegion.prototype, {
+    splitTip            : "Тяните для изменения размера.",
+    collapsibleSplitTip : "Тяните для изменения размера. Двойной щелчок спрячет панель."
   });
 }
 

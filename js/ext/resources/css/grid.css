@@ -1,6 +1,6 @@
 /*
- * Ext JS Library 2.0
- * Copyright(c) 2006-2007, Ext JS, LLC.
+ * Ext JS Library 2.0.1
+ * Copyright(c) 2006-2008, Ext JS, LLC.
  * licensing@extjs.com
  * 
  * http://extjs.com/license
@@ -527,9 +527,13 @@ a.x-grid3-hd-btn:hover {
     background-image:url(../images/default/grid/group-by.gif);
 }
 
-.ext-ie .x-grid3 .x-editor .x-form-text { /* ie  bug */
+.ext-ie .x-grid3 .x-editor .x-form-text { /* ie bug */
     position:relative;
     top:-1px;
+}
+.x-grid-editor { /* horiz scroll bug */
+    position: relative !important; 
+    float: left;
 }
 
 .x-grid-empty {

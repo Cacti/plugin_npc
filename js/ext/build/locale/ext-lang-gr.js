@@ -1,5 +1,5 @@
 /**
- * Greek Translations by Vagelis
+ * Greek (Old Version) Translations by Vagelis
  * 03-June-2007
  */
 

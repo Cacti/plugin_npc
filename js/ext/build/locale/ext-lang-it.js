@@ -2,6 +2,7 @@
  * Italian translation
  * By eric_void
  * 04-10-2007, 11:25 AM
+ * Updated by Federico Grilli 21/12/2007 
  */
 
 Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">Caricamento in corso...</div>';
@@ -19,7 +20,7 @@ if(Ext.TabPanelItem){
 }
 
 if(Ext.form.Field){
-   Ext.form.Field.prototype.invalidText = "Valore del campo non valido";
+   Ext.form.Field.prototype.invalidText = "Valore non valido";
 }
 
 if(Ext.LoadMask){
@@ -41,21 +42,48 @@ Date.monthNames = [
    "Dicembre"
 ];
 
+Date.getShortMonthName = function(month) {
+  return Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  Jan : 0,
+  Feb : 1,
+  Mar : 2,
+  Apr : 3,
+  May : 4,
+  Jun : 5,
+  Jul : 6,
+  Aug : 7,
+  Sep : 8,
+  Oct : 9,
+  Nov : 10,
+  Dec : 11
+};
+
+Date.getMonthNumber = function(name) {
+  return Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
 Date.dayNames = [
    "Domenica",
-   "Lunedi",
-   "Martedi",
-   "Mercoledi",
-   "Giovedi",
-   "Venerdi",
+   "Luned\u00EC",
+   "Marted\u00EC",
+   "Mercoled\u00EC",
+   "Gioved\u00EC",
+   "Venerd\u00EC",
    "Sabato"
 ];
+
+Date.getShortDayName = function(day) {
+  return Date.dayNames[day].substring(0, 3);
+};
 
 if(Ext.MessageBox){
    Ext.MessageBox.buttonText = {
       ok     : "OK",
       cancel : "Annulla",
-      yes    : "Si",
+      yes    : "S\u00EC",
       no     : "No"
    };
 }
@@ -82,7 +110,9 @@ if(Ext.DatePicker){
       monthYearText     : 'Scegli un mese (Ctrl+Su/Giu per cambiare anno)',
       todayTip          : "{0} (Barra spaziatrice)",
       format            : "d/m/y",
-      cancelText		: "Annulla"
+      cancelText		: "Annulla",
+	  okText            : "&#160;OK&#160;",
+	  startDay          : 1
    });
 }
 
@@ -95,15 +125,15 @@ if(Ext.PagingToolbar){
       nextText       : "Pagina successiva",
       lastText       : "Ultima pagina",
       refreshText    : "Aggiorna",
-      displayMsg     : "Vista {0} - {1} di {2}",
+      displayMsg     : "Record {0} - {1} di {2}",
       emptyMsg       : 'Nessun dato da mostrare'
    });
 }
 
 if(Ext.form.TextField){
    Ext.apply(Ext.form.TextField.prototype, {
-      minLengthText : "La lunghezza minima del campo risulta {0}",
-      maxLengthText : "La lunghezza massima del campo risulta {0}",
+      minLengthText : "La lunghezza minima \u00E8 {0}",
+      maxLengthText : "La lunghezza massima \u00E8 {0}",
       blankText     : "Campo obbligatorio",
       regexText     : "",
       emptyText     : null
@@ -112,9 +142,9 @@ if(Ext.form.TextField){
 
 if(Ext.form.NumberField){
    Ext.apply(Ext.form.NumberField.prototype, {
-      minText : "Il valore minimo del campo risulta {0}",
-      maxText : "Il valore massimo del campo risulta {0}",
-      nanText : "{0} non &grave; un numero corretto"
+      minText : "Il valore minimo \u00E8 {0}",
+      maxText : "Il valore massimo \u00E8 {0}",
+      nanText : "{0} non \u00E8 un valore numerico corretto"
    });
 }
 
@@ -122,9 +152,9 @@ if(Ext.form.DateField){
    Ext.apply(Ext.form.DateField.prototype, {
       disabledDaysText  : "Disabilitato",
       disabledDatesText : "Disabilitato",
-      minText           : "La data del campo deve essere successiva a {0}",
-      maxText           : "La data del campo deve essere precedente a {0}",
-      invalidText       : "{0} non &grave; una data valida. Deve essere nel formato {1}",
+      minText           : "La data deve essere successiva al {0}",
+      maxText           : "La data deve essere precedente al {0}",
+      invalidText       : "{0} non \u00E8 una data valida. Deve essere nel formato {1}",
       format            : "d/m/y",
       altFormats        : "d/m/Y|d-m-y|d-m-Y|d/m|d-m|dm|dmy|dmY|d|Y-m-d"
    });
@@ -146,6 +176,84 @@ if(Ext.form.VTypes){
    });
 }
 
+if(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : 'Inserire un URL per il link:',
+    buttonTips : {
+      bold : {
+        title: 'Grassetto (Ctrl+B)',
+        text: 'Rende il testo selezionato in grassetto.',
+        cls: 'x-html-editor-tip'
+      },
+      italic : {
+        title: 'Corsivo (Ctrl+I)',
+        text: 'Rende il testo selezionato in corsivo.',
+        cls: 'x-html-editor-tip'
+      },
+      underline : {
+        title: 'Sottolinea (Ctrl+U)',
+        text: 'Sottolinea il testo selezionato.',
+        cls: 'x-html-editor-tip'
+      },
+      increasefontsize : {
+        title: 'Ingrandisci testo',
+        text: 'Aumenta la dimensione del carattere.',
+        cls: 'x-html-editor-tip'
+      },
+      decreasefontsize : {
+        title: 'Rimpicciolisci testo',
+        text: 'Diminuisce la dimensione del carattere.',
+        cls: 'x-html-editor-tip'
+      },
+      backcolor : {
+        title: 'Colore evidenziatore testo',
+        text: 'Modifica il colore di sfondo del testo selezionato.',
+        cls: 'x-html-editor-tip'
+      },
+      forecolor : {
+        title: 'Colore carattere',
+        text: 'Modifica il colore del testo selezionato.',
+        cls: 'x-html-editor-tip'
+      },
+      justifyleft : {
+        title: 'Allinea a sinistra',
+        text: 'Allinea il testo a sinistra.',
+        cls: 'x-html-editor-tip'
+      },
+      justifycenter : {
+        title: 'Centra',
+        text: 'Centra il testo.',
+        cls: 'x-html-editor-tip'
+      },
+      justifyright : {
+        title: 'Allinea a destra',
+        text: 'Allinea il testo a destra.',
+        cls: 'x-html-editor-tip'
+      },
+      insertunorderedlist : {
+        title: 'Elenco puntato',
+        text: 'Elenco puntato.',
+        cls: 'x-html-editor-tip'
+      },
+      insertorderedlist : {
+        title: 'Elenco numerato',
+        text: 'Elenco numerato.',
+        cls: 'x-html-editor-tip'
+      },
+      createlink : {
+        title: 'Collegamento',
+        text: 'Trasforma il testo selezionato in un collegamanto.',
+        cls: 'x-html-editor-tip'
+      },
+      sourceedit : {
+        title: 'Sorgente',
+        text: 'Passa alla modalit\u00E0 editing del sorgente.',
+        cls: 'x-html-editor-tip'
+      }
+    }
+  });
+}
+
 if(Ext.grid.GridView){
    Ext.apply(Ext.grid.GridView.prototype, {
       sortAscText  : "Ordinamento crescente",
@@ -154,6 +262,14 @@ if(Ext.grid.GridView){
       unlockText   : "Sblocca colonna",
       columnsText  : "Colonne"
    });
+}
+
+if(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : '(Nessun dato)',
+    groupByText    : 'Raggruppa per questo campo',
+    showGroupsText : 'Mostra nei gruppi'
+  });
 }
 
 if(Ext.grid.PropertyColumnModel){

@@ -1,6 +1,7 @@
 /**
  * Polish Translations
  * By vbert 17-April-2007
+ * Updated by mmar 16-November-2007
  * Encoding: utf-8
  */
 
@@ -41,6 +42,29 @@ Date.monthNames = [
     "Grudzień"
 ];
 
+Date.getShortMonthName = function(month) {
+  return Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  Sty : 0,
+  Lut : 1,
+  Mar : 2,
+  Kwi : 3,
+  Maj : 4,
+  Cze : 5,
+  Lip : 6,
+  Sie : 7,
+  Wrz : 8,
+  Paź : 9,
+  Lis : 10,
+  Gru : 11
+};
+
+Date.getMonthNumber = function(name) {
+  return Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
 Date.dayNames = [
     "Niedziela",
     "Poniedziałek",
@@ -50,6 +74,19 @@ Date.dayNames = [
     "Piątek",
     "Sobota"
 ];
+
+Date.getShortDayName = function(day) {
+	switch(day) {
+		case 0: return 'ndz';
+		case 1: return 'pon';
+		case 2: return 'wt';
+		case 3: return 'śr';
+		case 4: return 'czw';
+		case 5: return 'pt';				
+		case 6: return 'sob';
+                default: return '';
+	}
+};
 
 if(Ext.MessageBox){
    Ext.MessageBox.buttonText = {
@@ -82,7 +119,10 @@ if(Ext.DatePicker){
 		prevText			: "Poprzedni miesiąc (Control+StrzałkaWLewo)",
 		monthYearText		: "Wybierz miesiąc (Control+Up/Down aby zmienić rok)",
 		todayTip			: "{0} (Spacja)",
-		format				: "Y-m-d"
+		format				: "Y-m-d",
+		okText            	: "&#160;OK&#160;",
+    	cancelText        	: "Anuluj",
+    	startDay          	: 1
 	});
 }
 
@@ -125,7 +165,8 @@ if(Ext.form.DateField){
 		minText				: "Data w tym polu musi być późniejsza od {0}",
 	    maxText				: "Data w tym polu musi być wcześniejsza od {0}",
 		invalidText			: "{0} to nie jest prawidłowa data - prawidłowy format daty {1}",
-	    format				: "Y-m-d"
+	    format				: "Y-m-d",
+    	altFormats    	    : "m/d/Y|m-d-y|m-d-Y|m/d|m-d|md|mdy|mdY|d|Y-m-d"
 	});
 }
 
@@ -145,6 +186,84 @@ if(Ext.form.VTypes){
 	});
 }
 
+if(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : 'Wprowadź adres URL strony:',
+    buttonTips : {
+      bold : {
+        title: 'Pogrubienie (Ctrl+B)',
+        text: 'Ustaw styl zaznaczonego tekstu na pogrubiony.',
+        cls: 'x-html-editor-tip'
+      },
+      italic : {
+        title: 'Kursywa (Ctrl+I)',
+        text: 'Ustaw styl zaznaczonego tekstu na kursywę.',
+        cls: 'x-html-editor-tip'
+      },
+      underline : {
+        title: 'Podkreślenie (Ctrl+U)',
+        text: 'Podkreśl zaznaczony tekst.',
+        cls: 'x-html-editor-tip'
+      },
+      increasefontsize : {
+        title: 'Zwiększ czcionkę',
+        text: 'Zwiększ rozmiar czcionki.',
+        cls: 'x-html-editor-tip'
+      },
+      decreasefontsize : {
+        title: 'Zmniejsz czcionkę',
+        text: 'Zmniejsz rozmiar czcionki.',
+        cls: 'x-html-editor-tip'
+      },
+      backcolor : {
+        title: 'Wyróżnienie',
+        text: 'Zmień kolor wyróżnienia zaznaczonego tekstu.',
+        cls: 'x-html-editor-tip'
+      },
+      forecolor : {
+        title: 'Kolor czcionki',
+        text: 'Zmień kolor zaznaczonego tekstu.',
+        cls: 'x-html-editor-tip'
+      },
+      justifyleft : {
+        title: 'Do lewej',
+        text: 'Wyrównaj tekst do lewej.',
+        cls: 'x-html-editor-tip'
+      },
+      justifycenter : {
+        title: 'Wyśrodkuj',
+        text: 'Wyrównaj tekst do środka.',
+        cls: 'x-html-editor-tip'
+      },
+      justifyright : {
+        title: 'Do prawej',
+        text: 'Wyrównaj tekst do prawej.',
+        cls: 'x-html-editor-tip'
+      },
+      insertunorderedlist : {
+        title: 'Lista wypunktowana',
+        text: 'Rozpocznij listę wypunktowaną.',
+        cls: 'x-html-editor-tip'
+      },
+      insertorderedlist : {
+        title: 'Lista numerowana',
+        text: 'Rozpocznij listę numerowaną.',
+        cls: 'x-html-editor-tip'
+      },
+      createlink : {
+        title: 'Hiperłącze',
+        text: 'Przekształć zaznaczony tekst w hiperłącze.',
+        cls: 'x-html-editor-tip'
+      },
+      sourceedit : {
+        title: 'Edycja źródła',
+        text: 'Przełącz w tryb edycji źródła.',
+        cls: 'x-html-editor-tip'
+      }
+    }
+  });
+}
+
 if(Ext.grid.GridView){
 	Ext.apply(Ext.grid.GridView.prototype, {
 	    sortAscText		: "Sortuj rosnąco",
@@ -153,6 +272,14 @@ if(Ext.grid.GridView){
 	    unlockText		: "Odblokuj kolumnę",
 		columnsText		: "Kolumny"
 	});
+}
+
+if(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : '(None)',
+    groupByText    : 'Grupuj po tym polu',
+    showGroupsText : 'Pokaż w grupach'
+  });
 }
 
 if(Ext.grid.PropertyColumnModel){

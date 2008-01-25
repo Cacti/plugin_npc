@@ -8,7 +8,7 @@
 Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">Učitavam...</div>';
 
 if(Ext.View){
-   Ext.View.prototype.emptyText = "";
+   Ext.View.prototype.emptyText = "Ne postoji ni jedan slog";
 }
 
 if(Ext.grid.Grid){
@@ -168,6 +168,6 @@ if(Ext.grid.PropertyColumnModel){
 if(Ext.layout.BorderLayout.SplitRegion){
    Ext.apply(Ext.layout.BorderLayout.SplitRegion.prototype, {
       splitTip            : "Povući za izmenu veličine.",
-      collapsibleSplitTip : "Povući za izmenu veličine. Dvostruku klik za skivanje."
+      collapsibleSplitTip : "Povući za izmenu veličine. Dvostruku klik za sakrivanje."
    });
 }
