@@ -117,6 +117,7 @@ npc.app.serviceDetail = function(record) {
                     },{
                         title: 'Graph',
                         //autoLoad: 'graphProxy.php'
+                        disabled:true,
                         id: id + '-sg',
                         tbar: sgTbar
                     },{
@@ -341,42 +342,11 @@ npc.app.serviceDetail = function(record) {
         })
     });
 
-    var sgStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=services&action=getServiceGraph&p_local_graph_id=0',
-        totalProperty:'totalCount',
-        root:'data',
-        fields:[
-            'graph'
-        ],
-        autoload:false
-    });
-
-    var sgCm = new Ext.grid.ColumnModel([{
-        header:'',
-        dataIndex:'graph',
-        width:768,
-        renderer: renderGraph
-    }]);
-
-    var sgGrid = new Ext.grid.GridPanel({
-        height:400,
-        store:sgStore,
-        cm:sgCm,
-        autoExpandColumn:'graph',
-        view: new Ext.grid.GridView({
-            forceFit:true,
-            autoFill:true,
-            emptyText:'No graphs.',
-            scrollOffset:0
-        })
-    });
-
     // Add the grids to the tabs
     Ext.getCmp(id+'-si').add(siGrid);
     Ext.getCmp(id+'-sn').add(snGrid);
     Ext.getCmp(id+'-sa').add(saGrid);
     Ext.getCmp(id+'-sd').add(sdGrid);
-    Ext.getCmp(id+'-sg').add(sgGrid);
 
     // Refresh the dashboard
     tabPanel.doLayout();
@@ -386,14 +356,12 @@ npc.app.serviceDetail = function(record) {
     snGrid.render();
     saGrid.render();
     sdGrid.render();
-    sgGrid.render();
 
     // Load the data stores
     siStore.load();
     snStore.load({params:{start:0, limit:pageSize}});
     saStore.load({params:{start:0, limit:pageSize}});
     sdStore.load({params:{start:0, limit:pageSize}});
-    sgStore.load();
 
     // Start auto refresh
     siStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);

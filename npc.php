@@ -42,7 +42,7 @@ if (is_array($_REQUEST)) {
 }
 
 
-// Display any results in JSON format
+// Display any results
 if ($module == 'layout' || $format == 'html') {
     $obj->$action($params);
 } else {

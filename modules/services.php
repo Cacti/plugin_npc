@@ -195,6 +195,41 @@ class NPC_services {
         return(array($this->rowCount, $output));
     }
 
+    /* NOT USED
+    function getGraphs() {
+
+        $sql = "
+            SELECT
+                graph_templates_graph.local_graph_id AS local_graph_id,
+                graph_templates_graph.height AS height,
+                graph_templates_graph.width AS width,
+                graph_templates_graph.title_cache as title
+            FROM 
+                (graph_local, graph_templates_graph)    
+                LEFT JOIN graph_templates on graph_local.graph_template_id = graph_templates.id 
+            WHERE 
+                graph_local.id = graph_templates_graph.local_graph_id   
+                AND graph_templates_graph.title_cache like '%' 
+            ORDER BY 
+                graph_templates_graph.title_cache,graph_local.host_id";
+
+        $output = db_fetch_assoc($sql);
+        return(array(count($output), $output));
+    }
+
+    function getServiceGraphMapping() {
+        
+        $output = array();
+
+        if ($this->local_graph_id) {
+            $html = '<img src="/graph_image.php?action=view&local_graph_id='.$this->local_graph_id.'&rra_id=1&graph_height='.$this->height.'&graph_width='.$this->width.'">';
+            $output = array(array('graph' => $html));
+        }
+
+        return(array(count($output), $output));
+    }
+    */
+
     function getServiceStateInfo() {
 
         $fields = array(
