@@ -153,10 +153,12 @@ npc.app = function() {
         },
 
         addTabExt: function(id, title, url) {
-            if(!Ext.getCmp(id)) {
-                var tabPanel = Ext.getCmp('centerTabPanel');
+            var tabPanel = Ext.getCmp('centerTabPanel');
+            var tab = (Ext.getCmp(id));
+            if(!tab) {
                 tabPanel.add({
                     title: title,
+                    id:id,
                     layout:'fit',
                     closable: true,
                     scripts: true,
@@ -165,6 +167,35 @@ npc.app = function() {
                     })]
                 }).show();
                 tabPanel.doLayout();
+            }
+            tabPanel.setActiveTab(tab);
+        },
+    
+        addCenterNestedTab: function(id, title) {
+            var tabPanel = Ext.getCmp('centerTabPanel');
+            var tab = Ext.getCmp(id);
+            if (tab)  {
+                tabPanel.setActiveTab(tab);
+            } else {
+                tabPanel.add({
+                    id: id, 
+                    title: title,
+                    closable: true,
+                    autoScroll: true,
+                    containerScroll: true,
+                    items: [
+                        new Ext.TabPanel({
+                            id: id + '-inner-panel',
+                            style:'padding:10px 0 10px 10px',
+                            autoHeight:true,
+                            autoWidth:true,
+                            plain:true,
+                            defaults:{autoScroll: true}
+                        })
+                    ] 
+                }).show();
+                tabPanel.doLayout();
+                tabPanel.setActiveTab(id);
             }
         },
 
@@ -250,7 +281,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.showServices('Services', 'any');
+                                                        npc.app.showServiceList('Service List', 'any');
                                                     }
                                                 }
                                             },{
@@ -259,7 +290,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.showServices('Service Problems', 'not_ok');
+                                                        npc.app.showServiceList('Service Problems', 'not_ok');
                                                     }
                                                 }
                                             },{
@@ -290,6 +321,18 @@ npc.app = function() {
                                             leaf:true 
                                         },{
                                             text:'Downtime',
+                                            iconCls:'tleaf',
+                                            leaf:true 
+                                        },{
+                                            text:'Process Info',
+                                            iconCls:'tleaf',
+                                            leaf:true 
+                                        },{
+                                            text:'Performance Info',
+                                            iconCls:'tleaf',
+                                            leaf:true 
+                                        },{
+                                            text:'Scheduling Queue',
                                             iconCls:'tleaf',
                                             leaf:true 
                                         }]

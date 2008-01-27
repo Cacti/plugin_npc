@@ -6,15 +6,21 @@ npc.app.serviceDetail = function(record) {
     // Set thetitle
     var title = record.data.host_name + ': ' + record.data.service_description;
 
-    // Get the tabPanel
-    var tabPanel = Ext.getCmp('centerTabPanel');
+    var outerTabId = 'services-tab';
+
+    npc.app.addCenterNestedTab(outerTabId, 'Services');
+
+    var centerTabPanel = Ext.getCmp('centerTabPanel');
+
+    var innerTabPanelId = 'services-tab-inner-panel';
+
+    var innerTabPanel = Ext.getCmp(innerTabPanelId);
 
     // Get the tab
     var tab = Ext.getCmp(id);
 
     // Default # of rows to display
     var pageSize = 20;
-
 
     // Build the tool bar for the graph mapping
     var sgTbar = new Ext.Toolbar();
@@ -82,12 +88,13 @@ npc.app.serviceDetail = function(record) {
 
     // If the tab exists set it active and return or else create it.
     if (tab)  { 
-        tabPanel.setActiveTab(tab);
+        innerTabPanel.setActiveTab(tab);
         return; 
     } else {
-        tabPanel.add({
+        innerTabPanel.add({
             id: id, 
             title: title,
+            autoHeight:true,
             closable: true,
             autoScroll: true,
             containerScroll: true,
@@ -129,8 +136,8 @@ npc.app.serviceDetail = function(record) {
                 })
             ]
         }).show();
-        tabPanel.doLayout();
-        tabPanel.setActiveTab(tab);
+        centerTabPanel.doLayout();
+        innerTabPanel.setActiveTab(tab);
         tab = Ext.getCmp(id);
     }
 
@@ -349,7 +356,7 @@ npc.app.serviceDetail = function(record) {
     Ext.getCmp(id+'-sd').add(sdGrid);
 
     // Refresh the dashboard
-    tabPanel.doLayout();
+    centerTabPanel.doLayout();
 
     // Render the default grid
     siGrid.render();

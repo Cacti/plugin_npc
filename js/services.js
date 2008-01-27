@@ -1,4 +1,4 @@
-npc.app.showServices = function(title, filter){
+npc.app.showServiceList = function(title, filter){
 
     // Panel ID
     var id = title.replace(/[-' ']/g,'') + '-tab';
@@ -9,23 +9,30 @@ npc.app.showServices = function(title, filter){
     // Default # of rows to display
     var pageSize = 20;
 
-    var tab = Ext.getCmp(id);
-    var tabPanel = Ext.getCmp('centerTabPanel');
+    var outerTabId = 'services-tab';
 
-    // Add or switch to the tab
-    if (tab)  {
-        tabPanel.setActiveTab(tab);
+    npc.app.addCenterNestedTab(outerTabId, 'Services');
+
+    var centerTabPanel = Ext.getCmp('centerTabPanel');
+
+    var innerTabId = 'services-tab-inner-panel';
+
+    var innerTabPanel = Ext.getCmp(innerTabId);
+
+    var tab = Ext.getCmp(id);
+
+    if (tab) {
+        innerTabPanel.setActiveTab(tab);
         return;
     } else {
-        tabPanel.add({
-            id: id,
-            title: title,
-            closable: true,
-            items: [{}]
-        }).show();
-        tabPanel.doLayout();
-        tabPanel.setActiveTab(tab);
-        tab = Ext.getCmp(id);
+        innerTabPanel.add({ 
+            id: id, 
+            title: title, 
+            closable: true, 
+            items: [{}] 
+        }).show(); 
+        innerTabPanel.setActiveTab(tab); 
+        tab = Ext.getCmp(id); 
     }
 
     function renderAttempt(val, p, record){
@@ -128,7 +135,7 @@ npc.app.showServices = function(title, filter){
     tab.items.add(grid);
 
     // Refresh the dashboard
-    tabPanel.doLayout();
+    centerTabPanel.doLayout();
 
     // Render the grid
     grid.render();
@@ -143,6 +150,9 @@ npc.app.showServices = function(title, filter){
     var listeners = {
         destroy: function() {
             store.stopAutoRefresh();
+            if (!innerTabPanel.items.length) {
+                centerTabPanel.remove(outerTabId, true);
+            }
         }
     };
 
@@ -150,4 +160,5 @@ npc.app.showServices = function(title, filter){
     tab.addListener(listeners);
 
     grid.on('rowclick', npc.app.serviceGridClick);
+
 };
