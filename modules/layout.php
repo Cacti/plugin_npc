@@ -51,7 +51,7 @@ class NPC_layout {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/Portlet.js"></script>
 
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/npc.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/services.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/serviceList.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/serviceDetail.js"></script>
           
           <script type="text/javascript">
