@@ -1316,6 +1316,12 @@ function npc_config_settings() {
                         "method" => "textbox",
                         "max_length" => 255,
                 ),
+                "npc_nagios_url" => array(
+                        "friendly_name" => "Nagios URL",
+                        "description" => "The full URL to your Nagios installation (http://nagios.company.com/nagios/)",
+                        "method" => "textbox",
+                        "max_length" => 255,
+                ),
                 "npc_date_format" => array(
                     "friendly_name" => "Date Format",
                     "description" => "Select the format you want for displaying dates.",

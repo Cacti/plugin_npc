@@ -7,15 +7,27 @@ z-index:20000;
 }
 
 .configuration {
-background-image:url(../images/icons/cog_go.png);
+background-image:url(../images/icons/cog_go.png) !important;
 }
 
 .reporting {
-background-image:url(../images/icons/report_go.png);
+background-image:url(../images/icons/report_go.png) !important;
 }
 
 .monitoring {
-background-image:url(../images/icons/application_go.png);
+background-image:url(../images/icons/application_view_gallery.png) !important;
+}
+
+.hosts {
+background-image:url(../images/icons/server.png) !important;
+}
+
+.tnode {
+background-image:url(../images/icons/folder.png) !important;
+}
+
+.tleaf {
+background-image:url(../images/icons/tab.png) !important;
 }
 
 .layout {

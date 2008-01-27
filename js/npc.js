@@ -152,14 +152,17 @@ npc.app = function() {
             m.slideIn('t').pause(5).ghost("t", {remove:true});
         },
 
-        addTabExt: function(title, url) {
-            if(!Ext.getCmp(title + '-tab')) {
+        addTabExt: function(id, title, url) {
+            if(!Ext.getCmp(id)) {
                 var tabPanel = Ext.getCmp('centerTabPanel');
                 tabPanel.add({
-                    title: title + '-tab',
+                    title: title,
+                    layout:'fit',
                     closable: true,
                     scripts: true,
-                    items: [ new Ext.ux.IFrameComponent({ url: url }) ]
+                    items: [ new Ext.ux.IFrameComponent({ 
+                        url: url 
+                    })]
                 }).show();
                 tabPanel.doLayout();
             }
@@ -194,31 +197,129 @@ npc.app = function() {
                         region:'west',
                         id:'west-panel',
                         split:true,
-                        width: 160,
-                        minSize: 160,
+                        title: 'Navigation',
+                        collapsible:true,
+                        width: 200,
+                        minSize: 200,
                         maxSize: 300,
-                        collapsible: true,
                         margins:'0 0 0 5',
-                        layout:'accordion',
-                        layoutConfig:{
-                            animate:true
-                        },
-                        items: [{
-                            title:'Monitoring',
-                            contentEl: 'west-monitoring',
-                            border:false,
-                            iconCls:'monitoring'
-                        },{
-                            title:'Reporting',
-                            html:'<p>Some settings in here.</p>',
-                            border:false,
-                            iconCls:'reporting'
-                        },{
-                            title:'N2Cacti',
-                            contentEl: 'west-config',
-                            border:false,
-                            iconCls:'configuration'
-                        }]
+                        items: [
+                            new Ext.tree.TreePanel({
+                                id:'nav-tree',
+                                loader: new Ext.tree.TreeLoader(),
+                                rootVisible:false,
+                                border:false,
+                                lines:true,
+                                autoScroll:true,
+                                root: new Ext.tree.AsyncTreeNode({
+                                    text:'root',
+                                    children:[{
+                                        text:'Monitoring',
+                                        iconCls:'tnode',
+                                        expanded:false,
+                                        children:[{
+                                            text:'Hosts',
+                                            iconCls:'tnode',
+                                            children:[{
+                                                text:'Hosts',
+                                                iconCls:'tleaf',
+                                                leaf:true
+                                            },{
+                                                text:'Host Problems',
+                                                iconCls:'tleaf',
+                                                leaf:true 
+                                            },{
+                                                text:'Hostgroup Overview',
+                                                iconCls:'tleaf',
+                                                leaf:true 
+                                            },{
+                                                text:'Hostgroup Summary',
+                                                iconCls:'tleaf',
+                                                leaf:true 
+                                            },{
+                                                text:'Hostgroup Grid',
+                                                iconCls:'tleaf',
+                                                leaf:true 
+                                            }]
+                                        },{
+                                            text:'Services',
+                                            iconCls:'tnode',
+                                            children:[{
+                                                text:'Services',
+                                                iconCls:'tleaf',
+                                                leaf:true,
+                                                listeners: {
+                                                    click: function() {
+                                                        npc.app.showServices('Services', 'any');
+                                                    }
+                                                }
+                                            },{
+                                                text:'Service Problems',
+                                                iconCls:'tleaf',
+                                                leaf:true,
+                                                listeners: {
+                                                    click: function() {
+                                                        npc.app.showServices('Service Problems', 'not_ok');
+                                                    }
+                                                }
+                                            },{
+                                                text:'Servicegroup Overview',
+                                                iconCls:'tleaf',
+                                                leaf:true 
+                                            },{
+                                                text:'Servicegroup Summary',
+                                                iconCls:'tleaf',
+                                                leaf:true 
+                                            },{
+                                                text:'Servicegroup Grid',
+                                                iconCls:'tleaf',
+                                                leaf:true 
+                                            }]
+                                        },{
+                                            text:'Status Map',
+                                            iconCls:'tleaf',
+                                            leaf:true,
+                                            listeners: {
+                                                click: function() {
+                                                    npc.app.addTabExt('StatusMap','Status Map',npc.app.params.npc_nagios_url+'/cgi-bin/statusmap.cgi?host=all');
+                                                }
+                                            }
+                                        },{
+                                            text:'Comments',
+                                            iconCls:'tleaf',
+                                            leaf:true 
+                                        },{
+                                            text:'Downtime',
+                                            iconCls:'tleaf',
+                                            leaf:true 
+                                        }]
+                                    },{
+                                        text:'Reporting',
+                                        iconCls:'tnode',
+                                        expanded:false,
+                                        children:[{
+                                            text:'Kelly',
+                                            leaf:true
+                                        },{
+                                            text:'Sara',
+                                            leaf:true
+                                        },{
+                                            text:'John',
+                                            leaf:true
+                                        }]
+                                    },{
+                                        text:'Nagios',
+                                        iconCls:'tleaf',
+                                        leaf:true,
+                                        listeners: {
+                                            click: function() {
+                                                npc.app.addTabExt('Nagios','Nagios',npc.app.params.npc_nagios_url);
+                                            }
+                                        }
+                                    }]
+                                })
+                            })
+                        ]
                     },
                     new Ext.TabPanel({
                         region:'center',

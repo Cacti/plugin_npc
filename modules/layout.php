@@ -62,6 +62,7 @@ class NPC_layout {
             npc.app.params.npc_portlet_rows = "<?php echo read_config_option('npc_portlet_rows'); ?>";
             npc.app.params.npc_date_format = "<?php echo read_config_option('npc_date_format'); ?>";
             npc.app.params.npc_time_format = "<?php echo read_config_option('npc_time_format'); ?>";
+            npc.app.params.npc_nagios_url = "<?php echo read_config_option('npc_nagios_url'); ?>";
 
             // Launch the app
             Ext.onReady(npc.app.init, npc.app);
@@ -88,21 +89,9 @@ class NPC_layout {
 
           <div id="west">
 
-            <div id="west-monitoring">
-                <div style="padding-left:10px;" id="navcontainer">
-                    <ul id="navlist">
-                        <li><a href="#" onclick="npc.app.showServices('Services', 'any');return false;">Services</a></li>
-                        <li><a href="#" onclick="npc.app.showServices('Service Problems', 'not_ok');return false;">Service Problems</a></li>
-                        <li><a href="#">Host Detail</a></li>
-                        <li><a href="#">Hostgroup Overview</a></li>
-                        <li><a href="#">Hostgroup Summary</a></li>
-                    </ul>
-                </div>
-            </div>
+            <div id="west-monitoring"></div>
 
-            <div id="west-config">
-                Foo
-            </div>
+            <div id="west-config"></div>
 
           </div>
 
