@@ -112,7 +112,11 @@ npc.app = function() {
 
         formatDate: function(val) {
             if(typeof val == "object") {
-                return String.format(val.dateFormat(npc.app.params.npc_date_format + ' ' + npc.app.params.npc_time_format));
+                if(val.getYear() == '69') {
+                    return String.format('NA');
+                } else {
+                    return String.format(val.dateFormat(npc.app.params.npc_date_format + ' ' + npc.app.params.npc_time_format));
+                }
             }
             return val;
         },
@@ -247,10 +251,11 @@ npc.app = function() {
                                     children:[{
                                         text:'Monitoring',
                                         iconCls:'tnode',
-                                        expanded:false,
+                                        expanded:true,
                                         children:[{
                                             text:'Hosts',
                                             iconCls:'tnode',
+                                            expanded:true,
                                             children:[{
                                                 text:'Hosts',
                                                 iconCls:'tleaf',
@@ -275,8 +280,9 @@ npc.app = function() {
                                         },{
                                             text:'Services',
                                             iconCls:'tnode',
+                                            expanded:true,
                                             children:[{
-                                                text:'Services',
+                                                text:'Service List',
                                                 iconCls:'tleaf',
                                                 leaf:true,
                                                 listeners: {

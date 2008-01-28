@@ -60,10 +60,6 @@ npc.app.serviceDetail = function(record) {
     });
 
 
-    function renderValue(val, meta, record) {
-        return String.format(val);
-    };
-
     function renderCheckAttempt(val, p, r){
         return String.format('{0}/{1}', val, r.data.max_check_attempts);
     };
@@ -84,6 +80,38 @@ npc.app.serviceDetail = function(record) {
     function renderGraph(val, p, r) {
         // '<img src="/graph_image.php?action=view&local_graph_id='.$this->local_graph_id.'&rra_id=1&graph_height='.$this->height.'&graph_width='.$this->width.'">';
         return(val);
+    }
+
+    function renderCommentType(val) {
+        var s;
+        switch(val) {
+            case '1':
+                s = 'User';
+                break;
+            case '2':
+                s = 'Scheduled Downtime';
+                break;
+            case '3':
+                s = 'Flap Detection';
+                break;
+            case '4':
+                s = 'Acknowledgement';
+                break;
+        }
+        return String.format('{0}', s);
+    }
+
+    function renderPersistent(val) {
+        var s;
+        switch(val) {
+            case '0':
+                s = 'No';
+                break;
+            case '1':
+                s = 'Yes';
+                break;
+        }
+        return String.format('{0}', s);
     }
 
     // If the tab exists set it active and return or else create it.
@@ -121,6 +149,9 @@ npc.app.serviceDetail = function(record) {
                     },{
                         title: 'Downtime History',
                         id: id + '-sd'
+                    },{
+                        title: 'Comments',
+                        id: id + '-sc'
                     },{
                         title: 'Graph',
                         //autoLoad: 'graphProxy.php'
@@ -163,7 +194,6 @@ npc.app.serviceDetail = function(record) {
         header:"Value",
         dataIndex:'value',
         width:300,
-        renderer: renderValue,
         align:'left'
     }]);
 
@@ -349,11 +379,92 @@ npc.app.serviceDetail = function(record) {
         })
     });
 
+/*
+         comment_id: 1
+        instance_id: 1
+         entry_time: 2008-01-27 20:37:49
+    entry_time_usec: 841856
+       comment_type: 2
+         entry_type: 4
+          object_id: 49
+       comment_time: 2008-01-27 20:37:49
+internal_comment_id: 3
+        author_name: Nagios Admin
+       comment_data: A firewall is blocking the service check.
+      is_persistent: 1
+     comment_source: 0
+            expires: 0
+    expiration_time: 1969-12-31 19:00:00
+*/
+
+    var scStore = new Ext.data.JsonStore({
+        url: 'npc.php?module=services&action=getServiceComments&p_id=' + record.data.service_object_id,
+        totalProperty:'totalCount',
+        root:'data',
+        fields:[
+            'comment_id',
+            'instance_id',
+            {name: 'entry_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            'entry_type',
+            'author_name',
+            'comment_data',
+            'is_persistent',
+            {name: 'expiration_time', type: 'date', dateFormat: 'Y-m-d H:i:s'}
+        ],
+        autoload:true
+    });
+
+    var scCm = new Ext.grid.ColumnModel([{
+        header:"Entry Time",
+        dataIndex:'entry_time',
+        renderer: npc.app.formatDate,
+        width:120
+    },{
+        header:"Author",
+        dataIndex:'author_name',
+        width:120
+    },{
+        header:"Comment",
+        dataIndex:'comment_data',
+        width:300
+    },{
+        header:"Persistent",
+        dataIndex:'is_persistent',
+        renderer:renderPersistent,
+        width:80
+    },{
+        header:"Type",
+        dataIndex:'entry_type',
+        renderer:renderCommentType,
+        width:120
+    },{
+        header:"Expires",
+        dataIndex:'expiration_time',
+        renderer: npc.app.formatDate,
+        width:120
+    }]);
+
+    var scGrid = new Ext.grid.GridPanel({
+        autoHeight:true,
+        autoWidth:true,
+        store:scStore,
+        cm:scCm,
+        autoExpandColumn:'Value',
+        stripeRows: true,
+        view: new Ext.grid.GridView({
+            forceFit:true,
+            autoFill:true,
+            emptyText:'No comments.',
+            scrollOffset:0
+        })
+    });
+
     // Add the grids to the tabs
     Ext.getCmp(id+'-si').add(siGrid);
     Ext.getCmp(id+'-sn').add(snGrid);
     Ext.getCmp(id+'-sa').add(saGrid);
     Ext.getCmp(id+'-sd').add(sdGrid);
+    Ext.getCmp(id+'-sc').add(scGrid);
 
     // Refresh the dashboard
     centerTabPanel.doLayout();
@@ -363,18 +474,21 @@ npc.app.serviceDetail = function(record) {
     snGrid.render();
     saGrid.render();
     sdGrid.render();
+    scGrid.render();
 
     // Load the data stores
     siStore.load();
     snStore.load({params:{start:0, limit:pageSize}});
     saStore.load({params:{start:0, limit:pageSize}});
     sdStore.load({params:{start:0, limit:pageSize}});
+    scStore.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh
     siStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     snStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     saStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     sdStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    scStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
 
     // Add listeners to stop auto refresh on the store if the tab is closed
     var listeners = {
@@ -383,6 +497,10 @@ npc.app.serviceDetail = function(record) {
             snStore.stopAutoRefresh();
             saStore.stopAutoRefresh();
             sdStore.stopAutoRefresh();
+            scStore.stopAutoRefresh();
+            if (!innerTabPanel.items.length) {
+                centerTabPanel.remove(outerTabId, true);
+            }
         }
     };
 
