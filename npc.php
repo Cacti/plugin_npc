@@ -3,9 +3,7 @@
 chdir('../../');
 
 require_once("include/auth.php");
-
-
-global $config;
+include(dirname(__FILE__) . "/config.php");
 
 $params['config'] = $config;
 
@@ -26,8 +24,8 @@ if (isset($_REQUEST['format'])) {
     $format = get_request_var_request('format');
 }
 
-// Include the requested module
-require_once("plugins/npc/modules/$module.php");
+// Include the requested controller
+require_once("plugins/npc/controllers/$module.php");
 
 $class = 'NPC_' . $module;
 $obj = new $class;

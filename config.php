@@ -1,0 +1,19 @@
+<?php
+
+//require the base Doctrine class
+require_once(dirname(__FILE__) . '/lib/Doctrine.php');
+
+//register the autoloader
+spl_autoload_register(array('Doctrine', 'autoload'));
+
+// Setup the DSN
+$dsn = "$database_type://$database_username:$database_password@$database_hostname:$database_port/$database_default";
+
+// initalize a new Doctrine_Connection
+$conn = Doctrine_Manager::connection($dsn);
+
+// Setup conservative (on demand) model loading
+Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_MODEL_LOADING, Doctrine::MODEL_LOADING_CONSERVATIVE); 
+
+// Load our models
+Doctrine::loadModels(dirname(__FILE__) . '/models'); 

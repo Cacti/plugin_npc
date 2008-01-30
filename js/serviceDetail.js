@@ -114,6 +114,11 @@ npc.app.serviceDetail = function(record) {
         return String.format('{0}', s);
     }
 
+    function renderAction(v, p, r) {
+        var url = 'npc.php?module=comments&action=delete&p_id=' + r.data.comment_id;
+        return String.format('<a href="#" onClick="npc.app.get(\''+url+'\')"><img src="images/icons/delete.png"></a>')
+    }
+
     // If the tab exists set it active and return or else create it.
     if (tab)  { 
         innerTabPanel.setActiveTab(tab);
@@ -379,26 +384,8 @@ npc.app.serviceDetail = function(record) {
         })
     });
 
-/*
-         comment_id: 1
-        instance_id: 1
-         entry_time: 2008-01-27 20:37:49
-    entry_time_usec: 841856
-       comment_type: 2
-         entry_type: 4
-          object_id: 49
-       comment_time: 2008-01-27 20:37:49
-internal_comment_id: 3
-        author_name: Nagios Admin
-       comment_data: A firewall is blocking the service check.
-      is_persistent: 1
-     comment_source: 0
-            expires: 0
-    expiration_time: 1969-12-31 19:00:00
-*/
-
     var scStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=services&action=getServiceComments&p_id=' + record.data.service_object_id,
+        url: 'npc.php?module=comments&action=getComments&p_type=2&p_id=' + record.data.service_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -422,11 +409,11 @@ internal_comment_id: 3
     },{
         header:"Author",
         dataIndex:'author_name',
-        width:120
+        width:100
     },{
         header:"Comment",
         dataIndex:'comment_data',
-        width:300
+        width:400
     },{
         header:"Persistent",
         dataIndex:'is_persistent',
@@ -436,12 +423,17 @@ internal_comment_id: 3
         header:"Type",
         dataIndex:'entry_type',
         renderer:renderCommentType,
-        width:120
+        width:100
     },{
         header:"Expires",
         dataIndex:'expiration_time',
         renderer: npc.app.formatDate,
         width:120
+    },{
+        header:"Delete",
+        renderer: renderAction,
+        align:'center',
+        width:50
     }]);
 
     var scGrid = new Ext.grid.GridPanel({
@@ -449,7 +441,7 @@ internal_comment_id: 3
         autoWidth:true,
         store:scStore,
         cm:scCm,
-        autoExpandColumn:'Value',
+        autoExpandColumn:'comment_data',
         stripeRows: true,
         view: new Ext.grid.GridView({
             forceFit:true,

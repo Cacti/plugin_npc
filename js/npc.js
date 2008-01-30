@@ -234,9 +234,9 @@ npc.app = function() {
                         split:true,
                         title: 'Navigation',
                         collapsible:true,
-                        width: 200,
-                        minSize: 200,
-                        maxSize: 300,
+                        width: 220,
+                        minSize: 220,
+                        maxSize: 400,
                         margins:'0 0 0 5',
                         items: [
                             new Ext.tree.TreePanel({
@@ -245,7 +245,7 @@ npc.app = function() {
                                 rootVisible:false,
                                 border:false,
                                 lines:true,
-                                autoScroll:true,
+                                autoScroll:false,
                                 root: new Ext.tree.AsyncTreeNode({
                                     text:'root',
                                     children:[{
