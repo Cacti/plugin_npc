@@ -7,7 +7,7 @@ Ext.onReady(function(){
     var id = 'host-status-summary';
 
     // Portlet URL
-    var url = 'npc.php?module=hosts&action=getHostSummary';
+    var url = 'npc.php?module=hosts&action=summary';
 
     // Default column
     var column = 'dashcol1';

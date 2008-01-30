@@ -3,31 +3,6 @@
 class Controller {
 
     /**
-     * The total number of records available
-     *
-     * @var string
-     * @access public
-     */
-    var $totalCount = null;
-
-    /**
-     * The output format.
-     *
-     * @var string
-     * @access public
-     */
-    var $format = 'json';
-
-    /**
-     * The results of a get method
-     *
-     * @var mixed A single html string or an array of results
-     * @access protected
-     */
-    var $results = false;
-
-
-    /**
      * Maps a hosts current_state
      *
      * @var array
@@ -55,6 +30,22 @@ class Controller {
      */
     function __construct() {
 
+    }
+
+    function jsonOutput($results, $totalCount=0) {
+
+        if (!$totalCount) {
+            $totalCount = count($results);
+        }   
+
+        if (count($results)) {
+            $results = array($results);
+        }
+
+        // Setup the output array:
+        $output = array('totalCount' => $count, 'data' => $results);
+
+        print json_encode($output);
     }
 
 }

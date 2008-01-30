@@ -1,15 +1,38 @@
 <?php
+/**
+ * Hosts controller class
+ *
+ * This is the access point to the npc_hosts table.
+ *
+ * @filesource
+ * @author              Billy Gunn <billy@gunn.org>
+ * @copyright           Copyright (c) 2007
+ * @link                http://trac2.assembla.com/npc
+ * @package             npc
+ * @subpackage          npc.controllers
+ * @since               NPC 2.0
+ * @version             $Id: $
+ */
 
+/**
+ * Hosts controller class
+ *
+ * Hosts controller provides basic functionality, such as building the 
+ * Doctrine querys and formatting output.
+ * 
+ * @package     npc
+ * @subpackage  npc.controllers
+ */
 class NpcHostsController extends Controller {
 
     /**
-     * statusCount
+     * summary
      * 
      * Returns a state count for all hosts
      *
      * @return array  The host status summary
      */
-    function statusCount() {
+    function summary() {
 
         $status = array(
             'down'        => 0, 
@@ -25,6 +48,6 @@ class NpcHostsController extends Controller {
             $status[$this->hostState[$host->Status->current_state]]++;
         }
 
-        return(array(1, array($status)));
+        $this->jsonOutput($status);
     }
 }

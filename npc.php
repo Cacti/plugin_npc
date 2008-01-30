@@ -39,24 +39,4 @@ if (is_array($_REQUEST)) {
     }
 }
 
-
-// Display any results
-if ($module == 'layout' || $format == 'html') {
-    $obj->$action($params);
-} else {
-
-    list ($count, $results) = $obj->$action($params);
-
-    if (!isset($count)) {
-        $count = 1;
-    }
-
-    // Setup the output array:
-    $output = array('totalCount' => $count, 'data' => $results);
-
-    // Print the JSON encoded output array:
-    print json_encode($output);
-}
-
-?>
-
+$obj->$action($params);
