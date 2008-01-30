@@ -1,15 +1,26 @@
 <?php
 
-class NPC_hosts {
+class NpcHostsController extends Controller {
 
-    var $id = null;
+    /**
+     * Name of the controller.
+     *
+     * @var string
+     */
+    var $name = 'NpcHosts';
+
+    /**
+     * An array containing the class names of models this controller uses.
+     *
+     * @var mixed A single name as a string or a list of names as an array.
+     * @access protected
+     */
+    var $models = array('NpcHost');
 
     private $currentState = array('0' => 'up',
                                   '1' => 'down',
                                   '2' => 'unreachable',
                                   '-1' => 'pending');
-
-    private $rowCount;
 
     /**
      * getHostSummary
@@ -20,6 +31,23 @@ class NPC_hosts {
      */
     function getHostSummary() {
 
+$q = new Doctrine_Query();
+$results = $q->from('NpcServices')->execute();
+
+
+
+// get all services
+//foreach(Doctrine::getTable('NpcServices')->findAll() as $service) {
+foreach($results as $service) {
+    if (count($service->Comment) > 0) {
+        foreach($service->Comment as $comment) {
+            print $service->Host->display_name . ": " . $service->display_name . " - " . $comment->entry_time . " - " . $comment->comment_data . "\n";
+        }
+    }
+}
+exit;
+
+/*
         $results = $this->hostStatus();
 
         $status = array('down' => 0, 
@@ -32,65 +60,7 @@ class NPC_hosts {
         }
 
         return(array(1, array($status)));
-    }
-
-    function hostPerfData() {
-
-        $sql = "
-            SELECT 
-                ROUND(MIN(hc.execution_time), 3) AS min_execution, 
-                ROUND(MAX(hc.execution_time), 3) AS max_execution, 
-                ROUND(AVG(hc.execution_time), 3) AS avg_execution, 
-                ROUND(MIN(hc.latency), 3) AS min_latency, 
-                ROUND(MAX(hc.latency), 3) AS max_latency, 
-                ROUND(AVG(hc.latency), 3) AS avg_latency
-            FROM 
-                npc_hostchecks hc, 
-                npc_hosts h, 
-                npc_objects o 
-            WHERE 
-                hc.host_object_id = o.object_id 
-                AND o.is_active = 1 
-                AND hc.host_object_id = h.host_object_id 
-                AND h.active_checks_enabled = 1
-        ";
-
-        if ($this->id) {
-            $sql .= " AND h.host_id = " . $this->id;
-        }
-
-        return(db_fetch_assoc($sql));
-    }
-
-    function hostStatus() {
-
-        $sql = "
-            SELECT 
-                npc_instances.instance_id ,
-                npc_instances.instance_name ,
-                npc_hosts.host_object_id ,
-                obj1.name1 AS host_name ,
-                npc_hoststatus.*
-            FROM 
-                `npc_hoststatus` 
-            LEFT JOIN 
-                npc_objects as obj1 
-                ON npc_hoststatus.host_object_id=obj1.object_id 
-            LEFT JOIN 
-                npc_hosts 
-                ON npc_hoststatus.host_object_id=npc_hosts.host_object_id 
-            LEFT JOIN 
-                npc_instances 
-                ON npc_hosts.instance_id=npc_instances.instance_id 
-            WHERE 
-                npc_hosts.config_type='1'
-        ";
-
-        if ($this->host_id) {
-            $sql .= " AND npc_hosts.host_id = " . $this->host_id;
-        }
-
-        return(db_fetch_assoc($sql));
+*/
     }
 }
 ?>

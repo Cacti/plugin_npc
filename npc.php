@@ -27,7 +27,7 @@ if (isset($_REQUEST['format'])) {
 // Include the requested controller
 require_once("plugins/npc/controllers/$module.php");
 
-$class = 'NPC_' . $module;
+$class = 'Npc' . ucfirst($module) . 'Controller';
 $obj = new $class;
 if (is_array($_REQUEST)) {
     foreach($_REQUEST as $key => $value) {

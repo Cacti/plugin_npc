@@ -2,6 +2,7 @@
 
 //require the base Doctrine class
 require_once(dirname(__FILE__) . '/lib/Doctrine.php');
+require_once(dirname(__FILE__) . '/controllers/controller.php');
 
 //register the autoloader
 spl_autoload_register(array('Doctrine', 'autoload'));
