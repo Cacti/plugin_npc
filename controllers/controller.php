@@ -38,12 +38,12 @@ class Controller {
             $totalCount = count($results);
         }   
 
-        if (count($results)) {
+        if (count($results) && !is_array($results[0])) {
             $results = array($results);
         }
 
         // Setup the output array:
-        $output = array('totalCount' => $count, 'data' => $results);
+        $output = array('totalCount' => $totalCount, 'data' => $results);
 
         print json_encode($output);
     }

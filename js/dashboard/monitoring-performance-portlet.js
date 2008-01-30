@@ -7,7 +7,7 @@ Ext.onReady(function(){
     var id = 'mon-perf-portlet';
 
     // Portlet URL
-    var url = 'npc.php?module=dashboard&action=getPerfSummary';
+    var url = 'npc.php?module=nagios&action=checkPerf';
 
     // Default column
     var column = 'dashcol2';
