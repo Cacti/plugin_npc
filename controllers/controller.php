@@ -3,20 +3,42 @@
 class Controller {
 
     /**
-     * The name of this controller.
+     * The total number of records available
      *
      * @var string
      * @access public
      */
-    var $name = null;
+    var $totalCount = null;
 
     /**
-     * An array containing the class names of models this controller uses.
+     * The output format.
      *
-     * @var mixed A single name as a string or a list of names as an array.
+     * @var string
+     * @access public
+     */
+    var $format = 'json';
+
+    /**
+     * The results of a get method
+     *
+     * @var mixed A single html string or an array of results
      * @access protected
      */
-    var $models = false;
+    var $results = false;
+
+
+    /**
+     * Maps a hosts current_state
+     *
+     * @var array
+     * @access public
+     */
+    var $hostState = array(
+        '0'  => 'up',
+        '1'  => 'down',
+        '2'  => 'unreachable',
+        '-1' => 'pending'
+    );
 
     /**
      * Holds all params passed and named.
