@@ -1,6 +1,48 @@
 <?php
+/**
+ * Base controller class
+ *
+ * @filesource
+ * @author              Billy Gunn <billy@gunn.org>
+ * @copyright           Copyright (c) 2007
+ * @link                http://trac2.assembla.com/npc
+ * @package             npc
+ * @subpackage          npc.controllers
+ * @since               NPC 2.0
+ * @version             $Id: $
+ */
 
+/**
+ * Base controller class
+ *
+ * @package     npc
+ * @subpackage  npc.controllers
+ */
 class Controller {
+
+    /**
+     * The starting row for fetching results
+     *
+     * @var string
+     * @access public
+     */
+    var $start = 0;
+
+    /**
+     * The number of rows to fetch
+     *
+     * @var string
+     * @access public
+     */
+    var $limit = 25;
+
+    /**
+     * The current page to fetch results for
+     *
+     * @var string
+     * @access public
+     */
+    var $currentPage = 1;
 
     /**
      * Maps a hosts current_state

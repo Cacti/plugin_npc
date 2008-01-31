@@ -39,4 +39,9 @@ if (is_array($_REQUEST)) {
     }
 }
 
+// Set the current page for pagination
+if (get_request_var_request('start')) {
+    $obj->currentPage = (($obj->start / $obj->limit) + 1);
+}
+
 $obj->$action($params);
