@@ -31,10 +31,12 @@ $class = 'Npc' . ucfirst($module) . 'Controller';
 $obj = new $class;
 if (is_array($_REQUEST)) {
     foreach($_REQUEST as $key => $value) {
-        $params[$key] = get_request_var_request($value);
         if (preg_match("/p_/", $key) || $key == "start" || $key == "limit") {
             $parm = preg_replace("/p_/", '', $key);
             $obj->$parm = $value;
+            $params[$parm] = get_request_var_request($key);
+        } else {
+            $params[$key] = get_request_var_request($key);
         }
     }
 }
@@ -44,4 +46,12 @@ if (get_request_var_request('start')) {
     $obj->currentPage = (($obj->start / $obj->limit) + 1);
 }
 
-$obj->$action($params);
+
+if ($out = $obj->$action($params)) {
+    print $out;
+}
+
+
+
+
+

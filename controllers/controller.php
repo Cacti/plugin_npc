@@ -23,7 +23,7 @@ class Controller {
     /**
      * The starting row for fetching results
      *
-     * @var string
+     * @var integer
      * @access public
      */
     var $start = 0;
@@ -31,7 +31,7 @@ class Controller {
     /**
      * The number of rows to fetch
      *
-     * @var string
+     * @var integer
      * @access public
      */
     var $limit = 25;
@@ -39,10 +39,27 @@ class Controller {
     /**
      * The current page to fetch results for
      *
-     * @var string
+     * @var integer
      * @access public
      */
     var $currentPage = 1;
+
+    /**
+     * The total number of records from
+     * the last query.
+     *
+     * @var integer
+     * @access public
+     */
+    var $numRecords = 1;
+
+    /**
+     * The ID of the requested record
+     *
+     * @var integer
+     * @access public
+     */
+    var $id = null;
 
     /**
      * Maps a hosts current_state
@@ -54,6 +71,20 @@ class Controller {
         '0'  => 'up',
         '1'  => 'down',
         '2'  => 'unreachable',
+        '-1' => 'pending'
+    );
+
+    /**
+     * Maps a services current_state
+     *
+     * @var array
+     * @access public
+     */
+    var $serviceState = array(
+        '0'  => 'ok',
+        '1'  => 'warning',
+        '2'  => 'critical',
+        '3'  => 'unknown',
         '-1' => 'pending'
     );
 
@@ -74,20 +105,44 @@ class Controller {
 
     }
 
-    function jsonOutput($results, $totalCount=0) {
-
-        if (!$totalCount) {
-            $totalCount = count($results);
-        }   
+    function jsonOutput($results) {
 
         if (count($results) && !is_array($results[0])) {
             $results = array($results);
         }
 
         // Setup the output array:
-        $output = array('totalCount' => $totalCount, 'data' => $results);
+        $output = array('totalCount' => $this->numRecords, 'data' => $results);
 
-        print json_encode($output);
+        return(json_encode($output));
+    }
+
+    /**
+     * combineNestedArrays
+     * 
+     * When fetching results via Doctrine in array mode
+     * the associated objects are returned as nested arrays.
+     * This method flattens the array.
+     *
+     * @return array  list of all services with status
+     */
+    function combineNestedArrays($array=array()) {
+
+        $newArray = array();
+
+        for ($i = 0; $i < count($array); $i++) {
+            foreach ($array[$i] as $key => $val) {
+                if (is_array($val)) {
+                    foreach ($val as $k => $v) {
+                        $newArray[$i][$k] = $v;
+                    }
+                } else {
+                    $newArray[$i][$key] = $val; 
+                }
+            }
+        }
+
+        return($newArray);
     }
 
 }

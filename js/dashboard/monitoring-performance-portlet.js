@@ -7,7 +7,7 @@ Ext.onReady(function(){
     var id = 'mon-perf-portlet';
 
     // Portlet URL
-    var url = 'npc.php?module=nagios&action=checkPerf';
+    var url = 'npc.php?module=nagios&action=checkPerf&p_resolution=7';
 
     // Default column
     var column = 'dashcol2';

@@ -17,7 +17,7 @@
 /**
  * Hosts controller class
  *
- * Hosts controller provides basic functionality, such as building the 
+ * Hosts controller provides functionality, such as building the 
  * Doctrine querys and formatting output.
  * 
  * @package     npc
@@ -30,7 +30,7 @@ class NpcHostsController extends Controller {
      * 
      * Returns a state count for all hosts
      *
-     * @return array  The host status summary
+     * @return string   json output
      */
     function summary() {
 
@@ -48,6 +48,6 @@ class NpcHostsController extends Controller {
             $status[$this->hostState[$host->Status->current_state]]++;
         }
 
-        $this->jsonOutput($status);
+        return($this->jsonOutput($status));
     }
 }

@@ -7,7 +7,7 @@ Ext.onReady(function(){
     var id = 'service-status-summary';
 
     // Portlet URL
-    var url = 'npc.php?module=services&action=getServiceSummary';
+    var url = 'npc.php?module=services&action=summary';
 
     // Default column
     var column = 'dashcol1';

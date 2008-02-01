@@ -34,9 +34,16 @@ class NpcNagiosController extends Controller {
      * 
      * Returns a summary of service and host check performance
      *
-     * @return array  The performance summary
+     * @return string   json output
      */
-    function checkPerf() {
+    function checkPerf($params) {
+
+        // Set the resolution in days to measure check performance.
+        if (isset($params['resolution'])) {
+            $resolution = $params['resolution'];
+        } else {
+            $resolution = 7;
+        }
 
         $q = new Doctrine_Query();
         $q->select('ROUND(MIN(hc.execution_time), 3) AS min_execution,
@@ -47,10 +54,10 @@ class NpcNagiosController extends Controller {
                     ROUND(AVG(hc.latency), 3) AS avg_latency'
                   );
         $q->from('NpcHostchecks hc, NpcHosts h, NpcObjects o');
-        $q->where('hc.host_object_id = o.object_id AND o.is_active = 1 '
+        $q->where('hc.host_object_id = o.object_id AND o.is_active = 1 AND hc.start_time > DATE_SUB(NOW(),INTERVAL ? DAY) '
                 . 'AND hc.host_object_id = h.host_object_id AND h.active_checks_enabled = 1');
 
-        $hostPerf = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $hostPerf = $q->execute(array($resolution), Doctrine::FETCH_ARRAY);
 
         $q = new Doctrine_Query();
         $q->select('ROUND(MIN(sc.execution_time), 3) AS min_execution,
@@ -61,10 +68,10 @@ class NpcNagiosController extends Controller {
                     ROUND(AVG(sc.latency), 3) AS avg_latency'
                   );
         $q->from('NpcServicechecks sc, NpcServices s, NpcObjects o');
-        $q->where('sc.service_object_id = o.object_id AND o.is_active = 1 '
+        $q->where('sc.service_object_id = o.object_id AND o.is_active = 1 AND sc.start_time > DATE_SUB(NOW(),INTERVAL ? DAY) '
                 . 'AND sc.service_object_id = s.service_object_id AND s.active_checks_enabled = 1');
 
-        $servicePerf = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $servicePerf = $q->execute(array($resolution), Doctrine::FETCH_ARRAY);
 
         $output = array(array_merge(array('name' => 'Service Check Execution Time'), array_slice($servicePerf[0], 0, 3)),
                         array_merge(array('name' => 'Service Check Latency'), array_slice($servicePerf[0], 3)),
@@ -79,6 +86,6 @@ class NpcNagiosController extends Controller {
             }
         }
 
-        $this->jsonOutput($output);
+        return($this->jsonOutput($output));
     }
 }

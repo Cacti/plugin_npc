@@ -7,7 +7,7 @@ Ext.onReady(function(){
     var id = 'eventlog-portlet';
 
     // Portlet URL
-    var url = 'npc.php?module=eventlog&action=getLogs';
+    var url = 'npc.php?module=logentries&action=getLogs';
 
     // Default column
     var column = 'dashcol2';

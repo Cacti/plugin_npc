@@ -7,7 +7,7 @@ Ext.onReady(function(){
     var id = 'service-problems-portlet';
 
     // Portlet URL
-    var url = 'npc.php?module=services&action=getServices&p_state=not_ok&p_portlet=1';
+    var url = 'npc.php?module=services&action=getServices&p_state=not_ok';
 
     // Default column
     var column = 'dashcol2';
@@ -15,7 +15,7 @@ Ext.onReady(function(){
     // Default # of events to display
     var pageSize = parseInt(npc.app.params.npc_portlet_rows);
 
-    function renderStatus(val){
+    function renderStatus(val, p, r){
         var img;
         if (val == 0) {
             img = 'recovery.png';
