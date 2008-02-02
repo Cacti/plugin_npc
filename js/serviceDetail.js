@@ -326,7 +326,7 @@ npc.app.serviceDetail = function(record) {
     });
 
     var sdStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=services&action=getServiceDowntimeHistory&p_id=' + record.data.service_object_id,
+        url: 'npc.php?module=downtime&action=getDowntime&p_id=' + record.data.service_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -369,7 +369,7 @@ npc.app.serviceDetail = function(record) {
         autoWidth:true,
         store:sdStore,
         cm:sdCm,
-        autoExpandColumn:'Comment',
+        autoExpandColumn:'comment_data',
         stripeRows: true,
         view: new Ext.grid.GridView({
             forceFit:true,
