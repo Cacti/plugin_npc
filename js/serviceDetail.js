@@ -145,9 +145,9 @@ npc.app.serviceDetail = function(record) {
                         title: 'Service State Information',
                         id: id + '-si'
                     },{
-                        title: 'Alert History',
+                        title: 'State History',
                         autoHeight:true,
-                        id: id + '-sa'
+                        id: id + '-sh'
                     },{
                         title: 'Notification History',
                         id: id + '-sn'
@@ -217,7 +217,7 @@ npc.app.serviceDetail = function(record) {
     });
 
     var snStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=services&action=getServiceNotifications&p_id=' + record.data.service_object_id,
+        url: 'npc.php?module=notifications&action=getNotifications&p_id=' + record.data.service_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -241,7 +241,7 @@ npc.app.serviceDetail = function(record) {
     },{
         header:"Message",
         dataIndex:'output',
-        width:400,
+        width:600,
     }]);
 
     var snGrid = new Ext.grid.GridPanel({
@@ -249,7 +249,7 @@ npc.app.serviceDetail = function(record) {
         autoWidth:true,
         store:snStore,
         cm:snCm,
-        autoExpandColumn:'Message',
+        autoExpandColumn:'output',
         stripeRows: true,
         view: new Ext.grid.GridView({
             forceFit:true,
@@ -264,8 +264,8 @@ npc.app.serviceDetail = function(record) {
         })
     });
 
-    var saStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=services&action=getServiceAlertHistory&p_id=' + record.data.service_object_id,
+    var shStore = new Ext.data.JsonStore({
+        url: 'npc.php?module=statehistory&action=getStateHistory&type=2&p_id=' + record.data.service_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -279,7 +279,7 @@ npc.app.serviceDetail = function(record) {
         autoload:true
     });
 
-    var saCm = new Ext.grid.ColumnModel([{
+    var shCm = new Ext.grid.ColumnModel([{
         header:"",
         dataIndex:'state',
         renderer:npc.app.renderStatusImage,
@@ -302,14 +302,14 @@ npc.app.serviceDetail = function(record) {
     },{
         header:"Plugin Output",
         dataIndex:'output',
-        width:350
+        width:500
     }]);
 
-    var saGrid = new Ext.grid.GridPanel({
+    var shGrid = new Ext.grid.GridPanel({
         autoHeight:true,
         autoWidth:true,
-        store:saStore,
-        cm:saCm,
+        store:shStore,
+        cm:shCm,
         autoExpandColumn:'output',
         stripeRows: true,
         view: new Ext.grid.GridView({
@@ -320,7 +320,7 @@ npc.app.serviceDetail = function(record) {
         }),
         bbar: new Ext.PagingToolbar({
             pageSize:pageSize,
-            store:saStore,
+            store:shStore,
             displayInfo:true
         })
     });
@@ -454,7 +454,7 @@ npc.app.serviceDetail = function(record) {
     // Add the grids to the tabs
     Ext.getCmp(id+'-si').add(siGrid);
     Ext.getCmp(id+'-sn').add(snGrid);
-    Ext.getCmp(id+'-sa').add(saGrid);
+    Ext.getCmp(id+'-sh').add(shGrid);
     Ext.getCmp(id+'-sd').add(sdGrid);
     Ext.getCmp(id+'-sc').add(scGrid);
 
@@ -464,21 +464,21 @@ npc.app.serviceDetail = function(record) {
     // Render the default grid
     siGrid.render();
     snGrid.render();
-    saGrid.render();
+    shGrid.render();
     sdGrid.render();
     scGrid.render();
 
     // Load the data stores
     siStore.load();
     snStore.load({params:{start:0, limit:pageSize}});
-    saStore.load({params:{start:0, limit:pageSize}});
+    shStore.load({params:{start:0, limit:pageSize}});
     sdStore.load({params:{start:0, limit:pageSize}});
     scStore.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh
     siStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     snStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    saStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    shStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     sdStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     scStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
 
@@ -487,7 +487,7 @@ npc.app.serviceDetail = function(record) {
         destroy: function() {
             siStore.stopAutoRefresh();
             snStore.stopAutoRefresh();
-            saStore.stopAutoRefresh();
+            shStore.stopAutoRefresh();
             sdStore.stopAutoRefresh();
             scStore.stopAutoRefresh();
             if (!innerTabPanel.items.length) {

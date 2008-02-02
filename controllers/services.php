@@ -163,7 +163,7 @@ class NpcServicesController extends Controller {
 
         $x = 0;
         foreach ($fields as $key) {
-            $output[$x] = array('name' => $this->friendlyNames[$key], 'value' => $this->renderValue($key, $results[0]));
+            $output[$x] = array('name' => $this->friendlyNames[$key], 'value' => $this->formatServiceStateInfo($key, $results[0]));
             $x++;
         }
 
@@ -238,4 +238,74 @@ class NpcServicesController extends Controller {
         return($services);
     }
 
+    /**
+     * formatServiceStateInfo
+     * 
+     * Formats the service state info results
+     *
+     * @return string   The formatted results
+     */
+    function formatServiceStateInfo($key, $results) {
+
+        // Set the default return value
+        $return = $results[$key];
+
+        $cs = array(
+            '0'  => '<img src="images/nagios/recovery.png">',
+            '1'  => '<img src="images/nagios/warning.png">',
+            '2'  => '<img src="images/nagios/critical.png">',
+            '3'  => '<img src="images/nagios/unknown.png">',
+            '-1' => '<img src="images/nagios/info.png">'
+        );
+
+        if ($key == 'current_state') {
+            $return = $cs[$results[$key]];
+        }
+
+        if ($key == 'current_check_attempt') {
+            $return = $results[$key] . '/' . $results['max_check_attempts'];
+        }
+
+        if ($key == 'is_flapping') {
+            if ($results[$key]) {
+                $return = 'Yes';
+            } else {
+                $return = 'No';
+            }
+        }
+
+        if (preg_match("/_enabled/", $key) || $key == 'process_performance_data' || $key == 'obsess_over_service') {
+            if($results[$key]) {
+                $return = '<img src="images/icons/tick.png">';
+            } else {
+                $return = '<img src="images/icons/cross.png">';
+            }
+        }
+
+        if ($key == 'last_state_change' || $key == 'last_check' || $key == 'next_check') {
+            $format = read_config_option('npc_date_format') . ' ' . read_config_option('npc_time_format');
+            $return = date($format, strtotime($results[$key]));
+        }
+
+        if ($key == 'scheduled_downtime_depth') {
+            if ($results[$key]) {
+                $return = 'Yes';
+            } else {
+                $return = 'No';
+            }
+        }
+
+        if ($return == '') {
+            $return = 'NA';
+        }
+
+        if (!$return) {
+            $return = 'NA';
+        }
+
+        return($return);
+    }
 }
+
+
+
