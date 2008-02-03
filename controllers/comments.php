@@ -1,13 +1,29 @@
 <?php
+/**
+ * Comments controller class
+ *
+ * This is the access point to the npc_comments table.
+ *
+ * @filesource
+ * @author              Billy Gunn <billy@gunn.org>
+ * @copyright           Copyright (c) 2007
+ * @link                http://trac2.assembla.com/npc
+ * @package             npc
+ * @subpackage          npc.controllers
+ * @since               NPC 2.0
+ * @version             $Id: $
+ */
 
-class NPC_comments {
-
-    var $id = null;
-    var $type = null;
-    var $start = 0;
-    var $limit = 20;
-
-    private $rowCount;
+/**
+ * Comments controller class
+ *
+ * Comments controller provides functionality, such as building the 
+ * Doctrine querys and formatting output.
+ * 
+ * @package     npc
+ * @subpackage  npc.controllers
+ */
+class NpcCommentsController extends Controller {
 
     /**
      * getComments
@@ -18,37 +34,33 @@ class NPC_comments {
      */
     function getComments() {
 
-        $sql = "
-            SELECT
-                npc_instances.instance_id,
-                npc_instances.instance_name,
-                npc_comments.object_id,
-                obj1.name1 AS host_name,
-                obj1.name2 AS service_description,
-                npc_comments.*
-            FROM
-                npc_comments
-                LEFT JOIN npc_objects as obj1 ON npc_comments.object_id=obj1.object_id
-                LEFT JOIN npc_instances ON npc_comments.instance_id=npc_instances.instance_id ";
-
-        if ($this->type) {
-            $sql .= " WHERE obj1.objecttype_id = " . $this->type;
-        } else {
-            $sql .= " WHERE obj1.objecttype_id in (1,2) ";
-        }
+        $where = '';
 
         if ($this->id) {
-            $sql .= sprintf(" AND npc_comments.object_id = %d", $this->id);
+            $where .= sprintf("c.object_id = %d", $this->id);
         }
 
-        $sql .= " ORDER BY entry_time DESC, entry_time_usec DESC, comment_id DESC";
+        $q = new Doctrine_Pager(
+            Doctrine_Query::create()
+                ->select('i.instance_name,'
+                        .'o.name1 AS host_name,'
+                        .'o.name2 AS service_description,'
+                        .'c.*')
+                ->from('NpcComments c')
+                ->leftJoin('c.Object o')
+                ->leftJoin('c.Instance i')
+                ->where("$where")
+                ->orderby( 'c.entry_time DESC, c.entry_time_usec DESC' ),
+            $this->currentPage,
+            $this->limit
+        );
 
-        $this->rowCount = count(db_fetch_assoc($sql));
+        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
 
-        $sql = sprintf($sql . " LIMIT %d,%d", $this->start, $this->limit);
+        // Set the total number of records 
+        $this->numRecords = $q->getNumResults();
 
-        return(array($this->rowCount, db_fetch_assoc($sql)));
+        return($this->jsonOutput($results));
     }
 
 }
-?>

@@ -385,7 +385,7 @@ npc.app.serviceDetail = function(record) {
     });
 
     var scStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=comments&action=getComments&p_type=2&p_id=' + record.data.service_object_id,
+        url: 'npc.php?module=comments&action=getComments&p_id=' + record.data.service_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
