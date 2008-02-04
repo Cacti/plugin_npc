@@ -287,7 +287,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.showServiceList('Service List', 'any');
+                                                        npc.app.serviceList('Service List', 'any');
                                                     }
                                                 }
                                             },{
@@ -296,7 +296,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.showServiceList('Service Problems', 'not_ok');
+                                                        npc.app.serviceList('Service Problems', 'not_ok');
                                                     }
                                                 }
                                             },{

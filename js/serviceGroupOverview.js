@@ -1,13 +1,16 @@
-npc.app.serviceList = function(title, filter){
+npc.app.serviceGroupOverview = function(){
+
+    // Panel title
+    var title = 'Service Group Overview';
 
     // Panel ID
-    var id = title.replace(/[-' ']/g,'') + '-tab';
+    var id = 'serviceGroupOverview-tab';
 
     // Grid URL
     var url = 'npc.php?module=services&action=getServices&p_state=' + filter;
 
     // Default # of rows to display
-    var pageSize = 20;
+    var pageSize = 25;
 
     var outerTabId = 'services-tab';
 
@@ -49,16 +52,9 @@ npc.app.serviceList = function(title, filter){
         }, [
             'host_object_id',
             'host_name',
-            'service_id',
             'service_object_id',
             'service_description',
-            'output',
-            'current_state',
-            'current_check_attempt',
-            'max_check_attempts',
-            {name: 'last_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'next_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'last_state_change', type: 'date', dateFormat: 'Y-m-d H:i:s'}
+            'current_state'
         ]),
         groupField:'host_name'
     });

@@ -5,7 +5,12 @@
  */
 class NpcServicegroups extends BaseNpcServicegroups
 {
-
-
-
+    public function setUp()
+    {
+        $this->hasOne('NpcObjects as Object', array('local' => 'servicegroup_object_id', 'foreign' => 'object_id'));
+        $this->hasOne('NpcInstances as Instance', array('local' => 'instance_id', 'foreign' => 'instance_id'));
+        $this->hasMany('NpcServicegroupMembers as ServicegroupMembers', array('local' => 'servicegroup_id', 'foreign' => 'servicegroup_id'));
+        $this->hasMany('NpcServices as Services', array('local' => 'servicegroup_id', 'foreign' => 'service_object_id', 'refClass' => 'NpcServicegroupMembers'));
+        $this->hasMany('NpcServicestatus as Servicestatus', array('local' => 'servicegroup_id', 'foreign' => 'service_object_id', 'refClass' => 'NpcServicegroupMembers'));
+    }
 }
