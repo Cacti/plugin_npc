@@ -282,12 +282,12 @@ npc.app = function() {
                                             iconCls:'tnode',
                                             expanded:true,
                                             children:[{
-                                                text:'Service List',
+                                                text:'Services',
                                                 iconCls:'tleaf',
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.serviceList('Service List', 'any');
+                                                        npc.app.serviceList('Services', 'any');
                                                     }
                                                 }
                                             },{

@@ -62,6 +62,22 @@ class Controller {
     var $id = null;
 
     /**
+     * The search string passed in from the client
+     *
+     * @var string
+     * @access public
+     */
+    var $searchString = null;
+
+    /**
+     * json encoded list of fields to search
+     *
+     * @var string
+     * @access public
+     */
+    var $searchFields = null;
+
+    /**
      * Maps a hosts current_state
      *
      * @var array
@@ -142,4 +158,34 @@ class Controller {
 
         return($newArray);
     }
+
+    /**
+     * searchClause
+     * 
+     * Appends search parameters to the passed in where clause
+     * @param string $where  An existing where clause
+     * @param array $fieldMap  Maps passed in field names
+     * @return string  The appended where clasue
+     */
+    function searchClause($where, $fieldMap) {
+
+        $where .= " AND ( ";
+
+        $fields = json_decode($this->searchFields);
+        $count = count($fields);
+
+        $x = 1;
+        foreach ($fields as $field) {
+            $where .= $fieldMap[$field] . " LIKE '%" . $this->searchString . "%' ";
+            if ($x < $count) {
+                $where .= " OR ";
+            }
+            $x++;
+        }
+
+        $where .= " ) ";
+
+        return($where);
+    }
 }
+

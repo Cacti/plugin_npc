@@ -127,7 +127,14 @@ npc.app.serviceList = function(title, filter){
         }),
         plugins:[new Ext.ux.grid.Search({
             mode:'remote',
-            iconCls:false
+            iconCls:false,
+            disableIndexes:[
+                'last_check', 
+                'next_check', 
+                'last_state_change', 
+                'current_check_attempt', 
+                'current_state'
+            ]
         })]
     });
 

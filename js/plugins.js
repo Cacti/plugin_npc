@@ -26,8 +26,8 @@ Ext.ux.grid.Search = function(config) {
         ,dateFormat:undefined
         ,mode:'remote'
         ,paramNames: {
-             fields:'p_fields'
-            ,query:'p_search'
+             fields:'p_searchFields'
+            ,query:'p_searchString'
         }
     });
 

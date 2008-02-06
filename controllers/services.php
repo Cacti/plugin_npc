@@ -204,7 +204,14 @@ class NpcServicesController extends Controller {
      */
     function services() {
 
-        $where = '';
+        // Maps searchable fields passed in from the client
+        $fieldMap = array('service_description' => 'o.name2',
+                          'host_name' => 'o.name1',
+                          'output' => 'ss.output');
+
+
+        // Build the where clause
+        $where = ' s.config_type = 1 ';
 
         if ($this->id) {
             $where .= sprintf(" AND s.service_object_id = %d", $this->id);
@@ -212,6 +219,11 @@ class NpcServicesController extends Controller {
 
         $where .= " AND ss.current_state in (" . $this->stringToState[$this->state] . ") ";
 
+        if ($this->searchString) {
+            $where = $this->searchClause($where, $fieldMap);    
+        }
+
+exec("echo \"$where\" > /tmp/DEBUG");
 
         $q = new Doctrine_Pager(
             Doctrine_Query::create()
@@ -224,7 +236,7 @@ class NpcServicesController extends Controller {
                 ->leftJoin('ss.Object o')
                 ->leftJoin('ss.Service s')
                 ->leftJoin('ss.Instance i')
-                ->where("s.config_type = 1 $where")
+                ->where("$where")
                 ->orderby( 'i.instance_name ASC, host_name ASC, service_description ASC' ),
             $this->currentPage,
             $this->limit
