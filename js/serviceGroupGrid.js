@@ -1,13 +1,13 @@
-npc.app.serviceGroupOverview = function(){
+npc.app.serviceGroupGrid = function(){
 
     // Panel title
-    var title = 'Service Group Overview';
+    var title = 'Servicegroup Grid';
 
     // Panel ID
-    var id = 'serviceGroupOverview-tab';
+    var id = 'serviceGroupGrid-tab';
 
     // Grid URL
-    var url = 'npc.php?module=servicegroups&action=getOverview';
+    var url = 'npc.php?module=servicegroups&action=getGrid';
 
     // Default # of rows to display
     var pageSize = 25;
@@ -59,6 +59,7 @@ npc.app.serviceGroupOverview = function(){
             'servicegroup_name',
             'servicestatus_id',
             'current_state',
+            'output',
             'service_object_id',
             'host_name',
             'service_description'
@@ -67,50 +68,34 @@ npc.app.serviceGroupOverview = function(){
     });
 
     var cm = new Ext.grid.ColumnModel([{
+        header:"Host",
+        dataIndex:'host_name',
+        sortable:true,
+        width:75
+    },{
         header:"Service",
         dataIndex:'service_description',
-        sortable:true,
-        width:100
+        width:75
     },{
         header:"Status",
         dataIndex:'current_state',
-        renderer:npc.app.renderStatusImage,
-        width:45
-    },{
-        header:"Last Check",
-        dataIndex:'last_check',
-        renderer: npc.app.formatDate,
-        width:110
-    },{
-        header:"Next Check",
-        dataIndex:'next_check',
-        renderer: npc.app.formatDate,
-        width:110
-    },{
-        header:"Duration",
-        dataIndex:'last_state_change',
-        renderer: npc.app.getDuration,
-        width:110
-    },{
-        header:"Attempt",
-        dataIndex:'current_check_attempt',
-        renderer: renderAttempt,
-        width:50
-    },{
-        header:"Host",
-        dataIndex:'host_name',
-        hidden:true,
-        width:75
+        renderer: npc.app.renderStatusImage,
+        width:40
     },{
         header:"Plugin Output",
         dataIndex:'output',
         width:400
+    },{
+        header:"Serivce Group",
+        dataIndex:'alias',
+        hidden:true,
+        width:75
     }]);
 
     var grid = new Ext.grid.GridPanel({
         id: id + '-grid',
         autoHeight:true,
-        autoExpandColumn: 'service_description',
+        autoExpandColumn:'output',
         store:store,
         cm:cm,
         sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
@@ -121,17 +106,14 @@ npc.app.serviceGroupOverview = function(){
             hideGroupedColumn: true,
             enableGroupingMenu: false,
             enableNoGroups: true,
+            scrollOffset:0,
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Services" : "Service"]})' 
         }),
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,
             store: store,
             displayInfo: true
-        }),
-        plugins:[new Ext.ux.grid.Search({
-            mode:'remote',
-            iconCls:false
-        })]
+        })
     });
 
     // Add the grid to the panel

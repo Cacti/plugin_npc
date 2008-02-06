@@ -15,22 +15,6 @@ Ext.onReady(function(){
     // Default # of events to display
     var pageSize = parseInt(npc.app.params.npc_portlet_rows);
 
-    function renderStatus(val, p, r){
-        var img;
-        if (val == 0) {
-            img = 'recovery.png';
-        } else if (val == 1) {
-            img = 'warning.png';
-        } else if (val == 2) {
-            img = 'critical.png';
-        } else if (val == 3) {
-            img = 'unknown.png';
-        } else if (val == -1) {
-            img = 'info.png';
-        }
-        return String.format('<p align="center"><img src="images/nagios/{0}"></p>', img);
-    }
-
     var store = new Ext.data.GroupingStore({
         url:url,
         autoload:true,
@@ -57,7 +41,7 @@ Ext.onReady(function(){
     },{
         header:"Status",
         dataIndex:'current_state',
-        renderer:renderStatus,
+        renderer:npc.app.renderStatusImage,
         width:45
     },{
         header:"Host",

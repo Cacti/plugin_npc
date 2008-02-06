@@ -302,15 +302,20 @@ npc.app = function() {
                                             },{
                                                 text:'Servicegroup Overview',
                                                 iconCls:'tleaf',
-                                                leaf:true 
+                                                leaf:true
                                             },{
                                                 text:'Servicegroup Summary',
                                                 iconCls:'tleaf',
-                                                leaf:true 
+                                                leaf:true
                                             },{
                                                 text:'Servicegroup Grid',
                                                 iconCls:'tleaf',
-                                                leaf:true 
+                                                leaf:true,
+                                                listeners: {
+                                                    click: function() {
+                                                        npc.app.serviceGroupGrid();
+                                                    }
+                                                }
                                             }]
                                         },{
                                             text:'Status Map',

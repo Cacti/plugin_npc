@@ -118,15 +118,13 @@ class Controller {
     }
 
     /**
-     * combineNestedArrays
+     * flattenArray
      * 
-     * When fetching results via Doctrine in array mode
-     * the associated objects are returned as nested arrays.
-     * This method flattens the array.
+     * Flattens the 1st level of nesting
      *
      * @return array  list of all services with status
      */
-    function combineNestedArrays($array=array()) {
+    function flattenArray($array=array()) {
 
         $newArray = array();
 

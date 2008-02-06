@@ -120,7 +120,7 @@ class NpcServicesController extends Controller {
 
         $services = $this->services();
 
-        $output = $this->combineNestedArrays($services);
+        $output = $this->flattenArray($services);
 
         return($this->jsonOutput($output));
     }
@@ -159,7 +159,7 @@ class NpcServicesController extends Controller {
 
         $service = $this->services();
 
-        $results = $this->combineNestedArrays($service);
+        $results = $this->flattenArray($service);
 
         $x = 0;
         foreach ($fields as $key) {
