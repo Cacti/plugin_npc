@@ -91,6 +91,18 @@ class NpcServicegroupsController extends Controller {
 
     function getServicegroups() {
 
+        // Maps searchable fields passed in from the client
+        $fieldMap = array('service_description' => 'o2.name2',
+                          'host_name' => 'o2.name1',
+                          'alias' => 'sg.alias',
+                          'output' => 's.output');
+
+        if ($this->searchString) {
+            $where = $this->searchClause(null, $fieldMap);
+        }
+
+exec("echo \"$where\" > /tmp/DEBUG");
+
         $q = new Doctrine_Query();
         $q->select('i.instance_name,'
                     .'o1.name1 AS servicegroup_name,'
@@ -106,6 +118,7 @@ class NpcServicegroupsController extends Controller {
             ->innerJoin('sg.Object o1')
             ->innerJoin('s.Object o2')
             ->innerJoin('sg.Instance i')
+            ->where("$where")
             ->orderBy('servicegroup_name ASC, host_name ASC, service_description ASC');
 
         $results = $q->execute(array(), Doctrine::FETCH_ARRAY);

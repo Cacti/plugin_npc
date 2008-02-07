@@ -169,7 +169,11 @@ class Controller {
      */
     function searchClause($where, $fieldMap) {
 
-        $where .= " AND ( ";
+        if (!$where) {
+            $where = " ( ";
+        } else {
+            $where .= " AND ( ";
+        }
 
         $fields = json_decode($this->searchFields);
         $count = count($fields);

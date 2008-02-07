@@ -223,8 +223,6 @@ class NpcServicesController extends Controller {
             $where = $this->searchClause($where, $fieldMap);    
         }
 
-exec("echo \"$where\" > /tmp/DEBUG");
-
         $q = new Doctrine_Pager(
             Doctrine_Query::create()
                 ->select('i.instance_name,'

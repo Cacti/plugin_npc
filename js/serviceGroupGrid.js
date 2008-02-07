@@ -113,7 +113,12 @@ npc.app.serviceGroupGrid = function(){
             pageSize: pageSize,
             store: store,
             displayInfo: true
-        })
+        }),
+        plugins:[new Ext.ux.grid.Search({
+            mode:'remote',
+            iconCls:false,
+            disableIndexes:['current_state']
+        })]
     });
 
     // Add the grid to the panel
