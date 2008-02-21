@@ -26,6 +26,14 @@
 class NpcServicegroupsController extends Controller {
 
     /**
+     * A host status cache
+     *
+     * @var array
+     * @access public
+     */
+    var $hostStatusCache = array();
+
+    /**
      * getOverview
      * 
      * Returns json formatted results for the 
@@ -43,14 +51,27 @@ class NpcServicegroupsController extends Controller {
     }
 
     /**
-     * getGrid
+     * getHostSummary
      * 
-     * Returns json formatted results for the 
-     * servicegroup grid screen.
+     * Returns host status by servicegroup
      *
      * @return string   json output
      */
-    function getGrid() {
+    function getHostSummary() {
+        $status = $this->getServicegroupMemberHoststatus('workstation');
+
+        print "DEBUG: " . $status;
+        exit;
+    }
+
+    /**
+     * getServices
+     * 
+     * Returns all services by servicegroup
+     *
+     * @return string   json output
+     */
+    function getServices() {
 
         $output = array();
 
@@ -89,7 +110,27 @@ class NpcServicegroupsController extends Controller {
         return($this->jsonOutput($output));
     }
 
+    function getServicegroupMemberHoststatus($hostname) {
+
+        if(isset($this->hostStatusCache[$hostname])) {
+            return($this->hostStatusCache[$hostname]);
+        }
+
+        $q = new Doctrine_Query();
+        $q->select('hs.current_state')
+          ->from('NpcHoststatus hs, NpcHosts h')
+          ->where('hs.host_object_id = h.host_object_id AND h.display_name = ?', $hostname);
+
+        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+
+        $this->hostStatusCache[$hostname] = $results[0]['current_state'];
+
+        return($this->hostStatusCache[$hostname]);
+    }
+
     function getServicegroups() {
+
+        $where = '';
 
         // Maps searchable fields passed in from the client
         $fieldMap = array('service_description' => 'o2.name2',
@@ -101,22 +142,20 @@ class NpcServicegroupsController extends Controller {
             $where = $this->searchClause(null, $fieldMap);
         }
 
-exec("echo \"$where\" > /tmp/DEBUG");
-
         $q = new Doctrine_Query();
         $q->select('i.instance_name,'
                     .'o1.name1 AS servicegroup_name,'
-                    .'s.service_object_id,'
-                    .'s.current_state,' 
-                    .'s.output,' 
+                    .'ss.service_object_id,'
+                    .'ss.current_state,' 
+                    .'ss.output,' 
                     .'o2.name1 AS host_name,'
                     .'o2.name2 AS service_description,'
                     .'sg.*')
             ->from('NpcServicegroups sg')
             ->innerJoin('sg.ServicegroupMembers sgm')
-            ->innerJoin('sg.Servicestatus s ON sgm.service_object_id = s.service_object_id')
+            ->innerJoin('sg.Servicestatus ss ON sgm.service_object_id = ss.service_object_id')
             ->innerJoin('sg.Object o1')
-            ->innerJoin('s.Object o2')
+            ->innerJoin('ss.Object o2')
             ->innerJoin('sg.Instance i')
             ->where("$where")
             ->orderBy('servicegroup_name ASC, host_name ASC, service_description ASC');

@@ -423,7 +423,7 @@ npc.app = function() {
                     var serviceProblemsChecked = serviceProblems.isVisible();
 
                     var form = new Ext.form.FormPanel({
-                        title: 'Show/hide portlets',
+                        //title: 'Show/hide portlets',
                         bodyStyle:'padding:5px 5px 0',
                         layout: 'form',
                         frame:true,

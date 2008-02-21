@@ -50,4 +50,27 @@ class NpcHostsController extends Controller {
 
         return($this->jsonOutput($status));
     }
+
+    function getPerfData($id) {
+
+        $q = new Doctrine_Query();
+        $q->select('perfdata')->from('NpcHostchecks')->where('host_object_id = ?', $id);
+        
+        return($q->execute(array(), Doctrine::FETCH_ARRAY));
+    }
+
+    /**
+     * listHostsCli
+     * 
+     * Returns all hosts and associated object ID's
+     *
+     * @return array   Array of hosts/id's
+     */
+    function listHostsCli() {
+
+        $q = new Doctrine_Query();
+        $q->select('display_name as name, host_object_id as id')->from('NpcHosts')->orderBy('display_name ASC');
+
+        return($q->execute(array(), Doctrine::FETCH_ARRAY));
+    }
 }

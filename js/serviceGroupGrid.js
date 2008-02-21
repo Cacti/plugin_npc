@@ -7,7 +7,7 @@ npc.app.serviceGroupGrid = function(){
     var id = 'serviceGroupGrid-tab';
 
     // Grid URL
-    var url = 'npc.php?module=servicegroups&action=getGrid';
+    var url = 'npc.php?module=servicegroups&action=getServices';
 
     // Default # of rows to display
     var pageSize = 25;
