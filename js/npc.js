@@ -370,6 +370,15 @@ npc.app = function() {
                                                 npc.app.addTabExt('Nagios','Nagios',npc.app.params.npc_nagios_url);
                                             }
                                         }
+                                    },{
+                                        text:'N2C',
+                                        iconCls:'tleaf',
+                                        leaf:true,
+                                        listeners: {
+                                            click: function() {
+                                                npc.app.n2c();
+                                            }
+                                        }
                                     }]
                                 })
                             })

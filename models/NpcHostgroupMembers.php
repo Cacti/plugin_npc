@@ -5,7 +5,9 @@
  */
 class NpcHostgroupMembers extends BaseNpcHostgroupMembers
 {
-
-
-
+    public function setUp()
+    {
+        $this->hasOne('NpcInstances as Instance', array('local' => 'instance_id', 'foreign' => 'instance_id'));
+        $this->hasOne('NpcObjects as Object', array('local' => 'host_object_id', 'foreign' => 'object_id'));
+    }
 }

@@ -254,8 +254,9 @@ class NpcServicesController extends Controller {
             Doctrine_Query::create()
                 ->select('n.perfdata')
             	->from('NpcServicechecks n, NpcServices n2')
-          	->where('n.service_object_id = ? AND n2.service_object_id = n.service_object_id AND n.start_time > now() - INTERVAL n2.check_interval * 2 MINUTE', $id)
-          	->orderby('n.start_time DESC'), 0, 1);
+          	    ->where('n.service_object_id = ? AND n2.service_object_id = n.service_object_id AND n.start_time'
+                       .' > now() - INTERVAL n2.check_interval * 2 MINUTE', $id)
+          	    ->orderby('n.start_time DESC'), 0, 1);
 
         return($q->execute(array(), Doctrine::FETCH_ARRAY));
     }
