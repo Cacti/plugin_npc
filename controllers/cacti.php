@@ -22,5 +22,18 @@ class NpcCactiController extends Controller {
         return($this->jsonOutput($results));
     }
 
+    /**
+     * isMapped
+     * 
+     * Checks to see if the passed nagios host is currently mapped 
+     * to a cacti device.
+     *
+     * @return boolean
+     */
+    function isMapped($id) {
+        $results = db_fetch_assoc("SELECT id FROM host WHERE npc_host_object_id = $id");
+        return(count($results));
+    }
+
 }
 ?>

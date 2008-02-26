@@ -121,9 +121,9 @@ class Controller {
 
     }
 
-    function jsonOutput($results) {
+    function jsonOutput($results=array()) {
 
-        if (count($results) && !is_array($results[0])) {
+        if (count($results) && !isset($results[0])) {
             $results = array($results);
         }
 

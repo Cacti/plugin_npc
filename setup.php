@@ -90,12 +90,12 @@ function npc_config_form () {
         foreach ($fields_host_edit2 as $f => $a) {
                 $fields_host_edit3[$f] = $a;
                 if ($f == 'disabled') {
-                        $fields_host_edit3["npc_host_id"] = array(
+                        $fields_host_edit3["npc_host_object_id"] = array(
                                 "method" => "drop_sql",
                                 "friendly_name" => "Nagios Host Mapping",
                                 "description" => "Select the Nagios host that maps to this host.",
-                                "value" => "|arg1:npc_host_id|",
-                                "none_value" => "Auto",
+                                "value" => "|arg1:npc_host_object_id|",
+                                "none_value" => "None",
                                 "default" => "0",
                                 "sql" => "SELECT npc_hosts.host_object_id as id, concat(npc_instances.instance_name, ': ', obj1.name1) AS name FROM `npc_hosts` LEFT JOIN npc_objects as obj1 ON npc_hosts.host_object_id=obj1.object_id LEFT JOIN npc_instances ON npc_hosts.instance_id=npc_instances.instance_id WHERE npc_hosts.config_type='1'",
                                 "form_id" => false
@@ -106,10 +106,10 @@ function npc_config_form () {
 }
 
 function npc_api_device_save ($save) {
-        if (isset($_POST['npc_host_id'])) {
-                $save["npc_host_id"] = form_input_validate($_POST['npc_host_id'], "npc_host_id", "", true, 3);
+        if (isset($_POST['npc_host_object_id'])) {
+                $save["npc_host_object_id"] = form_input_validate($_POST['npc_host_object_id'], "npc_host_object_id", "", true, 3);
         } else {
-                $save['npc_host_id'] = form_input_validate('', "npc_host_id", "", true, 3);
+                $save['npc_host_object_id'] = form_input_validate('', "npc_host_object_id", "", true, 3);
 	}
 
         return $save;
@@ -136,13 +136,13 @@ function npc_setup_table () {
     $found = false;
     $result = mysql_query("SHOW COLUMNS FROM host FROM " . $database_default) or die (mysql_error());
     while ($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-        if ($row['Field'] == 'npc_host_id') {
+        if ($row['Field'] == 'npc_host_object_id') {
             $found = true;
         }
     }
 
     if (!$found) {
-        $sql = "ALTER TABLE host ADD npc_host_id int(11) default NULL COMMENT 'Nagios host mapping'";
+        $sql = "ALTER TABLE host ADD npc_host_object_id int(11) default NULL COMMENT 'Nagios host object mapping'";
         $result = mysql_query($sql) or die (mysql_error());
     }
 

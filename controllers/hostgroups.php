@@ -26,29 +26,27 @@
 class NpcHostgroupsController extends Controller {
 
     /**
-     * listHostgroups
-     * 
-     * Returns a simple list of hostgroups with the number of hosts
+     * getHosts
      *
-     * @return string   json output
+     * Retrieves all hosts in the specified hostgroup
+     *
+     * @return array
      */
-    function listHostgroups() {
+    function getHosts($params) {
 
-        $output = array();
+        $column = key($params);
+        $value = $params[$column];
 
-        $results = $this->getHostgroups();
+        $q = new Doctrine_Query();
+        $q->select('h.host_object_id, h.display_name, h.address')
+          ->from('NpcHosts h, NpcHostgroups hg, NpcHostgroupMembers hgm')
+          ->where('hg.hostgroup_id = hgm.hostgroup_id AND hgm.host_object_id = h.host_object_id AND hg.'.$column.' = ?', $value);
 
-        $i = 0;
-        foreach($results as $hostgroup) {
-            $output[$i]['alias'] = $results[$i]['alias'];
-            $output[$i]['members'] = count($results[$i]['Hoststatus']);
-            $i++;
-        }
+        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
 
-        $this->numRecords = count($output);
-
-        return($this->jsonOutput($output));
+        return($results);
     }
+
 
     /**
      * getHostgroups

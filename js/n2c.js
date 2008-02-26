@@ -9,7 +9,7 @@ npc.app.n2c = function() {
     // Get the host groups and the number of hosts 
     // that will be imported from the server.
     var hostGroupStore = new Ext.data.JsonStore({
-        url:'npc.php?module=hostgroups&action=listHostgroups',
+        url:'npc.php?module=sync&action=listHostgroups',
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -80,7 +80,7 @@ npc.app.n2c = function() {
             tooltip:'Import the selected hostgroups applying the selected template.',
             iconCls:'add',
             handler : function(){
-                doImport(sm.getSelections());
+                getHosts(sm.getSelections());
             }
         }, '-', {
             text:'Cancel',
@@ -140,44 +140,42 @@ npc.app.n2c = function() {
         }
     }
 
-    function doImport(s) {
+    function doImport(h) {
+        console.log(h);
+        //for(var i = 0; i < h.length; i++) {
+    }
 
-        // Create an empty object to hold the json data sent to the server.
-        var myJSON = new Object();
+    function getHosts(s) {
 
-        // Add the hostgroup and assigned template to the object
+        var hg = new Object();
+
+        // Get the hosts for the selected hostgroups
         for(var i = 0; i < s.length; i++) {
-            myJSON[i] = {'alias' : s[i].data.alias, 'template' : s[i].data.template};
+            hg[i] = {'alias' : s[i].data.alias, 'template' : s[i].data.template};
         }
 
         // json encode our object
-        var data = Ext.util.JSON.encode(myJSON);
+        var data = Ext.util.JSON.encode(hg);
 
         // Create a messagebox with progress bar.
-        var dlgProgress = Ext.MessageBox.progress('', 'Importing...');
+        //var dlgProgress = Ext.MessageBox.progress('', 'Importing...');
 
         // Set the progress bar to run forever
-        dlgProgress.wait('Importing...', '', {interval:200});
+        //dlgProgress.wait('Importing...', '', {interval:200});
 
-        // Send the import data to the server
+        // Get all the hosts that will be imported
         Ext.Ajax.request({
             url : 'npc.php' , 
             params : { 
                 module : 'sync',
-                action : 'import',
+                action : 'getHosts',
                 p_data : data
             },
             success: function (response) {
-                console.log(response.responseText);
-
-                // Hide the progress bar
-                dlgProgress.hide();
+                doImport(Ext.util.JSON.decode(response.responseText));
             },
             failure: function (response) { 
                 alert('Import failed.'); 
-
-                // Hide the progress bar
-                dlgProgress.hide();
             } 
         });
     }
