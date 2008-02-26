@@ -34,13 +34,29 @@ class NpcHostgroupsController extends Controller {
      */
     function listHostgroups() {
 
+        $output = array();
+
         $results = $this->getHostgroups();
 
-	print_r($results);
-	exit;
-        //return($results);
+        $i = 0;
+        foreach($results as $hostgroup) {
+            $output[$i]['alias'] = $results[$i]['alias'];
+            $output[$i]['members'] = count($results[$i]['Hoststatus']);
+            $i++;
+        }
+
+        $this->numRecords = count($output);
+
+        return($this->jsonOutput($output));
     }
 
+    /**
+     * getHostgroups
+     *
+     * Retrieves all hosts with current state by hostgroup
+     *
+     * @return array
+     */
     function getHostgroups() {
 
         $where = '';

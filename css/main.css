@@ -10,6 +10,14 @@ z-index:20000;
 background-image:url(../images/icons/cog_go.png) !important;
 }
 
+.add {
+background-image:url(../images/icons/add.png) !important;
+}
+
+.cancel {
+background-image:url(../images/icons/cancel.png) !important;
+}
+
 .reporting {
 background-image:url(../images/icons/report_go.png) !important;
 }
