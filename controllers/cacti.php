@@ -1,5 +1,7 @@
 <?php
 
+require_once("include/auth.php");
+
 class NpcCactiController extends Controller {
 
     /**
@@ -33,6 +35,28 @@ class NpcCactiController extends Controller {
     function isMapped($id) {
         $results = db_fetch_assoc("SELECT id FROM host WHERE npc_host_object_id = $id");
         return(count($results));
+    }
+
+    /**
+     * mapHost
+     * 
+     * Maps a nagios host to a cacti host
+     *
+     * @return boolean
+     */
+    function mapHost($npc_id, $cacti_id) {
+        db_execute("UPDATE host SET npc_host_object_id = $npc_id WHERE id = $cacti_id");
+    }
+
+    /**
+     * getHostnames
+     * 
+     * Returns a list of cacti host ip addresses
+     *
+     * @return array   array of ip addresses
+     */
+    function getHostnames() {
+        return(db_fetch_assoc("SELECT id, hostname FROM host"));
     }
 
 }

@@ -93,6 +93,7 @@ npc.app.n2c = function() {
 
     // Setup a tab panel
     var panel = new Ext.TabPanel({
+        id:'n2c-panel',
         style:'padding:10px 0 10px 10px',
         activeTab: 0,
         autoHeight:true,
@@ -140,9 +141,63 @@ npc.app.n2c = function() {
         }
     }
 
-    function doImport(h) {
-        console.log(h);
-        //for(var i = 0; i < h.length; i++) {
+    function doImport(nodes) {
+        
+        var upBar = Ext.MessageBox.progress('Import Progress');
+
+        // A simple asynchronous pattern
+        if(!!nodes.length){
+
+            var totalNodes = nodes.length;
+            var currentNode = 1;
+            var progPerc;
+            var textData = [];
+            var dt = new Date();
+            var cacheId = dt.getTime();
+   
+            (function(){
+                var node, self = arguments.callee ;
+                if(node = nodes.shift()){
+                    progPerc = (currentNode/totalNodes);
+                    upBar.updateProgress(progPerc, 'Importing host '+currentNode+' of '+totalNodes);
+                    Ext.Ajax.request({
+                        method: 'GET',
+                        timeout: 10000,
+                        url : 'npc.php' , 
+                        params : { 
+                            module : 'sync',
+                            action : 'import',
+                            p_host_object_id : node.host_object_id,
+                            p_description : node.display_name,
+                            p_ip : node.address,
+                            p_template_id : node.template,
+                            p_cache_id : cacheId
+                        },
+                        success: function(response){
+                            r = response.responseText;
+                            textData[currentNode-1] = r.split("|");
+                            currentNode++;
+                            //upText.setValue(textData.join('\n'));
+                            setTimeout(self,1);   //  <--- Adjust this to smooth out UI response time during loop
+                        }
+                    });
+                } else {
+                    upBar.hide();
+                    panel.add({
+                        id:'n2c-import-results',
+                        title: 'Import Results',
+                        closable: true
+                    }).show();
+                    panel.doLayout();
+                    panel.setActiveTab(Ext.getCmp('n2c-import-results'));
+                    //     var myData = [
+                    //             ['3m Co',71.72,0.02,0.03,'9/1 12:00am'],
+                    //             ['Alcoa Inc',29.01,0.42,1.47,'9/1 12:00am']
+                    //     ];
+                    console.log(textData);
+                }
+            })();
+        }
     }
 
     function getHosts(s) {
@@ -156,12 +211,6 @@ npc.app.n2c = function() {
 
         // json encode our object
         var data = Ext.util.JSON.encode(hg);
-
-        // Create a messagebox with progress bar.
-        //var dlgProgress = Ext.MessageBox.progress('', 'Importing...');
-
-        // Set the progress bar to run forever
-        //dlgProgress.wait('Importing...', '', {interval:200});
 
         // Get all the hosts that will be imported
         Ext.Ajax.request({

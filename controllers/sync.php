@@ -33,29 +33,55 @@ class NpcSyncController extends Controller {
      * import
      * 
      * Handle importing Nagios hosts to cacti returning the import
-     * results back to the client.
+     * results back to the client. 
      *
-     * @return string   The json encoded results
+     * The import results are a pipe delimited string parsed into 
+     * an array on the client side.
+     *
+     * Columns: "description|imported|mapped|message|cacti_host_ID"
+     *
+     * @return string   The pipe delimited results
      */
     function import($params) {
    
         $config = $params['config'];
         $path = $config["base_path"] . "/cli/add_device.php";
 
-        $results = array();
+        $return = $params['description'] . '|';
 
-        foreach ($data as $hostgroup) {
-            $hosts = NpcHostgroupsController::getHosts(array('alias' => $hostgroup->alias));
-            foreach ($hosts as $host) {
-                if (!NpcCactiController::isMapped($host['host_object_id'])) {
-                    exec("php ".$path." --description=".$host['display_name']." --ip=".$host['address'] . 
-                         " --template=".$hostgroup->template, $status);
-                    exec("echo \"" . print_r($status, true) . "\" > /tmp/DEBUG");
-                }
-            }
+        // If the host already exists in Cacti map it and return.
+        if ($cactiId = $this->checkHostExists($params['ip'], $params['cache_id'])) {
+            NpcCactiController::mapHost($params['host_object_id'], $cactiId);
+            $return .= '0|1|The host already existed in Cacti and was mapped|' . $cactiId;
+            return($return);
         }
 
-        return('woot');
+        $importCmd = 'php ' . $path 
+                   . ' --description=' . $params['description'] 
+                   . ' --ip=' . $params['ip']
+                   . ' --template=' . $params['template_id'];
+
+        exec($importCmd, $status);
+
+        if(is_array($status)) {
+            preg_match("/Success - new device-id: \((.*)\)/", $status[2], $matches);
+
+            if (isset($matches[0])) {
+                // The import was successful now map the hosts
+                if (isset($matches[1])) {
+                    NpcCactiController::mapHost($params['host_object_id'], $matches[1]);
+                    $return .= '1|1|' . $status[1] . '|' . $matches[1];
+                } else {
+                    $return .= '1|0|' . $matches[0] . ' - ' . $status[1] . '|0';
+                }
+            } else {
+                $return .= $status[1];
+            }
+        } else {
+            $return .= '0|0|Unknown failure|0';
+        }
+
+        return($return);
     }
 
     /**
@@ -75,7 +101,12 @@ class NpcSyncController extends Controller {
             $hosts = NpcHostgroupsController::getHosts(array('alias' => $hostgroup->alias));
             foreach ($hosts as $host) {
                 if (!NpcCactiController::isMapped($host['host_object_id'])) {
-                    $results[] = array('host' => $host['host_object_id'], 'template' => $hostgroup->template);
+                    $results[] = array(
+                        'host_object_id' => $host['host_object_id'], 
+                        'display_name' => $host['display_name'],
+                        'address' => $host['address'],
+                        'template' => $hostgroup->template
+                    );
                 }
             }
         }
@@ -115,6 +146,61 @@ class NpcSyncController extends Controller {
         return($this->jsonOutput($output));
     }
 
+    /**
+     * checkHostExists
+     * 
+     * This method checks to see if a host exists in 
+     * Cacti by comparing IP addresses. If a match is 
+     * the found, the Cacti host ID is returned.
+     *
+     * The first time this method is called a cache of 
+     * id to ip address mappings will be built.
+     *
+     * @return int   The Cacti host ID
+     */
+    function checkHostExists($ip, $cache_id) {
+        // $myIP = gethostbyname(trim(`hostname`));
 
+        $buildCache = 0;
+
+        $cacheFile = 'plugins/npc/address_cache.php';
+
+        if (file_exists($cacheFile)) {
+            include($cacheFile);
+            if ($cacheKey != $cache_id) {
+                $buildCache = 1;
+            }
+        } else {
+            $buildCache = 1;
+        }
+
+        if ($buildCache) {
+            $fh = fopen($cacheFile, 'w') or die("can't open file");
+
+            $string = "<?php\n\n";
+            $string .= "\$cacheKey = '" . $cache_id . "';\n";
+            $string .= "\$hosts = array(\n";
+
+            $results = NpcCactiController::getHostnames();
+
+            for ($i = 0; $i < count($results); $i++) {
+                $address = gethostbyname($results[$i]['hostname']);
+                $string .= "'" . $address . "' => '" . $results[$i]['id'] . "',\n";
+            }
+
+            $string .= ");";
+
+            fwrite($fh, $string);
+
+            fclose($fh);
+        }
+
+        if (isset($hosts[$ip])) {
+            return($hosts[$ip]);
+        }
+
+        return(null);
+
+    }
 
 }
