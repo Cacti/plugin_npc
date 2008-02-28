@@ -3,6 +3,9 @@ npc.app.n2c = function() {
     // Set a grid object
     var xg = Ext.grid;
 
+    var upBar;
+    var results = [];
+
     // Set the selection model
     var sm = new xg.CheckboxSelectionModel();
 
@@ -71,15 +74,23 @@ npc.app.n2c = function() {
         border:false,
         cm:cm,
         sm:sm,
-        autoWidth:true,
+        width:600,
         autoHeight:true,
         frame:false,
         clicksToEdit:1,
+        view: new Ext.grid.GridView({
+           forceFit:true,
+            autoFill:true
+        }),
         tbar:[{
             text:'Import',
-            tooltip:'Import the selected hostgroups applying the selected template.',
+            tooltip:'Import the selected hostgroups with the selected template.',
             iconCls:'add',
             handler : function(){
+                var tab = Ext.getCmp('n2c-results');
+                if (tab) {
+                    panel.remove(tab, true);
+                }
                 getHosts(sm.getSelections());
             }
         }, '-', {
@@ -94,19 +105,17 @@ npc.app.n2c = function() {
     // Setup a tab panel
     var panel = new Ext.TabPanel({
         id:'n2c-panel',
-        style:'padding:10px 0 10px 10px',
         activeTab: 0,
-        autoHeight:true,
-        autoWidth:true,
-        plain:true,
+        height:400,
+        width:600,
         deferredRender:false,
+        layoutOnTabChange: true,
         defaults:{autoScroll: true},
         items:[{
             title: 'Import Hosts',
-            id: 'n2c-import'
-        },{
-            title: 'Map Hosts',
-            id: 'n2c-map'
+            id: 'n2c-import',
+            layout:'fit',
+            items: [ grid ]
         }]
     });
 
@@ -118,13 +127,9 @@ npc.app.n2c = function() {
         closable: true,
         width:600,
         height:400,
-        bodyStyle:'padding:5px;',
         items: panel
     });
     win.show();
-
-    // Add the grid to the panel
-    Ext.getCmp('n2c-import').add(grid);
 
     // Refresh the window
     win.doLayout();
@@ -143,7 +148,8 @@ npc.app.n2c = function() {
 
     function doImport(nodes) {
         
-        var upBar = Ext.MessageBox.progress('Import Progress');
+        upBar = Ext.MessageBox.progress('Import Progress');
+        results = [];
 
         // A simple asynchronous pattern
         if(!!nodes.length){
@@ -151,7 +157,6 @@ npc.app.n2c = function() {
             var totalNodes = nodes.length;
             var currentNode = 1;
             var progPerc;
-            var textData = [];
             var dt = new Date();
             var cacheId = dt.getTime();
    
@@ -175,29 +180,98 @@ npc.app.n2c = function() {
                         },
                         success: function(response){
                             r = response.responseText;
-                            textData[currentNode-1] = r.split("|");
+                            results[currentNode-1] = r.split("|");
                             currentNode++;
-                            //upText.setValue(textData.join('\n'));
-                            setTimeout(self,1);   //  <--- Adjust this to smooth out UI response time during loop
+                            setTimeout(self,1);   // Adjust this to smooth out UI response time during loop
                         }
                     });
                 } else {
-                    upBar.hide();
-                    panel.add({
-                        id:'n2c-import-results',
-                        title: 'Import Results',
-                        closable: true
-                    }).show();
-                    panel.doLayout();
-                    panel.setActiveTab(Ext.getCmp('n2c-import-results'));
-                    //     var myData = [
-                    //             ['3m Co',71.72,0.02,0.03,'9/1 12:00am'],
-                    //             ['Alcoa Inc',29.01,0.42,1.47,'9/1 12:00am']
-                    //     ];
-                    console.log(textData);
+                    importResults();
                 }
             })();
         }
+    }
+
+    function importResults() {
+
+        // Hide the progress bar
+        upBar.hide();
+
+        function renderCheck(val) {
+            var img;
+            if (val == 0) {
+                return '';
+            } else {
+                return String.format('<p align="center"><img src="images/icons/tick.png"></p>');
+            }
+        }
+
+        // Create a store to hold the results
+        var resultsStore = new Ext.data.SimpleStore({
+            fields: [
+                {name: 'host'},
+                {name: 'imported', type: 'int'},
+                {name: 'mapped', type: 'int'},
+                {name: 'message'}
+            ]
+        });
+
+        var cm = new Ext.grid.ColumnModel([{
+            header:"Host",
+            dataIndex:'host',
+            sortable:true,
+            width:100
+        },{
+            header:"Imported",
+            dataIndex:'imported',
+            renderer:renderCheck,
+            width:45
+        },{
+            header:"Mapped",
+            dataIndex:'mapped',
+            renderer:renderCheck,
+            width:45
+        },{
+            header:"Message",
+            dataIndex:'message',
+            width:300
+        }]);
+
+        // create the Grid
+        var resultsGrid = new Ext.grid.GridPanel({
+            id: 'n2cResultsGrid',
+            store: resultsStore,
+            border:false,
+            cm:cm,
+            sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
+            view: new Ext.grid.GridView({
+                forceFit:true,
+                autoFill:true
+            }),
+            stripeRows: true,
+            autoHeight:true,
+            width:600
+        });
+
+        panel.add({
+            id:'n2c-results',
+            title: 'Import Results',
+            deferredRender: false,
+            layout:'fit',
+            closable: true,
+            items: [resultsGrid]
+        }).show();
+        panel.doLayout();
+        panel.setActiveTab(Ext.getCmp('n2c-results'));
+
+        // Refresh the window
+        win.doLayout();
+
+        // Render the grid
+        resultsGrid.render();
+
+        // Load the results data
+        resultsStore.loadData(results);
     }
 
     function getHosts(s) {

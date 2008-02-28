@@ -49,10 +49,16 @@ class NpcSyncController extends Controller {
 
         $return = $params['description'] . '|';
 
-        // If the host already exists in Cacti map it and return.
+        // If the host exists and is already mapped return with notice
+        if (NpcCactiController::isMapped($params['host_object_id'])) {
+            $return .= '0|0|The host already exists and is mapped';
+            return($return);
+        }
+
+        // If the host already exists, map it and return.
         if ($cactiId = $this->checkHostExists($params['ip'], $params['cache_id'])) {
             NpcCactiController::mapHost($params['host_object_id'], $cactiId);
-            $return .= '0|1|The host already existed in Cacti and was mapped|' . $cactiId;
+            $return .= '0|1|The host already existed in Cacti with device ID: ' . $cactiId;
             return($return);
         }
 
@@ -64,21 +70,18 @@ class NpcSyncController extends Controller {
         exec($importCmd, $status);
 
         if(is_array($status)) {
+
             preg_match("/Success - new device-id: \((.*)\)/", $status[2], $matches);
 
-            if (isset($matches[0])) {
+            if (isset($matches[1])) {
                 // The import was successful now map the hosts
-                if (isset($matches[1])) {
-                    NpcCactiController::mapHost($params['host_object_id'], $matches[1]);
-                    $return .= '1|1|' . $status[1] . '|' . $matches[1];
-                } else {
-                    $return .= '1|0|' . $matches[0] . ' - ' . $status[1] . '|0';
-                }
-            } else {
-                $return .= $status[1];
+                NpcCactiController::mapHost($params['host_object_id'], $matches[1]);
+                $return .= '1|1|' . $status[2];
+            } elseif (isset($matches[0])) {
+                $return .= '1|0|Mapping failed - ' . $status[1];
             }
         } else {
-            $return .= '0|0|Unknown failure|0';
+            $return .= '0|0|Unknown failure';
         }
 
         return($return);
