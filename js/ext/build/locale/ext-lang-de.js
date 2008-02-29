@@ -19,6 +19,10 @@ if(Ext.TabPanelItem){
    Ext.TabPanelItem.prototype.closeText = "Diesen Tab schließen";
 }
 
+if(Ext.form.BasicForm){
+   Ext.form.BasicForm.prototype.waitTitle = "Bitte warten...";
+}
+
 if(Ext.form.Field){
    Ext.form.Field.prototype.invalidText = "Der Wert des Feldes ist nicht korrekt";
 }
@@ -112,7 +116,7 @@ if(Ext.DatePicker){
       format            : "d.m.Y",
       okText            : "&#160;OK&#160;",
       cancelText        : "Abbrechen",
-      startDay          : 0
+      startDay          : 1
    });
 }
 
@@ -226,8 +230,8 @@ if(Ext.form.HtmlEditor){
         cls: 'x-html-editor-tip'
       },
       justifyright : {
-        title: 'Align Text Right',
-        text: 'Align text to the right.',
+        title: 'Rechtsbündig',
+        text: 'Setzt den Text rechtsbündig.',
         cls: 'x-html-editor-tip'
       },
       insertunorderedlist : {
@@ -287,3 +291,11 @@ if(Ext.layout.BorderLayout.SplitRegion){
   });
 }
 
+if(Ext.form.TimeField){
+   Ext.apply(Ext.form.TimeField.prototype, {
+    minText : "Die Zeit muss gleich oder nach {0} liegen",
+    maxText : "Die Zeit muss gleich oder vor {0} liegen",
+    invalidText : "{0} ist keine gültige Zeit",
+    format : "H:i"
+   });
+}

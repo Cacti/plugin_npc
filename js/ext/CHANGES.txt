@@ -1,20 +1,19 @@
 //==========================================
 // Ext JS Release Notes
 //==========================================
-// Release Date: January 23, 2007
-// Current Version: 2.0.1 (rev 1594) 
-// Previous Version: 2.0.0 (rev 1454)
+// Release Date: February 24, 2008
+// Current Version: 2.0.1 (rev 1688) 
+// Previous Version: 2.0.1 (rev 1589)
 //==========================================
 
+
+NOTE: This is primarily a release of the new Ext AIR support, along with other minor bug fixes.  Everything under the 'air' folder in SVN is new in this release.
+
+
 ===== Added =====
-src/locale/
-     Catalonian 
-     Hebrew
-     Indonesian
-     Lithuanian
-     Portuguese
-     Spanish - Latin American
-     Thailand
+src/widgets/form/
+    Label
+       - New simple form label class for adding labels manually
 
 
 ===== Removed =====
@@ -22,204 +21,280 @@ none
 
 
 ===== Modified =====
-adapter/
-     Ext base adapter
-        - scroll, motion and color methods now support chaining
+src/adapter/
+    ext-base.js
+    jquery-bridge.js
+    prototype-bridge.js
+       - Changed instanceOf Array check to Ext.isArray
+       
+src/core
+    CompositeElement
+       - Changed instanceOf Array check to Ext.isArray
+    
+    DomHelper
+       - Internal refactoring and doc updates to support efficient creation of document fragments based on an array of specification objects
+    
+    Element
+       - Changed instanceOf Array check to Ext.isArray
+       - Doc updates
+    
+    Ext
+       - Added isSafari2, isSafari3 and isAir properties
+       - Changed the extend function to support supplying a custom constructor when extending a class via the constructor config
+       - Added isArray and isDate functions
+       - Changed instanceOf Array check to Ext.isArray
+       - Changes in destroy to call destroy recursively before removing the listeners and element
+       - Fix in removeNode to not remove the body node (e.g., when destroying a Viewport)
+    
+    Template
+       - Changed instanceOf Array check to Ext.isArray
 
-examples/view/
-     chooser.js
-        - Image chooser example ported to work under 2.0 and added to the examples page
-
-resources/css/
-     form.css
-        - Fix for form item horizontal scrolling issue
-        - Added fieldset no-border CSS rules
-        - Fixed a CSS sizing issue for Safari
-     grid.css
-        - Fixed grid editor position bug when scrolling horizontally (1490 & 1493) 
-     panel.css
-        - IE 7 Strict mode fix for panel header
-        - Fix for static scroll position of panel items in IE/Opera
-     tabs.css
-        - TabPanel now supports plain config option when a direct child of a Viewport.
-
-src/core/
-     Element
-        - Doc updates
-        - Updated insertFirst, insertSibling and replaceWith to accept an Element
-        - Added workarounds for FF 2.0/Mac overflow:auto browser bug that causes scrollbars to be invisible
-     Ext
-        - Fix to support latest AIR version via Ext.isAir property
-     Fx
-        - Doc updates
-     String
-        - Fixed a leftPad problem when size was <= the string length
-     UpdateManager
-        - Doc updates
-        
 src/data/
-    Connection
-        - Timeout option is no longer ignored when using submit or load of BasicForm
-        - Doc updates
-    Store
-        - Doc updates
-        - Fixed issue with sortInfo when beforeload fails
-        - Fixed issue where sort was not initialized correctly if only sortInfo was specified
+    ArrayReader
+       - Fix in readRecords to pass second param of full data to convert() function
+       
+    DataField
+       - Changed instanceOf Date check to Ext.isDate
+    
+    DataReader
+       - Changed instanceOf Array check to Ext.isArray
+    
+    JsonReader
+       - Fix in readRecords to pass second param of full data to convert() function
+       
     Record
-        - Added missing store check in set method
-                
-src/locale/
-    Bulgarian 
-    Chinese - Simplified
-    Chinese - Traditional 
-    Danish  
-    French - France     
-    Greek
-    Italian
-    Polish 
-    Russian
-    Serbian
-    Turkish
-        - Various edits
+       - Added isModified function
+       - Doc updates
+    
+    SortTypes
+       - Changed instanceOf Date check to Ext.isDate
+       
+    Tree
+       - Changed instanceOf Array check to Ext.isArray
+    
+    XmlReader
+       - Fix in readRecords to pass second param of full data to convert() function
+    
+src/dd/
+    ScrollManager
+       - Changed instanceOf Array check to Ext.isArray
 
-src/tree/
-     TreeNode
-        - Fixed ensureVisible 
+src/locale/
+    Czech (-cs)
+    German (-de)
+    Hungarian (-hu)
+    Portuguese/Brazil (-pt_BR)
+    Portuguese/European (-pt)
+    Spanish/Latin American (-es)
+    Turkish (-tr)
+       - Various updates
+       
+    Norwegian (-no)
+       - Split into 2 files, Bokmål (-no-NB) and Nynorsk (-no-NN)
+
+src/state/
+    Provider
+       - Changed instanceOf Date/Array check to Ext.isDate/isArray
 
 src/util/
-     MixedCollection
-        - Doc updates
-        
+    CSS
+       - Changed instanceOf Array check to Ext.isArray
+    
+    Date
+       - Internal fixes
+    
+    Format
+       - Changed instanceOf Date check to Ext.isDate
+    
+    JSON
+       - Changed instanceOf Date/Array check to Ext.isDate/isArray
+    
+    KeyMap
+       - Changed instanceOf Array check to Ext.isArray
+    
+    MixedCollection
+       - Changed instanceOf Array check to Ext.isArray
+       
+    Observable
+       - Doc updates only
+    
+    XTemplate
+       - Changed instanceOf Array check to Ext.isArray
+       
 src/widgets/
-     BasicForm
-        - Added checks in destroy functions for components that may not be rendered
-     Button
-        - Added checks in destroy functions for components that may not be rendered
-        - Fixed typo preventing menutriggerout event from firing
-        - Fixed IE conditional check in onEnable/Disable to apply disabled class for icon-only buttons
-        - Changed disabled class from hard-coded to using the disabledClass property
-     Component
-        - Doc updates - stateful config now doc'd
-     Container
-        - Doc updates
-     DatePicker
-        - Now stores a reference to todayBtn in the instance scope
-     MessageBox
-        - Doc updates
-     Panel
-        - Doc updates - Added tabTip doc for Panel's contained within an Ext.TabPanel
-        - Added workarounds for FF 2.0/Mac overflow:auto browser bug that causes scrollbars to be invisible
-        - Added check for possible invalid header reference
-     Resizable
-        - Fixed end of line delimiters
-     SplitButton
-        - Doc updates
-     TabPanel
-        - Doc updates
-        - Created private idDelimiter property
-        - Fixed activeTab issue when enableTabScroll was set
-     Toolbar
-        - Doc updates - examples for each toolbar item type
-        - Fixed xtype support for Ext.Toolbar.TextItem (tbtext)
-        - id config will now be rendered to the DOM 
-     Viewport
-        - Doc updates
-        - Removed trailing comma
-     Window
-        - Added mask to be destroyed in beforeDestroy
-        - Added workarounds for FF 2.0/Mac overflow:auto browser bug that causes scrollbars to be invisible
-        
-        
+    Action
+       - Added an execute function to execute the action manually using the default handler
+    
+    BoxComponent
+       - Doc updates
+    
+    Button
+       - Added ownerCt property
+       - Hid autoEl config since it does not apply
+    
+    ColorPalette
+       - Changed render logic to use the existing template (this.tpl) if specified
+       - Hid autoEl config since it does not apply
+    
+    Component
+       - Changed instanceOf Array check to Ext.isArray
+       - Added autoEl docs
+       - Fix to apply the component id to the rendered element if needed when autoEl is used
+       - Added findParentBy and findParentByType functions
+       
+    Container
+       - Changed instanceOf Array check to Ext.isArray
+       - Changed doLayout to support an optional shallow argument to support recalculating layout only for the current container, not all subcontainers
+    
+    CycleButton
+       - Internal refactoring
+       - Added forceIcon config
+    
+    DataView
+       - Changed instanceOf Array check to Ext.isArray
+    
+    DatePicker
+       - Hid autoEl config since it does not apply
+    
+    DomQuery
+       - Changed instanceOf Array check to Ext.isArray
+    
+    Editor
+       - Added logic to set inEditor=true (internal property) on bound fields
+       - Internal refactoring
+    
+    LoadMask
+       - Added docs to show and hide so they will show as public
+       - Other doc updates
+    
+    MessageBox
+       - Fixed issue of window adding a new internal 'show' handler to manage its keymap each time the window is shown (added single:true)
+
+    Panel
+       - Added print tool
+       - Changed instanceOf Array check to Ext.isArray
+       - Change to set ownerCt property on buttons added to the panel
+       - Hid autoEl config since it does not apply
+    
+    TabPanel
+       - Added support for item.tabCls to apply a custom class to tabs
+       - Internal Air-specific fixes in autoScrollTabs
+       - Added additional @hides for configs that do not apply
+    
+    Toolbar
+       - Changed instanceOf Array check to Ext.isArray
+       - Hid autoEl config since it does not apply
+       - Doc updates
+    
 src/widgets/form/
-     Action
-        - Doc updates
-     BasicForm
-        - Doc updates
-     ComboBox
-        - Doc updates
-        - Fixed bug to enable hidden field on combo enable
-        - Fixed invalid reference to this.list
-        - Changed FF/Mac overflow fix from this.list to this.innerList for paging toolbar display
-        - clearValue now clears this.value
-        - Fix for list propagating enter key
-     DateField
-        - Associated menu will now be destroyed on cleanup
-     Field
-        - Doc updates
-     FieldSet
-        - Doc updates
-     FormPanel
-        - Added formId config docs
-        - Fields added/removed to FormPanel will be added/removed to underlying BasicForm instance.
-     NumberField
-        - Fixed issue setting a non-numeric value into NumberField shows NaN
-     Radio
-        - Added onClick override to handle proper setting of the active radio button
-     TextField
-        - Fixed a minor logic error in selectText
-        
+    BasicForm
+       - Added standardSubmit config to support standard (non-Ajax) form submissions
+       - Changed instanceOf Array check to Ext.isArray
+    
+    Combo
+       - Changed logic to restrict the combo height to the viewport based on the optimal available space above or below the combo, also taking scroll position into account
+       - Added minHeight config to control minimum height based on new height restriction logic
+    
+    DateField
+       - Added non-0-padded formats to the default altFormats config
+       - Changed instanceOf Date check to Ext.isDate
+    
+    Field
+       - Fix to adjust width properly when fields are in an editor
+       - Added additional @hides for configs that do not apply
+    
+    FieldSet
+       - Changed render logic to only output the legend element if a title, header or checkbox is specified
+    
+    FormPanel
+       - Doc updates only
+    
+    HtmlEditor
+       - Added Air/Safari3 support for font sizing
+       - Added additional @hides for configs that do not apply
+    
+    Radio
+       - Added setValue override to support checking a sibling Radio of the same name whose value is the value specified (if a string value is passed)
+    
 src/widgets/grid/
-     CheckboxSelectionModel
-        - Checkboxes will not be toggled by a right-click
-     ColumnModel
-        - Doc updates
-        - Added basic tooltip support for grid column headers
-     EditorGrid
-        - Doc updates
-        - Added autoEncode config option to automatically handle html encoding/decode on edits
-     GridPanel
-        - Doc updates
-        - Remove deprecated config 'enableRowHeightSync'
-     GridView
-        - Doc updates
-        - Added basic tooltip support for grid column headers
-        - Fix for grid header scroll position on layout update
-        - Added check for invalid Store reference
-        - Fixed JS error when clicking on header used for a plugin
-        - Inline styles for headers will be deleted when config align is not used
-        - Fixed horizontal scroll reset issue when row selection changes
-     GroupingView
-        - Doc updates - includes how to format the group header using groupTextTpl and groupRenderer configs
-        - Show groups button in menu will now be disabled if the column is not set to groupable
-        - Fixed a bug in the grouping menu where grouping would be incorrect
-        - Invalid id's will no longer be generated when using spaces and other nonvalid characters
-        - Fix to maintain groups after sort when using startCollapsed
-     PropertyGrid
-        - Doc updates
-        - Remove deprecated config 'enableColLock'
-     RowSelectionModel
-        - fixed onEditorKey references to e.shiftKey after the event had been stopped
-
+    ColumnModel
+       - Added support for passing the standard cm config as a 'columns' property on the config object to support additional config properties that will get applied to the column model
+       - Added menuDisabled config and isMenuDisabled property function
+    
+    CheckboxSelectionModel
+       - Added menuDisabled:true to disable the header menu by default
+       
+    EditorGrid
+       - Change to not enter edit mode on right-click
+       - Fixes to pre/postEditValue to encode only if the value is a string type
+       
+    GridPanel
+       - Added docs to clarify that autoWidth is not supported
+       - Changed instanceOf Array check to Ext.isArray
+       - Added config hideHeaders (used in GridView)
+       - Doc updates
+    
+    GridView
+       - Added support for GridPanel hideHeaders config
+       - Added column resize cursor for Air
+       - Internal bug fixes
+    
+    GroupingView
+       - Change to getGroupId to encode the value when generating the groupd id
+    
+    PropertyGrid
+       - Changed instanceOf Date check to Ext.isDate
+       - Added menuDisabled:true to disable the header menus by default
+       
+    RowNumberer
+       - Added menuDisabled:true to disable the header menu by default
+    
+    RowSelectionModel
+       - Added config moveEditorOnEnter to control moving the editor to the next cell on enter
+       - Changed selectNext and selectPrevious to return boolean instead of void
+    
 src/widgets/layout/
-    AccordionLayout
-    ColumnLayout
-        - Fixed issue with calling doLayout after adding a column to a rendered ColumnLayout
-    ContainerLayout
-        -  Updated renderItem to use positionEl if available.  This fixes a bug in AbsoluteLayout when positioning components that have wrapping elements (e.g., CheckBox).
+    AbsoluteLayout
+       - Added AnchorLayout overrides for absolute positioing form elements when specifying position:'absolute' on a FormPanel
+       
+    BorderLayout
+       - Changed this.collapsedEl so that it now gets an id of the panel's id + '-xcollapsed'
+       - Changed this.splitEl so that it now gets an id of the panel's id + '-xsplit'
+    
     FormLayout
-        - labelWidth now defaults to 100, previously anchor layouts would not work without specifying the labelWidth
-
+       - Added check to adjust anchor width for labels only if the anchored component is a form field
+       
+    TableLayout
+       - Refactored layout logic to reduce code and fix cell spanning bugs
+       
 src/widgets/menu/
-     DateItem
-        - Doc updates
-     DateMenu
-        - Now destroys it's associated DatePicker
-     Menu
-        - Added code to clean up DOM elements and event listeners on destroy
-     MenuMgr
-        - Ext.MenuMgr.get will now fail gracefully when passed an invalid id
+    Item
+       - Menu item will now use itemText if available, or text by default
+    
+    Menu
+       - Changed instanceOf Array check to Ext.isArray
+       - Added check to use an existing keyNav on render if specified
 
 src/widgets/tips/
-     QuickTip
-        - Fixed issue where quicktip could lose it's activeTarget property
-     QuickTips
-        - Doc updates
-        - Fixed an issue where QuickTip would retain an invalid width when mixing auto and set width quicktips
-     Tip
-        - Doc updates
-        
+    QuickTip
+      - Changed instanceOf Array check to Ext.isArray
+
 src/widgets/tree/
-     TreePanel
-        - Doc updates
-     TreeNodeUI
-        - TreeNode checkboxes now account for being disabled
+    TreeDropZone
+       - Changed onNodeDrop to return a status value instead of false after a canceled drop to allow passing custom status
+       - Changed instanceOf Array check to Ext.isArray
+    
+    TreeEditor
+       - Changes to avoid entering auto-edit mode on node double-click
+    
+    TreeEventModel
+       - Changes to only monitor mouseover and mouseout if trackMouseOver=true
+       - Added support for tracking mouseover and mouseout on the tree node icon separately from the rest of the node
+    
+    TreePanel
+       - Added config useArrows for Vista-style arrow support
+       - Doc updates
+       
+    TreeSorter
+       - Added logic to re-sort automatically on text change
+       

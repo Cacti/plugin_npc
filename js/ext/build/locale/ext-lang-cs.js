@@ -1,7 +1,7 @@
 /**
- * Czech Translations / Český překlad
+ * Czech Translations
  * Translated by Tomáš Korčák (72)
- * 2007/05/01 21:29, Ext-1.0.1a
+ * 2008/02/08 18:02, Ext-2.0.1
  */
 
 Ext.UpdateManager.defaults.indicatorText = '<div class="loading-indicator">Prosím čekejte...</div>';
@@ -41,6 +41,29 @@ Date.monthNames = [
    "Prosinec"
 ];
 
+Date.getShortMonthName = function(month) {
+  return Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  Jan : 0,
+  Feb : 1,
+  Mar : 2,
+  Apr : 3,
+  May : 4,
+  Jun : 5,
+  Jul : 6,
+  Aug : 7,
+  Sep : 8,
+  Oct : 9,
+  Nov : 10,
+  Dec : 11
+};
+
+Date.getMonthNumber = function(name) {
+  return Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
 Date.dayNames = [
    "Neděle",
    "Pondělí",
@@ -50,6 +73,10 @@ Date.dayNames = [
    "Pátek",
    "Sobota"
 ];
+
+Date.getShortDayName = function(day) {
+  return Date.dayNames[day].substring(0, 3);
+};
 
 if(Ext.MessageBox){
    Ext.MessageBox.buttonText = {
@@ -64,7 +91,7 @@ if(Ext.util.Format){
    Ext.util.Format.date = function(v, format){
       if(!v) return "";
       if(!(v instanceof Date)) v = new Date(Date.parse(v));
-      return v.dateFormat(format || "m.d.Y");
+      return v.dateFormat(format || "d.m.Y");
    };
 }
 
@@ -81,7 +108,10 @@ if(Ext.DatePicker){
       prevText          : 'Předcházející měsíc (Control+Left)',
       monthYearText     : 'Zvolte měsíc (ke změně let použijte Control+Up/Down)',
       todayTip          : "{0} (Spacebar)",
-      format            : "m.d.y"
+      format            : "d.m.Y",
+      okText            : "&#160;OK&#160;",
+      cancelText        : "Storno",
+      startDay          : 1
    });
 }
 
@@ -124,7 +154,8 @@ if(Ext.form.DateField){
       minText           : "Datum v tomto poli nesmí být starší než {0}",
       maxText           : "Datum v tomto poli nesmí být novější než {0}",
       invalidText       : "{0} není platným datem - zkontrolujte zda-li je ve formátu {1}",
-      format            : "m.d.y"
+      format            : "d.m.Y",
+      altFormats        : "d/m/Y|d-m-y|d-m-Y|d/m|d-m|dm|dmy|dmY|d|Y-m-d"
    });
 }
 
@@ -144,6 +175,84 @@ if(Ext.form.VTypes){
    });
 }
 
+if(Ext.form.HtmlEditor){
+  Ext.apply(Ext.form.HtmlEditor.prototype, {
+    createLinkText : 'Zadejte URL adresu odkazu:',
+    buttonTips : {
+      bold : {
+        title: 'Tučné (Ctrl+B)',
+        text: 'Označí vybraný text tučně.',
+        cls: 'x-html-editor-tip'
+      },
+      italic : {
+        title: 'Kurzíva (Ctrl+I)',
+        text: 'Označí vybraný text kurzívou.',
+        cls: 'x-html-editor-tip'
+      },
+      underline : {
+        title: 'Podtržení (Ctrl+U)',
+        text: 'Podtrhne vybraný text.',
+        cls: 'x-html-editor-tip'
+      },
+      increasefontsize : {
+        title: 'Zvětšit písmo',
+        text: 'Zvětší velikost písma.',
+        cls: 'x-html-editor-tip'
+      },
+      decreasefontsize : {
+        title: 'Zúžit písmo',
+        text: 'Zmenší velikost písma.',
+        cls: 'x-html-editor-tip'
+      },
+      backcolor : {
+        title: 'Barva zvýraznění textu',
+        text: 'Označí vybraný text tak, aby vypadal jako označený zvýrazňovačem.',
+        cls: 'x-html-editor-tip'
+      },
+      forecolor : {
+        title: 'Barva písma',
+        text: 'Změní barvu textu.',
+        cls: 'x-html-editor-tip'
+      },
+      justifyleft : {
+        title: 'Zarovnat text vlevo',
+        text: 'Zarovná text doleva.',
+        cls: 'x-html-editor-tip'
+      },
+      justifycenter : {
+        title: 'Zarovnat na střed',
+        text: 'Zarovná text na střed.',
+        cls: 'x-html-editor-tip'
+      },
+      justifyright : {
+        title: 'Zarovnat text vpravo',
+        text: 'Zarovná text doprava.',
+        cls: 'x-html-editor-tip'
+      },
+      insertunorderedlist : {
+        title: 'Odrážky',
+        text: 'Začne seznam s odrážkami.',
+        cls: 'x-html-editor-tip'
+      },
+      insertorderedlist : {
+        title: 'Číslování',
+        text: 'Začne číslovaný seznam.',
+        cls: 'x-html-editor-tip'
+      },
+      createlink : {
+        title: 'Internetový odkaz',
+        text: 'Z vybraného textu vytvoří internetový odkaz.',
+        cls: 'x-html-editor-tip'
+      },
+      sourceedit : {
+        title: 'Zdrojový kód',
+        text: 'Přepne do módu úpravy zdrojového kódu.',
+        cls: 'x-html-editor-tip'
+      }
+    }
+  });
+}
+
 if(Ext.grid.GridView){
    Ext.apply(Ext.grid.GridView.prototype, {
       sortAscText  : "Řadit vzestupně",
@@ -154,11 +263,19 @@ if(Ext.grid.GridView){
    });
 }
 
+if(Ext.grid.GroupingView){
+  Ext.apply(Ext.grid.GroupingView.prototype, {
+    emptyGroupText : '(Žádná data)',
+    groupByText    : 'Seskupit dle tohoto pole',
+    showGroupsText : 'Zobrazit ve skupině'
+  });
+}
+
 if(Ext.grid.PropertyColumnModel){
    Ext.apply(Ext.grid.PropertyColumnModel.prototype, {
       nameText   : "Název",
       valueText  : "Hodnota",
-      dateFormat : "m.j.Y"
+      dateFormat : "j.m.Y"
    });
 }
 

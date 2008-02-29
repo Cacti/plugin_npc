@@ -20,7 +20,7 @@ if(Ext.TabPanelItem){
 }
 
 if(Ext.form.Field){
-   Ext.form.Field.prototype.invalidText = "O valor para este campo &eacute; inv&aacute;lido";
+   Ext.form.Field.prototype.invalidText = "O valor para este campo é inválido";
 }
 
 if(Ext.LoadMask){
@@ -30,7 +30,7 @@ if(Ext.LoadMask){
 Date.monthNames = [
    "Janeiro",
    "Fevereiro",
-   "Mar&ccedil;o",
+   "Março",
    "Abril",
    "Maio",
    "Junho",
@@ -42,14 +42,37 @@ Date.monthNames = [
    "Dezembro"
 ];
 
+Date.getShortMonthName = function(month) {
+  return Date.monthNames[month].substring(0, 3);
+};
+
+Date.monthNumbers = {
+  Jan : 0,
+  Fev : 1,
+  Mar : 2,
+  Abr : 3,
+  Mai : 4,
+  Jun : 5,
+  Jul : 6,
+  Ago : 7,
+  Set : 8,
+  Out : 9,
+  Nov : 10,
+  Dez : 11
+};
+
+Date.getMonthNumber = function(name) {
+  return Date.monthNumbers[name.substring(0, 1).toUpperCase() + name.substring(1, 3).toLowerCase()];
+};
+
 Date.dayNames = [
    "Domingo",
    "Segunda",
-   "Ter&ccedil;a",
+   "Terça",
    "Quarta",
    "Quinta",
    "Sexta",
-   "S&aacute;bado"
+   "Sábado"
 ];
 
 if(Ext.MessageBox){
@@ -57,7 +80,7 @@ if(Ext.MessageBox){
       ok     : "OK",
       cancel : "Cancelar",
       yes    : "Sim",
-      no     : "N&atilde;o"
+      no     : "Não"
    };
 }
 
@@ -72,16 +95,16 @@ if(Ext.util.Format){
 if(Ext.DatePicker){
    Ext.apply(Ext.DatePicker.prototype, {
       todayText         : "Hoje",
-      minText           : "Esta data &eacute; anterior a menor data",
-      maxText           : "Esta data &eacute; posterior a maior data",
+      minText           : "Esta data é anterior a menor data",
+      maxText           : "Esta data é posterior a maior data",
       disabledDaysText  : "",
       disabledDatesText : "",
       monthNames        : Date.monthNames,
       dayNames          : Date.dayNames,
-      nextText          : 'Pr&oacute;ximo M&ecirc;s (Control+Direita)',
-      prevText          : 'M&ecirc;s Anterior (Control+Esquerda)',
-      monthYearText     : 'Escolha um M&ecirc;s (Control+Cima/Baixo para mover entre os anos)',
-      todayTip          : "{0} (Espa&ccedil;o)",
+      nextText          : 'Próximo Mês (Control+Direita)',
+      prevText          : 'Mês Anterior (Control+Esquerda)',
+      monthYearText     : 'Escolha um Mês (Control+Cima/Baixo para mover entre os anos)',
+      todayTip          : "{0} (Espaço)",
       format            : "d/m/Y",
       okText            : "&#160;OK&#160;",
       cancelText        : "Cancelar",
@@ -91,23 +114,23 @@ if(Ext.DatePicker){
 
 if(Ext.PagingToolbar){
    Ext.apply(Ext.PagingToolbar.prototype, {
-      beforePageText : "P&aacute;gina",
+      beforePageText : "Página",
       afterPageText  : "de {0}",
-      firstText      : "Primeira P&aacute;gina",
-      prevText       : "P&aacute;gina Anterior",
-      nextText       : "Pr&oacute;xima P&aacute;gina",
-      lastText       : "&Uacute;ltima P&aacute;gina",
+      firstText      : "Primeira Página",
+      prevText       : "Página Anterior",
+      nextText       : "Próxima Página",
+      lastText       : "Última Página",
       refreshText    : "Atualizar",
-      displayMsg     : "<b>{0} &agrave; {1} de {2} registro(s)</b>",
+      displayMsg     : "<b>{0} à {1} de {2} registro(s)</b>",
       emptyMsg       : 'Sem registros para exibir'
    });
 }
 
 if(Ext.form.TextField){
    Ext.apply(Ext.form.TextField.prototype, {
-      minLengthText : "O tamanho m&iacute;nimo para este campo &eacute; {0}",
-      maxLengthText : "O tamanho m&aacute;ximo para este campo &eacute; {0}",
-      blankText     : "Este campo &eacute; obrigat&oacute;rio.",
+      minLengthText : "O tamanho mínimo para este campo é {0}",
+      maxLengthText : "O tamanho máximo para este campo é {0}",
+      blankText     : "Este campo é obrigatório.",
       regexText     : "",
       emptyText     : null
    });
@@ -115,9 +138,9 @@ if(Ext.form.TextField){
 
 if(Ext.form.NumberField){
    Ext.apply(Ext.form.NumberField.prototype, {
-      minText : "O valor m&iacute;nimo para este campo &eacute; {0}",
-      maxText : "O valor m&aacute;ximo para este campo &eacute; {0}",
-      nanText : "{0} n&atilde;o &eacute; um n&uacute;mero v&aacute;lido"
+      minText : "O valor mínimo para este campo é {0}",
+      maxText : "O valor máximo para este campo é {0}",
+      nanText : "{0} não é um número válido"
    });
 }
 
@@ -127,7 +150,7 @@ if(Ext.form.DateField){
       disabledDatesText : "Desabilitado",
       minText           : "A data deste campo deve ser posterior a {0}",
       maxText           : "A data deste campo deve ser anterior a {0}",
-      invalidText       : "{0} n&atilde;o &eacute; uma data v&aacute;lida - deve ser informado no formato {1}",
+      invalidText       : "{0} não é uma data válida - deve ser informado no formato {1}",
       format            : "d/m/Y"
    });
 }
@@ -141,10 +164,10 @@ if(Ext.form.ComboBox){
 
 if(Ext.form.VTypes){
    Ext.apply(Ext.form.VTypes, {
-      emailText    : 'Este campo deve ser um endere&ccedil;o de e-mail v&aacute;lido, no formado "usuario@dominio.com.br"',
+      emailText    : 'Este campo deve ser um endereço de e-mail válido, no formado "usuario@dominio.com.br"',
       urlText      : 'Este campo deve ser uma URL no formato "http:/'+'/www.dominio.com.br"',
       alphaText    : 'Este campo deve conter apenas letras e _',
-      alphanumText : 'Este campo deve conter apenas letras, n&uacute;meros e _'
+      alphanumText : 'Este campo deve conter apenas letras, números e _'
    });
 }
 
@@ -188,8 +211,8 @@ if(Ext.form.HtmlEditor){
                cls: 'x-html-editor-tip'
            },
            justifyleft : {
-               title: 'Alinhar &agrave; Esquerda',
-               text: 'Alinha o texto &agrave; esquerda.',
+               title: 'Alinhar à Esquerda',
+               text: 'Alinha o texto à esquerda.',
                cls: 'x-html-editor-tip'
            },
            justifycenter : {
@@ -198,8 +221,8 @@ if(Ext.form.HtmlEditor){
                cls: 'x-html-editor-tip'
            },
            justifyright : {
-               title: 'Alinhar &agrave; Direita',
-               text: 'Alinha o texto &agrave; direita.',
+               title: 'Alinhar à Direita',
+               text: 'Alinha o texto à direita.',
                cls: 'x-html-editor-tip'
            },
            insertunorderedlist : {
@@ -213,13 +236,13 @@ if(Ext.form.HtmlEditor){
                cls: 'x-html-editor-tip'
            },
            createlink : {
-               title: 'Hyperliga&ccedil;&atilde;o',
+               title: 'Hyperligação',
                text: 'Transforma o texto selecionado em um hyperlink.',
                cls: 'x-html-editor-tip'
            },
            sourceedit : {
                title: 'Editar Fonte',
-               text: 'Troca para o modo de edi&ccedil;&atilde;o de c&oacute;digo fonte.',
+               text: 'Troca para o modo de edição de código fonte.',
                cls: 'x-html-editor-tip'
            }
         }
