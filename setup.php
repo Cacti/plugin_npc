@@ -45,7 +45,6 @@ function npc_version () {
 function npc_config_arrays () {
 
     global $user_auth_realms, $user_auth_realm_filenames, $npc_date_format, $npc_time_format;
-    global $npc_device_mapping;
 
     $user_auth_realms[32]='View NPC';
     $user_auth_realm_filenames['npc.php'] = 32;
@@ -72,14 +71,6 @@ function npc_config_arrays () {
         "H.i.s"  => "23.07",
         "h.i.sa" => "11.07pm",
         "h.i.sA" => "11.07PM"
-    );
-
-    $npc_device_mapping = array(
-        "1" => "Cacti Description <-> Nagios Alias",
-        "2" => "Cacti Description <-> Nagios Hostname",
-        "3" => "Cacti Hostname <-> Nagios Hostname",
-        "4" => "Cacti Hostname <-> Nagios Address",
-        "5" => "Manual Mapping"
     );
 }
 
@@ -1305,23 +1296,23 @@ function npc_check_upgrade() {
 
 function npc_config_settings() {
 
-        global $tabs, $settings, $npc_date_format, $npc_time_format, $npc_device_mapping;
+        global $tabs, $settings, $npc_date_format, $npc_time_format;
 
-        $tabs["npc"] = "NPC";
+        $tabs["npc"] = " NPC ";
 
         $settings['npc'] = array(
                 "npc_header" => array(
                         "friendly_name" => "General Settings",
                         "method" => "spacer",
                 ),
-                "nagios_commands" => array(
+                "npc_nagios_commands" => array(
                         "friendly_name" => "Remote Commands",
-                        "description" => "Allow commands to be sent to Nagios via NPC.",
+                        "description" => "Allow commands to be written to the Nagios command file.",
                         "method" => "checkbox",
                 ),
-                "path_nagios_cmd" => array(
+                "npc_nagios_cmd_path" => array(
                         "friendly_name" => "Nagios Command File Path",
-                        "description" => "The path to nagios.cmd",
+                        "description" => "The path to the Nagios command file (nagios.cmd).",
                         "method" => "textbox",
                         "max_length" => 255,
                 ),
@@ -1330,13 +1321,6 @@ function npc_config_settings() {
                         "description" => "The full URL to your Nagios installation (http://nagios.company.com/nagios/)",
                         "method" => "textbox",
                         "max_length" => 255,
-                ),
-                "npc_device_mapping" => array(
-                    "friendly_name" => "Device Mapping",
-                    "description" => "Select the method used to map Nagios and Cacti devices.",
-                    "method" => "drop_array",
-                    "default" => "1",
-                    "array" => $npc_device_mapping,
                 ),
                 "npc_date_format" => array(
                     "friendly_name" => "Date Format",

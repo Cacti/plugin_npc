@@ -36,7 +36,31 @@ class NagiosCmd {
      * @var string
      * @access public
      */ 
-    var $commandfile = '/usr/local/nagios/var/rw/nagios.cmd';
+    var $commandfile = null;
+
+    /**
+     * The status message from the last action
+     *
+     * @var string
+     * @access public
+     */ 
+    var $message = null;
+
+    /**
+     * The current command string
+     *
+     * The preferred way to set this is using setCommand.
+     * setCommand has a simple interface and validates
+     * all the parameters. On success $command is set 
+     * with a properly formatted string.
+     *
+     * You can set the command string directly by 
+     * accessing this property.
+     *
+     * @var string
+     * @access public
+     */ 
+    var $command = null;
 
     /**
      * A list of the commands and thier required attributes
@@ -287,6 +311,17 @@ class NagiosCmd {
     );
 
     /**
+     * getCommand
+     * 
+     * An accessor method to return the current command string
+     *
+     * @return array
+     */
+    function getCommand() {
+        return($this->command);
+    }
+
+    /**
      * getCommands
      * 
      * An accessor method to return the $commands array
@@ -296,4 +331,68 @@ class NagiosCmd {
     function getCommands() {
         return($this->commands);
     }
+
+    /**
+     * setCommand
+     * 
+     * Validate the command based on the passed parameters
+     *
+     * Example of the expected parameters:
+     *
+     * $cmd = 'ACKNOWLEDGE_HOST_PROBLEM';
+     * $args = array('host_name'  => 'localhost',
+     *               'sticky'     => 1,
+     *               'notify'     => 1,
+     *               'persistent' => 0,
+     *               'author'     => 'jdoe',
+     *               'comment'    => 'I am working on this problem');
+     *
+     * @param  string    $cmd - The command
+     * @param  array     $args - The command arguments
+     * @return boolean
+     */
+    function setCommand($cmd, $args) {
+
+        // [%lu] ACKNOWLEDGE_HOST_PROBLEM;host1;1;1;1;Some One;Some Acknowledgement Comment\n"
+
+        // Check that the command is valid
+        if (!array_key_exists($cmd, $this->commands)) {
+            $this->message = $cmd . ' is not a valid command.';
+            return(false);
+        }
+
+        // Check that the command is implemented
+        if (!is_array($this->commands[$cmd])) {
+            $this->message = 'Command ' . $cmd . ' is not yet implemented.';
+            return(false);
+        }
+
+
+        // Build the command string as we go:
+        $now = date('U');
+        $this->command = "[$now] $cmd;";
+
+        foreach ($this->commands[$cmd] as $param => $attrib) {
+            if ($attrib['required']) {
+                if (!array_key_exists($param, $args)) {
+                    $this->message = 'Missing required parameter: ' . $param;
+                    return(false);
+                }
+            }
+
+            if ($attrib['type'] == 'boolean') {
+                if ($args[$param] != 1 || $args[$param] != 0) {
+                    $this->message = $param . ' must be equal to 1 or 0';
+                    return(false);
+                }
+            }
+
+            $this->command .= $args[$param] . ";";
+        }
+
+        $this->command .= "\n";;
+
+        return(true);
+    }
+
 }

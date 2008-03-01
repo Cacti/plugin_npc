@@ -22,12 +22,27 @@
  * This is the access point to various tables used to 
  * access data specific to an entire Nagios install.
  * This includes the Nagios process, check performance,
- * and other Nagios statistics.
+ * and other Nagios statistics. 
  * 
  * @package     npc
  * @subpackage  npc.controllers
  */
 class NpcNagiosController extends Controller {
+
+    /**
+     * command
+     * 
+     * Formats commands for writing to the Nagios command file.
+     * Commands are not checked for correctness. 
+     *
+     * @param  array    $params - The command and parameters
+     * @return boolean  Returns true/false on success/failure
+     */
+    function command($params) {
+
+        $commandfile = read_config_option('npc_nagios_cmd_path');
+
+    }
 
     /**
      * checkPerf

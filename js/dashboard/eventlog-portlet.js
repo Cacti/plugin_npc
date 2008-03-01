@@ -36,7 +36,10 @@ Ext.onReady(function(){
             return String.format('<img src="images/icons/stop.png">');
         } else if (val.match(/ restarting.../)) {
             return String.format('<img src="images/icons/arrow_refresh.png">');
+        } else if (val.match(/EXTERNAL COMMAND/)) {
+            return String.format('<img src="images/icons/resultset_next.png">');
         }
+
         return String.format('<img src="images/icons/information.png">');
     }
 
