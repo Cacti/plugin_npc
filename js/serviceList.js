@@ -52,13 +52,20 @@ npc.app.serviceList = function(title, filter){
             'service_id',
             'service_object_id',
             'service_description',
+            'acknowledgement',
+            'comment',
             'output',
             'current_state',
             'current_check_attempt',
             'max_check_attempts',
             {name: 'last_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
             {name: 'next_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'last_state_change', type: 'date', dateFormat: 'Y-m-d H:i:s'}
+            {name: 'last_state_change', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'problem_has_been_acknowledged', type: 'int'},
+            {name: 'notifications_enabled', type: 'int'},
+            {name: 'active_checks_enabled', type: 'int'},
+            {name: 'passive_checks_enabled', type: 'int'},
+            {name: 'is_flapping', type: 'int'}
         ]),
         groupField:'host_name'
     });
@@ -66,6 +73,7 @@ npc.app.serviceList = function(title, filter){
     var cm = new Ext.grid.ColumnModel([{
         header:"Service",
         dataIndex:'service_description',
+        renderer:npc.app.renderServiceIcons,
         sortable:true,
         width:100
     },{

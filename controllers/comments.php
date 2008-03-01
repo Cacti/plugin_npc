@@ -26,18 +26,61 @@
 class NpcCommentsController extends Controller {
 
     /**
+     * getAck
+     * 
+     * An accessor method to retrieve an acknowlegement
+     *
+     * @return string   The acknowledgement
+     */
+    function getAck($id) {
+        $where = 'c.entry_type = 4';
+        $ack = $this->comments($id, $where);
+        return($ack[0]['author_name'] . "*|*" . $ack[0]['comment_data']);
+    }
+
+    /**
+     * getLastComment
+     * 
+     * An accessor method to retrieve the latest comment
+     * that is not an aknowledgement.
+     *
+     * @return string   The comment
+     */
+    function getLastComment($id) {
+        $where = 'c.entry_type != 4';
+        $comment = $this->comments($id, $where);
+        if (isset($comment[0])) {
+            return($comment[0]['author_name'] . "*|*" . $comment[0]['comment_data']);
+        }
+
+        return(0);
+    }
+
+    /**
      * getComments
+     * 
+     * An accessor method to return comments
+     *
+     * @return string   json output
+     */
+    function getComments() {
+        return($this->jsonOutput($this->comments()));
+    }
+
+    /**
+     * comments
      * 
      * Returns a an array of comments
      *
      * @return array  The comments
      */
-    function getComments() {
+    function comments($id=null, $where='') {
 
-        $where = '';
-
-        if ($this->id) {
-            $where .= sprintf("c.object_id = %d", $this->id);
+        if ($this->id || $id) {
+            if ($where != '') {
+                $where .= ' AND ';
+            }
+            $where .= sprintf("c.object_id = %d", is_null($id) ? $this->id : $id);
         }
 
         $q = new Doctrine_Pager(
@@ -60,7 +103,7 @@ class NpcCommentsController extends Controller {
         // Set the total number of records 
         $this->numRecords = $q->getNumResults();
 
-        return($this->jsonOutput($results));
+        return($results);
     }
 
 }

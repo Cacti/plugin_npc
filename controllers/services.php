@@ -14,6 +14,9 @@
  * @version             $Id: $
  */
 
+require_once("include/auth.php");
+require_once("plugins/npc/controllers/comments.php");
+
 /**
  * Services controller class
  *
@@ -112,17 +115,27 @@ class NpcServicesController extends Controller {
     /**
      * getServices
      * 
-     * Gets and formats services for output
+     * Gets and formats services for output. 
      *
      * @return string   json output
      */
     function getServices() {
 
-        $services = $this->services();
+        $results = $this->services();
 
-        $output = $this->flattenArray($services);
+        $comments = new NpcCommentsController;
 
-        return($this->jsonOutput($output));
+        $services = $this->flattenArray($results);
+
+        for ($i = 0; $i < count($services); $i++) {
+            if ($services[$i]['problem_has_been_acknowledged']) {
+                $services[$i]['acknowledgement'] = $comments->getAck($services[$i]['service_object_id']);
+            }
+            // Add the last comment to the array
+            $services[$i]['comment'] = $comments->getLastComment($services[$i]['service_object_id']);
+        }    
+
+        return($this->jsonOutput($services));
     }
 
     /**

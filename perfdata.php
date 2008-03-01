@@ -8,8 +8,8 @@ if (!isset($_SERVER["argv"][0]) || isset($_SERVER['REQUEST_METHOD'])  || isset($
 
 include(dirname(__FILE__)."/../../include/global.php");
 include(dirname(__FILE__) . "/config.php");
-require_once("plugins/npc/controllers/hosts.php");
-require_once("plugins/npc/controllers/services.php");
+require_once($config["base_path"]."/plugins/npc/controllers/hosts.php");
+require_once($config["base_path"]."/plugins/npc/controllers/services.php");
 
 /* process calling arguments */
 $parms = $_SERVER["argv"];
@@ -32,7 +32,7 @@ if (!sizeof($parms)) {
                 $objectId = trim($value);
                 break;
 
-            case "--datasource":
+            case "--ds":
                 $ds = trim($value);
                 break;
 
@@ -101,10 +101,10 @@ function display_help() {
     echo "A simple command line utility to fetch host or service performance data from NPC\n\n";
     echo "usage: perfdata.php --type=[host|service] --id=[ID] --datasource=[DS]\n\n";
     echo "Required:\n";
-    echo "    --type         Type specifies that we are querting perfdata for a host or service\n";
-    echo "    --id           The host or service object ID\n\n";
+    echo "    --type          Type specifies that we are querting perfdata for a host or service\n";
+    echo "    --id            The host or service object ID\n";
     echo "Optional:\n";
-    echo "    --datasource    Return only the specified datasource. All returned by default.\n\n";
+    echo "    --ds            Return only the specified datasource. All returned by default.\n";
     echo "List Options:\n";
     echo "    --list-hosts\n";
     echo "    --list-services\n\n";

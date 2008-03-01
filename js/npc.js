@@ -80,18 +80,32 @@ npc.app = function() {
 
         // public methods
 
-        // Unused at the moment
-        getTip: function(el) {
-            new Ext.ToolTip({
-                target: el.id,
-                width: 200,
-                autoLoad: {url: 'npc.php?module=help&action=getTip&p_id='+el.id+'&format=html'},
-                dismissDelay: 15000 // auto hide after 15 seconds
-            });
-        },
-
         serviceGridClick: function(grid, rowIndex, e) {
             npc.app.serviceDetail(grid.getStore().getAt(rowIndex));
+        },
+
+        renderServiceIcons: function(val, p, record) {
+            var img = '';
+            if (record.data.problem_has_been_acknowledged == 1) {
+                var ack = record.data.acknowledgement.split("*|*");
+                img = String.format('&nbsp;<img ext:qtitle="Acknowledged by {0}" ext:qtip="{1}" src="images/icons/wrench.png">', ack[0], ack[1]);
+            }
+            if (record.data.notifications_enabled == 0) {
+                img = String.format('&nbsp;<img ext:qtip="Notifications for this service have been disabled." src="images/icons/sound_mute.png">') + img;
+            }
+            if (record.data.comment) {
+                var c = record.data.comment.split("*|*");
+                img = String.format('&nbsp;<img qtitle="{0}" ext:qtip="{1}" src="images/icons/comment.png">', c[0], c[1]) + img;
+            }
+            if (record.data.is_flapping) {
+                img = String.format('&nbsp;<img ext:qtip="This service is flapping between states" src="images/icons/link_error.png">') + img;
+            }
+            if (!record.data.active_checks_enabled && !record.data.passive_checks_enabled) {
+                img = String.format('&nbsp;<img ext:qtip="Active and passive checks have been disabled" src="images/icons/cross.png">') + img;
+            } else if (!record.data.active_checks_enabled) {
+                img = String.format('&nbsp;<img qtitle="Active checks disabled" ext:qtip="Passive checks are being accepted" src="images/nagios/passiveonly.gif">') + img;
+            }
+            return String.format('<div><div style="float: left;">{0}</div><div style="float: right;">{1}</div></div>', val, img);
         },
 
         getDuration: function(val) {

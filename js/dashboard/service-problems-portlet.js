@@ -28,8 +28,15 @@ Ext.onReady(function(){
             'service_object_id',
             'service_id',
             'service_description',
+            'acknowledgement',
+            'comment',
             'current_state',
-            'output'
+            'output',
+            {name: 'problem_has_been_acknowledged', type: 'int'},
+            {name: 'notifications_enabled', type: 'int'},
+            {name: 'active_checks_enabled', type: 'int'},
+            {name: 'passive_checks_enabled', type: 'int'},
+            {name: 'is_flapping', type: 'int'}
         ]),
         groupField:'host_name'
     });
@@ -37,6 +44,7 @@ Ext.onReady(function(){
     var cm = new Ext.grid.ColumnModel([{
         header:"Service",
         dataIndex:'service_description',
+        renderer:npc.app.renderServiceIcons,
         width:100
     },{
         header:"Status",

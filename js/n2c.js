@@ -6,6 +6,9 @@ npc.app.n2c = function() {
     var upBar;
     var results = [];
 
+    var tabPanel = Ext.getCmp('centerTabPanel');
+    var tab = Ext.getCmp('n2c-panel');
+
     // Set the selection model
     var sm = new xg.CheckboxSelectionModel();
 
@@ -79,7 +82,7 @@ npc.app.n2c = function() {
         frame:false,
         clicksToEdit:1,
         view: new Ext.grid.GridView({
-           forceFit:true,
+            forceFit:true,
             autoFill:true
         }),
         tbar:[{
@@ -93,46 +96,42 @@ npc.app.n2c = function() {
                 }
                 getHosts(sm.getSelections());
             }
-        }, '-', {
-            text:'Cancel',
-            iconCls:'cancel',
-            handler : function(){
-                win.close();
-            }
         }]
     });
 
-    // Setup a tab panel
-    var panel = new Ext.TabPanel({
-        id:'n2c-panel',
-        activeTab: 0,
-        height:400,
-        width:600,
-        deferredRender:false,
-        layoutOnTabChange: true,
-        defaults:{autoScroll: true},
-        items:[{
-            title: 'Import Hosts',
-            id: 'n2c-import',
-            layout:'fit',
-            items: [ grid ]
-        }]
-    });
-
-    // Create a modal window to hold our tab panel and grids
-    var win = new Ext.Window({
-        title:'Nagios to Cacti',
-        layout:'fit',
-        modal:true,
-        closable: true,
-        width:600,
-        height:400,
-        items: panel
-    });
-    win.show();
-
-    // Refresh the window
-    win.doLayout();
+    if (tab)  {
+        tabPanel.setActiveTab(tab);
+    } else {
+        tabPanel.add({
+            title: 'N2C',
+            closable:true,
+            height:400,
+            width:600,
+            deferredRender:false,
+            layoutOnTabChange: true,
+            defaults:{autoScroll: true},
+            items: [
+                new Ext.TabPanel({
+                    id:'n2c-panel',
+                    style:'padding:5px 0 5px 5px',
+                    activeTab: 0,
+                    autoHeight:true,
+                    autoWidth:true,
+                    plain:true,
+                    deferredRender:false,
+                    defaults:{autoScroll: true},
+                    items:[{
+                        title: 'Import Hosts',
+                        id: 'n2c-import',
+                        layout:'fit',
+                        items: [ grid ]
+                    }]
+                })
+            ]
+        }).show();
+        tabPanel.doLayout();
+        tabPanel.setActiveTab(tab);
+    }
 
     // Render the grid
     grid.render();
@@ -148,6 +147,10 @@ npc.app.n2c = function() {
 
     function doImport(nodes) {
         
+        if (!nodes.length){
+            return(Ext.Msg.alert('Error', 'There are no hosts available for import in the selected hostgroup.'));
+        }
+
         upBar = Ext.MessageBox.progress('Import Progress');
         results = [];
 
@@ -253,7 +256,7 @@ npc.app.n2c = function() {
             width:600
         });
 
-        panel.add({
+        Ext.getCmp('n2c-panel').add({
             id:'n2c-results',
             title: 'Import Results',
             deferredRender: false,
@@ -261,11 +264,8 @@ npc.app.n2c = function() {
             closable: true,
             items: [resultsGrid]
         }).show();
-        panel.doLayout();
-        panel.setActiveTab(Ext.getCmp('n2c-results'));
-
-        // Refresh the window
-        win.doLayout();
+        tabPanel.doLayout();
+        Ext.getCmp('n2c-panel').setActiveTab(Ext.getCmp('n2c-results'));
 
         // Render the grid
         resultsGrid.render();
