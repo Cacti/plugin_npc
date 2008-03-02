@@ -32,16 +32,45 @@ class NpcNagiosController extends Controller {
     /**
      * command
      * 
-     * Formats commands for writing to the Nagios command file.
-     * Commands are not checked for correctness. 
+     * Creates a nagios command object passing in command
+     * arguments from the client.
      *
      * @param  array    $params - The command and parameters
      * @return boolean  Returns true/false on success/failure
      */
     function command($params) {
 
-        $commandfile = read_config_option('npc_nagios_cmd_path');
+        include("plugins/npc/nagioscmd.php");
 
+        $nagios = new NagiosCmd;
+
+        if (!$nagios->setCommandFile(read_config_option('npc_nagios_cmd_path'))) {
+            echo $nagios->message;
+        }
+
+        /*
+        $cmd = 'ACKNOWLEDGE_HOST_PROBLEM'; 
+        $args = array('host_name'  => 'localhost',
+                      'sticky'     => 1,
+                      'notify'     => 1,
+                      'persistent' => 0,
+                      'author'     => 'jdoe',
+                      'comment'    => 'I am working on this problem');
+        */
+
+        $cmd = 'ENABLE_SVC_CHECK'; 
+        $args = array('host_name'  => 'localhost',
+                      'service_description' => 'Sendmail');
+
+        if (!$nagios->setCommand($cmd, $args)) {
+            echo $nagios->message;
+        }
+
+        if (!$nagios->execute()) {
+            echo $nagios->message;
+        }
+
+        exit;
     }
 
     /**

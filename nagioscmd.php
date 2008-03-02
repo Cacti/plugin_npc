@@ -31,14 +31,6 @@ require_once("include/auth.php");
 class NagiosCmd {
 
     /**
-     * The full path to the Nagios command file
-     *
-     * @var string
-     * @access public
-     */ 
-    var $commandfile = null;
-
-    /**
      * The status message from the last action
      *
      * @var string
@@ -61,6 +53,14 @@ class NagiosCmd {
      * @access public
      */ 
     var $command = null;
+
+    /**
+     * The full path to the Nagios command file
+     *
+     * @var string
+     * @access public
+     */ 
+    private $commandFile = null;
 
     /**
      * A list of the commands and thier required attributes
@@ -89,7 +89,6 @@ class NagiosCmd {
                 'required' => true,
                 'type' => 'string')
         ),
-
         'ACKNOWLEDGE_SVC_PROBLEM' => array(
             'host_name' => array(
                 'required' => true,
@@ -113,7 +112,6 @@ class NagiosCmd {
                 'required' => true,
                 'type' => 'string')
         ),
-
         'ADD_HOST_COMMENT' => array(
             'host_name' => array(
                 'required' => true,
@@ -128,7 +126,6 @@ class NagiosCmd {
                 'required' => true,
                 'type' => 'string')
         ),
-
         'ADD_SVC_COMMENT' => array(
             'host_name' => array(
                 'required' => true,
@@ -155,7 +152,6 @@ class NagiosCmd {
                 'required' => true,
                 'type' => 'string'),
         ),
-
         'CHANGE_CONTACT_MODATTR' => null,
         'CHANGE_CONTACT_MODHATTR' => null,
         'CHANGE_CONTACT_MODSATTR' => null,
@@ -260,7 +256,14 @@ class NagiosCmd {
         'ENABLE_SERVICEGROUP_SVC_CHECKS' => null,
         'ENABLE_SERVICEGROUP_SVC_NOTIFICATIONS' => null,
         'ENABLE_SERVICE_FRESHNESS_CHECKS' => null,
-        'ENABLE_SVC_CHECK' => null,
+        'ENABLE_SVC_CHECK' => array(
+            'host_name' => array(
+                'required' => true,
+                'type' => 'string'),
+            'service_description' => array(
+                'required' => true,
+                'type' => 'string')
+        ),
         'ENABLE_SVC_EVENT_HANDLER' => null,
         'ENABLE_SVC_FLAP_DETECTION' => null,
         'ENABLE_SVC_NOTIFICATIONS' => null,
@@ -313,9 +316,9 @@ class NagiosCmd {
     /**
      * getCommand
      * 
-     * An accessor method to return the current command string
+     * An accessor method to return var $command
      *
-     * @return array
+     * @return string
      */
     function getCommand() {
         return($this->command);
@@ -324,12 +327,56 @@ class NagiosCmd {
     /**
      * getCommands
      * 
-     * An accessor method to return the $commands array
+     * An accessor method to return the var $commands
      *
      * @return array
      */
     function getCommands() {
         return($this->commands);
+    }
+
+    /**
+     * getMessage
+     * 
+     * An accessor method to return var $message
+     *
+     * @return array
+     */
+    function getMessage() {
+        return($this->message);
+    }
+
+    /**
+     * getCommandFile
+     * 
+     * An accessor method to return var $commandFile
+     *
+     * @return string
+     */
+    function getCommandFile() {
+        return($this->commandFile);
+    }
+
+    /**
+     * setCommandFile
+     * 
+     * A simple setter method to set var $commandFile.
+     *
+     * @return boolean
+     */
+    function setCommandFile($file) {
+        if (!file_exists($file)) {
+            $this->message = "$file does not exist.";
+            return(false);
+        }
+
+        if (!is_writable($file) || !is_readable($file)) {
+            $this->message = "$file must be readable and writable by the web server user.";
+            return(false);
+        }
+
+        $this->commandFile = $file;
+        return(true);
     }
 
     /**
@@ -353,8 +400,6 @@ class NagiosCmd {
      */
     function setCommand($cmd, $args) {
 
-        // [%lu] ACKNOWLEDGE_HOST_PROBLEM;host1;1;1;1;Some One;Some Acknowledgement Comment\n"
-
         // Check that the command is valid
         if (!array_key_exists($cmd, $this->commands)) {
             $this->message = $cmd . ' is not a valid command.';
@@ -370,7 +415,7 @@ class NagiosCmd {
 
         // Build the command string as we go:
         $now = date('U');
-        $this->command = "[$now] $cmd;";
+        $this->command = "[$now] $cmd";
 
         foreach ($this->commands[$cmd] as $param => $attrib) {
             if ($attrib['required']) {
@@ -381,16 +426,60 @@ class NagiosCmd {
             }
 
             if ($attrib['type'] == 'boolean') {
-                if ($args[$param] != 1 || $args[$param] != 0) {
+                if ($args[$param] != 1 && $args[$param] != 0) {
                     $this->message = $param . ' must be equal to 1 or 0';
                     return(false);
                 }
             }
 
-            $this->command .= $args[$param] . ";";
+            $this->command .= ";" . $args[$param];
         }
 
-        $this->command .= "\n";;
+        $this->command .= "\n";
+
+        return(true);
+    }
+
+    /**
+     * execute
+     * 
+     * Write the command to the Nagios command file.
+     * No command validation is done here. The passed 
+     * command will be written to the Nagios command file.
+     *
+     * @return boolean
+     */
+    function execute($cmd = null) {
+
+        if ($cmd) { 
+            $this->command = $cmd;
+        }
+
+        // Verify the command is set
+        if (!$this->command) {
+            $this->message = 'You must supply a command.';
+            return(false);
+        }
+
+        // Verify the command file is set
+        if (!$this->commandFile) {
+            $this->message = 'You must supply the command file path.';
+            return(false);
+        }
+            
+        // Write the command to the command file 
+        try {
+            if (!$pipe = fopen($this->commandFile, 'r+')) {
+                throw new Exception('Failed to open '.$this->commandFile);
+            }
+            if (fwrite($pipe, $this->command) === FALSE) {
+                throw new Exception('Failed to write to file: '.$this->commandFile);
+            }
+            fclose($pipe);
+        } catch (Exception $e) {
+            $this->message = $e->getMessage();
+            return(false);
+        }
 
         return(true);
     }
