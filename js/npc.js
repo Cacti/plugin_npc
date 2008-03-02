@@ -84,6 +84,100 @@ npc.app = function() {
             npc.app.serviceDetail(grid.getStore().getAt(rowIndex));
         },
 
+        addServiceComment: function(host, service) {
+            var form = new Ext.FormPanel({
+                labelWidth: 75,
+                url:'npc.php?module=nagios&action=command',
+                frame:true,
+                bodyStyle:'padding:5px 5px 0',
+                width: 325,
+                defaults: {width: 175},
+                defaultType: 'textfield',
+                    items: [
+                    {
+                        name: 'p_command',
+                        value: 'ADD_SVC_COMMENT',
+                        xtype: 'hidden'
+                    },{
+                        fieldLabel: 'Host Name',
+                        name: 'p_host_name',
+                        value: host,
+                        allowBlank:false
+                    },{
+                        fieldLabel: 'Service',
+                        name: 'p_service_description',
+                        value: service,
+                        allowBlank:false
+                    },{
+                        fieldLabel: 'Persistent',
+                        //boxLabel:' ',
+                        name: 'p_persistent',
+                        xtype: 'xcheckbox',
+                        checked:true
+                    },{
+                        fieldLabel: 'Author',
+                        name: 'p_author',
+                        value: npc.app.params.userName,
+                        readOnly:true
+                    },{
+                        fieldLabel: 'Comment',
+                        name: 'p_comment',
+                        xtype: 'textarea',
+                        width: 250,
+                    }
+                ],
+                buttons: [{
+                    text: 'Submit',
+                    handler: function(){
+                        form.getForm().submit({
+                            success: function(f, a) {
+                                win.close();
+                            },
+                            failure: function(f, a) {
+                                Ext.Msg.alert('Error', a.result.msg);
+                            } 
+                        });
+                    }
+                },{
+                    text: 'Cancel',
+                    handler: function(){
+                        win.close();
+                    }
+                }]
+            });
+
+            var win = new Ext.Window({ 
+                title:'New Comment', 
+                layout:'fit', 
+                modal:true, 
+                closable: true, 
+                width:400, 
+                height:300, 
+                bodyStyle:'padding:5px;', 
+                items: form 
+            }); 
+            win.show(); 
+
+        },
+
+/*
+            'host_name' => array(
+                'required' => true,
+                'type' => 'string'), 
+            'service_description' => array(
+                'required' => true,
+                'type' => 'string'),
+            'persistent' => array(
+                'required' => true,
+                'type' => 'boolean'),
+            'author' => array(
+                'required' => true,
+                'type' => 'string'),
+            'comment' => array(
+                'required' => true,
+                'type' => 'string')
+*/
+
         renderServiceIcons: function(val, p, record) {
             var img = '';
             if (record.data.problem_has_been_acknowledged == 1) {

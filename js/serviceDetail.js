@@ -448,7 +448,14 @@ npc.app.serviceDetail = function(record) {
             autoFill:true,
             emptyText:'No comments.',
             scrollOffset:0
-        })
+        }),
+        tbar:[{
+            text:'New Comment',
+            iconCls:'commentAdd',
+            handler : function(){
+                npc.app.addServiceComment(record.data.host_name,record.data.service_description);
+            }
+        }]
     });
 
     // Add the grids to the tabs

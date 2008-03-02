@@ -58,13 +58,14 @@ class NpcLayoutController {
           
           <script type="text/javascript">
 
-            // Add dynamic properties to the params array
+            // Add some properties to the params array
             npc.app.params = new Array();
             npc.app.params.npc_portlet_refresh = "<?php echo read_config_option('npc_portlet_refresh'); ?>";
-            npc.app.params.npc_portlet_rows = "<?php echo read_config_option('npc_portlet_rows'); ?>";
-            npc.app.params.npc_date_format = "<?php echo read_config_option('npc_date_format'); ?>";
-            npc.app.params.npc_time_format = "<?php echo read_config_option('npc_time_format'); ?>";
-            npc.app.params.npc_nagios_url = "<?php echo read_config_option('npc_nagios_url'); ?>";
+            npc.app.params.npc_portlet_rows    = "<?php echo read_config_option('npc_portlet_rows'); ?>";
+            npc.app.params.npc_date_format     = "<?php echo read_config_option('npc_date_format'); ?>";
+            npc.app.params.npc_time_format     = "<?php echo read_config_option('npc_time_format'); ?>";
+            npc.app.params.npc_nagios_url      = "<?php echo read_config_option('npc_nagios_url'); ?>";
+            npc.app.params.userName            = "<?php echo db_fetch_cell('SELECT username FROM user_auth WHERE id = ' . $_SESSION['sess_user_id']); ?>";
 
             // Launch the app
             Ext.onReady(npc.app.init, npc.app);

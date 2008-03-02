@@ -36,41 +36,57 @@ class NpcNagiosController extends Controller {
      * arguments from the client.
      *
      * @param  array    $params - The command and parameters
-     * @return boolean  Returns true/false on success/failure
+     * @return string
      */
     function command($params) {
 
         include("plugins/npc/nagioscmd.php");
 
         $nagios = new NagiosCmd;
+        $args = array();
 
         if (!$nagios->setCommandFile(read_config_option('npc_nagios_cmd_path'))) {
-            echo $nagios->message;
+            $response = array('success' => false, 'msg' => $nagios->message);
+            return(json_encode($response));
         }
 
-        /*
-        $cmd = 'ACKNOWLEDGE_HOST_PROBLEM'; 
-        $args = array('host_name'  => 'localhost',
-                      'sticky'     => 1,
-                      'notify'     => 1,
-                      'persistent' => 0,
-                      'author'     => 'jdoe',
-                      'comment'    => 'I am working on this problem');
-        */
+        // Get the passed command
+        $cmd = $params['command'];
 
-        $cmd = 'ENABLE_SVC_CHECK'; 
-        $args = array('host_name'  => 'localhost',
-                      'service_description' => 'Sendmail');
+        // Get the command definition
+        $commandDef = $nagios->getCommands($cmd);
 
+        // Build the args array
+        foreach ($commandDef as $k => $v) {
+            if (isset($params[$k])) {
+                $value = $params[$k];
+
+                // Checkboxes from EXT come as a string of either "true" or "false".
+                // These need to be set to 1 or 0
+                if ($value == 'true') {
+                    $value = 1;
+                }
+                if ($value == 'false') {
+                    $value = 0;
+                }
+                $args[$k] = $value;
+            }
+        }
+
+        // Buld the command string
         if (!$nagios->setCommand($cmd, $args)) {
-            echo $nagios->message;
+            $response = array('success' => false, 'msg' => $nagios->message);
+            return(json_encode($response));
         }
 
+        // Execute the command
         if (!$nagios->execute()) {
-            echo $nagios->message;
+            $response = array('success' => false, 'msg' => $nagios->message);
+            return(json_encode($response));
         }
 
-        exit;
+        // Return success to the form
+        return(json_encode(array('success' => true)));
     }
 
     /**

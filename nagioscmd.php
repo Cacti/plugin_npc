@@ -327,11 +327,14 @@ class NagiosCmd {
     /**
      * getCommands
      * 
-     * An accessor method to return the var $commands
+     * An accessor method to return var $commands
      *
      * @return array
      */
-    function getCommands() {
+    function getCommands($cmd=null) {
+        if ($cmd) {
+            return($this->commands[$cmd]);
+        }
         return($this->commands);
     }
 

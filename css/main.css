@@ -14,6 +14,10 @@ background-image:url(../images/icons/cog_go.png) !important;
 background-image:url(../images/icons/add.png) !important;
 }
 
+.commentAdd {
+background-image:url(../images/icons/comment_add.png) !important;
+}
+
 .cancel {
 background-image:url(../images/icons/cancel.png) !important;
 }
@@ -108,6 +112,30 @@ color: #666;
 .x-portlet .x-panel-nofooter .x-panel-bc {
     height:2px;
 }
+
+.x-form-checkbox {
+   margin-top: 5px;
+}
+
+.xcheckbox-wrap { 
+    line-height: 18px;
+    padding-top:2px;
+}
+.xcheckbox-wrap a {
+    display:block;
+    width:16px;
+    height:16px;
+}
+.x-toolbar .xcheckbox-wrap {
+    padding: 0 0 2px 0;
+}
+.xcheckbox-on {
+    background:transparent url(../js/ext/resources/images/default/menu/checked.gif) no-repeat 0 0;
+}
+.xcheckbox-off {
+    background:transparent url(../js/ext/resources/images/default/menu/unchecked.gif) no-repeat 0 0;
+}
+
 
 .x-grid3-cell-inner, .x-grid3-hd-inner{
     overflow:hidden;
