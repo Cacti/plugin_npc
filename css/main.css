@@ -18,6 +18,14 @@ background-image:url(../images/icons/add.png) !important;
 background-image:url(../images/icons/comment_add.png) !important;
 }
 
+.commentsDelete {
+background-image:url(../images/icons/comments_delete.png) !important;
+}
+
+.commentDelete {
+background-image:url(../images/icons/comment_delete.png) !important;
+}
+
 .cancel {
 background-image:url(../images/icons/cancel.png) !important;
 }

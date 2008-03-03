@@ -48,7 +48,7 @@ npc.app.serviceGroupGrid = function(){
         sortInfo:{field: 'service_description', direction: "ASC"},
         reader: new Ext.data.JsonReader({
             totalProperty:'totalCount',
-            root:'data',
+            root:'data'
         }, [
             'servicegroup_id',
             'instance_id',

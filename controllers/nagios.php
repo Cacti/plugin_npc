@@ -69,6 +69,11 @@ class NpcNagiosController extends Controller {
                 if ($value == 'false') {
                     $value = 0;
                 }
+
+                if ($k == 'comment') {
+                    // Replace newline characters: 
+                    $value = str_replace(array("\r", "\n"), '<br />', $value);
+                }
                 $args[$k] = $value;
             }
         }

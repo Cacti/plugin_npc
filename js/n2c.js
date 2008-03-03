@@ -46,11 +46,11 @@ npc.app.n2c = function() {
         {
             header: "Hostgroup",
             dataIndex: 'alias',
-            width: 200,
+            width: 200
         },{
             header: "Hosts",
             dataIndex: 'members',
-            width: 50,
+            width: 50
         },{
             header: "Template",
             dataIndex: 'template',

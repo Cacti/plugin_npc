@@ -180,10 +180,21 @@ class NagiosCmd {
         'DELAY_HOST_NOTIFICATION' => null,
         'DELAY_SVC_NOTIFICATION' => null,
         'DEL_ALL_HOST_COMMENTS' => null,
-        'DEL_ALL_SVC_COMMENTS' => null,
+        'DEL_ALL_SVC_COMMENTS' => array(   
+            'host_name' => array(
+                'required' => true,
+                'type' => 'string'),
+            'service_description' => array(
+                'required' => true,
+                'type' => 'string'),
+        ),
         'DEL_HOST_COMMENT' => null,
         'DEL_HOST_DOWNTIME' => null,
-        'DEL_SVC_COMMENT' => null,
+        'DEL_SVC_COMMENT' => array( 
+            'comment_id' => array(
+                'required' => true,
+                'type' => 'integer')
+        ),
         'DEL_SVC_DOWNTIME' => null,
         'DISABLE_ALL_NOTIFICATIONS_BEYOND_HOST' => null,
         'DISABLE_CONTACTGROUP_HOST_NOTIFICATIONS' => null,

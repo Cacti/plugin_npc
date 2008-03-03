@@ -6,6 +6,9 @@ npc.app.serviceDetail = function(record) {
     // Set thetitle
     var title = record.data.host_name + ': ' + record.data.service_description;
 
+    // Default # of rows to display
+    var pageSize = 20;
+
     var outerTabId = 'services-tab';
 
     npc.app.addCenterNestedTab(outerTabId, 'Services');
@@ -115,8 +118,7 @@ npc.app.serviceDetail = function(record) {
     }
 
     function renderAction(v, p, r) {
-        var url = 'npc.php?module=comments&action=delete&p_id=' + r.data.comment_id;
-        return String.format('<a href="#" onClick="npc.app.get(\''+url+'\')"><img src="images/icons/delete.png"></a>')
+        return String.format('<img src="images/icons/comment_delete.png">');
     }
 
     // If the tab exists set it active and return or else create it.
@@ -241,7 +243,7 @@ npc.app.serviceDetail = function(record) {
     },{
         header:"Message",
         dataIndex:'output',
-        width:600,
+        width:600
     }]);
 
     var snGrid = new Ext.grid.GridPanel({
@@ -396,6 +398,7 @@ npc.app.serviceDetail = function(record) {
             'author_name',
             'comment_data',
             'is_persistent',
+            'internal_comment_id',
             {name: 'expiration_time', type: 'date', dateFormat: 'Y-m-d H:i:s'}
         ],
         autoload:true
@@ -431,6 +434,7 @@ npc.app.serviceDetail = function(record) {
         width:120
     },{
         header:"Delete",
+        dataIndex:'internal_comment_id',
         renderer: renderAction,
         align:'center',
         width:50
@@ -455,7 +459,41 @@ npc.app.serviceDetail = function(record) {
             handler : function(){
                 npc.app.addServiceComment(record.data.host_name,record.data.service_description);
             }
-        }]
+        }, '-', {
+            text:'Delete comments',
+            tooltip:'Delete all comments',
+            iconCls:'commentsDelete',
+            handler : function(){
+                Ext.Msg.show({
+                    title:'Confirm Delete',
+                    msg: 'Are you sure you want to delete all comments?',
+                    buttons: Ext.Msg.YESNO,
+                    fn: function(btn) {
+                        if (btn == 'yes') {
+                            npc.app.aPost({
+                                module : 'nagios',
+                                action : 'command',
+                                p_command : 'DEL_ALL_SVC_COMMENTS',
+                                p_host_name : record.data.host_name,
+                                p_service_description : record.data.service_description
+                            });
+                        }
+                    },
+                    animEl: 'elId',
+                    icon: Ext.MessageBox.QUESTION
+                });
+            }
+        }],
+        bbar: new Ext.PagingToolbar({
+            pageSize: pageSize,
+            store: scStore,
+            displayInfo: true
+        })
+        // The search field won't render :(
+        //plugins:[new Ext.ux.grid.Search({
+        //    mode:'remote',
+        //    iconCls:false
+        //})]
     });
 
     // Add the grids to the tabs
@@ -505,4 +543,30 @@ npc.app.serviceDetail = function(record) {
 
     // Add the listeners
     tab.addListener(listeners);
+
+    // Handle deleting individual comments
+    scGrid.addListener("cellclick", function(grid, row, column, e) {
+        var rec = grid.getStore().getAt(row);
+        var fieldName = grid.getColumnModel().getDataIndex(column);
+        if (fieldName == 'internal_comment_id') {
+            Ext.Msg.show({
+                title:'Confirm Delete',
+                msg: 'Are you sure you want to delete this comment?',
+                buttons: Ext.Msg.YESNO,
+                fn: function(btn) {
+                    if (btn == 'yes') {
+                        var args = {
+                            module : 'nagios',
+                            action : 'command',
+                            p_command : 'DEL_SVC_COMMENT',
+                            p_comment_id : rec.get(fieldName)
+                        };
+                        npc.app.aPost(args);
+                    }
+                },
+                animEl: 'elId',
+                icon: Ext.MessageBox.QUESTION
+            });
+        }
+    });
 };

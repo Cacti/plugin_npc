@@ -28,6 +28,7 @@ npc.app.serviceList = function(title, filter){
         innerTabPanel.add({ 
             id: id, 
             title: title, 
+            deferredRender:false,
             closable: true, 
             items: [{}] 
         }).show(); 
@@ -37,7 +38,7 @@ npc.app.serviceList = function(title, filter){
 
     function renderAttempt(val, p, record){
         return String.format('{0}/{1}', val, record.data.max_check_attempts);
-    }
+    };
 
     var store = new Ext.data.GroupingStore({
         url:url,
@@ -45,7 +46,7 @@ npc.app.serviceList = function(title, filter){
         sortInfo:{field: 'service_description', direction: "ASC"},
         reader: new Ext.data.JsonReader({
             totalProperty:'totalCount',
-            root:'data',
+            root:'data'
         }, [
             'host_object_id',
             'host_name',
@@ -117,6 +118,7 @@ npc.app.serviceList = function(title, filter){
         autoHeight:true,
         autoExpandColumn: 'service_description',
         store:store,
+        autoScroll: true,
         cm:cm,
         sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
         stripeRows: true,
@@ -175,5 +177,4 @@ npc.app.serviceList = function(title, filter){
     tab.addListener(listeners);
 
     grid.on('rowclick', npc.app.serviceGridClick);
-
 };

@@ -68,11 +68,6 @@ npc.app = function() {
                 '</div>'].join('');
     };
 
-    function services() {
-        alert('SERVICES!!!');
-    };
-
-
     /* Public Space */
     return {
 
@@ -110,20 +105,22 @@ npc.app = function() {
                         allowBlank:false
                     },{
                         fieldLabel: 'Persistent',
-                        //boxLabel:' ',
                         name: 'p_persistent',
                         xtype: 'xcheckbox',
                         checked:true
                     },{
-                        fieldLabel: 'Author',
                         name: 'p_author',
                         value: npc.app.params.userName,
-                        readOnly:true
+                        xtype: 'hidden'
                     },{
                         fieldLabel: 'Comment',
                         name: 'p_comment',
                         xtype: 'textarea',
-                        width: 250,
+                        width: 250
+                    },{
+                        xtype: 'panel',
+                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the comment.</span>',
+                        width: 400
                     }
                 ],
                 buttons: [{
@@ -160,23 +157,16 @@ npc.app = function() {
 
         },
 
-/*
-            'host_name' => array(
-                'required' => true,
-                'type' => 'string'), 
-            'service_description' => array(
-                'required' => true,
-                'type' => 'string'),
-            'persistent' => array(
-                'required' => true,
-                'type' => 'boolean'),
-            'author' => array(
-                'required' => true,
-                'type' => 'string'),
-            'comment' => array(
-                'required' => true,
-                'type' => 'string')
-*/
+        // A simple ajax post
+        aPost: function(args) {
+            Ext.Ajax.request({
+                url : 'npc.php' ,
+                params : args,
+                failure: function (r) {
+                    Ext.Msg.alert('Error', r.result.msg);
+                }
+            });
+        },
 
         renderServiceIcons: function(val, p, record) {
             var img = '';
@@ -294,11 +284,13 @@ npc.app = function() {
                     title: title,
                     closable: true,
                     autoScroll: true,
+                    layout:'fit',
                     containerScroll: true,
                     items: [
                         new Ext.TabPanel({
                             id: id + '-inner-panel',
                             style:'padding:10px 0 10px 10px',
+                            deferredRender:false,
                             autoHeight:true,
                             autoWidth:true,
                             plain:true,
@@ -321,13 +313,13 @@ npc.app = function() {
                     stateEvents: ["move","position","drop","hide","show","collapse","expand","columnmove","columnresize","sortchange"],
                     stateful:true,
                     getState: function(){
+                        console.log(this);
                         return {collapsed:this.collapsed, hidden:this.hidden, column:this.ownerCt.id};
                     },
                     tools: tools
                 });
                 Ext.getCmp(panel.column).items.add(panel);
 
-                //var p = Ext.getCmp('dashboard').items.itemAt(0).items.itemAt(1);
                 Ext.getCmp('centerTabPanel').doLayout();
             }
         },
