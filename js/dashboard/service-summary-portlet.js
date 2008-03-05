@@ -1,10 +1,10 @@
-Ext.onReady(function(){
+npc.app.portlet.serviceSummary = function(){
 
     // Portlet name
     var name = 'Service Status Summary';
 
     // Portlet ID
-    var id = 'service-status-summary';
+    var id = 'serviceSummary';
 
     // Portlet URL
     var url = 'npc.php?module=services&action=summary';
@@ -129,4 +129,4 @@ Ext.onReady(function(){
     };
 
     Ext.getCmp(id).addListener(listeners);
-});
+};

@@ -45,6 +45,7 @@ function npc_version () {
 function npc_config_arrays () {
 
     global $user_auth_realms, $user_auth_realm_filenames, $npc_date_format, $npc_time_format;
+    global $npc_default_settings;
 
     $user_auth_realms[32]='View NPC';
     $user_auth_realm_filenames['npc.php'] = 32;
@@ -72,6 +73,17 @@ function npc_config_arrays () {
         "h.i.sa" => "11.07pm",
         "h.i.sA" => "11.07PM"
     );
+
+    $npc_default_settings = array(
+        'date_format' => "s%3AY-m-d",
+        'time_format' => "s%3AH%3Ai%3As",
+        "serviceProblems" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+        "hostSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+        "serviceSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+        "monitoringPerf" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+        "eventLog" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10'
+    );
+
 }
 
 function npc_config_form () {
@@ -115,7 +127,7 @@ function npc_draw_navigation_text ($nav) {
 }
 
 function npc_setup_table () {
-    global $config, $database_default;
+    global $config, $database_default, $npc_default_settings;
 
     include_once($config["library_path"] . "/database.php");
 
@@ -175,6 +187,7 @@ function npc_setup_table () {
         $sql[] = "INSERT INTO settings VALUES ('npc_host_summary_portlet','on');";
         $sql[] = "INSERT INTO settings VALUES ('npc_portlet_refresh',60);";
         $sql[] = "INSERT INTO settings VALUES ('npc_portlet_rows',10);";
+
     }
 
     if (!in_array('npc_commands', $tables)) {
@@ -1266,6 +1279,32 @@ function npc_setup_table () {
                     PRIMARY KEY  (`timeperiod_id`),
                     UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`timeperiod_object_id`)
                   ) ENGINE=InnoDB COMMENT='Timeperiod definitions';";
+    }
+
+    if (!in_array('npc_settings', $tables)) {
+        $sql[] = "CREATE TABLE `npc_settings` (
+                    `user_id` mediumint(8) unsigned NOT NULL,
+                    `settings` text default null,
+                    PRIMARY KEY  (`user_id`)
+                  ) ENGINE=InnoDB COMMENT='NPC user settings';";
+    } else {
+
+        $cUser = db_fetch_assoc('SELECT id FROM user_auth');
+        $nUser = db_fetch_assoc('SELECT user_id FROM npc_settings');
+
+        // Add exitsting users to npc_settings
+        for ($i = 0; $i < count($cUser); $i++) {
+            if (!db_fetch_cell('SELECT user_id FROM npc_settings WHERE user_id = ' . $cUser[$i]['id'])) {
+                db_execute("INSERT INTO npc_settings VALUES(". $cUser[$i]['id'].",'".serialize($npc_default_settings)."')");
+            }
+        }
+
+        // Delete non existent users from npc_settings
+        for ($i = 0; $i < count($nUser); $i++) {
+            if (!db_fetch_cell('SELECT id FROM user_auth WHERE id = ' . $nUser[$i]['id'])) {
+                db_execute('DELETE FROM npc_settings WHERE user_id = ' . $nUser[$i]['id']);
+            }
+        }
     }
 
     if (!empty($sql)) {

@@ -59,7 +59,6 @@ class NpcLayoutController {
           <script type="text/javascript">
 
             // Add some properties to the params array
-            npc.app.params = new Array();
             npc.app.params.npc_portlet_refresh = "<?php echo read_config_option('npc_portlet_refresh'); ?>";
             npc.app.params.npc_portlet_rows    = "<?php echo read_config_option('npc_portlet_rows'); ?>";
             npc.app.params.npc_date_format     = "<?php echo read_config_option('npc_date_format'); ?>";
@@ -67,14 +66,17 @@ class NpcLayoutController {
             npc.app.params.npc_nagios_url      = "<?php echo read_config_option('npc_nagios_url'); ?>";
             npc.app.params.userName            = "<?php echo db_fetch_cell('SELECT username FROM user_auth WHERE id = ' . $_SESSION['sess_user_id']); ?>";
 
+            <?php $state = unserialize(db_fetch_cell('SELECT settings FROM npc_settings WHERE user_id = ' . $_SESSION['sess_user_id'])); ?>
+            var ExtState = Ext.decode('<?php echo json_encode($state); ?>');
+
             // Launch the app
             Ext.onReady(npc.app.init, npc.app);
 
             Ext.onReady(function() {
-                Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+                //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+                Ext.state.Manager.setProvider(new Ext.state.HttpProvider({url: 'npc.php?module=settings&action=save'}));
                 Ext.QuickTips.init();
             });
-
           </script>
 
           <!-- Portlets -->
@@ -83,6 +85,13 @@ class NpcLayoutController {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/eventlog-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/service-problems-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/monitoring-performance-portlet.js"></script>
+
+          <script type="text/javascript">
+            Ext.onReady(function() {
+              //console.log(Ext.state.Manager.get('serviceProblems'));
+              npc.app.initPortlets();
+            });
+          </script>
 
         </head>
 

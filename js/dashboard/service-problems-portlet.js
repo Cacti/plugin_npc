@@ -1,10 +1,10 @@
-Ext.onReady(function(){
+npc.app.portlet.serviceProblems = function(){
 
     // Portlet name
     var name = 'Service Problems';
 
     // Portlet ID
-    var id = 'service-problems-portlet';
+    var id = 'serviceProblems';
 
     // Portlet URL
     var url = 'npc.php?module=services&action=getServices&p_state=not_ok';
@@ -132,4 +132,4 @@ Ext.onReady(function(){
 
     grid.on('rowclick', npc.app.serviceGridClick);
 
-});
+};

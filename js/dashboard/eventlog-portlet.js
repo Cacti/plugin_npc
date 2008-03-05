@@ -1,10 +1,10 @@
-Ext.onReady(function(){
+npc.app.portlet.eventLog = function(){
 
     // Portlet name
     var name = 'Event Log';
 
     // Portlet ID
-    var id = 'eventlog-portlet';
+    var id = 'eventLog';
 
     // Portlet URL
     var url = 'npc.php?module=logentries&action=getLogs';
@@ -136,4 +136,4 @@ Ext.onReady(function(){
     function doAutoRefresh() {
         store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     }
-});
+};

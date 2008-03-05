@@ -72,6 +72,8 @@ npc.app = function() {
     return {
 
         // public properties, e.g. strings to translate
+        params: new Array(),
+        portlet: {},
 
         // public methods
 
@@ -85,7 +87,7 @@ npc.app = function() {
                 url:'npc.php?module=nagios&action=command',
                 frame:true,
                 bodyStyle:'padding:5px 5px 0',
-                width: 325,
+                width: 525,
                 defaults: {width: 175},
                 defaultType: 'textfield',
                     items: [
@@ -115,8 +117,8 @@ npc.app = function() {
                     },{
                         fieldLabel: 'Comment',
                         name: 'p_comment',
-                        xtype: 'textarea',
-                        width: 250
+                        xtype: 'htmleditor',
+                        width: 525
                     },{
                         xtype: 'panel',
                         html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the comment.</span>',
@@ -148,8 +150,8 @@ npc.app = function() {
                 layout:'fit', 
                 modal:true, 
                 closable: true, 
-                width:400, 
-                height:300, 
+                width:600, 
+                height:400, 
                 bodyStyle:'padding:5px;', 
                 items: form 
             }); 
@@ -303,7 +305,28 @@ npc.app = function() {
             }
         },
 
-        addPortlet: function(id, title, column) {
+        initPortlets: function() {
+            var o = this.portlet;
+            var p = [
+                'eventLog',
+                'hostSummary',
+                'monitoringPerf',
+                'serviceProblems',
+                'serviceSummary'
+            ];
+
+            for (var i = 0; i < p.length; i++) {
+                for (x in p) {
+                    if (x != 'remove') {
+                        if (Ext.state.Manager.get(p[x]).index == i) {
+                            o[p[x]]();
+                        }
+                    }
+                }
+            }
+        },
+
+        addPortlet: function(id, title, column, index) {
             if(!Ext.getCmp(id)) {
                 panel = new Ext.ux.Portlet({
                     id: id,
@@ -313,8 +336,19 @@ npc.app = function() {
                     stateEvents: ["move","position","drop","hide","show","collapse","expand","columnmove","columnresize","sortchange"],
                     stateful:true,
                     getState: function(){
-                        console.log(this);
-                        return {collapsed:this.collapsed, hidden:this.hidden, column:this.ownerCt.id};
+                        var column;
+                        var key;
+                        if (this.ownerCt) {
+                            column = this.ownerCt.id;
+                            var a = this.ownerCt.items.keys;
+                            for (var i in a) {
+                                if (a[i] == id) {
+                                    key = i;
+                                    break;
+                                }
+                            }
+                        }
+                        return {collapsed:this.collapsed, hidden:this.hidden, column:column, index:key};
                     },
                     tools: tools
                 });

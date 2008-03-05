@@ -1,10 +1,10 @@
-Ext.onReady(function(){
+npc.app.portlet.hostSummary = function(){
 
     // Portlet name
     var name = 'Host Status Summary';
 
     // Portlet ID
-    var id = 'host-status-summary';
+    var id = 'hostSummary';
 
     // Portlet URL
     var url = 'npc.php?module=hosts&action=summary';
@@ -120,4 +120,4 @@ Ext.onReady(function(){
     };
 
     Ext.getCmp(id).addListener(listeners);
-});
+};

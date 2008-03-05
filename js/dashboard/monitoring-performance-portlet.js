@@ -1,10 +1,10 @@
-Ext.onReady(function(){
+npc.app.portlet.monitoringPerf = function(){
 
     // Portlet name
     var name = 'Monitoring Performance';
 
     // Portlet ID
-    var id = 'mon-perf-portlet';
+    var id = 'monitoringPerf';
 
     // Portlet URL
     var url = 'npc.php?module=nagios&action=checkPerf&p_resolution=1';
@@ -99,4 +99,4 @@ Ext.onReady(function(){
     }
 
     Ext.getCmp(id).addListener(listeners);
-});
+};
