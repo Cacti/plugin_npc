@@ -1,13 +1,17 @@
-npc.app.serviceGroupGrid = function(){
+npc.app.serviceGroupGrid = function(id, title, soi){
 
     // Panel title
-    var title = 'Servicegroup Grid';
+    //title = 'Servicegroup Grid';
+    title = (typeof title == 'undefined') ? 'Servicegroup Grid' : title;
 
     // Panel ID
-    var id = 'serviceGroupGrid-tab';
+    //id = 'serviceGroupGrid-tab';
+    id = (typeof id == 'undefined') ? 'serviceGroupGrid-tab' : id;
+
+    soi = (typeof soi == 'undefined') ? '' : '&p_id='+soi;
 
     // Grid URL
-    var url = 'npc.php?module=servicegroups&action=getServices';
+    var url = 'npc.php?module=servicegroups&action=getServices'+soi;
 
     // Default # of rows to display
     var pageSize = 25;

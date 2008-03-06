@@ -81,7 +81,8 @@ function npc_config_arrays () {
         "hostSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
         "serviceSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
         "monitoringPerf" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "eventLog" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10'
+        "eventLog" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+        "servicegroupOverview" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10'
     );
 
 }

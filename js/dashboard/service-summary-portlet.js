@@ -15,30 +15,6 @@ npc.app.portlet.serviceSummary = function(){
     // Refresh rate
     var refresh = npc.app.params.npc_portlet_refresh;
 
-    function renderStatus(val, meta){  
-        if(val > 0){  
-            switch(meta.id) {  
-                case 'serviceTotalsOk':  
-                    bg = '33FF00';  
-                    break;  
-                case 'serviceTotalsCritical':  
-                    bg = 'F83838';  
-                    break;  
-                case 'serviceTotalsWarning':  
-                    bg = 'FFFF00';  
-                    break;  
-                case 'serviceTotalsUnknown':  
-                    bg = 'FF9900';  
-                    break;  
-                case 'serviceTotalsPending':  
-                    bg = '0099FF';  
-                    break;  
-            }  
-            meta.attr = 'style="background-color: #' + bg + ';"';  
-        }  
-        return String.format('<b>{0}</b>', val);
-    }
-
     var store = new Ext.data.JsonStore({
         url:url,
         totalProperty:'totalCount',
@@ -48,38 +24,38 @@ npc.app.portlet.serviceSummary = function(){
     });
 
     var cm = new Ext.grid.ColumnModel([{
-        id: 'serviceTotalsCritical',
+        id: 'serviceTotalsCRITICAL',
         header:"Critical",
         dataIndex:'critical',
-        renderer: renderStatus,
+        renderer: npc.app.renderStatusBg,
         width:80,
         align:'center'
     },{
-        id: 'serviceTotalsWarning',
+        id: 'serviceTotalsWARNING',
         header:"Warning",
         dataIndex:'warning',
-        renderer: renderStatus,
+        renderer: npc.app.renderStatusBg,
         width:80,
         align:'center'
     }, {
-        id: 'serviceTotalsUnknown',
+        id: 'serviceTotalsUNKNOWN',
         header:"Unknown",
         dataIndex:'unknown',
-        renderer: renderStatus,
+        renderer: npc.app.renderStatusBg,
         width:80,
         align:'center'
     }, {
-        id: 'serviceTotalsOk',
+        id: 'serviceTotalsOK',
         header:"Ok",
         dataIndex:'ok',
-        renderer: renderStatus,
+        renderer: npc.app.renderStatusBg,
         width:80,
         align:'center'
     }, {
-        id: 'serviceTotalsPending',
+        id: 'serviceTotalsPENDING',
         header:"Pending",
         dataIndex:'pending',
-        renderer: renderStatus,
+        renderer: npc.app.renderStatusBg,
         width:80,
         align:'center'
     }]);

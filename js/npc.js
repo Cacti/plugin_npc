@@ -170,6 +170,31 @@ npc.app = function() {
             });
         },
 
+        renderStatusBg: function(val, meta){
+            if(val > 0){
+                if (meta.id.match('UP')) {
+                        bg = '33FF00';
+                } else if  (meta.id.match('DOWN')) {
+                        bg = 'F83838';
+                } else if  (meta.id.match('UNREACHABLE')) {
+                        bg = 'F83838';
+                } else if  (meta.id.match('PENDING')) {
+                        bg = '0099FF';
+                } else if  (meta.id.match('OK')) {
+                        bg = '33FF00';
+                } else if  (meta.id.match('CRITICAL')) {
+                        bg = 'F83838';
+                } else if  (meta.id.match('WARNING')) {
+                        bg = 'FFFF00';
+                } else if  (meta.id.match('UNKNOWN')) {
+                        bg = 'FF9900';
+                }
+                meta.attr = 'style="background-color: #' + bg + ';"';
+                return String.format('<b>{0}</b>', val);
+            }
+            return('0');
+        },
+
         renderServiceIcons: function(val, p, record) {
             var img = '';
             if (record.data.problem_has_been_acknowledged == 1) {
@@ -328,7 +353,6 @@ npc.app = function() {
                 for (x in portlets) {
                     if (typeof portlets[x][0] == 'string') {
                         if (Ext.state.Manager.get(portlets[x][0]).index == i) {
-                            console.log(portlets[x][0]);
                             o[portlets[x][0]]();
                         }
                     }

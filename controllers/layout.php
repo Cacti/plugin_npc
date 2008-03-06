@@ -85,6 +85,7 @@ class NpcLayoutController {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/eventlog-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/service-problems-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/monitoring-performance-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/servicegroup-overview-portlet.js"></script>
 
           <script type="text/javascript">
             Ext.onReady(function() {

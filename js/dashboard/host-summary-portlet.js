@@ -15,28 +15,6 @@ npc.app.portlet.hostSummary = function(){
     // Refresh rate
     var refresh = npc.app.params.npc_portlet_refresh;
 
-    function renderStatus(val, meta){  
-        if(val > 0){  
-            switch(meta.id) {  
-                case 'hostTotalsUp':  
-                    bg = '33FF00';  
-                    break;  
-                case 'hostTotalsDown':  
-                    bg = 'F83838';  
-                    break;  
-                case 'hostTotalsUnreachable':  
-                    bg = 'F83838';  
-                    break;  
-                case 'hostTotalsPending':  
-                    bg = '0099FF';  
-                    break;  
-            }  
-            meta.attr = 'style="background-color: #' + bg + ';"';  
-        }  
-        return String.format('<b>{0}</b>', val);
-    }
-
-
     var store = new Ext.data.JsonStore({
         url:url,
         totalProperty:'totalCount',
@@ -46,31 +24,31 @@ npc.app.portlet.hostSummary = function(){
     });
 
     var cm = new Ext.grid.ColumnModel([{
-        id: 'hostTotalsDown',
+        id: 'hostTotalsDOWN',
         header:"Down",
         dataIndex:'down',
-        renderer: renderStatus,
+        renderer: npc.app.renderStatusBg,
         width:100,
         align:'center'
     },{
-        id: 'hostTotalsUnreachable',
+        id: 'hostTotalsUNREACHABLE',
         header:"Unreachable",
         dataIndex:'unreachable',
-        renderer: renderStatus,
+        renderer: npc.app.renderStatusBg,
         width:100,
         align:'center'
     }, {
-        id: 'hostTotalsUp',
+        id: 'hostTotalsUP',
         header:"Up",
         dataIndex:'up',
-        renderer: renderStatus,
+        renderer: npc.app.renderStatusBg,
         width:100,
         align:'center'
     }, {
-        id: 'hostTotalsPending',
+        id: 'hostTotalsPENDING',
         header:"Pending",
         dataIndex:'pending',
-        renderer: renderStatus,
+        renderer: npc.app.renderStatusBg,
         width:100,
         align:'center'
     }]);
