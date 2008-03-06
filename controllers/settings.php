@@ -29,7 +29,7 @@ class NpcSettingsController extends Controller {
     function getSettings($id) {
 
         $q = new Doctrine_Query();
-        $settings = $q->from('NpcSettings s')->where('s.user_id = ?', $id)->execute();
+        $settings = $this->conn->getTable('NpcSettings')->find($id);
         
         return($settings);
 
@@ -38,13 +38,15 @@ class NpcSettingsController extends Controller {
     function save($params) {
     
         $user_id = $_SESSION['sess_user_id'];
-        $settings = $this->getSettings($user_id);
+        $obj = $this->getSettings($user_id);
 
-        print_r($settings);
+        $settings = unserialize($obj->settings);
+        $settings[$params['name']] = $params['value'];
 
-        //$rows = $q->update('NpcSettings')
-        //          ->set('', 'amount + 200')
-    
+        $obj->settings = serialize($settings);
+        $obj->save();
+
+        return(true); 
     }
 
 }

@@ -307,48 +307,81 @@ npc.app = function() {
 
         initPortlets: function() {
             var o = this.portlet;
-            var p = [
-                'eventLog',
-                'hostSummary',
-                'monitoringPerf',
-                'serviceProblems',
-                'serviceSummary'
-            ];
+            var portlets = [];
+            var c = 0;
+            
+            var a = 0;
+            for (x in o) {
+                if (!Ext.state.Manager.get(x).dt) {
+                    portlets[a] = [x,0];
+                } else {
+                    portlets[a] = [x,Ext.state.Manager.get(x).dt];
+                }
+                a++;
+            }
 
-            for (var i = 0; i < p.length; i++) {
-                for (x in p) {
-                    if (x != 'remove') {
-                        if (Ext.state.Manager.get(p[x]).index == i) {
-                            o[p[x]]();
+            // Sort portlets by position 1 which holds an integer value
+            portlets.sort(function(a, b) { return b[1] - a[1] });
+
+            // Launch the portlets in order
+            for (var i = 0; i < portlets.length; i++) {
+                for (x in portlets) {
+                    if (typeof portlets[x][0] == 'string') {
+                        if (Ext.state.Manager.get(portlets[x][0]).index == i) {
+                            console.log(portlets[x][0]);
+                            o[portlets[x][0]]();
                         }
                     }
                 }
             }
         },
 
-        addPortlet: function(id, title, column, index) {
+        addPortlet: function(id, title, column) {
             if(!Ext.getCmp(id)) {
                 panel = new Ext.ux.Portlet({
                     id: id,
                     title: title,
-                    column: column,
+                    index: 0,
                     layout:'fit',
-                    stateEvents: ["move","position","drop","hide","show","collapse","expand","columnmove","columnresize","sortchange"],
+                    stateEvents: ["hide","show","collapse","expand"],
                     stateful:true,
                     getState: function(){
+
+                        var dt = new Date();
+                        var d = 0;
                         var column;
-                        var key;
+                        var index;
+
+                        // Find the new column and index
                         if (this.ownerCt) {
                             column = this.ownerCt.id;
                             var a = this.ownerCt.items.keys;
                             for (var i in a) {
                                 if (a[i] == id) {
-                                    key = i;
+                                    index = i;
                                     break;
                                 }
                             }
                         }
-                        return {collapsed:this.collapsed, hidden:this.hidden, column:column, index:key};
+
+                        // Rare case to make sure column has a value
+                        if (!column) { column = Ext.state.Manager.get(id).column; }
+
+                        // Rare case to make sure index has a value
+                        if (!index) { index = Ext.state.Manager.get(id).index; }
+
+                        // d is used to track if portlets have moved up or down. This 
+                        // is needed because the first time a portlet is moved it will 
+                        // have the same index value as another portlet.
+                        if (index < this.index) {
+                            d = dt.format('U');    
+                        } else if (index > this.index) {
+                            d = -1
+                        }
+
+                        // A place holder for the current index value
+                        this.index = index;
+                        return {collapsed:this.collapsed, hidden:this.hidden, column:column, index:index, dt:d};
                     },
                     tools: tools
                 });
@@ -553,17 +586,20 @@ npc.app = function() {
                 text: 'Portlets',
                 handler: function() {
 
-                    var eventLog = Ext.getCmp('eventlog-portlet');
+                    var eventLog = Ext.getCmp('eventLog');
                     var evetLogChecked = eventLog.isVisible();
 
-                    var hostSummary = Ext.getCmp('host-status-summary')
+                    var hostSummary = Ext.getCmp('hostSummary')
                     var hostSummaryChecked = hostSummary.isVisible();
 
-                    var serviceSummary = Ext.getCmp('service-status-summary');
+                    var serviceSummary = Ext.getCmp('serviceSummary');
                     var serviceSummaryChecked = serviceSummary.isVisible();
 
-                    var serviceProblems = Ext.getCmp('service-problems-portlet');
+                    var serviceProblems = Ext.getCmp('serviceProblems');
                     var serviceProblemsChecked = serviceProblems.isVisible();
+
+                    var monitoringPerf = Ext.getCmp('monitoringPerf');
+                    var monitoringPerf = monitoringPerf.isVisible();
 
                     var form = new Ext.form.FormPanel({
                         //title: 'Show/hide portlets',
@@ -624,6 +660,20 @@ npc.app = function() {
                                         serviceProblems.show();
                                     } else {
                                         serviceProblems.hide();
+                                    }
+                                }
+                            }
+                        },{
+                            boxLabel: 'Monitoring Performance',
+                            hideLabel: true,
+                            xtype:'checkbox',
+                            checked: monitoringPerfChecked,
+                            listeners: {
+                                check: function(cb, checked) {
+                                    if (checked) {
+                                        monitoringPerf.show();
+                                    } else {
+                                        monitoringPerf.hide();
                                     }
                                 }
                             }

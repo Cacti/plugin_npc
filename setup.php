@@ -1301,7 +1301,7 @@ function npc_setup_table () {
 
         // Delete non existent users from npc_settings
         for ($i = 0; $i < count($nUser); $i++) {
-            if (!db_fetch_cell('SELECT id FROM user_auth WHERE id = ' . $nUser[$i]['id'])) {
+            if (isset($nUser[$i]['id']) && !db_fetch_cell('SELECT id FROM user_auth WHERE id = ' . $nUser[$i]['id'])) {
                 db_execute('DELETE FROM npc_settings WHERE user_id = ' . $nUser[$i]['id']);
             }
         }

@@ -29,6 +29,8 @@ require_once("plugins/npc/controllers/$module.php");
 
 $class = 'Npc' . ucfirst($module) . 'Controller';
 $obj = new $class;
+$obj->conn = $conn;
+
 if (is_array($_REQUEST)) {
     foreach($_REQUEST as $key => $value) {
         if (preg_match("/p_/", $key) || $key == "start" || $key == "limit") {

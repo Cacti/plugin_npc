@@ -20,6 +20,8 @@
  */
 class Controller {
 
+    var $conn = null;
+
     /**
      * The starting row for fetching results
      *
