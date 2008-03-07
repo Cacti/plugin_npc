@@ -460,10 +460,6 @@ npc.app = function() {
                                                 iconCls:'tleaf',
                                                 leaf:true 
                                             },{
-                                                text:'Hostgroup Summary',
-                                                iconCls:'tleaf',
-                                                leaf:true 
-                                            },{
                                                 text:'Hostgroup Grid',
                                                 iconCls:'tleaf',
                                                 leaf:true 
@@ -499,10 +495,6 @@ npc.app = function() {
                                                         npc.app.serviceGroupOverview();
                                                     }
                                                 }
-                                            },{
-                                                text:'Servicegroup Summary',
-                                                iconCls:'tleaf',
-                                                leaf:true
                                             },{
                                                 text:'Servicegroup Grid',
                                                 iconCls:'tleaf',
@@ -633,6 +625,9 @@ npc.app = function() {
                     var sgSS = Ext.getCmp('servicegroupServiceStatus');
                     var sgSSC = sgSS.isVisible();
 
+                    var sgHS = Ext.getCmp('servicegroupHostStatus');
+                    var sgHSC = sgHS.isVisible();
+
                     var form = new Ext.form.FormPanel({
                         //title: 'Show/hide portlets',
                         bodyStyle:'padding:5px 5px 0',
@@ -710,7 +705,7 @@ npc.app = function() {
                                 }
                             }
                         },{
-                            boxLabel: 'Servicegroup Service Status',
+                            boxLabel: 'Servicegroup: Service Status',
                             hideLabel: true,
                             xtype:'checkbox',
                             checked: sgSSC,
@@ -723,6 +718,20 @@ npc.app = function() {
                                     }
                                 }
                             }
+                        },{
+                            boxLabel: 'Servicegroup: Host Status',
+                            hideLabel: true,
+                            xtype:'checkbox',
+                            checked: sgHSC,
+                            listeners: {
+                                check: function(cb, checked) {
+                                    if (checked) {
+                                        sgHS.show();
+                                    } else {
+                                        sgHS.hide();
+                                    }
+                                }
+                            }
                         }]
                     });
 
@@ -731,7 +740,7 @@ npc.app = function() {
                         modal:true,
                         closable: true,
                         width:300,
-                        height:200,
+                        height:300,
                         layout:'fit',
                         plain:true,
                         bodyStyle:'padding:5px;',

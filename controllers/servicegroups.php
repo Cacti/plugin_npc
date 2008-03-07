@@ -33,6 +33,113 @@ class NpcServicegroupsController extends Controller {
      */
     var $hostStatusCache = array();
 
+
+    /**
+     * getHostStatusPortlet
+     * 
+     * Returns host status counts by servicegroup.
+     *
+     * @return string   json output
+     */
+    function getHostStatusPortlet() {
+
+        // Initialize the output array
+        $output = array();
+
+        // Initialize the hosts array
+        $hosts = array();
+
+        $fields = array('servicegroup_object_id',
+                        'alias',
+                        'instance_id');
+                 
+        // Combine servicegroup/service/host etc. into a single record
+        $results = $this->setupResultsArray();
+
+        // Loop through the results array and build an ouput array
+        // that includes a single record per servicegroup
+        // and the number of crit, warn , ok services within 
+        // that servicegroup.
+        for ($i = 0; $i < count($results); $i++) {
+            $sg = $results[$i]['servicegroup_object_id'];
+            if(!isset($output[$sg])) {
+                $output[$sg] = array('down'        => 0,
+                                     'unreachable' => 0,
+                                     'up'          => 0,
+                                     'pending'     => 0);
+            }
+            if (!isset($hosts[$sg][$results[$i]['host_name']])) {
+                $hostState = $this->getServicegroupMemberHoststatus($results[$i]['host_name']);
+                $output[$sg][$this->hostState[$hostState]]++;
+                $hosts[$sg][$results[$i]['host_name']] = 1;
+            }
+            foreach ($results[$i] as $key => $val) {
+                if (in_array($key, $fields)) {
+                    $output[$sg][$key] = $val;
+                }
+            }
+        }
+
+        // Set the total number of records 
+        $this->numRecords = count($output);
+
+        // Implement paging by slicing the ouput array
+        $output = array_slice($output, $this->start, $this->limit);
+
+        return($this->jsonOutput($output));
+    }
+
+    /**
+     * getServiceStatusPortlet
+     * 
+     * Returns service status counts by servicegroup.
+     *
+     * @return string   json output
+     */
+    function getServiceStatusPortlet() {
+
+        // Initialize the output array
+        $output = array();
+
+        $fields = array('servicegroup_object_id',
+                        'alias',
+                        'instance_id');
+                 
+        // Combine servicegroup/service/host etc. into a single record
+        $results = $this->setupResultsArray();
+
+        // Loop through the results array and build an ouput array
+        // that includes a single record per servicegroup
+        // and the number of crit, warn , ok services within 
+        // that servicegroup.
+        for ($i = 0; $i < count($results); $i++) {
+            $sg = $results[$i]['servicegroup_object_id'];
+            $hostState = $this->getServicegroupMemberHoststatus($results[$i]['host_name']);
+            if(!isset($output[$sg])) {
+                $output[$sg] = array('critical' => 0,
+                                   'warning'  => 0,
+                                   'unknown'  => 0,
+                                   'ok'       => 0,
+                                   'pending'  => 0);
+            }
+            foreach ($results[$i] as $key => $val) {
+                if ($key == 'current_state') { 
+                    $output[$sg][$this->serviceState[$val]]++;
+                } else if(in_array($key, $fields)) {
+                    $output[$sg][$key] = $val;
+                }
+            }
+        }
+
+        // Set the total number of records 
+        $this->numRecords = count($output);
+
+        // Implement paging by slicing the ouput array
+        $output = array_slice($output, $this->start, $this->limit);
+
+        return($this->jsonOutput($output));
+    }
+
     /**
      * getOverview
      * 
@@ -48,23 +155,15 @@ class NpcServicegroupsController extends Controller {
                         'instance_id',
                         'host_name');
                  
-        // Initialize the ourput array
+        // Initialize the output array
         $output = array();
 
-        // Get the servicegroups
-        $results = $this->getServicegroups();
-
-        // Flatten the 1st level of nested arrays
-        $results = $this->flattenArray($results);
-
         // Combine servicegroup/service/host etc. into a single record
-        // for display in a grid on the client side.
-        $results = $this->flattenServicegroups($results);
-
+        $results = $this->setupResultsArray();
 
         // Loop through the results array and build an ouput array
         // that includes a single record per host with the servicegroup
-        // and the number of crit, warn , ok services with in 
+        // and the number of crit, warn , ok services within 
         // that servicegroup.
         for ($i = 0; $i < count($results); $i++) {
             $sg = $results[$i]['servicegroup_object_id'];
@@ -130,15 +229,7 @@ class NpcServicegroupsController extends Controller {
      */
     function getServices() {
 
-        // Get the servicegroups
-        $results = $this->getServicegroups();
-
-        // Flatten the 1st level of nested arrays
-        $results = $this->flattenArray($results);
-
-        // Combine servicegroup/service/host etc. into a single record
-        // for display in a grid on the client side.
-        $output = $this->flattenServicegroups($results);
+        $output = $this->setupResultsArray();
 
         // Set the total number of records 
         $this->numRecords = count($output);
@@ -235,6 +326,26 @@ class NpcServicegroupsController extends Controller {
         return($results);
     }
 
+    /**
+     * setupResultsArray
+     * 
+     * A utility method to handle some common formatting tasks.
+     *
+     * @return array
+     */
+    function setupResultsArray() {
+
+        // Get the servicegroups
+        $results = $this->getServicegroups();
+
+        // Flatten the 1st level of nested arrays
+        $results = $this->flattenArray($results);
+
+        // Combine servicegroup/service/host etc. into a single record.
+        $results = $this->flattenServicegroups($results);
+
+        return($results);
+    }
 }
 
 
