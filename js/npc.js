@@ -492,7 +492,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.serviceGroupOverview();
+                                                        npc.app.servicegroupOverview();
                                                     }
                                                 }
                                             },{

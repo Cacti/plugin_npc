@@ -1,10 +1,10 @@
-npc.app.serviceGroupOverview = function(){
+npc.app.servicegroupOverview = function(){
 
     // Panel title
     var title = 'Servicegroup Overview';
 
     // Panel ID
-    var id = 'serviceGroupOverview-tab';
+    var id = 'servicegroupOverview-tab';
 
     // Portlet URL
     var url = 'npc.php?module=servicegroups&action=getOverview';
