@@ -501,7 +501,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.serviceGroupGrid();
+                                                        npc.app.servicegroupGrid();
                                                     }
                                                 }
                                             }]

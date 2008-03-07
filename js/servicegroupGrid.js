@@ -1,12 +1,10 @@
-npc.app.serviceGroupGrid = function(id, title, soi){
+npc.app.servicegroupGrid = function(id, title, soi){
 
     // Panel title
-    //title = 'Servicegroup Grid';
     title = (typeof title == 'undefined') ? 'Servicegroup Grid' : title;
 
     // Panel ID
-    //id = 'serviceGroupGrid-tab';
-    id = (typeof id == 'undefined') ? 'serviceGroupGrid-tab' : id;
+    id = (typeof id == 'undefined') ? 'servicegroupGrid-tab' : id;
 
     soi = (typeof soi == 'undefined') ? '' : '&p_id='+soi;
 

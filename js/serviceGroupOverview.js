@@ -198,6 +198,6 @@ npc.app.serviceGroupOverview = function(){
         //console.log(grid.getStore().getAt(rowIndex).json.servicegroup_object_id);
         var soi = grid.getStore().getAt(rowIndex).json.servicegroup_object_id;
         var name = grid.getStore().getAt(rowIndex).json.alias;
-        npc.app.serviceGroupGrid('serviceGroupGrid-'+soi, 'Servicegroup: '+name, soi);
+        npc.app.servicegroupGrid('servicegroupGrid-'+soi, 'Servicegroup: '+name, soi);
     }
 };
