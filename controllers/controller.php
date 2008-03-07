@@ -23,6 +23,33 @@ class Controller {
     var $conn = null;
 
     /**
+     * The default state to query
+     *
+     * @var string
+     * @access public
+     */
+    var $state = 'any';
+
+    /**
+     * String to state mapping
+     *
+     * @var array
+     * @access public
+     */
+    var $stringToState = array(
+        'ok'          => '0',
+        'up'          => '0',
+        'warning'     => '1',
+        'down'        => '1',
+        'critical'    => '2',
+        'unreachable' => '2',
+        'unkown'      => '3',
+        'pending'     => '-1',
+        'any'         => '0,1,2,3,-1',
+        'not_ok'      => '1,2,3'
+    );
+
+    /**
      * The starting row for fetching results
      *
      * @var integer

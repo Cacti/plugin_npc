@@ -1,4 +1,4 @@
-npc.app.serviceList = function(title, filter){
+npc.app.services = function(title, filter){
 
     // Panel ID
     var id = title.replace(/[-' ']/g,'') + '-tab';

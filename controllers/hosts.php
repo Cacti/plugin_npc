@@ -60,6 +60,59 @@ class NpcHostsController extends Controller {
     }
 
     /**
+     * hosts
+     * 
+     * Retrieves all hosts along with status information
+     *
+     * @return array 
+     */
+    function hosts() {
+
+        // Maps searchable fields passed in from the client
+        $fieldMap = array('host_name' => 'o.name1',
+                          'output' => 'hs.output');
+
+
+        // Build the where clause
+        $where = ' h.config_type = 1 ';
+
+        if ($this->id) {
+            $where .= sprintf(" AND hs.host_object_id = %d", $this->id);
+        }
+
+        $where .= " AND hs.current_state in (" . $this->stringToState[$this->state] . ") ";
+
+        if ($this->searchString) {
+            $where = $this->searchClause($where, $fieldMap);
+        }
+
+        $q = new Doctrine_Pager(
+            Doctrine_Query::create()
+                ->select('i.instance_name,'
+                        .'o.name1 AS host_name,'
+                        .'s.service_object_id,'
+                        .'s.display_name,'
+                        .'hs.*')
+                ->from('NpcHoststatus hs')
+                ->leftJoin('hs.Object o')
+                ->leftJoin('hs.Host h')
+                ->leftJoin('hs.Instance i')
+                ->leftJoin('hs.Services s')
+                ->where("$where")
+                ->orderby( 'i.instance_name ASC, host_name ASC' ),
+            $this->currentPage,
+            $this->limit
+        );
+
+        $hosts = $q->execute(array(), Doctrine::FETCH_ARRAY);
+
+        // Set the total number of records
+        $this->numRecords = $q->getNumResults();
+
+        return($hosts);
+    }
+
+    /**
      * listHostsCli
      * 
      * Returns all hosts and associated object ID's
