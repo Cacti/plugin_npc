@@ -20,19 +20,19 @@ npc.app.portlet.servicegroupOverview = function(){
         var bg;
         switch(val) {
             case 0:
-                state = 'Up';
+                state = 'UP';
                 bg = '33FF00';
                 break;
             case 1:
-                state = 'Down';
+                state = 'DOWN';
                 bg = 'F83838';
                 break;
             case 2:
-                state = 'Unreachable';
+                state = 'UNREACHABLE';
                 bg = 'F83838';
                 break;
             case -1:
-                state = 'Pending';
+                state = 'PENDING';
                 bg = '0099FF';
                 break;
         }
@@ -76,7 +76,7 @@ npc.app.portlet.servicegroupOverview = function(){
         header:"Status",
         dataIndex:'host_state',
         align:'center',
-        width:40,
+        width:50,
         renderer:renderHostStatus
     },{
         id: 'sgHostTotalsCRITICAL',
@@ -90,28 +90,28 @@ npc.app.portlet.servicegroupOverview = function(){
         header:"Warning",
         dataIndex:'warning',
         align:'center',
-        width:45,
+        width:40,
         renderer: npc.app.renderStatusBg
     },{
         id: 'sgHostTotalsUNKNOWN',
         header:"Unknown",
         dataIndex:'unknown',
         align:'center',
-        width:45,
+        width:40,
         renderer: npc.app.renderStatusBg
     },{
         id: 'sgHostTotalsOK',
         header:"Ok",
         dataIndex:'ok',
         align:'center',
-        width:25,
+        width:20,
         renderer: npc.app.renderStatusBg
     },{
         id: 'sgHostTotalsPENDING',
         header:"Pending",
         dataIndex:'pending',
         align:'center',
-        width:45,
+        width:40,
         renderer: npc.app.renderStatusBg
     }]);
 

@@ -55,6 +55,7 @@ class NpcLayoutController {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/serviceList.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/serviceDetail.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/serviceGroupGrid.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/serviceGroupOverview.js"></script>
           
           <script type="text/javascript">
 
@@ -85,7 +86,7 @@ class NpcLayoutController {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/eventlog-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/service-problems-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/monitoring-performance-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/servicegroup-overview-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/servicegroup-service-status.js"></script>
 
           <script type="text/javascript">
             Ext.onReady(function() {

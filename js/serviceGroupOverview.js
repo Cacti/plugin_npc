@@ -1,12 +1,12 @@
 npc.app.serviceGroupOverview = function(){
 
     // Panel title
-    var title = 'Service Group Overview';
+    var title = 'Servicegroup Overview';
 
     // Panel ID
     var id = 'serviceGroupOverview-tab';
 
-    // Grid URL
+    // Portlet URL
     var url = 'npc.php?module=servicegroups&action=getOverview';
 
     // Default # of rows to display
@@ -28,89 +28,121 @@ npc.app.serviceGroupOverview = function(){
         innerTabPanel.setActiveTab(tab);
         return;
     } else {
-        innerTabPanel.add({ 
-            id: id, 
-            title: title, 
-            closable: true, 
-            items: [{}] 
-        }).show(); 
-        innerTabPanel.setActiveTab(tab); 
-        tab = Ext.getCmp(id); 
+        innerTabPanel.add({
+            id: id,
+            title: title,
+            closable: true,
+            items: [{}]
+        }).show();
+        innerTabPanel.setActiveTab(tab);
+        tab = Ext.getCmp(id);
     }
 
-    function renderAttempt(val, p, record){
-        return String.format('{0}/{1}', val, record.data.max_check_attempts);
+    function renderHostStatus(val, meta){
+        var state;
+        var bg;
+        switch(val) {
+            case 0:
+                state = 'Up';
+                bg = '33FF00';
+                break;
+            case 1:
+                state = 'Down';
+                bg = 'F83838';
+                break;
+            case 2:
+                state = 'Unreachable';
+                bg = 'F83838';
+                break;
+            case -1:
+                state = 'Pending';
+                bg = '0099FF';
+                break;
+        }
+
+        meta.attr = 'style="background-color: #' + bg + ';"';
+        return String.format('<b>{0}</b>', state);
     }
 
     var store = new Ext.data.GroupingStore({
         url:url,
         autoload:true,
-        sortInfo:{field: 'service_description', direction: "ASC"},
+        sortInfo:{field: 'host_name', direction: "ASC"},
         reader: new Ext.data.JsonReader({
             totalProperty:'totalCount',
-            root:'data',
+            root:'data'
         }, [
-            'servicegroup_id',
-            'instance_id',
-            'config_type',
-            'servicegroup_object_id',
+            {name: 'instance_id', type: 'int'},
+            {name: 'servicegroup_object_id', type: 'int'},
             'alias',
-            'instance_name',
-            'servicegroup_name',
-            'servicestatus_id',
-            'current_state',
-            'service_object_id',
             'host_name',
-            'service_description'
+            {name: 'host_state', type: 'int'},
+            {name: 'critical', type: 'int'},
+            {name: 'warning', type: 'int'},
+            {name: 'unknown', type: 'int'},
+            {name: 'ok', type: 'int'},
+            {name: 'pending', type: 'int'}
         ]),
         groupField:'alias'
     });
 
     var cm = new Ext.grid.ColumnModel([{
-        header:"Service",
-        dataIndex:'service_description',
+        header:"Servicegroup",
+        dataIndex:'alias',
+        hidden:true
+    },{
+        header:"Host",
+        dataIndex:'host_name',
         sortable:true,
         width:100
     },{
         header:"Status",
-        dataIndex:'current_state',
-        renderer:npc.app.renderStatusImage,
-        width:45
+        dataIndex:'host_state',
+        align:'center',
+        width:40,
+        renderer:renderHostStatus
     },{
-        header:"Last Check",
-        dataIndex:'last_check',
-        renderer: npc.app.formatDate,
-        width:110
+        id: 'sgHostTotalsCRITICAL',
+        header:"Critical",
+        dataIndex:'critical',
+        align:'center',
+        width:40,
+        renderer: npc.app.renderStatusBg
     },{
-        header:"Next Check",
-        dataIndex:'next_check',
-        renderer: npc.app.formatDate,
-        width:110
+        id: 'sgHostTotalsWARNING',
+        header:"Warning",
+        dataIndex:'warning',
+        align:'center',
+        width:45,
+        renderer: npc.app.renderStatusBg
     },{
-        header:"Duration",
-        dataIndex:'last_state_change',
-        renderer: npc.app.getDuration,
-        width:110
+        id: 'sgHostTotalsUNKNOWN',
+        header:"Unknown",
+        dataIndex:'unknown',
+        align:'center',
+        width:45,
+        renderer: npc.app.renderStatusBg
     },{
-        header:"Attempt",
-        dataIndex:'current_check_attempt',
-        renderer: renderAttempt,
-        width:50
+        id: 'sgHostTotalsOK',
+        header:"Ok",
+        dataIndex:'ok',
+        align:'center',
+        width:25,
+        renderer: npc.app.renderStatusBg
     },{
-        header:"Host",
-        dataIndex:'host_name',
-        hidden:true,
-        width:75
-    },{
-        header:"Plugin Output",
-        dataIndex:'output',
-        width:400
+        id: 'sgHostTotalsPENDING',
+        header:"Pending",
+        dataIndex:'pending',
+        align:'center',
+        width:45,
+        renderer: npc.app.renderStatusBg
     }]);
 
+
     var grid = new Ext.grid.GridPanel({
-        id: id + '-grid',
+        id: 'servicegroup-overview-portlet-grid',
         autoHeight:true,
-        autoExpandColumn: 'service_description',
+        autoExpandColumn: 'host_name',
         store:store,
         cm:cm,
         sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
@@ -121,17 +153,15 @@ npc.app.serviceGroupOverview = function(){
             hideGroupedColumn: true,
             enableGroupingMenu: false,
             enableNoGroups: true,
-            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Services" : "Service"]})' 
+            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Hosts" : "Host"]})',
+            scrollOffset:0
         }),
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,
             store: store,
-            displayInfo: true
-        }),
-        plugins:[new Ext.ux.grid.Search({
-            mode:'remote',
-            iconCls:false
-        })]
+            displayInfo: true,
+            displayMsg: ''
+        })
     });
 
     // Add the grid to the panel
@@ -162,6 +192,12 @@ npc.app.serviceGroupOverview = function(){
     // Add the listener to the tab
     tab.addListener(listeners);
 
-    grid.on('rowclick', npc.app.serviceGridClick);
+    grid.on('rowclick', sgOverviewClick);
 
+    function sgOverviewClick(grid, rowIndex, e) {
+        //console.log(grid.getStore().getAt(rowIndex).json.servicegroup_object_id);
+        var soi = grid.getStore().getAt(rowIndex).json.servicegroup_object_id;
+        var name = grid.getStore().getAt(rowIndex).json.alias;
+        npc.app.serviceGroupGrid('serviceGroupGrid-'+soi, 'Servicegroup: '+name, soi);
+    }
 };

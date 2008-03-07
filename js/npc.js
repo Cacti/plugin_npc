@@ -493,7 +493,12 @@ npc.app = function() {
                                             },{
                                                 text:'Servicegroup Overview',
                                                 iconCls:'tleaf',
-                                                leaf:true
+                                                leaf:true,
+                                                listeners: {
+                                                    click: function() {
+                                                        npc.app.serviceGroupOverview();
+                                                    }
+                                                }
                                             },{
                                                 text:'Servicegroup Summary',
                                                 iconCls:'tleaf',
@@ -610,20 +615,23 @@ npc.app = function() {
                 text: 'Portlets',
                 handler: function() {
 
-                    var eventLog = Ext.getCmp('eventLog');
-                    var evetLogChecked = eventLog.isVisible();
+                    var eL = Ext.getCmp('eventLog');
+                    var eLC = eL.isVisible();
 
-                    var hostSummary = Ext.getCmp('hostSummary')
-                    var hostSummaryChecked = hostSummary.isVisible();
+                    var hS = Ext.getCmp('hostSummary')
+                    var hSC = hS.isVisible();
 
-                    var serviceSummary = Ext.getCmp('serviceSummary');
-                    var serviceSummaryChecked = serviceSummary.isVisible();
+                    var sS = Ext.getCmp('serviceSummary');
+                    var sSC = sS.isVisible();
 
-                    var serviceProblems = Ext.getCmp('serviceProblems');
-                    var serviceProblemsChecked = serviceProblems.isVisible();
+                    var sP = Ext.getCmp('serviceProblems');
+                    var sPC = sP.isVisible();
 
-                    var monitoringPerf = Ext.getCmp('monitoringPerf');
-                    var monitoringPerf = monitoringPerf.isVisible();
+                    var mP = Ext.getCmp('monitoringPerf');
+                    var mPC = mP.isVisible();
+
+                    var sgSS = Ext.getCmp('servicegroupServiceStatus');
+                    var sgSSC = sgSS.isVisible();
 
                     var form = new Ext.form.FormPanel({
                         //title: 'Show/hide portlets',
@@ -635,13 +643,13 @@ npc.app = function() {
                             boxLabel: 'Event Log',
                             hideLabel: true,
                             xtype:'checkbox',
-                            checked: evetLogChecked,
+                            checked: eLC,
                             listeners: {
                                 check: function(cb, checked) {
                                     if (checked) {
-                                        eventLog.show();
+                                        eL.show();
                                     } else {
-                                        eventLog.hide();
+                                        eL.hide();
                                     }
                                 }
                             }
@@ -649,13 +657,13 @@ npc.app = function() {
                             boxLabel: 'Host Status Summary',
                             hideLabel: true,
                             xtype:'checkbox',
-                            checked: hostSummaryChecked,
+                            checked: hSC,
                             listeners: {
                                 check: function(cb, checked) {
                                     if (checked) {
-                                        hostSummary.show();
+                                        hS.show();
                                     } else {
-                                        hostSummary.hide();
+                                        hS.hide();
                                     }
                                 }
                             }
@@ -663,13 +671,13 @@ npc.app = function() {
                             boxLabel: 'Service Status Summary',
                             hideLabel: true,
                             xtype:'checkbox',
-                            checked: serviceSummaryChecked,
+                            checked: sSC,
                             listeners: {
                                 check: function(cb, checked) {
                                     if (checked) {
-                                        serviceSummary.show();
+                                        sS.show();
                                     } else {
-                                        serviceSummary.hide();
+                                        sS.hide();
                                     }
                                 }
                             }
@@ -677,13 +685,13 @@ npc.app = function() {
                             boxLabel: 'Service Problems',
                             hideLabel: true,
                             xtype:'checkbox',
-                            checked: serviceProblemsChecked,
+                            checked: sPC,
                             listeners: {
                                 check: function(cb, checked) {
                                     if (checked) {
-                                        serviceProblems.show();
+                                        sP.show();
                                     } else {
-                                        serviceProblems.hide();
+                                        sP.hide();
                                     }
                                 }
                             }
@@ -691,13 +699,27 @@ npc.app = function() {
                             boxLabel: 'Monitoring Performance',
                             hideLabel: true,
                             xtype:'checkbox',
-                            checked: monitoringPerfChecked,
+                            checked: mPC,
                             listeners: {
                                 check: function(cb, checked) {
                                     if (checked) {
-                                        monitoringPerf.show();
+                                        mP.show();
                                     } else {
-                                        monitoringPerf.hide();
+                                        mP.hide();
+                                    }
+                                }
+                            }
+                        },{
+                            boxLabel: 'Servicegroup Service Status',
+                            hideLabel: true,
+                            xtype:'checkbox',
+                            checked: sgSSC,
+                            listeners: {
+                                check: function(cb, checked) {
+                                    if (checked) {
+                                        sgSS.show();
+                                    } else {
+                                        sgSS.hide();
                                     }
                                 }
                             }

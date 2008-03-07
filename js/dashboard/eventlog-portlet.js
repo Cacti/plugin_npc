@@ -13,7 +13,7 @@ npc.app.portlet.eventLog = function(){
     var column = 'dashcol2';
 
     // Default # of events to display
-    var pageSize = parseInt(npc.app.params.npc_portlet_rows);
+    var pageSize = 5;
 
     function renderIcon(val){
         if (val.match(/SERVICE ALERT:/) && val.match(/WARNING/)) {
@@ -86,7 +86,7 @@ npc.app.portlet.eventLog = function(){
              scrollOffset:0
         }),
         bbar: new Ext.PagingToolbar({
-            pageSize: 10,
+            pageSize: pageSize,
             store: store,
             displayInfo: true,
             displayMsg: ''
@@ -106,8 +106,7 @@ npc.app.portlet.eventLog = function(){
     grid.render();
 
     // Load the data store
-    //grid.store.load({params:{start:0, limit:pageSize}});
-    store.load({params:{start:0, limit:10}});
+    store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
     if (Ext.getCmp(id).isVisible()) {
