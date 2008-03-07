@@ -14,6 +14,9 @@
  * @version             $Id: $
  */
 
+require_once("include/auth.php");
+require_once("plugins/npc/controllers/comments.php");
+
 /**
  * Hosts controller class
  *
@@ -24,6 +27,44 @@
  * @subpackage  npc.controllers
  */
 class NpcHostsController extends Controller {
+
+    /**
+     * getHosts
+     * 
+     * Gets and formats hosts for output. 
+     *
+     * @return string   json output
+     */
+    function getHosts() {
+
+        $results = $this->hosts();
+
+        $comments = new NpcCommentsController;
+
+        $hosts = $this->flattenArray($results);
+
+
+        for ($i = 0; $i < count($hosts); $i++) {
+            if ($hosts[$i]['problem_has_been_acknowledged']) {
+                $hosts[$i]['acknowledgement'] = $comments->getAck($hosts[$i]['host_object_id']);
+            }
+            // Add the last comment to the array
+            $hosts[$i]['comment'] = $comments->getLastComment($hosts[$i]['host_object_id']);
+
+            // Count the services and delete the entries
+            $services = 0;
+            foreach ($hosts[$i] as $k => $v) {
+                if (is_array($v)) {
+                    $services++;
+                    unset($hosts[$i][$k]);
+                }
+            }
+
+            $hosts[$i]['service_count'] = $services;
+        }    
+
+        return($this->jsonOutput($hosts));
+    }
 
     /**
      * summary
@@ -70,6 +111,7 @@ class NpcHostsController extends Controller {
 
         // Maps searchable fields passed in from the client
         $fieldMap = array('host_name' => 'o.name1',
+                          'alias' => 'h.alias',
                           'output' => 'hs.output');
 
 
@@ -90,6 +132,7 @@ class NpcHostsController extends Controller {
             Doctrine_Query::create()
                 ->select('i.instance_name,'
                         .'o.name1 AS host_name,'
+                        .'h.alias,'
                         .'s.service_object_id,'
                         .'s.display_name,'
                         .'hs.*')

@@ -195,6 +195,32 @@ npc.app = function() {
             return('0');
         },
 
+        renderHostStatus: function(val, meta){
+            var state;
+            var bg;
+            switch(val) {
+                case 0:
+                    state = 'UP';
+                    bg = '33FF00';
+                    break;
+                case 1:
+                    state = 'DOWN';
+                    bg = 'F83838';
+                    break;
+                case 2:
+                    state = 'UNREACHABLE';
+                    bg = 'F83838';
+                    break;
+                case -1:
+                    state = 'PENDING';
+                    bg = '0099FF';
+                    break;
+            }
+
+            meta.attr = 'style="background-color: #' + bg + ';"';
+            return String.format('<b>{0}</b>', state);
+        },
+
         renderServiceIcons: function(val, p, record) {
             var img = '';
             if (record.data.problem_has_been_acknowledged == 1) {
@@ -450,7 +476,12 @@ npc.app = function() {
                                             children:[{
                                                 text:'Hosts',
                                                 iconCls:'tleaf',
-                                                leaf:true
+                                                leaf:true,
+                                                listeners: {
+                                                    click: function() {
+                                                        npc.app.hosts('Hosts', 'any');
+                                                    }
+                                                }
                                             },{
                                                 text:'Host Problems',
                                                 iconCls:'tleaf',

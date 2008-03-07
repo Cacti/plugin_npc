@@ -38,32 +38,6 @@ npc.app.servicegroupOverview = function(){
         tab = Ext.getCmp(id);
     }
 
-    function renderHostStatus(val, meta){
-        var state;
-        var bg;
-        switch(val) {
-            case 0:
-                state = 'Up';
-                bg = '33FF00';
-                break;
-            case 1:
-                state = 'Down';
-                bg = 'F83838';
-                break;
-            case 2:
-                state = 'Unreachable';
-                bg = 'F83838';
-                break;
-            case -1:
-                state = 'Pending';
-                bg = '0099FF';
-                break;
-        }
-
-        meta.attr = 'style="background-color: #' + bg + ';"';
-        return String.format('<b>{0}</b>', state);
-    }
-
     var store = new Ext.data.GroupingStore({
         url:url,
         autoload:true,
@@ -100,7 +74,7 @@ npc.app.servicegroupOverview = function(){
         dataIndex:'host_state',
         align:'center',
         width:40,
-        renderer:renderHostStatus
+        renderer:npc.app.renderHostStatus
     },{
         id: 'sgHostTotalsCRITICAL',
         header:"Critical",
