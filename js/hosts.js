@@ -50,6 +50,7 @@ npc.app.hosts = function(title, filter){
             {name: 'host_object_id', type: 'int'},
             'host_name',
             'alias',
+            'comment',
             {name: 'service_count', type: 'int'},
             'output',
             {name: 'current_state', type: 'int'},
@@ -70,6 +71,7 @@ npc.app.hosts = function(title, filter){
         header:"Host",
         dataIndex:'host_name',
         sortable:true,
+        renderer:npc.app.renderExtraIcons,
         width:100
     },{
         header:"Alias",

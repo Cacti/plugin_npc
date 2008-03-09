@@ -74,7 +74,7 @@ npc.app.services = function(title, filter){
     var cm = new Ext.grid.ColumnModel([{
         header:"Service",
         dataIndex:'service_description',
-        renderer:npc.app.renderServiceIcons,
+        renderer:npc.app.renderExtraIcons,
         sortable:true,
         width:100
     },{

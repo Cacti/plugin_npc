@@ -44,7 +44,7 @@ npc.app.portlet.serviceProblems = function(){
     var cm = new Ext.grid.ColumnModel([{
         header:"Service",
         dataIndex:'service_description',
-        renderer:npc.app.renderServiceIcons,
+        renderer:npc.app.renderExtraIcons,
         width:100
     },{
         header:"Status",

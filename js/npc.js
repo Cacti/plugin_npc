@@ -85,8 +85,8 @@ npc.app = function() {
             npc.app.hostDetail(grid.getStore().getAt(rowIndex));
         },
 
-        addComment: function(host, service) {
-            var cmd;
+        addHostComment: function(host) {
+
             var form = new Ext.FormPanel({
                 labelWidth: 75,
                 url:'npc.php?module=nagios&action=command',
@@ -98,17 +98,12 @@ npc.app = function() {
                     items: [
                     {
                         name: 'p_command',
-                        value: 'ADD_SVC_COMMENT',
+                        value:'ADD_HOST_COMMENT',
                         xtype: 'hidden'
                     },{
                         fieldLabel: 'Host Name',
                         name: 'p_host_name',
                         value: host,
-                        allowBlank:false
-                    },{
-                        fieldLabel: 'Service',
-                        name: 'p_service_description',
-                        value: service,
                         allowBlank:false
                     },{
                         fieldLabel: 'Persistent',
@@ -123,7 +118,7 @@ npc.app = function() {
                         fieldLabel: 'Comment',
                         name: 'p_comment',
                         xtype: 'htmleditor',
-                        width: 600
+                        width: 500
                     },{
                         xtype: 'panel',
                         html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the comment.</span>',
@@ -155,7 +150,86 @@ npc.app = function() {
                 layout:'fit', 
                 modal:true, 
                 closable: true, 
-                width:700, 
+                width:650, 
+                height:400, 
+                bodyStyle:'padding:5px;', 
+                items: form 
+            }); 
+            win.show(); 
+
+        },
+
+        addServiceComment: function(host, service) {
+
+            var form = new Ext.FormPanel({
+                labelWidth: 75,
+                url:'npc.php?module=nagios&action=command',
+                frame:true,
+                bodyStyle:'padding:5px 5px 0',
+                width: 525,
+                defaults: {width: 175},
+                defaultType: 'textfield',
+                    items: [
+                    {
+                        name: 'p_command',
+                        value:'ADD_SVC_COMMENT',
+                        xtype: 'hidden'
+                    },{
+                        fieldLabel: 'Host Name',
+                        name: 'p_host_name',
+                        value: host,
+                        allowBlank:false
+                    },{
+                        fieldLabel: 'Service',
+                        name: 'p_service_description',
+                        value: service,
+                        allowBlank:false
+                    },{
+                        fieldLabel: 'Persistent',
+                        name: 'p_persistent',
+                        xtype: 'xcheckbox',
+                        checked:true
+                    },{
+                        name: 'p_author',
+                        value: npc.app.params.userName,
+                        xtype: 'hidden'
+                    },{
+                        fieldLabel: 'Comment',
+                        name: 'p_comment',
+                        xtype: 'htmleditor',
+                        width: 550
+                    },{
+                        xtype: 'panel',
+                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the comment.</span>',
+                        width: 400
+                    }
+                ],
+                buttons: [{
+                    text: 'Submit',
+                    handler: function(){
+                        form.getForm().submit({
+                            success: function(f, a) {
+                                win.close();
+                            },
+                            failure: function(f, a) {
+                                Ext.Msg.alert('Error', a.result.msg);
+                            } 
+                        });
+                    }
+                },{
+                    text: 'Cancel',
+                    handler: function(){
+                        win.close();
+                    }
+                }]
+            });
+
+            var win = new Ext.Window({ 
+                title:'New Comment', 
+                layout:'fit', 
+                modal:true, 
+                closable: true, 
+                width:650, 
                 height:500, 
                 bodyStyle:'padding:5px;', 
                 items: form 
@@ -230,14 +304,14 @@ npc.app = function() {
             return String.format('<p align="center"><img src="images/icons/{0}"></p>', img);
         },
 
-        renderServiceIcons: function(val, p, record) {
+        renderExtraIcons: function(val, p, record) {
             var img = '';
             if (record.data.problem_has_been_acknowledged == 1) {
                 var ack = record.data.acknowledgement.split("*|*");
                 img = String.format('&nbsp;<img ext:qtitle="Acknowledged by {0}" ext:qtip="{1}" src="images/icons/wrench.png">', ack[0], ack[1]);
             }
             if (record.data.notifications_enabled == 0) {
-                img = String.format('&nbsp;<img ext:qtip="Notifications for this service have been disabled." src="images/icons/sound_mute.png">') + img;
+                img = String.format('&nbsp;<img ext:qtip="Notifications have been disabled." src="images/icons/sound_mute.png">') + img;
             }
             if (record.data.comment) {
                 var c = record.data.comment.split("*|*");
