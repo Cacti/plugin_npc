@@ -81,6 +81,10 @@ npc.app = function() {
             npc.app.serviceDetail(grid.getStore().getAt(rowIndex));
         },
 
+        hostGridClick: function(grid, rowIndex, e) {
+            npc.app.hostDetail(grid.getStore().getAt(rowIndex));
+        },
+
         addServiceComment: function(host, service) {
             var form = new Ext.FormPanel({
                 labelWidth: 75,
@@ -494,7 +498,12 @@ npc.app = function() {
                                             },{
                                                 text:'Hostgroup Overview',
                                                 iconCls:'tleaf',
-                                                leaf:true 
+                                                leaf:true,
+                                                listeners: {
+                                                    click: function() {
+                                                        npc.app.hostgroupOverview();
+                                                    }
+                                                }
                                             },{
                                                 text:'Hostgroup Grid',
                                                 iconCls:'tleaf',

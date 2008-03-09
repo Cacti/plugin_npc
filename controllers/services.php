@@ -187,11 +187,31 @@ class NpcServicesController extends Controller {
     /**
      * services
      * 
+     * A utility method to simply return the state of every service belonging
+     * to the specified host.
+     *
+     * @return array  list of all services with status
+     */
+    function getServiceStatesByHost($host_object_id) {
+
+        $q = new Doctrine_Query();
+        $q->select('ss.current_state')
+          ->from('NpcServicestatus ss, NpcServices s')
+          ->where('ss.service_object_id = s.service_object_id AND s.host_object_id = ?', $host_object_id);
+
+        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+
+        return($results);
+    }
+
+    /**
+     * services
+     * 
      * Retrieves all services along with status information
      *
      * @return array  list of all services with status
      */
-    function services() {
+    function services($id=null, $where='') {
 
         // Maps searchable fields passed in from the client
         $fieldMap = array('service_description' => 'o.name2',
@@ -200,10 +220,14 @@ class NpcServicesController extends Controller {
 
 
         // Build the where clause
-        $where = ' s.config_type = 1 ';
+        if ($where != '') {
+            $where .= ' AND ';
+        }
 
-        if ($this->id) {
-            $where .= sprintf(" AND s.service_object_id = %d", $this->id);
+        $where .= ' s.config_type = 1 ';
+
+        if ($this->id || $id) {
+            $where .= sprintf(" AND s.service_object_id = %d", is_null($id) ? $this->id : $id);;
         }
 
         $where .= " AND ss.current_state in (" . $this->stringToState[$this->state] . ") ";

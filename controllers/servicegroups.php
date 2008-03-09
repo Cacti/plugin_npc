@@ -29,9 +29,9 @@ class NpcServicegroupsController extends Controller {
      * A host status cache
      *
      * @var array
-     * @access public
+     * @access private
      */
-    var $hostStatusCache = array();
+    private $hostStatusCache = array();
 
 
     /**
