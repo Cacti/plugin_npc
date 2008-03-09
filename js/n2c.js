@@ -166,6 +166,7 @@ npc.app.n2c = function() {
             (function(){
                 var node, self = arguments.callee ;
                 if(node = nodes.shift()){
+                    if (!node.template) { return(Ext.Msg.alert('Error', 'You must choose a template.')); }
                     progPerc = (currentNode/totalNodes);
                     upBar.updateProgress(progPerc, 'Importing host '+currentNode+' of '+totalNodes);
                     Ext.Ajax.request({

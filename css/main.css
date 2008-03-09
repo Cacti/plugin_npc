@@ -6,6 +6,10 @@ width:350px;
 z-index:20000;
 }
 
+.errorGo {
+background-image:url(../images/icons/error_go.png) !important;
+}
+
 .configuration {
 background-image:url(../images/icons/cog_go.png) !important;
 }

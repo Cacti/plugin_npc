@@ -118,7 +118,7 @@ npc.app = function() {
                         fieldLabel: 'Comment',
                         name: 'p_comment',
                         xtype: 'htmleditor',
-                        width: 525
+                        width: 600
                     },{
                         xtype: 'panel',
                         html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the comment.</span>',
@@ -150,8 +150,8 @@ npc.app = function() {
                 layout:'fit', 
                 modal:true, 
                 closable: true, 
-                width:600, 
-                height:400, 
+                width:700, 
+                height:500, 
                 bodyStyle:'padding:5px;', 
                 items: form 
             }); 
@@ -485,7 +485,12 @@ npc.app = function() {
                                             },{
                                                 text:'Host Problems',
                                                 iconCls:'tleaf',
-                                                leaf:true 
+                                                leaf:true,
+                                                listeners: {
+                                                    click: function() {
+                                                        npc.app.hosts('Host Problems', 'not_ok');
+                                                    }
+                                                }
                                             },{
                                                 text:'Hostgroup Overview',
                                                 iconCls:'tleaf',
@@ -493,7 +498,12 @@ npc.app = function() {
                                             },{
                                                 text:'Hostgroup Grid',
                                                 iconCls:'tleaf',
-                                                leaf:true 
+                                                leaf:true,
+                                                listeners: {
+                                                    click: function() {
+                                                        npc.app.hostgroupGrid();
+                                                    }
+                                                }
                                             }]
                                         },{
                                             text:'Services',

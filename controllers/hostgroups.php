@@ -27,12 +27,33 @@ class NpcHostgroupsController extends Controller {
 
     /**
      * getHosts
+     * 
+     * Returns all hosts by hostgroup. Used to populate 
+     * the Hostgroup Grid screen.
+     *
+     * @return string   json output
+     */
+    function getHosts() {
+
+        $output = $this->setupResultsArray();
+
+        // Set the total number of records 
+        $this->numRecords = count($output);
+
+        // Implement paging by slicing the ouput array
+        $output = array_slice($output, $this->start, $this->limit);
+
+        return($this->jsonOutput($output));
+    }
+
+    /**
+     * getHostList
      *
      * Retrieves all hosts in the specified hostgroup
      *
      * @return array
      */
-    function getHosts($params) {
+    function getHostList($params) {
 
         $column = key($params);
         $value = $params[$column];
@@ -90,6 +111,28 @@ class NpcHostgroupsController extends Controller {
 
         return($results);
     }
+
+    /**
+     * setupResultsArray
+     * 
+     * A utility method to handle some common formatting tasks.
+     *
+     * @return array
+     */
+    function setupResultsArray() {
+
+        // Get the servicegroups
+        $results = $this->getHostgroups();
+
+        // Flatten the 1st level of nested arrays
+        $results = $this->flattenArray($results);
+
+        // Combine servicegroup/service/host etc. into a single record.
+        $results = $this->flattenNestedArray($results);
+
+        return($results);
+    }
+
 }
 
 

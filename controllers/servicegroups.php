@@ -299,33 +299,6 @@ class NpcServicegroupsController extends Controller {
         return($results);
     }
 
-    function flattenServicegroups($sgArray) {
-
-        $results = array();
-
-        // Re-format the results so that each service/servicegroup
-        // combination is a single record 
-        $x = 0;
-        for ($i = 0; $i < count($sgArray); $i++) {
-            foreach ($sgArray[$i] as $key => $val) {
-                if (is_array($val)) {
-                    $t[0] = $val;
-                    $v = $this->flattenArray($t); 
-                    unset($sgArray[$i][$key]);
-                    foreach ($sgArray[$i] as $key => $val) {
-                        if (!is_array($val)) {
-                            $a[$key] = $val;
-                        }
-                    }
-                    $results[$x] = array_merge($a, $v[0]);    
-                    $x++;
-                }
-            }
-        }
-
-        return($results);
-    }
-
     /**
      * setupResultsArray
      * 
@@ -342,10 +315,11 @@ class NpcServicegroupsController extends Controller {
         $results = $this->flattenArray($results);
 
         // Combine servicegroup/service/host etc. into a single record.
-        $results = $this->flattenServicegroups($results);
+        $results = $this->flattenNestedArray($results);
 
         return($results);
     }
+
 }
 
 

@@ -220,5 +220,31 @@ class Controller {
 
         return($where);
     }
+
+    function flattenNestedArray($array) {
+
+        $results = array();
+
+        $x = 0;
+        for ($i = 0; $i < count($array); $i++) {
+            foreach ($array[$i] as $key => $val) {
+                if (is_array($val)) {
+                    $t[0] = $val;
+                    $v = $this->flattenArray($t); 
+                    unset($array[$i][$key]);
+                    foreach ($array[$i] as $key => $val) {
+                        if (!is_array($val)) {
+                            $a[$key] = $val;
+                        }
+                    }
+                    $results[$x] = array_merge($a, $v[0]);    
+                    $x++;
+                }
+            }
+        }
+
+        return($results);
+    }
+
 }
 

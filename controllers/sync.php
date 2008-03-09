@@ -101,7 +101,7 @@ class NpcSyncController extends Controller {
         $results = array();
 
         foreach ($data as $hostgroup) {
-            $hosts = NpcHostgroupsController::getHosts(array('alias' => $hostgroup->alias));
+            $hosts = NpcHostgroupsController::getHostList(array('alias' => $hostgroup->alias));
             foreach ($hosts as $host) {
                 if (!NpcCactiController::isMapped($host['host_object_id'])) {
                     $results[] = array(
