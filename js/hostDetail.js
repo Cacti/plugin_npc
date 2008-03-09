@@ -1,21 +1,21 @@
-npc.app.serviceDetail = function(record) {
+npc.app.hostDetail = function(record) {
 
     // Set the id for the service detail tab
-    var id = 'serviceDetail' + record.data.service_object_id + '-tab';
+    var id = 'hostDetail' + record.data.host_object_id + '-tab';
 
     // Set thetitle
-    var title = record.data.host_name + ': ' + record.data.service_description;
+    var title = record.data.host_name;
 
     // Default # of rows to display
     var pageSize = 20;
 
-    var outerTabId = 'services-tab';
+    var outerTabId = 'hosts-tab';
 
-    npc.app.addCenterNestedTab(outerTabId, 'Services');
+    npc.app.addCenterNestedTab(outerTabId, 'Hosts');
 
     var centerTabPanel = Ext.getCmp('centerTabPanel');
 
-    var innerTabPanelId = 'services-tab-inner-panel';
+    var innerTabPanelId = 'hosts-tab-inner-panel';
 
     var innerTabPanel = Ext.getCmp(innerTabPanelId);
 
@@ -29,7 +29,7 @@ npc.app.serviceDetail = function(record) {
     var sgTbar = new Ext.Toolbar();
 
     var store = new Ext.data.JsonStore({
-        url: 'npc.php?module=services&action=getGraphs',
+        url: 'npc.php?module=hosts&action=getGraphs',
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -55,9 +55,9 @@ npc.app.serviceDetail = function(record) {
         width:300,
         listeners: {
             select: function(c, r) {
-                sgStore.url = 'npc.php?module=services&action=getServiceGraph&p_local_graph_id=' + r.data.local_graph_id;
-                sgStore.proxy.conn.url = 'npc.php?module=services&action=getServiceGraph&p_local_graph_id=' + r.data.local_graph_id;
-                sgStore.reload();
+                hgStore.url = 'npc.php?module=hosts&action=getHostGraph&p_local_graph_id=' + r.data.local_graph_id;
+                hgStore.proxy.conn.url = 'npc.php?module=hosts&action=getHostGraph&p_local_graph_id=' + r.data.local_graph_id;
+                hgStore.reload();
             }
         }
     });
@@ -141,24 +141,23 @@ npc.app.serviceDetail = function(record) {
                     autoWidth:true,
                     plain:true,
                     deferredRender:false,
-                    //layoutOnTabChange:true,
                     defaults:{autoScroll: true},
                     items:[{
-                        title: 'Service State Information',
-                        id: id + '-si'
+                        title: 'Host State Information',
+                        id: id + '-hi'
                     },{
                         title: 'State History',
                         autoHeight:true,
-                        id: id + '-sh'
+                        id: id + '-hh'
                     },{
                         title: 'Notification History',
-                        id: id + '-sn'
+                        id: id + '-hn'
                     },{
                         title: 'Downtime History',
-                        id: id + '-sd'
+                        id: id + '-hd'
                     },{
                         title: 'Comments',
-                        id: id + '-sc'
+                        id: id + '-hc'
                     },{
                         title: 'Graph',
                         //autoLoad: 'graphProxy.php'
@@ -182,8 +181,8 @@ npc.app.serviceDetail = function(record) {
     // Add the graph selector to the graph tab
     sgTbar.addField(combo);
 
-    var siStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=services&action=getStateInfo&p_id=' + record.data.service_object_id,
+    var hiStore = new Ext.data.JsonStore({
+        url: 'npc.php?module=hosts&action=getStateInfo&p_id=' + record.data.host_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -193,7 +192,7 @@ npc.app.serviceDetail = function(record) {
         autoload:true
     });
 
-    var siCm = new Ext.grid.ColumnModel([{
+    var hiCm = new Ext.grid.ColumnModel([{
         header:"Parameter",
         dataIndex:'name',
         width:100
@@ -204,11 +203,11 @@ npc.app.serviceDetail = function(record) {
         align:'left'
     }]);
 
-    var siGrid = new Ext.grid.GridPanel({
+    var hiGrid = new Ext.grid.GridPanel({
         autoHeight:true,
         autoWidth:true,
-        store:siStore,
-        cm:siCm,
+        store:hiStore,
+        cm:hiCm,
         autoExpandColumn:'Value',
         stripeRows: true,
         view: new Ext.grid.GridView({
@@ -218,8 +217,8 @@ npc.app.serviceDetail = function(record) {
         })
     });
 
-    var snStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=notifications&action=getNotifications&p_id=' + record.data.service_object_id,
+    var hnStore = new Ext.data.JsonStore({
+        url: 'npc.php?module=notifications&action=getNotifications&p_id=' + record.data.host_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -230,11 +229,11 @@ npc.app.serviceDetail = function(record) {
         autoload:true
     });
 
-    var snCm = new Ext.grid.ColumnModel([{
+    var hnCm = new Ext.grid.ColumnModel([{
         header:"",
         dataIndex:'state',
         width:40,
-        renderer:npc.app.serviceStatusImage
+        renderer:npc.app.hostStatusImage
     },{
         header:"Date",
         dataIndex:'start_time',
@@ -246,11 +245,11 @@ npc.app.serviceDetail = function(record) {
         width:600
     }]);
 
-    var snGrid = new Ext.grid.GridPanel({
+    var hnGrid = new Ext.grid.GridPanel({
         autoHeight:true,
         autoWidth:true,
-        store:snStore,
-        cm:snCm,
+        store:hnStore,
+        cm:hnCm,
         autoExpandColumn:'output',
         stripeRows: true,
         view: new Ext.grid.GridView({
@@ -261,13 +260,13 @@ npc.app.serviceDetail = function(record) {
         }),
         bbar: new Ext.PagingToolbar({
             pageSize:pageSize,
-            store:snStore,
+            store:hnStore,
             displayInfo:true
         })
     });
 
-    var shStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=statehistory&action=getStateHistory&type=2&p_id=' + record.data.service_object_id,
+    var hhStore = new Ext.data.JsonStore({
+        url: 'npc.php?module=statehistory&action=getStateHistory&type=2&p_id=' + record.data.host_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -281,10 +280,10 @@ npc.app.serviceDetail = function(record) {
         autoload:true
     });
 
-    var shCm = new Ext.grid.ColumnModel([{
+    var hhCm = new Ext.grid.ColumnModel([{
         header:"",
         dataIndex:'state',
-        renderer:npc.app.serviceStatusImage,
+        renderer:npc.app.hostStatusImage,
         width:40
     },{
         header:"Date",
@@ -307,11 +306,11 @@ npc.app.serviceDetail = function(record) {
         width:500
     }]);
 
-    var shGrid = new Ext.grid.GridPanel({
+    var hhGrid = new Ext.grid.GridPanel({
         autoHeight:true,
         autoWidth:true,
-        store:shStore,
-        cm:shCm,
+        store:hhStore,
+        cm:hhCm,
         autoExpandColumn:'output',
         stripeRows: true,
         view: new Ext.grid.GridView({
@@ -322,13 +321,13 @@ npc.app.serviceDetail = function(record) {
         }),
         bbar: new Ext.PagingToolbar({
             pageSize:pageSize,
-            store:shStore,
+            store:hhStore,
             displayInfo:true
         })
     });
 
-    var sdStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=downtime&action=getDowntime&p_id=' + record.data.service_object_id,
+    var hdStore = new Ext.data.JsonStore({
+        url: 'npc.php?module=downtime&action=getDowntime&p_id=' + record.data.host_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -341,7 +340,7 @@ npc.app.serviceDetail = function(record) {
         autoload:true
     });
 
-    var sdCm = new Ext.grid.ColumnModel([{
+    var hdCm = new Ext.grid.ColumnModel([{
         header:"Entry Time",
         dataIndex:'entry_time',
         renderer: npc.app.formatDate,
@@ -366,11 +365,11 @@ npc.app.serviceDetail = function(record) {
         width:400
     }]);
 
-    var sdGrid = new Ext.grid.GridPanel({
+    var hdGrid = new Ext.grid.GridPanel({
         autoHeight:true,
         autoWidth:true,
-        store:sdStore,
-        cm:sdCm,
+        store:hdStore,
+        cm:hdCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
         view: new Ext.grid.GridView({
@@ -381,13 +380,13 @@ npc.app.serviceDetail = function(record) {
         }),
         bbar: new Ext.PagingToolbar({
             pageSize:pageSize,
-            store:sdStore,
+            store:hdStore,
             displayInfo:true
         })
     });
 
-    var scStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=comments&action=getComments&p_id=' + record.data.service_object_id,
+    var hcStore = new Ext.data.JsonStore({
+        url: 'npc.php?module=comments&action=getComments&p_id=' + record.data.host_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -404,7 +403,7 @@ npc.app.serviceDetail = function(record) {
         autoload:true
     });
 
-    var scCm = new Ext.grid.ColumnModel([{
+    var hcCm = new Ext.grid.ColumnModel([{
         header:"Entry Time",
         dataIndex:'entry_time',
         renderer: npc.app.formatDate,
@@ -440,11 +439,11 @@ npc.app.serviceDetail = function(record) {
         width:50
     }]);
 
-    var scGrid = new Ext.grid.GridPanel({
+    var hcGrid = new Ext.grid.GridPanel({
         autoHeight:true,
         autoWidth:true,
-        store:scStore,
-        cm:scCm,
+        store:hcStore,
+        cm:hcCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
         view: new Ext.grid.GridView({
@@ -457,7 +456,7 @@ npc.app.serviceDetail = function(record) {
             text:'New Comment',
             iconCls:'commentAdd',
             handler : function(){
-                npc.app.addServiceComment(record.data.host_name,record.data.service_description);
+                npc.app.addHostComment(record.data.host_name);
             }
         }, '-', {
             text:'Delete comments',
@@ -473,9 +472,8 @@ npc.app.serviceDetail = function(record) {
                             npc.app.aPost({
                                 module : 'nagios',
                                 action : 'command',
-                                p_command : 'DEL_ALL_SVC_COMMENTS',
-                                p_host_name : record.data.host_name,
-                                p_service_description : record.data.service_description
+                                p_command : 'DEL_ALL_HOST_COMMENTS',
+                                p_host_name : record.data.host_name
                             });
                         }
                     },
@@ -486,7 +484,7 @@ npc.app.serviceDetail = function(record) {
         }],
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,
-            store: scStore,
+            store: hcStore,
             displayInfo: true
         })
         // The search field won't render :(
@@ -497,44 +495,44 @@ npc.app.serviceDetail = function(record) {
     });
 
     // Add the grids to the tabs
-    Ext.getCmp(id+'-si').add(siGrid);
-    Ext.getCmp(id+'-sn').add(snGrid);
-    Ext.getCmp(id+'-sh').add(shGrid);
-    Ext.getCmp(id+'-sd').add(sdGrid);
-    Ext.getCmp(id+'-sc').add(scGrid);
+    Ext.getCmp(id+'-hi').add(hiGrid);
+    Ext.getCmp(id+'-hn').add(hnGrid);
+    Ext.getCmp(id+'-hh').add(hhGrid);
+    Ext.getCmp(id+'-hd').add(hdGrid);
+    Ext.getCmp(id+'-hc').add(hcGrid);
 
     // Refresh the dashboard
     centerTabPanel.doLayout();
 
     // Render the default grid
-    siGrid.render();
-    snGrid.render();
-    shGrid.render();
-    sdGrid.render();
-    scGrid.render();
+    hiGrid.render();
+    hnGrid.render();
+    hhGrid.render();
+    hdGrid.render();
+    hcGrid.render();
 
     // Load the data stores
-    siStore.load();
-    snStore.load({params:{start:0, limit:pageSize}});
-    shStore.load({params:{start:0, limit:pageSize}});
-    sdStore.load({params:{start:0, limit:pageSize}});
-    scStore.load({params:{start:0, limit:pageSize}});
+    hiStore.load();
+    hnStore.load({params:{start:0, limit:pageSize}});
+    hhStore.load({params:{start:0, limit:pageSize}});
+    hdStore.load({params:{start:0, limit:pageSize}});
+    hcStore.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh
-    siStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    snStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    shStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    sdStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    scStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    hiStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    hnStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    hhStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    hdStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    hcStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
 
     // Add listeners to stop auto refresh on the store if the tab is closed
     var listeners = {
         destroy: function() {
-            siStore.stopAutoRefresh();
-            snStore.stopAutoRefresh();
-            shStore.stopAutoRefresh();
-            sdStore.stopAutoRefresh();
-            scStore.stopAutoRefresh();
+            hiStore.stopAutoRefresh();
+            hnStore.stopAutoRefresh();
+            hhStore.stopAutoRefresh();
+            hdStore.stopAutoRefresh();
+            hcStore.stopAutoRefresh();
             if (!innerTabPanel.items.length) {
                 centerTabPanel.remove(outerTabId, true);
             }
@@ -545,7 +543,7 @@ npc.app.serviceDetail = function(record) {
     tab.addListener(listeners);
 
     // Handle deleting individual comments
-    scGrid.addListener("cellclick", function(grid, row, column, e) {
+    hcGrid.addListener("cellclick", function(grid, row, column, e) {
         var rec = grid.getStore().getAt(row);
         var fieldName = grid.getColumnModel().getDataIndex(column);
         if (fieldName == 'internal_comment_id') {
@@ -558,7 +556,7 @@ npc.app.serviceDetail = function(record) {
                         var args = {
                             module : 'nagios',
                             action : 'command',
-                            p_command : 'DEL_SVC_COMMENT',
+                            p_command : 'DEL_HOST_COMMENT',
                             p_comment_id : rec.get(fieldName)
                         };
                         npc.app.aPost(args);

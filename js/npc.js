@@ -85,7 +85,8 @@ npc.app = function() {
             npc.app.hostDetail(grid.getStore().getAt(rowIndex));
         },
 
-        addServiceComment: function(host, service) {
+        addComment: function(host, service) {
+            var cmd;
             var form = new Ext.FormPanel({
                 labelWidth: 75,
                 url:'npc.php?module=nagios&action=command',
@@ -199,30 +200,34 @@ npc.app = function() {
             return('0');
         },
 
-        renderHostStatus: function(val, meta){
-            var state;
-            var bg;
-            switch(val) {
-                case 0:
-                    state = 'UP';
-                    bg = '33FF00';
-                    break;
-                case 1:
-                    state = 'DOWN';
-                    bg = 'F83838';
-                    break;
-                case 2:
-                    state = 'UNREACHABLE';
-                    bg = 'F83838';
-                    break;
-                case -1:
-                    state = 'PENDING';
-                    bg = '0099FF';
-                    break;
+        hostStatusImage: function(val){
+            var img;
+            if (val == 0) {
+                img = 'greendot.gif';
+            } else if (val == 1) {
+                img = 'reddot.gif';
+            } else if (val == 2) {
+                img = 'reddot.gif';
+            } else if (val == -1) {
+                img = 'bluedot.gif';
             }
+            return String.format('<p align="center"><img src="images/icons/{0}"></p>', img);
+        },
 
-            meta.attr = 'style="background-color: #' + bg + ';"';
-            return String.format('<b>{0}</b>', state);
+        serviceStatusImage: function(val){
+            var img;
+            if (val == 0) {
+                img = 'greendot.gif';
+            } else if (val == 1) {
+                img = 'yellowdot.gif';
+            } else if (val == 2) {
+                img = 'reddot.gif';
+            } else if (val == 3) {
+                img = 'orangedot.gif';
+            } else if (val == -1) {
+                img = 'bluedot.gif';
+            }
+            return String.format('<p align="center"><img src="images/icons/{0}"></p>', img);
         },
 
         renderServiceIcons: function(val, p, record) {
@@ -274,22 +279,6 @@ npc.app = function() {
                 }
             }
             return val;
-        },
-
-        renderStatusImage: function(val){
-            var img;
-            if (val == 0) {
-                img = 'recovery.png';
-            } else if (val == 1) {
-                img = 'warning.png';
-            } else if (val == 2) {
-                img = 'critical.png';
-            } else if (val == 3) {
-                img = 'unknown.png';
-            } else if (val == -1) {
-                img = 'info.png';
-            }
-            return String.format('<p align="center"><img src="images/nagios/{0}"></p>', img);
         },
 
         toggleRegion: function(region, link){

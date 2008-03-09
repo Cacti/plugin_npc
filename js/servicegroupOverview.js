@@ -74,7 +74,7 @@ npc.app.servicegroupOverview = function(){
         dataIndex:'host_state',
         align:'center',
         width:40,
-        renderer:npc.app.renderHostStatus
+        renderer:npc.app.hostStatusImage
     },{
         id: 'sgHostTotalsCRITICAL',
         header:"Critical",

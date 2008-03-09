@@ -79,7 +79,7 @@ npc.app.hosts = function(title, filter){
     },{
         header:"Status",
         dataIndex:'current_state',
-        renderer:npc.app.renderHostStatus,
+        renderer:npc.app.hostStatusImage,
         align:'center',
         width:50
     },{

@@ -74,7 +74,7 @@ npc.app.hostgroupOverview = function(){
         dataIndex:'host_state',
         align:'center',
         width:40,
-        renderer:npc.app.renderHostStatus
+        renderer:npc.app.hostStatusImage
     },{
         id: 'hgHostTotalsCRITICAL',
         header:"Critical",

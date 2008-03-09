@@ -77,7 +77,7 @@ npc.app.hostgroupGrid = function(id, title, hoi){
         header:"Status",
         dataIndex:'current_state',
         align:'center',
-        renderer: npc.app.renderHostStatus,
+        renderer: npc.app.hostStatusImage,
         width:40
     },{
         header:"Plugin Output",

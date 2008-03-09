@@ -29,66 +29,6 @@ require_once("plugins/npc/controllers/comments.php");
 class NpcServicesController extends Controller {
 
     /**
-     * Column aliases
-     *
-     * @var array
-     * @access public
-     */
-    var $friendlyNames = array(
-        'instance_id'                   => 'Instance Id',
-        'instance_name'                 => 'Instance Name',
-        'host_object_id'                => 'Host Object Id',
-        'host_name'                     => 'Host Name',
-        'service_id'                    => 'Service Id',
-        'service_description'           => 'Service Description',
-        'servicestatus_id'              => 'Servicestatus Id',
-        'service_object_id'             => 'Service Object Id',
-        'status_update_time'            => 'Status Update Time',
-        'output'                        => 'Output',
-        'perfdata'                      => 'Perfdata',
-        'current_state'                 => 'Current State',
-        'has_been_checked'              => 'Has Been Checked',
-        'should_be_scheduled'           => 'Should Be Scheduled',
-        'current_check_attempt'         => 'Current Check Attempt',
-        'max_check_attempts'            => 'Max Check Attempts',
-        'last_check'                    => 'Last Check',
-        'next_check'                    => 'Next Check',
-        'check_type'                    => 'Check Type',
-        'last_state_change'             => 'Last State Change',
-        'last_hard_state_change'        => 'Last Hard State Change',
-        'last_hard_state'               => 'Last Hard State',
-        'last_time_ok'                  => 'Last Time Ok',
-        'last_time_warning'             => 'Last Time Warning',
-        'last_time_unknown'             => 'Last Time Unknown',
-        'last_time_critical'            => 'Last Time Critical',
-        'state_type'                    => 'State Type',
-        'last_notification'             => 'Last Notification',
-        'next_notification'             => 'Next Notification',
-        'no_more_notifications'         => 'No More Notifications',
-        'notifications_enabled'         => 'Notifications Enabled',
-        'problem_has_been_acknowledged' => 'Problem Has Been Acknowledged',
-        'acknowledgement_type'          => 'Acknowledgement Type',
-        'current_notification_number'   => 'Current Notification Number',
-        'passive_checks_enabled'        => 'Passive Checks Enabled',
-        'active_checks_enabled'         => 'Active Checks Enabled',
-        'event_handler_enabled'         => 'Event Handler Enabled',
-        'flap_detection_enabled'        => 'Flap Detection Enabled',
-        'is_flapping'                   => 'Flapping',
-        'percent_state_change'          => 'Percent State Change',
-        'latency'                       => 'Latency',
-        'execution_time'                => 'Execution Time',
-        'scheduled_downtime_depth'      => 'In Scheduled Downtime',
-        'failure_prediction_enabled'    => 'Failure Prediction Enabled',
-        'process_performance_data'      => 'Process Performance Data',
-        'obsess_over_service'           => 'Obsess Over Service',
-        'modified_service_attributes'   => 'Modified Service Attributes',
-        'event_handler'                 => 'Event Handler',
-        'check_command'                 => 'Check Command',
-        'normal_check_interval'         => 'Normal Check Interval',
-        'retry_check_interval'          => 'Retry Check Interval',
-        'check_timeperiod_object_id'    => 'Check Timeperiod Object Id');
-        
-    /**
      * getServices
      * 
      * Gets and formats services for output. 
@@ -115,13 +55,13 @@ class NpcServicesController extends Controller {
     }
 
     /**
-     * getServiceStateInfo
+     * getStateInfo
      * 
      * Gets and formats service state information
      *
      * @return string   json output
      */
-    function getServiceStateInfo() {
+    function getStateInfo() {
 
         $fields = array(
             'current_state',
@@ -152,7 +92,7 @@ class NpcServicesController extends Controller {
 
         $x = 0;
         foreach ($fields as $key) {
-            $output[$x] = array('name' => $this->friendlyNames[$key], 'value' => $this->formatServiceStateInfo($key, $results[0]));
+            $output[$x] = array('name' => $this->columnAlias[$key], 'value' => $this->formatStateInfo($key, $results[0]));
             $x++;
         }
 
@@ -290,13 +230,13 @@ class NpcServicesController extends Controller {
     }
 
     /**
-     * formatServiceStateInfo
+     * formatStateInfo
      * 
      * Formats the service state info results for display
      *
      * @return string   The formatted results
      */
-    function formatServiceStateInfo($key, $results) {
+    function formatStateInfo($key, $results) {
 
         // Set the default return value
         $return = $results[$key];

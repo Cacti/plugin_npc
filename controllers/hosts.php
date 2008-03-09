@@ -67,6 +67,55 @@ class NpcHostsController extends Controller {
     }
 
     /**
+     * getStateInfo
+     * 
+     * Gets and formats host state information
+     *
+     * @return string   json output
+     */
+    function getStateInfo() {
+
+        $fields = array(
+            'current_state',
+            'output',
+            'last_state_change',
+            'check_command',
+            'current_check_attempt',
+            'last_check',
+            'next_check',
+            'event_handler',
+            'latency',
+            'execution_time',
+            'is_flapping',
+            'scheduled_downtime_depth',
+            'active_checks_enabled',
+            'passive_checks_enabled',
+            'event_handler_enabled',
+            'flap_detection_enabled',
+            'notifications_enabled',
+            'failure_prediction_enabled',
+            'process_performance_data',
+            'obsess_over_host'
+        );
+
+        $hosts = $this->hosts();
+
+        $results = $this->flattenArray($hosts);
+
+        $x = 0;
+        foreach ($fields as $key) {
+            $output[$x] = array('name' => $this->columnAlias[$key], 'value' => $this->formatStateInfo($key, $results[0]));
+            $x++;
+        }
+
+        return($this->jsonOutput($output));
+    }
+
+    function getGraphs() {
+
+    }
+
+    /**
      * summary
      * 
      * Returns a state count for all hosts
@@ -169,4 +218,72 @@ class NpcHostsController extends Controller {
 
         return($q->execute(array(), Doctrine::FETCH_ARRAY));
     }
+
+    /**
+     * formatStateInfo
+     * 
+     * Formats the host state info results for display
+     *
+     * @return string   The formatted results
+     */
+    function formatStateInfo($key, $results) {
+
+        // Set the default return value
+        $return = $results[$key];
+
+        $cs = array(
+            '0'  => '<img src="images/icons/greendot.gif">',
+            '1'  => '<img src="images/icons/reddot.gif">',
+            '2'  => '<img src="images/icons/reddot.gif">',
+            '-1' => '<img src="images/icons/bluedot.gif">'
+        );
+
+        if ($key == 'current_state') {
+            $return = $cs[$results[$key]];
+        }
+
+        if ($key == 'current_check_attempt') {
+            $return = $results[$key] . '/' . $results['max_check_attempts'];
+        }
+
+        if ($key == 'is_flapping') {
+            if ($results[$key]) {
+                $return = 'Yes';
+            } else {
+                $return = 'No';
+            }
+        }
+
+        if (preg_match("/_enabled/", $key) || $key == 'process_performance_data' || $key == 'obsess_over_host') {
+            if($results[$key]) {
+                $return = '<img src="images/icons/tick.png">';
+            } else {
+                $return = '<img src="images/icons/cross.png">';
+            }
+        }
+
+        if ($key == 'last_state_change' || $key == 'last_check' || $key == 'next_check') {
+            $format = read_config_option('npc_date_format') . ' ' . read_config_option('npc_time_format');
+            $return = date($format, strtotime($results[$key]));
+        }
+
+        if ($key == 'scheduled_downtime_depth') {
+            if ($results[$key]) {
+                $return = 'Yes';
+            } else {
+                $return = 'No';
+            }
+        }
+
+        if ($return == '') {
+            $return = 'NA';
+        }
+
+        if (!$return) {
+            $return = 'NA';
+        }
+
+        return($return);
+    }
+
 }

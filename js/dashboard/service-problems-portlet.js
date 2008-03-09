@@ -49,7 +49,7 @@ npc.app.portlet.serviceProblems = function(){
     },{
         header:"Status",
         dataIndex:'current_state',
-        renderer:npc.app.renderStatusImage,
+        renderer:npc.app.serviceStatusImage,
         width:45
     },{
         header:"Host",

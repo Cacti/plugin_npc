@@ -81,7 +81,7 @@ npc.app.servicegroupGrid = function(id, title, soi){
     },{
         header:"Status",
         dataIndex:'current_state',
-        renderer: npc.app.renderStatusImage,
+        renderer: npc.app.serviceStatusImage,
         width:40
     },{
         header:"Plugin Output",

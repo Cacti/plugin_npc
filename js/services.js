@@ -80,7 +80,7 @@ npc.app.services = function(title, filter){
     },{
         header:"Status",
         dataIndex:'current_state',
-        renderer:npc.app.renderStatusImage,
+        renderer:npc.app.serviceStatusImage,
         width:45
     },{
         header:"Last Check",
