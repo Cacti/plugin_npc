@@ -7,7 +7,7 @@ npc.app.portlet.hostgroupHostStatus = function(){
     var id = 'hostgroupHostStatus';
 
     // Portlet URL
-    var url = 'npc.php?module=hostgroups&action=getHostStatusPortlet';
+    var url = 'npc.php?module=hostgroups&action=getHostgroupHostStatus';
 
     // Default column
     var column = 'dashcol2';
@@ -25,7 +25,7 @@ npc.app.portlet.hostgroupHostStatus = function(){
         fields:[
             'alias',
             {name: 'instance_id', type: 'int'},
-            {name: 'servicegroup_object_id', type: 'int'},
+            {name: 'hostgroup_object_id', type: 'int'},
             {name: 'down', type: 'int'},
             {name: 'unreachable', type: 'int'},
             {name: 'up', type: 'int'},
@@ -133,11 +133,11 @@ npc.app.portlet.hostgroupHostStatus = function(){
         store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     }
 
-    grid.on('rowclick', sgClick);
+    grid.on('rowclick', hgClick);
 
-    function sgClick(grid, rowIndex, e) {
-        var hoi = grid.getStore().getAt(rowIndex).json.servicegroup_object_id;
+    function hgClick(grid, rowIndex, e) {
+        var hoi = grid.getStore().getAt(rowIndex).json.hostgroup_object_id;
         var name = grid.getStore().getAt(rowIndex).json.alias;
-        npc.app.hostGroupGrid('hostGroupGrid-'+soi, 'Hostgroup: '+name, hoi);
+        npc.app.hostGroupGrid('hostGroupGrid-'+hoi, 'Hostgroup: '+name, hoi);
     }
 };

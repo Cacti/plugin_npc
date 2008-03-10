@@ -308,14 +308,14 @@ npc.app = function() {
             var img = '';
             if (record.data.problem_has_been_acknowledged == 1) {
                 var ack = record.data.acknowledgement.split("*|*");
-                img = String.format('&nbsp;<img ext:qtitle="Acknowledged by {0}" ext:qtip="{1}" src="images/icons/wrench.png">', ack[0], ack[1]);
+                img = String.format('&nbsp;<img ext:qtitle="Acknowledged by {0}" ext:qtip=\'{1}\' src="images/icons/wrench.png">', ack[0], ack[1]);
             }
             if (record.data.notifications_enabled == 0) {
                 img = String.format('&nbsp;<img ext:qtip="Notifications have been disabled." src="images/icons/sound_mute.png">') + img;
             }
             if (record.data.comment) {
                 var c = record.data.comment.split("*|*");
-                img = String.format('&nbsp;<img qtitle="{0}" ext:qtip="{1}" src="images/icons/comment.png">', c[0], c[1]) + img;
+                img = String.format('&nbsp;<img qtitle="{0}" ext:qtip=\'{1}\' src="images/icons/comment.png">', c[0], c[1]) + img;
             }
             if (record.data.is_flapping) {
                 img = String.format('&nbsp;<img ext:qtip="This service is flapping between states" src="images/icons/link_error.png">') + img;

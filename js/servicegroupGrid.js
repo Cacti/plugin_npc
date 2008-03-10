@@ -64,7 +64,15 @@ npc.app.servicegroupGrid = function(id, title, soi){
             'output',
             'service_object_id',
             'host_name',
-            'service_description'
+            'service_description',
+            'comment',
+            'acknowledgement',
+            {name: 'problem_has_been_acknowledged', type: 'int'},
+            {name: 'notifications_enabled', type: 'int'},
+            {name: 'active_checks_enabled', type: 'int'},
+            {name: 'passive_checks_enabled', type: 'int'},
+            {name: 'is_flapping', type: 'int'}
+
         ]),
         groupField:'alias'
     });
@@ -77,6 +85,7 @@ npc.app.servicegroupGrid = function(id, title, soi){
     },{
         header:"Service",
         dataIndex:'service_description',
+        renderer:npc.app.renderExtraIcons,
         width:75
     },{
         header:"Status",

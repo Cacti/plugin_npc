@@ -37,6 +37,101 @@ class NpcHostgroupsController extends Controller {
     private $statusCache = array();
 
     /**
+     * getHostgroupHostStatus
+     * 
+     * Returns host status counts by hostgroup.
+     *
+     * @return string   json output
+     */
+    function getHostgroupHostStatus() {
+
+        // Initialize the output array
+        $output = array();
+
+        // Initialize the hosts array
+        $hosts = array();
+
+        $fields = array('hostgroup_object_id',
+                        'alias',
+                        'instance_id');
+
+        $results = $this->setupResultsArray();
+
+        for ($i = 0; $i < count($results); $i++) {
+            $hg = $results[$i]['hostgroup_object_id'];
+            if(!isset($output[$hg])) {
+                $output[$hg] = array('down'        => 0,
+                                     'unreachable' => 0,
+                                     'up'          => 0,
+                                     'pending'     => 0);
+            }
+            if (!isset($hosts[$hg][$results[$i]['host_name']])) {
+                $output[$hg][$this->hostState[$results[$i]['current_state']]]++;
+                $hosts[$hg][$results[$i]['host_name']] = 1;
+            }
+            foreach ($results[$i] as $key => $val) {
+                if (in_array($key, $fields)) {
+                    $output[$hg][$key] = $val;
+                }
+            }
+        }
+
+        // Set the total number of records 
+        $this->numRecords = count($output);
+
+        // Implement paging by slicing the ouput array
+        $output = array_slice($output, $this->start, $this->limit);
+
+        return($this->jsonOutput($output));
+    }
+
+    /**
+     * getHostgroupServiceStatus
+     * 
+     * Returns service status counts by hostgroup.
+     *
+     * @return string   json output
+     */
+    function getHostgroupServiceStatus() {
+
+        // Initialize the output array
+        $output = array();
+
+        $fields = array('hostgroup_object_id',
+                        'alias',
+                        'instance_id');
+                 
+        // Combine servicegroup/service/host etc. into a single record
+        $results = $this->setupResultsArray();
+
+        for ($i = 0; $i < count($results); $i++) {
+            $hg = $results[$i]['hostgroup_object_id'];
+            $ss = $this->getHostgroupMemberServiceStatus($results[$i]['host_object_id']);
+            if(!isset($output[$hg])) {
+                $output[$hg] = $ss;
+            } else {
+                foreach ($ss as $k => $v) {
+                    $output[$hg][$k] = $output[$hg][$k] + $v;
+                }
+            }
+            foreach ($results[$i] as $key => $val) {
+                if (in_array($key, $fields)) {
+                    $output[$hg][$key] = $val;
+                }
+            }
+        }
+
+        // Set the total number of records 
+        $this->numRecords = count($output);
+
+        // Implement paging by slicing the ouput array
+        $output = array_slice($output, $this->start, $this->limit);
+
+        return($this->jsonOutput($output));
+    }
+
+
+    /**
      * getOverview
      * 
      * Returns all hosts by hostgroup. Used to populate 
@@ -57,10 +152,11 @@ class NpcHostgroupsController extends Controller {
         // Combine servicegroup/service/host etc. into a single record
         $results = $this->setupResultsArray();
 
-        // Loop through the results array and build an ouput array
-        // that includes a single record per host within the hostgroup
-        // and the number of crit, warn , ok services within 
-        // that hostgroup.
+        /*  Loop through the results array and build an ouput array
+         *  that includes a single record per host within the hostgroup
+         *  and the number of crit, warn , ok services within 
+         *  that hostgroup.
+         */
         for ($i = 0; $i < count($results); $i++) {
             $hg = $results[$i]['hostgroup_object_id'];
             $host = $results[$i]['host_name'];

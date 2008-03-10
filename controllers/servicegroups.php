@@ -14,6 +14,9 @@
  * @version             $Id: $
  */
 
+require_once("include/auth.php");
+require_once("plugins/npc/controllers/comments.php");
+
 /**
  * Servicegroups controller class
  *
@@ -90,13 +93,13 @@ class NpcServicegroupsController extends Controller {
     }
 
     /**
-     * getServiceStatusPortlet
+     * getServicegroupServiceStatus
      * 
      * Returns service status counts by servicegroup.
      *
      * @return string   json output
      */
-    function getServiceStatusPortlet() {
+    function getServicegroupServiceStatus() {
 
         // Initialize the output array
         $output = array();
@@ -108,13 +111,8 @@ class NpcServicegroupsController extends Controller {
         // Combine servicegroup/service/host etc. into a single record
         $results = $this->setupResultsArray();
 
-        // Loop through the results array and build an ouput array
-        // that includes a single record per servicegroup
-        // and the number of crit, warn , ok services within 
-        // that servicegroup.
         for ($i = 0; $i < count($results); $i++) {
             $sg = $results[$i]['servicegroup_object_id'];
-            $hostState = $this->getServicegroupMemberHoststatus($results[$i]['host_name']);
             if(!isset($output[$sg])) {
                 $output[$sg] = array('critical' => 0,
                                    'warning'  => 0,
@@ -171,11 +169,11 @@ class NpcServicegroupsController extends Controller {
             $hostState = $this->getServicegroupMemberHoststatus($host);
             if(!isset($temp[$sg][$host])) {
                 $temp[$sg][$host] = array('host_state' => $hostState,
-                                            'critical' => 0,
-                                            'warning'  => 0,
-                                            'unknown'  => 0,
-                                            'ok'       => 0,
-                                            'pending'  => 0);
+                                          'critical' => 0,
+                                          'warning'  => 0,
+                                          'unknown'  => 0,
+                                          'ok'       => 0,
+                                          'pending'  => 0);
             }
             foreach ($results[$i] as $key => $val) {
                 if ($key == 'current_state') { 
@@ -229,15 +227,27 @@ class NpcServicegroupsController extends Controller {
      */
     function getServices() {
 
-        $output = $this->setupResultsArray();
+        $results = $this->setupResultsArray();
+
+        $comments = new NpcCommentsController;
+
+        $services = $this->flattenArray($results);
+
+        for ($i = 0; $i < count($services); $i++) {
+            if ($services[$i]['problem_has_been_acknowledged']) {
+                $services[$i]['acknowledgement'] = $comments->getAck($services[$i]['service_object_id']);
+            }
+            // Add the last comment to the array
+            $services[$i]['comment'] = $comments->getLastComment($services[$i]['service_object_id']);
+        }
 
         // Set the total number of records 
-        $this->numRecords = count($output);
+        $this->numRecords = count($services);
 
         // Implement paging by slicing the ouput array
-        $output = array_slice($output, $this->start, $this->limit);
+        $services = array_slice($services, $this->start, $this->limit);
 
-        return($this->jsonOutput($output));
+        return($this->jsonOutput($services));
     }
 
     function getServicegroupMemberHoststatus($hostname) {
@@ -279,11 +289,9 @@ class NpcServicegroupsController extends Controller {
         $q = new Doctrine_Query();
         $q->select('i.instance_name,'
                     .'o1.name1 AS servicegroup_name,'
-                    .'ss.service_object_id,'
-                    .'ss.current_state,' 
-                    .'ss.output,' 
                     .'o2.name1 AS host_name,'
                     .'o2.name2 AS service_description,'
+                    .'ss.*,' 
                     .'sg.*')
             ->from('NpcServicegroups sg')
             ->innerJoin('sg.ServicegroupMembers sgm')
