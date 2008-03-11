@@ -80,7 +80,6 @@ class NpcDowntimeController extends Controller {
         $q = new Doctrine_Pager(
             Doctrine_Query::create()
                 ->select('i.instance_name,'
-                        .'o.object_id,'
                         .'o.name1 AS host_name,'
                         .'o.name2 AS service_description,'
                         .'d.*')

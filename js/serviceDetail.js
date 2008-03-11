@@ -1,6 +1,6 @@
 npc.app.serviceDetail = function(record) {
 
-    var service_object_id = (typeof service_object_id != 'undefined') ? service_object_id : record.data.object_id;
+    var service_object_id = (typeof record.data.service_object_id != 'undefined') ? record.data.service_object_id : record.data.object_id;
 
     // Set the id for the service detail tab
     var id = 'serviceDetail' + service_object_id + '-tab';
@@ -443,7 +443,7 @@ npc.app.serviceDetail = function(record) {
         fields:[
             'comment_id',
             'instance_id',
-            {name: 'entry_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'comment_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
             'entry_type',
             'author_name',
             'comment_data',

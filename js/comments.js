@@ -43,6 +43,10 @@ npc.app.comments = function(){
         return String.format('<img src="images/icons/comment_delete.png">');
     }
 
+    function renderServicegroupHeading(v, p, r) {
+        return String.format('[{0}] - {1}', r.data.host_name, r.data.service_description);
+    }
+
     var hcStore = new Ext.data.GroupingStore({
         url: 'npc.php?module=comments&action=getHostComments',
         autoload:true,
@@ -55,6 +59,7 @@ npc.app.comments = function(){
             'instance_id',
             'host_name',
             {name: 'comment_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'object_id', type: 'int'},
             'entry_type',
             'author_name',
             'comment_data',
@@ -118,6 +123,7 @@ npc.app.comments = function(){
             autoFill:true,
             hideGroupedColumn: true,
             enableGroupingMenu: false,
+            showGroupName:false,
             enableNoGroups: true,
             emptyText:'No comments.',
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Comments" : "Comment"]})'
@@ -171,6 +177,7 @@ npc.app.comments = function(){
             'host_name',
             'service_description',
             {name: 'comment_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'object_id', type: 'int'},
             'entry_type',
             'author_name',
             'comment_data',
@@ -178,7 +185,7 @@ npc.app.comments = function(){
             'internal_comment_id',
             {name: 'expiration_time', type: 'date', dateFormat: 'Y-m-d H:i:s'}
         ]),
-        groupField:'service_description'
+        groupField:'object_id'
     });
 
     var scCm = new Ext.grid.ColumnModel([{
@@ -188,7 +195,8 @@ npc.app.comments = function(){
         width:120
     },{
         header:"Service",
-        dataIndex:'service_description',
+        dataIndex:'object_id',
+        groupRenderer:renderServicegroupHeading,
         hidden:true,
         width:120
     },{
@@ -239,6 +247,7 @@ npc.app.comments = function(){
             autoFill:true,
             hideGroupedColumn: true,
             enableGroupingMenu: false,
+            showGroupName: false,
             enableNoGroups: true,
             emptyText:'No comments.',
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Comments" : "Comment"]})'
