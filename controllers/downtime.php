@@ -25,24 +25,62 @@
  */
 class NpcDowntimeController extends Controller {
 
+
     /**
      * getDowntime
-     * 
-     * Returns downtime history
+     *
+     * An accessor method to return downtime records
      *
      * @return string   json output
      */
     function getDowntime() {
+        return($this->jsonOutput($this->downtime()));
+    }
 
-        $where = '';
+    /**
+     * getHostDowntime
+     *
+     * An accessor method to return all host comments
+     *
+     * @return string   json output
+     */
+    function getHostDowntime() {
+        $results = $this->flattenArray($this->downtime(null, 'o.objecttype_id = 1'));
+        return($this->jsonOutput($results));
+    }
 
-        if ($this->id) {
-            $where .= sprintf("d.object_id = %d", $this->id);
+    /**
+     * getServiceDowntime
+     *
+     * An accessor method to return all service comments
+     *
+     * @return string   json output
+     */
+    function getServiceDowntime() {
+        $results = $this->flattenArray($this->downtime(null, 'o.objecttype_id = 2'));
+        return($this->jsonOutput($results));
+    }
+
+    /**
+     * downtime
+     * 
+     * Returns downtime history
+     *
+     * @return array
+     */
+    function downtime($id=null, $where='') {
+
+        if ($this->id || $id) {
+            if ($where != '') {
+                $where .= ' AND ';
+            }
+            $where .= sprintf("c.object_id = %d", is_null($id) ? $this->id : $id);
         }
 
         $q = new Doctrine_Pager(
             Doctrine_Query::create()
                 ->select('i.instance_name,'
+                        .'o.object_id,'
                         .'o.name1 AS host_name,'
                         .'o.name2 AS service_description,'
                         .'d.*')
@@ -60,6 +98,6 @@ class NpcDowntimeController extends Controller {
         // Set the total number of records 
         $this->numRecords = $q->getNumResults();
 
-        return($this->jsonOutput($results));
+        return($results);
     }
 }

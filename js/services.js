@@ -176,5 +176,5 @@ npc.app.services = function(title, filter){
     // Add the listener to the tab
     tab.addListener(listeners);
 
-    grid.on('rowclick', npc.app.serviceGridClick);
+    grid.on('rowdblclick', npc.app.serviceGridClick);
 };

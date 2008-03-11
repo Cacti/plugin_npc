@@ -66,6 +66,7 @@ class NpcServicesController extends Controller {
         $fields = array(
             'current_state',
             'output',
+            'perfdata',
             'last_state_change',
             'check_command',
             'current_check_attempt',
@@ -76,13 +77,12 @@ class NpcServicesController extends Controller {
             'execution_time',
             'is_flapping',
             'scheduled_downtime_depth',
+            'process_performance_data',
             'active_checks_enabled',
             'passive_checks_enabled',
             'event_handler_enabled',
             'flap_detection_enabled',
             'notifications_enabled',
-            'failure_prediction_enabled',
-            'process_performance_data',
             'obsess_over_service'
         );
 
@@ -232,7 +232,9 @@ class NpcServicesController extends Controller {
     /**
      * formatStateInfo
      * 
-     * Formats the service state info results for display
+     * Formats the service state info results for display.
+     * This is a workaround for some of the limitations of
+     * EXT property grid.
      *
      * @return string   The formatted results
      */
@@ -257,15 +259,7 @@ class NpcServicesController extends Controller {
             $return = $results[$key] . '/' . $results['max_check_attempts'];
         }
 
-        if ($key == 'is_flapping') {
-            if ($results[$key]) {
-                $return = 'Yes';
-            } else {
-                $return = 'No';
-            }
-        }
-
-        if (preg_match("/_enabled/", $key) || $key == 'process_performance_data' || $key == 'obsess_over_service') {
+        if (preg_match("/_enabled/", $key) || $key == 'obsess_over_service') {
             if($results[$key]) {
                 $return = '<img src="images/icons/tick.png">';
             } else {
@@ -278,7 +272,7 @@ class NpcServicesController extends Controller {
             $return = date($format, strtotime($results[$key]));
         }
 
-        if ($key == 'scheduled_downtime_depth') {
+        if ($key == 'scheduled_downtime_depth' || $key == 'is_flapping' || $key == 'process_performance_data') {
             if ($results[$key]) {
                 $return = 'Yes';
             } else {
@@ -286,11 +280,7 @@ class NpcServicesController extends Controller {
             }
         }
 
-        if ($return == '') {
-            $return = 'NA';
-        }
-
-        if (!$return) {
+        if ($return == '' || !$return) {
             $return = 'NA';
         }
 

@@ -14,11 +14,11 @@ npc.app = function() {
 
     // create some portlet tools using built in Ext tool ids
     var tools = [{
-        id:'gear',
-        handler: function(){
-            Ext.Msg.alert('Message', 'The Settings tool was clicked.');
-        }
-    },{
+//        id:'gear',
+//        handler: function(){
+//            Ext.Msg.alert('Message', 'The Settings tool was clicked.');
+//        }
+//    },{
         id:'close',
         handler: function(e, target, panel){
             panel.hide();
@@ -692,15 +692,20 @@ npc.app = function() {
                                             text:'Comments',
                                             iconCls:'tleaf',
                                             leaf:true,
-                                                listeners: {
-                                                    click: function() {
-                                                        npc.app.comments();
-                                                    }
+                                            listeners: {
+                                                click: function() {
+                                                    npc.app.comments();
                                                 }
+                                            }
                                         },{
                                             text:'Downtime',
                                             iconCls:'tleaf',
-                                            leaf:true 
+                                            leaf:true,
+                                            listeners: {
+                                                click: function() {
+                                                    npc.app.downtime();
+                                                }
+                                            }
                                         },{
                                             text:'Process Info',
                                             iconCls:'tleaf',

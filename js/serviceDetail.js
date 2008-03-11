@@ -1,7 +1,9 @@
 npc.app.serviceDetail = function(record) {
 
+    var service_object_id = (typeof service_object_id != 'undefined') ? service_object_id : record.data.object_id;
+
     // Set the id for the service detail tab
-    var id = 'serviceDetail' + record.data.service_object_id + '-tab';
+    var id = 'serviceDetail' + service_object_id + '-tab';
 
     // Set thetitle
     var title = record.data.host_name + ': ' + record.data.service_description;
@@ -89,6 +91,68 @@ npc.app.serviceDetail = function(record) {
         return String.format('<img src="images/icons/comment_delete.png">');
     }
 
+    function toggleEnabled(v, toggle) {
+
+        var cmd;
+        var msg;
+        var m;
+
+        switch(v) {
+            case 'Active Checks Enabled':
+                m = ' active checks for this service?';
+                cmd = '_SVC_CHECK';
+                break;
+            case 'Passive Checks Enabled':
+                m = ' passive checks for this service?';
+                cmd = '_PASSIVE_SVC_CHECKS';
+                break;
+            case 'Event Handler Enabled':
+                m = ' event handler for this service?';
+                cmd = '_SVC_EVENT_HANDLER';
+                break;
+            case 'Flap Detection Enabled':
+                m = ' flap detection for this service?';
+                cmd = '_SVC_FLAP_DETECTION';
+                break;
+            case 'Notifications Enabled':
+                m = ' notifications for this service?';
+                cmd = '_SVC_NOTIFICATIONS';
+                break;
+            case 'Obsess Over Service':
+                var c = 'Stop';
+                if (toggle == 'Enable') {
+                    c = 'Start';
+                }
+                msg = c + ' obsessing over this service?';
+                cmd = c.toUpperCase() + '_OBSESSING_OVER_SVC';
+                break;
+        }
+
+        if (v.match('Enabled')) { 
+            cmd = toggle.toUpperCase() + cmd;
+            msg = toggle + m;
+        }
+
+        Ext.Msg.show({
+            title:'Confirm',
+            msg:msg,
+            buttons: Ext.Msg.YESNO,
+            fn: function(btn) {
+                if (btn == 'yes') {
+                    npc.app.aPost({
+                        module : 'nagios',
+                        action : 'command',
+                        p_command :cmd,
+                        p_host_name : record.data.host_name,
+                        p_service_description : record.data.service_description
+                    });
+                }
+            },
+            animEl: 'elId',
+            icon: Ext.MessageBox.QUESTION
+        });
+    }
+
     // If the tab exists set it active and return or else create it.
     if (tab)  { 
         innerTabPanel.setActiveTab(tab);
@@ -151,7 +215,7 @@ npc.app.serviceDetail = function(record) {
     sgTbar.addField(combo);
 
     var siStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=services&action=getStateInfo&p_id=' + record.data.service_object_id,
+        url: 'npc.php?module=services&action=getStateInfo&p_id=' + service_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -178,6 +242,7 @@ npc.app.serviceDetail = function(record) {
         store:siStore,
         cm:siCm,
         autoExpandColumn:'Value',
+        sm: new Ext.grid.RowSelectionModel(),
         stripeRows: true,
         view: new Ext.grid.GridView({
              forceFit:true,
@@ -186,8 +251,25 @@ npc.app.serviceDetail = function(record) {
         })
     });
 
+    // Add some action handlers to the SSI grid
+    siGrid.on('rowdblclick', function(grid, row) {
+        var n = grid.getStore().getAt(row).data.name;
+        var v = grid.getStore().getAt(row).data.value;
+        var toggle = false;
+
+        if (v.match('tick.png')) {
+            toggle = 'Disable';
+        } else if (v.match('cross.png')) {
+            toggle = 'Enable';
+        }
+
+        if (toggle) {
+            toggleEnabled(n, toggle);
+        }
+    });
+
     var snStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=notifications&action=getNotifications&p_id=' + record.data.service_object_id,
+        url: 'npc.php?module=notifications&action=getNotifications&p_id=' + service_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -235,7 +317,7 @@ npc.app.serviceDetail = function(record) {
     });
 
     var shStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=statehistory&action=getStateHistory&type=2&p_id=' + record.data.service_object_id,
+        url: 'npc.php?module=statehistory&action=getStateHistory&type=2&p_id=' + service_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -296,7 +378,7 @@ npc.app.serviceDetail = function(record) {
     });
 
     var sdStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=downtime&action=getDowntime&p_id=' + record.data.service_object_id,
+        url: 'npc.php?module=downtime&action=getDowntime&p_id=' + service_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -355,7 +437,7 @@ npc.app.serviceDetail = function(record) {
     });
 
     var scStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=comments&action=getComments&p_id=' + record.data.service_object_id,
+        url: 'npc.php?module=comments&action=getComments&p_id=' + service_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[

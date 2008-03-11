@@ -1,7 +1,9 @@
 npc.app.hostDetail = function(record) {
 
+    var host_object_id = (typeof record.data.host_object_id != 'undefined') ? record.data.host_object_id : record.data.object_id;
+
     // Set the id for the service detail tab
-    var id = 'hostDetail' + record.data.host_object_id + '-tab';
+    var id = 'hostDetail' + host_object_id + '-tab';
 
     // Set thetitle
     var title = record.data.host_name;
@@ -150,7 +152,7 @@ npc.app.hostDetail = function(record) {
     sgTbar.addField(combo);
 
     var hiStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=hosts&action=getStateInfo&p_id=' + record.data.host_object_id,
+        url: 'npc.php?module=hosts&action=getStateInfo&p_id=' + host_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -186,7 +188,7 @@ npc.app.hostDetail = function(record) {
     });
 
     var hnStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=notifications&action=getNotifications&p_id=' + record.data.host_object_id,
+        url: 'npc.php?module=notifications&action=getNotifications&p_id=' + host_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -234,7 +236,7 @@ npc.app.hostDetail = function(record) {
     });
 
     var hhStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=statehistory&action=getStateHistory&type=2&p_id=' + record.data.host_object_id,
+        url: 'npc.php?module=statehistory&action=getStateHistory&type=2&p_id=' + host_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -295,7 +297,7 @@ npc.app.hostDetail = function(record) {
     });
 
     var hdStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=downtime&action=getDowntime&p_id=' + record.data.host_object_id,
+        url: 'npc.php?module=downtime&action=getDowntime&p_id=' + host_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[
@@ -354,7 +356,7 @@ npc.app.hostDetail = function(record) {
     });
 
     var hcStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=comments&action=getComments&p_id=' + record.data.host_object_id,
+        url: 'npc.php?module=comments&action=getComments&p_id=' + host_object_id,
         totalProperty:'totalCount',
         root:'data',
         fields:[

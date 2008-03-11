@@ -178,5 +178,5 @@ npc.app.hosts = function(title, filter){
     // Add the listener to the tab
     tab.addListener(listeners);
 
-    grid.on('rowclick', npc.app.hostGridClick);
+    grid.on('rowdblclick', npc.app.hostGridClick);
 };

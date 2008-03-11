@@ -152,7 +152,7 @@ class NagiosCmd {
                 'required' => true,
                 'type' => 'string')
         ),
-        
+       
         'CHANGE_CONTACT_MODATTR' => array(
         	'contact_name' => array(
         		'required' => true,
@@ -161,7 +161,7 @@ class NagiosCmd {
         		'required' => true,
         		'type' => 'integer')
         ),
-        
+       
         'CHANGE_CONTACT_MODHATTR' => array(
         	'contact_name' => array(
         		'required' => true,
@@ -170,7 +170,7 @@ class NagiosCmd {
         		'required' => true,
         		'type' => 'integer')
         ),
-        
+       
         'CHANGE_CONTACT_MODSATTR' => array(
         	'contact_name' => array(
         		'required' => true,
@@ -179,7 +179,7 @@ class NagiosCmd {
         		'required' => true,
         		'type' => 'integer')
         ),
-        
+       
         'CHANGE_CONTACT_SVC_NOTIFICATION_TIMEPERIOD' => array(
         	'contact_name' => array(
         		'required' => true,
@@ -188,7 +188,7 @@ class NagiosCmd {
                 'required' => true,
                 'type' => 'string')
         ),
-        
+       
         'CHANGE_CUSTOM_CONTACT_VAR' => array(
         	'contact_name' => array(
         		'required' => true,
@@ -200,7 +200,7 @@ class NagiosCmd {
         		'required' => true,
         		'type' => 'string')
         ),
-        
+       
         'CHANGE_CUSTOM_HOST_VAR' => array(
         	'host_name' => array(
         		'required' => true,
@@ -212,7 +212,7 @@ class NagiosCmd {
         		'required' => true,
         		'type' => 'string')
         ),
-        
+       
         'CHANGE_CUSTOM_SVC_VAR' => array(
         	'host_name' => array(
         		'required' => true,
@@ -227,19 +227,19 @@ class NagiosCmd {
         		'required' => true,
         		'type' => 'string')
         ),
-        
+       
         'CHANGE_GLOBAL_HOST_EVENT_HANDLER' => array(
         	'event_handler_command' => array(
         		'required' => true,
         		'type' => 'string')
         ),
-        
+       
         'CHANGE_GLOBAL_SVC_EVENT_HANDLER' => array(
         	'event_handler_command' => array(
         		'required' => true,
         		'type' => 'string')
         ),
-        
+       
         'CHANGE_HOST_CHECK_COMMAND' => array(
         	'host_name' => array(
         		'required' => true,
@@ -248,10 +248,7 @@ class NagiosCmd {
         		'required' => true,
         		'type' => 'string')
         ),
-        /* FIXME These two checks below seem to be duplicated
-         * and documentation appears to have typo's
-         */
-        'CHANGE_HOST_CHECK_TIMEPERIOD' => null,
+
         'CHANGE_HOST_CHECK_TIMEPERIOD' => null,
         
         'CHANGE_HOST_EVENT_HANDLER' => array(
