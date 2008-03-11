@@ -276,46 +276,61 @@ npc.app = function() {
 
         hostStatusImage: function(val){
             var img;
+            var state;
             if (val == 0) {
                 img = 'greendot.gif';
+                state = "UP";
             } else if (val == 1) {
                 img = 'reddot.gif';
+                state = "DOWN";
             } else if (val == 2) {
                 img = 'reddot.gif';
+                state = "UNREACHABLE";
             } else if (val == -1) {
                 img = 'bluedot.gif';
+                state = "PENDING";
             }
-            return String.format('<p align="center"><img src="images/icons/{0}"></p>', img);
+            return String.format('<p align="center"><img ext:qtip="{0}" src="images/icons/{1}"></p>', state, img);
         },
 
         serviceStatusImage: function(val){
             var img;
+            var state;
             if (val == 0) {
                 img = 'greendot.gif';
+                state = "OK";
             } else if (val == 1) {
                 img = 'yellowdot.gif';
+                state = "WARNING";
             } else if (val == 2) {
                 img = 'reddot.gif';
+                state = "CRITICAL";
             } else if (val == 3) {
                 img = 'orangedot.gif';
+                state = "UNKNOWN";
             } else if (val == -1) {
                 img = 'bluedot.gif';
+                state = "PENDING";
             }
-            return String.format('<p align="center"><img src="images/icons/{0}"></p>', img);
+            return String.format('<p align="center"><img ext:qtip="{0}" src="images/icons/{1}"></p>', state, img);
         },
 
         renderExtraIcons: function(val, p, record) {
             var img = '';
             if (record.data.problem_has_been_acknowledged == 1) {
                 var ack = record.data.acknowledgement.split("*|*");
-                img = String.format('&nbsp;<img ext:qtitle="Acknowledged by {0}" ext:qtip=\'{1}\' src="images/icons/wrench.png">', ack[0], ack[1]);
+                var by = '';
+                if (ack[0]) {
+                    by = 'by ' + ack[0];
+                }
+                img = String.format('&nbsp;<img ext:qtip="This problem has been acknowledged {0}" src="images/icons/wrench.png">', by);
             }
             if (record.data.notifications_enabled == 0) {
                 img = String.format('&nbsp;<img ext:qtip="Notifications have been disabled." src="images/icons/sound_mute.png">') + img;
             }
             if (record.data.comment) {
-                var c = record.data.comment.split("*|*");
-                img = String.format('&nbsp;<img qtitle="{0}" ext:qtip=\'{1}\' src="images/icons/comment.png">', c[0], c[1]) + img;
+                //var c = record.data.comment.split("*|*");
+                img = String.format('&nbsp;<img ext:qtip="There are comments for this item" src="images/icons/comment.png">') + img;
             }
             if (record.data.is_flapping) {
                 img = String.format('&nbsp;<img ext:qtip="This service is flapping between states" src="images/icons/link_error.png">') + img;
@@ -326,6 +341,52 @@ npc.app = function() {
                 img = String.format('&nbsp;<img qtitle="Active checks disabled" ext:qtip="Passive checks are being accepted" src="images/nagios/passiveonly.gif">') + img;
             }
             return String.format('<div><div style="float: left;">{0}</div><div style="float: right;">{1}</div></div>', val, img);
+        },
+
+        renderCommentType: function(val) {
+            var s;
+            switch(val) {
+                case '1':
+                    s = 'User';
+                    break;
+                case '2':
+                    s = 'Scheduled Downtime';
+                    break;
+                case '3':
+                    s = 'Flap Detection';
+                    break;
+                case '4':
+                    s = 'Acknowledgement';
+                    break;
+            }
+            return String.format('{0}', s);
+        },
+
+        renderPersistent: function(val) {
+            var s;
+            switch(val) {
+                case '0':
+                    s = 'No';
+                    break;
+                case '1':
+                    s = 'Yes';
+                    break;
+            }
+            return String.format('{0}', s);
+        },
+
+        renderCommentExpires: function(val, p, record) {
+            if (record.data.is_persistent == 1) {
+                return String.format('NA');
+            }
+            if(typeof val == "object") {
+                if(val.getYear() == '69') {
+                    return String.format('NA');
+                } else {
+                    return String.format(val.dateFormat(npc.app.params.npc_date_format + ' ' + npc.app.params.npc_time_format));
+                }
+            }
+            return val;
         },
 
         getDuration: function(val) {
@@ -630,7 +691,12 @@ npc.app = function() {
                                         },{
                                             text:'Comments',
                                             iconCls:'tleaf',
-                                            leaf:true 
+                                            leaf:true,
+                                                listeners: {
+                                                    click: function() {
+                                                        npc.app.comments();
+                                                    }
+                                                }
                                         },{
                                             text:'Downtime',
                                             iconCls:'tleaf',
@@ -741,6 +807,12 @@ npc.app = function() {
                     var sgHS = Ext.getCmp('servicegroupHostStatus');
                     var sgHSC = sgHS.isVisible();
 
+                    var hgSS = Ext.getCmp('hostgroupServiceStatus');
+                    var hgSSC = hgSS.isVisible();
+
+                    var hgHS = Ext.getCmp('hostgroupHostStatus');
+                    var hgHSC = hgHS.isVisible();
+
                     var form = new Ext.form.FormPanel({
                         //title: 'Show/hide portlets',
                         bodyStyle:'padding:5px 5px 0',
@@ -814,6 +886,34 @@ npc.app = function() {
                                         mP.show();
                                     } else {
                                         mP.hide();
+                                    }
+                                }
+                            }
+                        },{
+                            boxLabel: 'Hostgroup: Service Status',
+                            hideLabel: true,
+                            xtype:'checkbox',
+                            checked: sgSSC,
+                            listeners: {
+                                check: function(cb, checked) {
+                                    if (checked) {
+                                        hgSS.show();
+                                    } else {
+                                        hgSS.hide();
+                                    }
+                                }
+                            }
+                        },{
+                            boxLabel: 'Hostgroup: Host Status',
+                            hideLabel: true,
+                            xtype:'checkbox',
+                            checked: sgHSC,
+                            listeners: {
+                                check: function(cb, checked) {
+                                    if (checked) {
+                                        hgHS.show();
+                                    } else {
+                                        hgHS.hide();
                                     }
                                 }
                             }

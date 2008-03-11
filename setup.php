@@ -42,6 +42,11 @@ function npc_version () {
     );
 }
 
+function npc_top_graph_refresh() {
+    // Don't want to refresh so set very high
+    return('2592000');
+}
+
 function npc_config_arrays () {
 
     global $user_auth_realms, $user_auth_realm_filenames, $npc_date_format, $npc_time_format;

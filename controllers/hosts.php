@@ -232,10 +232,10 @@ class NpcHostsController extends Controller {
         $return = $results[$key];
 
         $cs = array(
-            '0'  => '<img src="images/icons/greendot.gif">',
-            '1'  => '<img src="images/icons/reddot.gif">',
-            '2'  => '<img src="images/icons/reddot.gif">',
-            '-1' => '<img src="images/icons/bluedot.gif">'
+            '0'  => '<img ext:qtip="UP" src="images/icons/greendot.gif">',
+            '1'  => '<img ext:qtip="DOWN" src="images/icons/reddot.gif">',
+            '2'  => '<img ext:qtip="UNREACHABLE" src="images/icons/reddot.gif">',
+            '-1' => '<img ext:qtip="PENDING" src="images/icons/bluedot.gif">'
         );
 
         if ($key == 'current_state') {

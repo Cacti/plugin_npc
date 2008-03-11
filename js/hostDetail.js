@@ -85,38 +85,6 @@ npc.app.hostDetail = function(record) {
         return(val);
     }
 
-    function renderCommentType(val) {
-        var s;
-        switch(val) {
-            case '1':
-                s = 'User';
-                break;
-            case '2':
-                s = 'Scheduled Downtime';
-                break;
-            case '3':
-                s = 'Flap Detection';
-                break;
-            case '4':
-                s = 'Acknowledgement';
-                break;
-        }
-        return String.format('{0}', s);
-    }
-
-    function renderPersistent(val) {
-        var s;
-        switch(val) {
-            case '0':
-                s = 'No';
-                break;
-            case '1':
-                s = 'Yes';
-                break;
-        }
-        return String.format('{0}', s);
-    }
-
     function renderAction(v, p, r) {
         return String.format('<img src="images/icons/comment_delete.png">');
     }
@@ -392,7 +360,7 @@ npc.app.hostDetail = function(record) {
         fields:[
             'comment_id',
             'instance_id',
-            {name: 'entry_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'comment_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
             'entry_type',
             'author_name',
             'comment_data',
@@ -405,7 +373,7 @@ npc.app.hostDetail = function(record) {
 
     var hcCm = new Ext.grid.ColumnModel([{
         header:"Entry Time",
-        dataIndex:'entry_time',
+        dataIndex:'comment_time',
         renderer: npc.app.formatDate,
         width:120
     },{
@@ -419,17 +387,17 @@ npc.app.hostDetail = function(record) {
     },{
         header:"Persistent",
         dataIndex:'is_persistent',
-        renderer:renderPersistent,
+        renderer:npc.app.renderPersistent,
         width:80
     },{
         header:"Type",
         dataIndex:'entry_type',
-        renderer:renderCommentType,
+        renderer:npc.app.renderCommentType,
         width:100
     },{
         header:"Expires",
         dataIndex:'expiration_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.app.renderCommentExpires,
         width:120
     },{
         header:"Delete",
@@ -487,11 +455,6 @@ npc.app.hostDetail = function(record) {
             store: hcStore,
             displayInfo: true
         })
-        // The search field won't render :(
-        //plugins:[new Ext.ux.grid.Search({
-        //    mode:'remote',
-        //    iconCls:false
-        //})]
     });
 
     // Add the grids to the tabs

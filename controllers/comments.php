@@ -14,6 +14,8 @@
  * @version             $Id: $
  */
 
+require_once("include/auth.php");
+
 /**
  * Comments controller class
  *
@@ -65,6 +67,88 @@ class NpcCommentsController extends Controller {
      */
     function getComments() {
         return($this->jsonOutput($this->comments()));
+    }
+
+    /**
+     * getHostComments
+     * 
+     * An accessor method to return all host comments
+     *
+     * @return string   json output
+     */
+    function getHostComments() {
+        $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 1'));
+        return($this->jsonOutput($results));
+    }
+
+    /**
+     * getServiceComments
+     * 
+     * An accessor method to return all service comments
+     *
+     * @return string   json output
+     */
+    function getServiceComments() {
+        $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 2'));
+        return($this->jsonOutput($results));
+    }
+
+    /**
+     * deleteAllHostComments
+     * 
+     * Delete all host comments.
+     *
+     * @return string   json output
+     */
+    function deleteAllHostComments() {
+
+        require_once("plugins/npc/controllers/nagios.php");
+
+        $seen = array();
+
+        $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 1'));
+        
+        for ($i = 0; $i < count($results); $i++) {
+            $host = $results[$i]['host_name'];
+            if (!isset($seen[$host])) {
+                $params = array(
+                    'command' => 'DEL_ALL_HOST_COMMENTS',
+                    'host_name' => $host
+                );
+                NpcNagiosController::command($params);
+                $seen[$host] = 1;
+            }   
+        }
+    }
+
+    /**
+     * deleteAllServiceComments
+     * 
+     * Delete all service comments.
+     *
+     * @return string   json output
+     */
+    function deleteAllServiceComments() {
+
+        require_once("plugins/npc/controllers/nagios.php");
+
+        $seen = array();
+
+        $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 2'));
+        
+        for ($i = 0; $i < count($results); $i++) {
+            $host = $results[$i]['host_name'];
+            $service = $results[$i]['service_description'];
+            if (!isset($seen[$host][$service])) {
+                $params = array(
+                    'command' => 'DEL_ALL_SVC_COMMENTS',
+                    'host_name' => $host,
+                    'service_description' => $service,
+                );
+                NpcNagiosController::command($params);
+                $seen[$host][$service] = 1;
+            }   
+        }
     }
 
     /**

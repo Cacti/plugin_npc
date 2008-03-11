@@ -154,27 +154,6 @@ npc.app.services = function(title, filter){
     // Refresh the dashboard
     centerTabPanel.doLayout();
 
-    // Add button to toggle betwen handled and unhandled problems
-    /*
-    if (filter == 'not_ok') {
-        var bbar = grid.getBottomToolbar();
-        bbar.addSeparator();
-        bbar.addButton({
-            id:'unhandledButton',
-            text:'Unhandled',
-            enableToggle: true,
-            iconCls:'errorGo',
-            handler : function(){
-                if (Ext.getCmp('unhandledButton').pressed) {
-                    grid.store.load({params:{start:0, limit:pageSize, unhandled:1}});
-                } else {
-                    grid.store.load({params:{start:0, limit:pageSize}});
-                }
-            }
-        });
-    }
-    */
-
     // Render the grid
     grid.render();
 

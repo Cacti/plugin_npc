@@ -16,6 +16,8 @@
  * @version             $Id: $
  */
 
+require_once("plugins/npc/nagioscmd.php");
+
 /**
  * Nagios controller class
  *
@@ -39,8 +41,6 @@ class NpcNagiosController extends Controller {
      * @return string
      */
     function command($params) {
-
-        include("plugins/npc/nagioscmd.php");
 
         $nagios = new NagiosCmd;
         $args = array();

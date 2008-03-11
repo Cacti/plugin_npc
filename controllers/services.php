@@ -242,11 +242,11 @@ class NpcServicesController extends Controller {
         $return = $results[$key];
 
         $cs = array(
-            '0'  => '<img src="images/nagios/recovery.png">',
-            '1'  => '<img src="images/nagios/warning.png">',
-            '2'  => '<img src="images/nagios/critical.png">',
-            '3'  => '<img src="images/nagios/unknown.png">',
-            '-1' => '<img src="images/nagios/info.png">'
+            '0'  => '<img ext:qtip="OK" src="images/icons/greendot.gif">',
+            '1'  => '<img ext:qtip="WARNING" src="images/icons/yellowdot.gif">',
+            '2'  => '<img ext:qtip="CRITICAL" src="images/icons/reddot.gif">',
+            '3'  => '<img ext:qtip="UNKNOWN" src="images/icons/orangedot.gif">',
+            '-1' => '<img ext:qtip="PENDING" src="images/icons/bluedot.gif">'
         );
 
         if ($key == 'current_state') {
