@@ -26,7 +26,6 @@ class NpcLayoutController {
 
     } // end drawFrame
 
-
     function drawLayout($params) {
 
         $config = $params['config'];
@@ -42,29 +41,9 @@ class NpcLayoutController {
           <!-- <link rel="stylesheet" type="text/css" href="<?php echo $config["url_path"]; ?>plugins/npc/js/ext/resources/css/xtheme-gray.css" /> -->
 
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/ext/adapter/ext/ext-base.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/ext/ext-all-debug.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/plugins.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/overrides.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/ext/ext-all.js"></script>
 
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/Portal.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/PortalColumn.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/Portlet.js"></script>
-
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/npc.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/n2c.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/hosts.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/hostDetail.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/hostgroupGrid.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/hostgroupOverview.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/services.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/serviceDetail.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/servicegroupGrid.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/servicegroupOverview.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/comments.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/downtime.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/processInfo.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/reporting.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/eventLog.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/npc-all-min.js"></script>
           
           <script type="text/javascript">
 
@@ -90,16 +69,7 @@ class NpcLayoutController {
           </script>
 
           <!-- Portlets -->
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/host-problems-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/host-summary-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/service-summary-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/eventlog-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/service-problems-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/monitoring-performance-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/servicegroup-service-status-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/servicegroup-host-status-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/hostgroup-host-status-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/hostgroup-service-status-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/portlets-all-min.js"></script>
 
           <script type="text/javascript">
             Ext.onReady(function() {
