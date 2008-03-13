@@ -2,7 +2,7 @@
 <project name="npc" description="NPC build file" default="main" >
 
   <property name="build.dir"  value="." />
-  <property name="yuicompressor"  value="/home/bgunn/workspace/npc/yuicompressor-2.3.4.jar" />
+  <property name="yuicompressor"  value="/home/bgunn/workspace/yuicompressor-2.3.4.jar" />
   <property name="tmp.dir"  value="/tmp" />
 
   <target name="main" depends="js.minify"/>
@@ -21,8 +21,8 @@
   <target name="js.minify" depends="js.prepare">
     <exec command="java -jar ${yuicompressor} --type js -o ../npc-all-min.js ${tmp.dir}/npc-all.js" />
     <exec command="java -jar ${yuicompressor} --type js -o ../portlets-all-min.js ${tmp.dir}/portlets-all.js" />
-    <delete file="/tmp/npc-all.js" />
-    <delete file="/tmp/portlets-all.js" />
+    <delete file="${tmp.dir}/npc-all.js" />
+    <delete file="${tmp.dir}/portlets-all.js" />
   </target>
 
 </project>

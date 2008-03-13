@@ -5,6 +5,7 @@
   <property name="tmp.dir"  value="/tmp" />
   <property name="svnpath" value="/usr/bin/svn" />
   <property name="repo" value="http://svn2.assembla.com/svn/npc/trunk/src" />
+  <property name="yuicompressor"  value="/home/bgunn/workspace/yuicompressor-2.3.4.jar" />
 
   <target name="main" depends="js.minify"/>
 
@@ -29,10 +30,10 @@
   </target>
 
   <target name="js.minify" depends="js.prepare">
-    <exec command="java -jar yuicompressor-2.3.4.jar --type js -o ${build.dir}/js/npc-all-min.js ${tmp.dir}/npc-all.js" />
-    <exec command="java -jar yuicompressor-2.3.4.jar --type js -o ${build.dir}/js/portlets-all-min.js ${tmp.dir}/portlets-all.js" />
-    <delete file="/tmp/npc-all.js" />
-    <delete file="/tmp/portlets-all.js" />
+    <exec command="java -jar ${yuicompressor} --type js -o ${build.dir}/js/npc-all-min.js ${tmp.dir}/npc-all.js" />
+    <exec command="java -jar ${yuicompressor} --type js -o ${build.dir}/js/portlets-all-min.js ${tmp.dir}/portlets-all.js" />
+    <delete file="${tmp.dir}/npc-all.js" />
+    <delete file="${tmp.dir}/portlets-all.js" />
   </target>
 
 </project>
