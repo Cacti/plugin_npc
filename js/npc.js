@@ -873,6 +873,9 @@ npc.app = function() {
                 text: 'Portlets',
                 handler: function() {
 
+                    var hP = Ext.getCmp('hostProblems');
+                    var hPC = hP.isVisible();
+
                     var eL = Ext.getCmp('eventLog');
                     var eLC = eL.isVisible();
 
@@ -901,137 +904,158 @@ npc.app = function() {
                     var hgHSC = hgHS.isVisible();
 
                     var form = new Ext.form.FormPanel({
-                        //title: 'Show/hide portlets',
                         bodyStyle:'padding:5px 5px 0',
                         layout: 'form',
-                        frame:true,
-                        xtype:'fieldset',
+                        border:false,
+                        frame:false,
                         items: [{
-                            boxLabel: 'Event Log',
-                            hideLabel: true,
-                            xtype:'checkbox',
-                            checked: eLC,
-                            listeners: {
-                                check: function(cb, checked) {
-                                    if (checked) {
-                                        eL.show();
-                                    } else {
-                                        eL.hide();
+                            xtype:'fieldset',
+                            title: 'Show/hide portlets',
+                            checkboxToggle:false,
+                            autoHeight:true,
+                            defaults: {width: 210},
+                            defaultType: 'checkbox',
+                                items: [{
+                                boxLabel: 'Event Log',
+                                hideLabel: true,
+                                xtype:'checkbox',
+                                checked: eLC,
+                                listeners: {
+                                    check: function(cb, checked) {
+                                        if (checked) {
+                                            eL.show();
+                                        } else {
+                                            eL.hide();
+                                        }
                                     }
                                 }
-                            }
-                        },{
-                            boxLabel: 'Host Status Summary',
-                            hideLabel: true,
-                            xtype:'checkbox',
-                            checked: hSC,
-                            listeners: {
-                                check: function(cb, checked) {
-                                    if (checked) {
-                                        hS.show();
-                                    } else {
-                                        hS.hide();
+                            },{
+                                boxLabel: 'Host Problems',
+                                hideLabel: true,
+                                xtype:'checkbox',
+                                checked: hPC,
+                                listeners: {
+                                    check: function(cb, checked) {
+                                        if (checked) {
+                                            hP.show();
+                                        } else {
+                                            hP.hide();
+                                        }
                                     }
                                 }
-                            }
-                        },{
-                            boxLabel: 'Service Status Summary',
-                            hideLabel: true,
-                            xtype:'checkbox',
-                            checked: sSC,
-                            listeners: {
-                                check: function(cb, checked) {
-                                    if (checked) {
-                                        sS.show();
-                                    } else {
-                                        sS.hide();
+                            },{
+                                boxLabel: 'Host Status Summary',
+                                hideLabel: true,
+                                xtype:'checkbox',
+                                checked: hSC,
+                                listeners: {
+                                    check: function(cb, checked) {
+                                        if (checked) {
+                                            hS.show();
+                                        } else {
+                                            hS.hide();
+                                        }
                                     }
                                 }
-                            }
-                        },{
-                            boxLabel: 'Service Problems',
-                            hideLabel: true,
-                            xtype:'checkbox',
-                            checked: sPC,
-                            listeners: {
-                                check: function(cb, checked) {
-                                    if (checked) {
-                                        sP.show();
-                                    } else {
-                                        sP.hide();
+                            },{
+                                boxLabel: 'Service Status Summary',
+                                hideLabel: true,
+                                xtype:'checkbox',
+                                checked: sSC,
+                                listeners: {
+                                    check: function(cb, checked) {
+                                        if (checked) {
+                                            sS.show();
+                                        } else {
+                                            sS.hide();
+                                        }
                                     }
                                 }
-                            }
-                        },{
-                            boxLabel: 'Monitoring Performance',
-                            hideLabel: true,
-                            xtype:'checkbox',
-                            checked: mPC,
-                            listeners: {
-                                check: function(cb, checked) {
-                                    if (checked) {
-                                        mP.show();
-                                    } else {
-                                        mP.hide();
+                            },{
+                                boxLabel: 'Service Problems',
+                                hideLabel: true,
+                                xtype:'checkbox',
+                                checked: sPC,
+                                listeners: {
+                                    check: function(cb, checked) {
+                                        if (checked) {
+                                            sP.show();
+                                        } else {
+                                            sP.hide();
+                                        }
                                     }
                                 }
-                            }
-                        },{
-                            boxLabel: 'Hostgroup: Service Status',
-                            hideLabel: true,
-                            xtype:'checkbox',
-                            checked: sgSSC,
-                            listeners: {
-                                check: function(cb, checked) {
-                                    if (checked) {
-                                        hgSS.show();
-                                    } else {
-                                        hgSS.hide();
+                            },{
+                                boxLabel: 'Monitoring Performance',
+                                hideLabel: true,
+                                xtype:'checkbox',
+                                checked: mPC,
+                                listeners: {
+                                    check: function(cb, checked) {
+                                        if (checked) {
+                                            mP.show();
+                                        } else {
+                                            mP.hide();
+                                        }
                                     }
                                 }
-                            }
-                        },{
-                            boxLabel: 'Hostgroup: Host Status',
-                            hideLabel: true,
-                            xtype:'checkbox',
-                            checked: sgHSC,
-                            listeners: {
-                                check: function(cb, checked) {
-                                    if (checked) {
-                                        hgHS.show();
-                                    } else {
-                                        hgHS.hide();
+                            },{
+                                boxLabel: 'Hostgroup: Service Status',
+                                hideLabel: true,
+                                xtype:'checkbox',
+                                checked: sgSSC,
+                                listeners: {
+                                    check: function(cb, checked) {
+                                        if (checked) {
+                                            hgSS.show();
+                                        } else {
+                                            hgSS.hide();
+                                        }
                                     }
                                 }
-                            }
-                        },{
-                            boxLabel: 'Servicegroup: Service Status',
-                            hideLabel: true,
-                            xtype:'checkbox',
-                            checked: sgSSC,
-                            listeners: {
-                                check: function(cb, checked) {
-                                    if (checked) {
-                                        sgSS.show();
-                                    } else {
-                                        sgSS.hide();
+                            },{
+                                boxLabel: 'Hostgroup: Host Status',
+                                hideLabel: true,
+                                xtype:'checkbox',
+                                checked: sgHSC,
+                                listeners: {
+                                    check: function(cb, checked) {
+                                        if (checked) {
+                                            hgHS.show();
+                                        } else {
+                                            hgHS.hide();
+                                        }
                                     }
                                 }
-                            }
-                        },{
-                            boxLabel: 'Servicegroup: Host Status',
-                            hideLabel: true,
-                            xtype:'checkbox',
-                            checked: sgHSC,
-                            listeners: {
-                                check: function(cb, checked) {
-                                    if (checked) {
-                                        sgHS.show();
-                                    } else {
-                                        sgHS.hide();
+                            },{
+                                boxLabel: 'Servicegroup: Service Status',
+                                hideLabel: true,
+                                xtype:'checkbox',
+                                checked: sgSSC,
+                                listeners: {
+                                    check: function(cb, checked) {
+                                        if (checked) {
+                                            sgSS.show();
+                                        } else {
+                                            sgSS.hide();
+                                        }
                                     }
                                 }
-                            }
+                            },{
+                                boxLabel: 'Servicegroup: Host Status',
+                                hideLabel: true,
+                                xtype:'checkbox',
+                                checked: sgHSC,
+                                listeners: {
+                                    check: function(cb, checked) {
+                                        if (checked) {
+                                            sgHS.show();
+                                        } else {
+                                            sgHS.hide();
+                                        }
+                                    }
+                                }
+                            }]
                         }]
                     });
 
@@ -1040,10 +1064,10 @@ npc.app = function() {
                         modal:true,
                         closable: true,
                         width:300,
-                        height:300,
+                        height:350,
                         layout:'fit',
-                        plain:true,
-                        bodyStyle:'padding:5px;',
+                        //plain:true,
+                        //bodyStyle:'padding:5px;',
                         items:form
                     });
                     window.show();

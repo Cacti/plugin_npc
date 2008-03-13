@@ -98,6 +98,7 @@ npc.app.hosts = function(title, filter){
     },{
         header:"Duration",
         dataIndex:'last_state_change',
+        hidden:true,
         renderer: npc.app.getDuration,
         width:110
     },{
@@ -109,6 +110,7 @@ npc.app.hosts = function(title, filter){
     },{
         header:"Services",
         dataIndex:'service_count',
+        hidden:true,
         align:'center',
         width:50
     },{

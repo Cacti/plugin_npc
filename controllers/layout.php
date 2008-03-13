@@ -90,6 +90,7 @@ class NpcLayoutController {
           </script>
 
           <!-- Portlets -->
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/host-problems-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/host-summary-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/service-summary-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/dashboard/eventlog-portlet.js"></script>
