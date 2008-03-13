@@ -144,8 +144,6 @@ class NpcSyncController extends Controller {
             $i++;
         }
 
-        $this->numRecords = count($output);
-
         return($this->jsonOutput($output));
     }
 

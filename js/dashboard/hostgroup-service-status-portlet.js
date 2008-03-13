@@ -141,7 +141,7 @@ npc.app.portlet.hostgroupServiceStatus = function(){
         store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     }
 
-    grid.on('rowclick', hgClick);
+    grid.on('rowdblclick', hgClick);
 
     function hgClick(grid, rowIndex, e) {
         var hoi = grid.getStore().getAt(rowIndex).json.hostgroup_object_id;

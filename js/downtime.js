@@ -1,6 +1,6 @@
 npc.app.downtime = function(){
 
-    var title = 'Downtime';
+    var title = 'Scheduled Downtime';
 
     // Default # of rows to display
     var pageSize = 20;
@@ -23,14 +23,14 @@ npc.app.downtime = function(){
     } else {
         innerTabPanel.add({ 
             id: 'host-downtime-tab', 
-            title: 'Host Downtime', 
+            title: 'Hosts', 
             deferredRender:false,
             closable: false, 
             items: [{}] 
         });
         innerTabPanel.add({ 
             id: 'service-downtime-tab', 
-            title: 'Service Downtime', 
+            title: 'Services', 
             deferredRender:false,
             closable: false, 
             items: [{}] 
@@ -211,8 +211,8 @@ npc.app.downtime = function(){
     serviceGrid.store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
-    hostStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    serviceStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    hostStore.startAutoRefresh(60);
+    serviceStore.startAutoRefresh(60);
 
     // Stop auto refresh if the tab is closed
     var listeners = {

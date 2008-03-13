@@ -32,6 +32,62 @@ require_once("plugins/npc/nagioscmd.php");
 class NpcNagiosController extends Controller {
 
     /**
+     * getProcessInfo
+     * 
+     * Gets and formats Nagios process state information
+     *
+     * @return string   json output
+     */
+    function getProcessInfo() {
+
+        $fields = array(
+            'program_version',
+            'instance_id',
+            'process_id',
+            'status_update_time',
+            'program_start_time',
+            'program_end_time',
+            //'is_currently_running',
+            'last_command_check',
+            'last_log_rotation',
+            'notifications_enabled',
+            'active_service_checks_enabled',
+            'passive_service_checks_enabled',
+            'active_host_checks_enabled',
+            'passive_host_checks_enabled',
+            'event_handlers_enabled',
+            'flap_detection_enabled',
+            'process_performance_data',
+            'obsess_over_hosts',
+            'obsess_over_services'
+        );
+
+        $q = new Doctrine_Query();
+        $q->select('ps.*')->from('NpcProgramstatus ps');
+
+        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+
+        $q = new Doctrine_Query();
+        $q->select('p.instance_id, p.program_version, max(p.processevent_id)')
+          ->from('NpcProcessevents p')
+          ->where('p.instance_id = ?', $results[0]['instance_id'])
+          ->groupby('p.program_version');
+
+        $version = $q->execute(array(), Doctrine::FETCH_ARRAY);
+
+        $results[0]['program_version'] = $version[0]['program_version'];
+
+        $x = 0;
+        foreach ($fields as $key) {
+            $output[$x] = array('name' => $this->columnAlias[$key], 'value' => $this->formatProcessInfo($key, $results[0]));
+            $x++;
+        }
+
+        return($this->jsonOutput($output));
+    }
+
+
+    /**
      * command
      * 
      * Creates a nagios command object passing in command
@@ -152,5 +208,56 @@ class NpcNagiosController extends Controller {
         }
 
         return($this->jsonOutput($output));
+    }
+
+    /**
+     * formatProcessInfo
+     * 
+     * Formats the process info results for display.
+     * This is a workaround for some of the limitations of
+     * EXT property grid.
+     *
+     * @return string   The formatted results
+     */
+    function formatProcessInfo($key, $results) {
+
+        // Set the default return value
+        $return = $results[$key];
+
+        $toggle = array(
+            'notifications_enabled',
+            'active_service_checks_enabled',
+            'passive_service_checks_enabled',
+            'active_host_checks_enabled',
+            'passive_host_checks_enabled',
+            'event_handlers_enabled',
+            'obsess_over_services',
+            'obsess_over_hosts',
+            'flap_detection_enabled',
+            'process_performance_data'
+        );
+
+        if (in_array($key, $toggle)) {
+            if($results[$key]) {
+                $return = '<img src="images/icons/tick.png">';
+            } else {
+                $return = '<img src="images/icons/cross.png">';
+            }
+        }
+
+        if ($key == 'program_start_time' || $key == 'status_update_time' || $key == 'last_command_check' || $key == 'last_log_rotation' || $key == 'program_end_time') {
+            $format = read_config_option('npc_date_format') . ' ' . read_config_option('npc_time_format');
+            $date = date($format, strtotime($results[$key]));
+            if (preg_match("/1969/", $date)) {
+                return('NA');
+            }
+            return($date);   
+        }
+
+        if ($return == '' || !$return) {
+            $return = 'NA';
+        }
+
+        return($return);
     }
 }

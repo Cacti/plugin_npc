@@ -130,6 +130,6 @@ npc.app.portlet.serviceProblems = function(){
         store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     }
 
-    grid.on('rowclick', npc.app.serviceGridClick);
+    grid.on('rowdblclick', npc.app.serviceGridClick);
 
 };

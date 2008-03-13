@@ -249,7 +249,7 @@ class NagiosCmd {
         		'type' => 'string')
         ),
 
-        'CHANGE_HOST_CHECK_TIMEPERIOD' => null,
+        'CHANGE_HOST_CHECK_TIMEPERIOD' => array(),
         
         'CHANGE_HOST_EVENT_HANDLER' => array(
         	'host_name' => array(
@@ -487,9 +487,9 @@ class NagiosCmd {
                 'type' => 'string')
         ),
         
-        'DISABLE_EVENT_HANDLERS' => null,
-        'DISABLE_FAILURE_PREDICTION' => null,
-        'DISABLE_FLAP_DETECTION' => null,
+        'DISABLE_EVENT_HANDLERS' => array(),
+        'DISABLE_FAILURE_PREDICTION' => array(),
+        'DISABLE_FLAP_DETECTION' => array(),
         
         'DISABLE_HOSTGROUP_HOST_CHECKS' => array(   
             'hostgroup_name' => array(
@@ -551,7 +551,7 @@ class NagiosCmd {
                 'type' => 'string')
         ),
         
-        'DISABLE_HOST_FRESHNESS_CHECKS' => null,
+        'DISABLE_HOST_FRESHNESS_CHECKS' => array(),
         
         'DISABLE_HOST_NOTIFICATIONS' => array(   
             'host_name' => array(
@@ -571,7 +571,7 @@ class NagiosCmd {
                 'type' => 'string')
         ),
         
-        'DISABLE_NOTIFICATIONS' => null,
+        'DISABLE_NOTIFICATIONS' => array(),
         
         'DISABLE_PASSIVE_HOST_CHECKS' => array(   
             'host_name' => array(
@@ -588,7 +588,7 @@ class NagiosCmd {
         		'type' => 'string')
         ),
 
-        'DISABLE_PERFORMANCE_DATA' => null,
+        'DISABLE_PERFORMANCE_DATA' => array(),
         
         'DISABLE_SERVICEGROUP_HOST_CHECKS' => array(   
             'servicegroup_name' => array(
@@ -635,7 +635,7 @@ class NagiosCmd {
         		'type' => 'string')
         ),
 
-        'DISABLE_SERVICE_FRESHNESS_CHECKS' => null,
+        'DISABLE_SERVICE_FRESHNESS_CHECKS' => array(),
         
         'DISABLE_SVC_CHECK' => array(
         	'host_name' => array(
@@ -703,9 +703,9 @@ class NagiosCmd {
         		'type' => 'string')
         ),
 
-        'ENABLE_EVENT_HANDLERS' => null,
-        'ENABLE_FAILURE_PREDICTION' => null,
-        'ENABLE_FLAP_DETECTION' => null,
+        'ENABLE_EVENT_HANDLERS' => array(),
+        'ENABLE_FAILURE_PREDICTION' => array(),
+        'ENABLE_FLAP_DETECTION' => array(),
         
         'ENABLE_HOSTGROUP_HOST_CHECKS' => array(   
             'hostgroup_name' => array(
@@ -767,7 +767,7 @@ class NagiosCmd {
                 'type' => 'string')
         ),
 
-        'ENABLE_HOST_FRESHNESS_CHECKS' => null,
+        'ENABLE_HOST_FRESHNESS_CHECKS' => array(),
         
         'ENABLE_HOST_NOTIFICATIONS' => array(   
             'host_name' => array(
@@ -787,7 +787,7 @@ class NagiosCmd {
                 'type' => 'string')
         ),
 
-        'ENABLE_NOTIFICATIONS' => null,
+        'ENABLE_NOTIFICATIONS' => array(),
         
         'ENABLE_PASSIVE_HOST_CHECKS' => array(   
             'host_name' => array(
@@ -804,7 +804,7 @@ class NagiosCmd {
         		'type' => 'string')
         ),
 
-        'ENABLE_PERFORMANCE_DATA' => null,
+        'ENABLE_PERFORMANCE_DATA' => array(),
         
         'ENABLE_SERVICEGROUP_HOST_CHECKS' => array(   
             'servicegroup_name' => array(
@@ -842,7 +842,7 @@ class NagiosCmd {
                 'type' => 'string')
         ),
         
-        'ENABLE_SERVICE_FRESHNESS_CHECKS' => null,
+        'ENABLE_SERVICE_FRESHNESS_CHECKS' => array(),
         
         'ENABLE_SVC_CHECK' => array(
             'host_name' => array(
@@ -915,7 +915,7 @@ class NagiosCmd {
                 'type' => 'string')
         ),
         
-        'READ_STATE_INFORMATION' => null,
+        'READ_STATE_INFORMATION' => array(),
         
         'REMOVE_HOST_ACKNOWLEDGEMENT' => array(
             'host_name' => array(
@@ -932,8 +932,8 @@ class NagiosCmd {
                 'type' => 'string')
         ),
         
-        'RESTART_PROGRAM' => null,
-        'SAVE_STATE_INFORMATION' => null,
+        'RESTART_PROGRAM' => array(),
+        'SAVE_STATE_INFORMATION' => array(),
         
         'SCHEDULE_AND_PROPAGATE_HOST_DOWNTIME' => array(
             'host_name' => array(
@@ -1295,18 +1295,18 @@ class NagiosCmd {
                 'type' => 'integer')
         ),
         
-        'SHUTDOWN_PROGRAM' => null,        
-        'START_ACCEPTING_PASSIVE_HOST_CHECKS' => null,
-        'START_ACCEPTING_PASSIVE_SVC_CHECKS' => null,
-        'START_EXECUTING_HOST_CHECKS' => null,
-        'START_EXECUTING_SVC_CHECKS' => null,
+        'SHUTDOWN_PROGRAM' => array(),        
+        'START_ACCEPTING_PASSIVE_HOST_CHECKS' => array(),
+        'START_ACCEPTING_PASSIVE_SVC_CHECKS' => array(),
+        'START_EXECUTING_HOST_CHECKS' => array(),
+        'START_EXECUTING_SVC_CHECKS' => array(),
         'START_OBSESSING_OVER_HOST' => array(
             'host_name' => array(
                 'required' => true,
                 'type' => 'string')
         ),
         
-        'START_OBSESSING_OVER_HOST_CHECKS' => null,
+        'START_OBSESSING_OVER_HOST_CHECKS' => array(),
         'START_OBSESSING_OVER_SVC' => array(
             'host_name' => array(
                 'required' => true,
@@ -1316,18 +1316,18 @@ class NagiosCmd {
                 'type' => 'string')
         ),
         
-        'START_OBSESSING_OVER_SVC_CHECKS' => null,
-        'STOP_ACCEPTING_PASSIVE_HOST_CHECKS' => null,
-        'STOP_ACCEPTING_PASSIVE_SVC_CHECKS' => null,
-        'STOP_EXECUTING_HOST_CHECKS' => null,
-        'STOP_EXECUTING_SVC_CHECKS' => null,
+        'START_OBSESSING_OVER_SVC_CHECKS' => array(),
+        'STOP_ACCEPTING_PASSIVE_HOST_CHECKS' => array(),
+        'STOP_ACCEPTING_PASSIVE_SVC_CHECKS' => array(),
+        'STOP_EXECUTING_HOST_CHECKS' => array(),
+        'STOP_EXECUTING_SVC_CHECKS' => array(),
         'STOP_OBSESSING_OVER_HOST' => array(
             'host_name' => array(
                 'required' => true,
                 'type' => 'string')
         ),
         
-        'STOP_OBSESSING_OVER_HOST_CHECKS' => null,
+        'STOP_OBSESSING_OVER_HOST_CHECKS' => array(),
         'STOP_OBSESSING_OVER_SVC' => array(
             'host_name' => array(
                 'required' => true,
@@ -1337,7 +1337,7 @@ class NagiosCmd {
                 'type' => 'string')
         ),
         
-        'STOP_OBSESSING_OVER_SVC_CHECKS' => null,
+        'STOP_OBSESSING_OVER_SVC_CHECKS' => array(),
     );
 
     /**

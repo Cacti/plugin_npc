@@ -243,8 +243,11 @@ npc.app = function() {
             Ext.Ajax.request({
                 url : 'npc.php' ,
                 params : args,
-                failure: function (r) {
-                    Ext.Msg.alert('Error', r.result.msg);
+                callback: function (o, s, r) {
+                    var o = Ext.util.JSON.decode(r.responseText)
+                    if(!o.success) {
+                        Ext.Msg.alert('Error', o.msg);
+                    }
                 }
             });
         },
@@ -698,7 +701,7 @@ npc.app = function() {
                                                 }
                                             }
                                         },{
-                                            text:'Downtime',
+                                            text:'Scheduled Downtime',
                                             iconCls:'tleaf',
                                             leaf:true,
                                             listeners: {
@@ -707,17 +710,14 @@ npc.app = function() {
                                                 }
                                             }
                                         },{
-                                            text:'Process Info',
+                                            text:'Process Information',
                                             iconCls:'tleaf',
-                                            leaf:true 
-                                        },{
-                                            text:'Performance Info',
-                                            iconCls:'tleaf',
-                                            leaf:true 
-                                        },{
-                                            text:'Scheduling Queue',
-                                            iconCls:'tleaf',
-                                            leaf:true 
+                                            leaf:true,
+                                            listeners: {
+                                                click: function() {
+                                                    npc.app.processInfo();
+                                                }
+                                            }
                                         }]
                                     },{
                                         text:'Reporting',

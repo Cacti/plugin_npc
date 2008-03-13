@@ -62,6 +62,7 @@ class NpcLayoutController {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/servicegroupOverview.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/comments.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/downtime.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/processInfo.js"></script>
           
           <script type="text/javascript">
 

@@ -80,7 +80,7 @@ class Controller {
      * @var integer
      * @access public
      */
-    var $numRecords = 1;
+    var $numRecords = null;
 
     /**
      * The ID of the requested record
@@ -148,7 +148,7 @@ class Controller {
      * @access public
      */
     var $columnAlias = array(
-        'instance_id'                   => 'Instance Id',
+        'instance_id'                   => 'Instance ID',
         'instance_name'                 => 'Instance Name',
         'host_object_id'                => 'Host Object Id',
         'host_name'                     => 'Host Name',
@@ -184,11 +184,17 @@ class Controller {
         'acknowledgement_type'          => 'Acknowledgement Type',
         'current_notification_number'   => 'Current Notification Number',
         'passive_checks_enabled'        => 'Passive Checks Enabled',
+        'passive_service_checks_enabled' => 'Passive Service Checks Enabled',
+        'passive_host_checks_enabled'   => 'Passive Host Checks Enabled',
         'active_checks_enabled'         => 'Active Checks Enabled',
+        'active_host_checks_enabled'    => 'Active Host Checks Enabled',
+        'active_service_checks_enabled' => 'Active Service Checks Enabled',
         'event_handler_enabled'         => 'Event Handler Enabled',
+        'event_handlers_enabled'        => 'Event Handlers Enabled',
         'flap_detection_enabled'        => 'Flap Detection Enabled',
         'is_flapping'                   => 'Flapping',
         'percent_state_change'          => 'Percent State Change',
+        'program_version'               => 'Nagios Version',
         'latency'                       => 'Latency',
         'execution_time'                => 'Execution Time',
         'scheduled_downtime_depth'      => 'In Scheduled Downtime',
@@ -196,11 +202,19 @@ class Controller {
         'process_performance_data'      => 'Processing Performance Data', 
         'obsess_over_service'           => 'Obsess Over Service', 
         'obsess_over_host'              => 'Obsess Over Host', 
+        'obsess_over_services'          => 'Obsess Over Services', 
+        'obsess_over_hosts'             => 'Obsess Over Hosts', 
+        'is_currently_running'          => 'Currently Running', 
+        'last_log_rotation'             => 'Last Log Rotation', 
+        'last_command_check'            => 'Last External Command Check', 
+        'program_start_time'            => 'Program Start Time', 
+        'program_end_time'              => 'Program Stop Time', 
         'modified_service_attributes'   => 'Modified Service Attributes', 
         'event_handler'                 => 'Event Handler', 
         'check_command'                 => 'Check Command', 
         'normal_check_interval'         => 'Normal Check Interval', 
         'retry_check_interval'          => 'Retry Check Interval', 
+        'process_id'                    => 'Process ID', 
         'check_timeperiod_object_id'    => 'Check Timeperiod Object Id'); 
 
 
@@ -213,6 +227,10 @@ class Controller {
     }
 
     function jsonOutput($results=array()) {
+
+        if (!$this->numRecords) {
+            $this->numRecords = count($results);
+        }
 
         if (count($results) && !isset($results[0])) {
             $results = array($results);

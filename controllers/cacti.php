@@ -17,10 +17,6 @@ class NpcCactiController extends Controller {
 
     function getHostTemplates() {
         $results = db_fetch_assoc("SELECT id, name FROM host_template");
-
-        // Set the total number of records 
-        $this->numRecords = count($results);
-
         return($this->jsonOutput($results));
     }
 

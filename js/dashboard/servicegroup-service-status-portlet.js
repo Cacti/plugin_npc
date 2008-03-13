@@ -141,7 +141,7 @@ npc.app.portlet.servicegroupServiceStatus = function(){
         store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
     }
 
-    grid.on('rowclick', sgClick);
+    grid.on('rowdblclick', sgClick);
 
     function sgClick(grid, rowIndex, e) {
         var soi = grid.getStore().getAt(rowIndex).json.servicegroup_object_id;
