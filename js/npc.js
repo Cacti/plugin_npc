@@ -277,6 +277,34 @@ npc.app = function() {
             return('0');
         },
 
+        renderEventIcon: function(val){
+            if (val.match(/SERVICE ALERT:/) && val.match(/WARNING/)) {
+                return String.format('<img src="images/icons/error.png">');
+            } else if (val.match(/SERVICE ALERT:/) && val.match(/OK/)) {
+                return String.format('<img src="images/icons/accept.png">');
+            } else if (val.match(/SERVICE ALERT:/) && val.match(/CRITICAL/)) {
+                return String.format('<img src="images/icons/exclamation.png">');
+            } else if (val.match(/LOG ROTATION:/)) {
+                return String.format('<img src="images/icons/arrow_rotate_clockwise.png">');
+            } else if (val.match(/ NOTIFICATION:/)) {
+                return String.format('<img src="images/icons/transmit.png">');
+            } else if (val.match(/HOST ALERT:/) && (val.match(/;RECOVERY;/) || val.match(/;UP;/))) {
+                return String.format('<img src="images/icons/accept.png">');
+            } else if (val.match(/Finished daemonizing.../)) {
+                return String.format('<img src="images/icons/arrow_up.png">');
+            } else if (val.match(/ shutting down.../)) {
+                return String.format('<img src="images/icons/cancel.png">');
+            } else if (val.match(/Successfully shutdown/)) {
+                return String.format('<img src="images/icons/stop.png">');
+            } else if (val.match(/ restarting.../)) {
+                return String.format('<img src="images/icons/arrow_refresh.png">');
+            } else if (val.match(/EXTERNAL COMMAND/)) {
+                return String.format('<img src="images/icons/resultset_next.png">');
+            }
+
+            return String.format('<img src="images/icons/information.png">');
+        },
+
         hostStatusImage: function(val){
             var img;
             var state;
@@ -718,20 +746,74 @@ npc.app = function() {
                                                     npc.app.processInfo();
                                                 }
                                             }
+                                        },{
+                                            text:'Event Log',
+                                            iconCls:'tleaf',
+                                            leaf:true,
+                                            listeners: {
+                                                click: function() {
+                                                    npc.app.eventLog();
+                                                }
+                                            }
                                         }]
                                     },{
                                         text:'Reporting',
                                         iconCls:'tnode',
                                         expanded:false,
                                         children:[{
-                                            text:'Kelly',
-                                            leaf:true
+                                            text:'Trends',
+                                            iconCls:'tleaf',
+                                            leaf:true,
+                                            listeners: {
+                                                click: function() {
+                                                    npc.app.reporting('Trends',npc.app.params.npc_nagios_url+'/cgi-bin/trends.cgi');
+                                                }
+                                            }
                                         },{
-                                            text:'Sara',
-                                            leaf:true
+                                            text:'Availability',
+                                            iconCls:'tleaf',
+                                            leaf:true,
+                                            listeners: {
+                                                click: function() {
+                                                    npc.app.reporting('Availability',npc.app.params.npc_nagios_url+'/cgi-bin/avail.cgi');
+                                                }
+                                            }
                                         },{
-                                            text:'John',
-                                            leaf:true
+                                            text:'Alert Histogram',
+                                            iconCls:'tleaf',
+                                            leaf:true,
+                                            listeners: {
+                                                click: function() {
+                                                    npc.app.reporting('Alert Histogram',npc.app.params.npc_nagios_url+'/cgi-bin/histogram.cgi');
+                                                }
+                                            }
+                                        },{
+                                            text:'Alert History',
+                                            iconCls:'tleaf',
+                                            leaf:true,
+                                            listeners: {
+                                                click: function() {
+                                                    npc.app.reporting('Alert History',npc.app.params.npc_nagios_url+'/cgi-bin/history.cgi?host=all');
+                                                }
+                                            }
+                                        },{
+                                            text:'Alert Summary',
+                                            iconCls:'tleaf',
+                                            leaf:true,
+                                            listeners: {
+                                                click: function() {
+                                                    npc.app.reporting('Alert Summary',npc.app.params.npc_nagios_url+'/cgi-bin/summary.cgi');
+                                                }
+                                            }
+                                        },{
+                                            text:'Notifications',
+                                            iconCls:'tleaf',
+                                            leaf:true,
+                                            listeners: {
+                                                click: function() {
+                                                    npc.app.reporting('Notifications',npc.app.params.npc_nagios_url+'/cgi-bin/notifications.cgi?contact=all');
+                                                }
+                                            }
                                         }]
                                     },{
                                         text:'Nagios',

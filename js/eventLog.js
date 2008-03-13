@@ -1,26 +1,22 @@
-npc.app.portlet.eventLog = function(){
+npc.app.eventLog = function(){
 
-    // Portlet name
-    var name = 'Event Log';
+    var title = 'Event Log';
 
-    // Portlet ID
-    var id = 'eventLog';
+    var id = 'eventlog-tab';
 
-    // Portlet URL
-    var url = 'npc.php?module=logentries&action=getLogs';
+    var pageSize = 20;
 
-    // Default column
-    var column = 'dashcol2';
-
-    // Default # of events to display
-    var pageSize = 5;
+    var tabPanel = Ext.getCmp('centerTabPanel');
+    var tab = Ext.getCmp(id);
 
     var store = new Ext.data.JsonStore({
-        url:url,
+        url:'npc.php?module=logentries&action=getLogs',
         totalProperty:'totalCount',
         root:'data',
         fields:[
-            'logentry_id',
+            {name: 'instance_id', type: 'int'},
+            'instance_name',
+            {name: 'logentry_id', type: 'int'},
             {name: 'entry_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
             'logentry_data'
         ],
@@ -32,9 +28,15 @@ npc.app.portlet.eventLog = function(){
         renderer: npc.app.renderEventIcon,
         width:25
     },{
+        header:"Instance",
+        dataIndex:'instance_name',
+        width:125,
+        hidden:true,
+        align:'left'
+    }, {
         header:"Date",
         dataIndex:'entry_time',
-        width:125,
+        width:100,
         renderer:npc.app.formatDate,
         align:'left'
     }, {
@@ -62,17 +64,34 @@ npc.app.portlet.eventLog = function(){
             store: store,
             displayInfo: true,
             displayMsg: ''
-        })
+        }),
+        plugins:[new Ext.ux.grid.Search({
+            mode:'remote',
+            iconCls:false
+        })]
     });
 
-    // Create a portlet to hold the grid
-    npc.app.addPortlet(id, name, column);
+    if (tab)  {
+        tabPanel.setActiveTab(tab);
+    } else {
+        tabPanel.add({
+            id: id,
+            title: title,
+            closable: true,
+            autoHeight:true,
+            autoWidth:true,
+            //style:'padding:0px 0 0px 0px',
+            autoScroll: true,
+            layout:'fit',
+            deferredRender:false,
+            containerScroll: true,
+            items: grid
+        }).show();
+        tabPanel.doLayout();
+    }
 
-    // Add the grid to the portlet
-    Ext.getCmp(id).items.add(grid);
-
-    // Refresh the dashboard
-    Ext.getCmp('centerTabPanel').doLayout();
+    tab = Ext.getCmp(id);
+    tabPanel.setActiveTab(id);
 
     // Render the grid
     grid.render();
@@ -81,30 +100,16 @@ npc.app.portlet.eventLog = function(){
     store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
-    if (Ext.getCmp(id).isVisible()) {
-        doAutoRefresh();
-    }
+    store.startAutoRefresh(60);
 
-    // Add listeners to the portlet to stop and start auto refresh
-    // depending on wether or not the portlet is visible.
+    // Stop auto refresh if the tab is closed
     var listeners = {
-        hide: function() {
+        destroy: function() {
             store.stopAutoRefresh();
-        },
-        show: function() {
-            doAutoRefresh();
-        },
-        collapse: function() {
-            store.stopAutoRefresh();
-        },
-        expand: function() {
-            doAutoRefresh();
         }
     };
 
-    Ext.getCmp(id).addListener(listeners);
+    // Add the listener to the tab
+    tab.addListener(listeners);
 
-    function doAutoRefresh() {
-        store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    }
-};
+}

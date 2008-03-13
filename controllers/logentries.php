@@ -34,15 +34,30 @@ class NpcLogentriesController extends Controller {
      */
     function getLogs() {
 
+        // Maps searchable fields passed in from the client
+        $fieldMap = array('logentry_data' => 'l.logentry_data',
+                          'instance_name' => 'i.instance_name');
+
+
+        $where = '';
+
+        if ($this->searchString) {
+            $where = $this->searchClause($where, $fieldMap);
+        }
+
         $q = new Doctrine_Pager(
             Doctrine_Query::create()
-                ->from( 'NpcLogentries l' )
+                ->select('i.instance_name,'
+                        .'l.*')
+                ->from('NpcLogentries l')
+                ->leftJoin('l.Instance i')
+                ->where("$where")
                 ->orderby( 'l.entry_time DESC, l.entry_time_usec DESC' ),
             $this->currentPage,
             $this->limit
         );
 
-        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $results = $this->flattenArray($q->execute(array(), Doctrine::FETCH_ARRAY));
 
         // Set the total number of records
         $this->numRecords = $q->getNumResults();
