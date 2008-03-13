@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<project name="npc" description="NPC build file" default="main" >
+
+  <property name="build.dir"  value="src" />
+  <property name="tmp.dir"  value="/tmp" />
+  <property name="svnpath" value="/usr/bin/svn" />
+  <property name="repo" value="http://svn2.assembla.com/svn/npc/trunk/src" />
+
+  <target name="main" depends="js.minify"/>
+
+  <target name="svncheckout">
+    <svncheckout
+      svnpath="${svnpath}"
+      nocache="true"
+      repositoryurl="${repo}"
+      todir="${build.dir}"/>
+  </target>
+
+  <target name="js.prepare">
+
+    <concat destfile="${tmp.dir}/npc-all.js">
+        <filelist dir="${build.dir}/js/src/" files="plugins.js,overrides.js,Portal.js,PortalColumn.js,Portlet.js,npc.js,n2c.js,hosts.js,hostDetail.js,hostgroupGrid.js,hostgroupOverview.js,services.js,serviceDetail.js,servicegroupGrid.js,servicegroupOverview.js,comments.js,downtime.js,processInfo.js,reporting.js,eventLog.js"/>
+    </concat>
+    <concat destfile="${tmp.dir}/portlets-all.js">
+        <filelist dir="${build.dir}/js/src/" files="host-problems-portlet.js,host-summary-portlet.js,service-summary-portlet.js,eventlog-portlet.js,service-problems-portlet.js,monitoring-performance-portlet.js,servicegroup-service-status-portlet.js,servicegroup-host-status-portlet.js,hostgroup-host-status-portlet.js,hostgroup-service-status-portlet.js"/>
+    </concat>
+
+    <exec command="perl -i -p -e 's/layoutDev/layout/ig' ${build.dir}/npc.php" />
+  </target>
+
+  <target name="js.minify" depends="js.prepare">
+    <exec command="java -jar yuicompressor-2.3.4.jar --type js -o ${build.dir}/js/npc-all-min.js ${tmp.dir}/npc-all.js" />
+    <exec command="java -jar yuicompressor-2.3.4.jar --type js -o ${build.dir}/js/portlets-all-min.js ${tmp.dir}/portlets-all.js" />
+    <delete file="/tmp/npc-all.js" />
+    <delete file="/tmp/portlets-all.js" />
+  </target>
+
+</project>
+
