@@ -18,6 +18,10 @@ background-image:url(../images/icons/cog_go.png) !important;
 background-image:url(../images/icons/add.png) !important;
 }
 
+.appLightning {
+background-image:url(../images/icons/application_lightning.png) !important;
+}
+
 .commentAdd {
 background-image:url(../images/icons/comment_add.png) !important;
 }

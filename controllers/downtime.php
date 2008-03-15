@@ -74,7 +74,7 @@ class NpcDowntimeController extends Controller {
             if ($where != '') {
                 $where .= ' AND ';
             }
-            $where .= sprintf("c.object_id = %d", is_null($id) ? $this->id : $id);
+            $where .= sprintf("d.object_id = %d", is_null($id) ? $this->id : $id);
         }
 
         $q = new Doctrine_Pager(

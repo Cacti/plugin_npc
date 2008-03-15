@@ -27,6 +27,10 @@ npc.app.serviceDetail = function(record) {
     // Default # of rows to display
     var pageSize = 20;
 
+    // build the command menu
+    var menu = new Ext.menu.Menu();
+    buildCommandMenu();
+
     // Build the tool bar for the graph mapping
     var sgTbar = new Ext.Toolbar();
 
@@ -64,10 +68,13 @@ npc.app.serviceDetail = function(record) {
         }
     });
 
+    function onItemClick() {
+        console.log(arguments);
+    }
 
     function renderCheckAttempt(val, p, r){
         return String.format('{0}/{1}', val, r.data.max_check_attempts);
-    };
+    }
 
     function renderStateType(val){
         var state;
@@ -80,7 +87,7 @@ npc.app.serviceDetail = function(record) {
                 break;
         }
         return String.format('{0}', state);
-    };
+    }
 
     function renderGraph(val, p, r) {
         // '<img src="/graph_image.php?action=view&local_graph_id='.$this->local_graph_id.'&rra_id=1&graph_height='.$this->height.'&graph_width='.$this->width.'">';
@@ -132,25 +139,16 @@ npc.app.serviceDetail = function(record) {
             cmd = toggle.toUpperCase() + cmd;
             msg = toggle + m;
         }
+        
+        var post = {
+            module: 'nagios',
+            action: 'command',
+            p_command: cmd,
+            p_host_name: record.data.host_name,
+            p_service_description: record.data.service_description
+        };
 
-        Ext.Msg.show({
-            title:'Confirm',
-            msg:msg,
-            buttons: Ext.Msg.YESNO,
-            fn: function(btn) {
-                if (btn == 'yes') {
-                    npc.app.aPost({
-                        module : 'nagios',
-                        action : 'command',
-                        p_command :cmd,
-                        p_host_name : record.data.host_name,
-                        p_service_description : record.data.service_description
-                    });
-                }
-            },
-            animEl: 'elId',
-            icon: Ext.MessageBox.QUESTION
-        });
+        doCommand(msg, post);
     }
 
     // If the tab exists set it active and return or else create it.
@@ -167,13 +165,12 @@ npc.app.serviceDetail = function(record) {
             containerScroll: true,
             items: [
                 new Ext.TabPanel({
-                    style:'padding:10px 0 10px 10px',
+                    style:'padding:5px 0 5px 5px',
                     activeTab: 0,
                     autoHeight:true,
                     autoWidth:true,
                     plain:true,
                     deferredRender:false,
-                    //layoutOnTabChange:true,
                     defaults:{autoScroll: true},
                     items:[{
                         title: 'Service State Information',
@@ -197,11 +194,6 @@ npc.app.serviceDetail = function(record) {
                         disabled:true,
                         id: id + '-sg',
                         tbar: sgTbar
-                    },{
-                        title: 'Commands',
-                        //listeners: {activate: handleActivate},
-                        disabled:true,
-                        html: 'Execute commands if you have permission.'
                     }]
                 })
             ]
@@ -213,6 +205,27 @@ npc.app.serviceDetail = function(record) {
 
     // Add the graph selector to the graph tab
     sgTbar.addField(combo);
+
+    var serviceStore = new Ext.data.JsonStore({
+        url:'npc.php?module=services&action=getServices&p_id=' + service_object_id,
+        autoload:true,
+        totalProperty:'totalCount',
+        root:'data',
+        fields: [
+            'host_name',
+            'service_description',
+            {name: 'service_object_id', type: 'int'},
+            {name: 'current_state', type: 'int'},
+            {name: 'problem_has_been_acknowledged', type: 'int'},
+            {name: 'notifications_enabled', type: 'int'},
+            {name: 'active_checks_enabled', type: 'int'},
+            {name: 'passive_checks_enabled', type: 'int'},
+            {name: 'obsess_over_service', type: 'int'},
+            {name: 'event_handler_enabled', type: 'int'},
+            {name: 'flap_detection_enabled', type: 'int'}
+        ]
+    });
+
 
     var siStore = new Ext.data.JsonStore({
         url: 'npc.php?module=services&action=getStateInfo&p_id=' + service_object_id,
@@ -244,6 +257,11 @@ npc.app.serviceDetail = function(record) {
         autoExpandColumn:'Value',
         sm: new Ext.grid.RowSelectionModel(),
         stripeRows: true,
+        tbar: [{
+            text:'Commands',
+            iconCls:'appLightning',
+            menu: menu
+        }],
         view: new Ext.grid.GridView({
              forceFit:true,
              autoFill:true,
@@ -565,21 +583,24 @@ npc.app.serviceDetail = function(record) {
 
     // Load the data stores
     siStore.load();
+    serviceStore.load();
     snStore.load({params:{start:0, limit:pageSize}});
     shStore.load({params:{start:0, limit:pageSize}});
     sdStore.load({params:{start:0, limit:pageSize}});
     scStore.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh
-    siStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    snStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    shStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    sdStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    scStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    serviceStore.startAutoRefresh(60);
+    siStore.startAutoRefresh(60);
+    snStore.startAutoRefresh(60);
+    shStore.startAutoRefresh(60);
+    sdStore.startAutoRefresh(60);
+    scStore.startAutoRefresh(60);
 
     // Add listeners to stop auto refresh on the store if the tab is closed
     var listeners = {
         destroy: function() {
+            serviceStore.stopAutoRefresh();
             siStore.stopAutoRefresh();
             snStore.stopAutoRefresh();
             shStore.stopAutoRefresh();
@@ -619,4 +640,134 @@ npc.app.serviceDetail = function(record) {
             });
         }
     });
+
+    serviceStore.on('load', function() {
+        buildCommandMenu(menu);
+    });
+
+    function buildCommandMenu() {
+
+        var item;
+        var text;
+        var a;
+
+        var service = serviceStore ? serviceStore.data.items[0].data : record.data;
+
+        menu.removeAll();
+
+        var post = {
+            module: 'nagios',
+            action: 'command',
+            p_host_name: service.host_name,
+            p_service_description: service.service_description
+        };
+
+        if (service.current_state == 2) {
+            item = menu.add({
+                text: 'Acknowledge this service problem'
+                //handler: ackProblemk
+            });
+        }
+
+        a = service.active_checks_enabled ? 'Disable' : 'Enable';
+        text = a + ' active checks of this service';
+        item = menu.add({
+            text: text,
+            handler: function(o) {
+                post.p_command = a.toUpperCase() + '_SVC_CHECK';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        a = service.notifications_enabled ? 'Disable' : 'Enable';
+        text = a + ' notifications for this service';
+        item = menu.add({
+            text: text,
+            handler: function(o) {
+                post.p_command = a.toUpperCase() + '_SVC_NOTIFICATIONS';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        item = menu.add({
+            text: 'Send custom service notification'
+            //handler: sendCustomNotification
+        });
+
+        item = menu.add({
+            text: 'Re-schedule the next check of this service'
+            //handler: scheduleNextCheck
+        });
+
+        if (service.passive_checks_enabled) {
+            item = menu.add({
+                text: 'Submit Passive Check Result For This Service'
+                //handler: submitPassiveCheck
+            });
+        }
+
+        item = menu.add({
+            text: 'Schedule downtime for this service'
+            //handler: scheduleNextCheck
+        });
+
+        a = service.passive_checks_enabled ? 'Stop' : 'Start';
+        text = a + ' accepting passive checks for this service';
+        item = menu.add({
+            text: text,
+            handler: function(o) {
+                post.p_command = a.toUpperCase() + '_PASSIVE_SVC_CHECKS';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        a = service.obsess_over_service ? 'Stop' : 'Start';
+        text = a + ' obsessing over this service';
+        item = menu.add({
+            text: text,
+            handler: function(o) {
+                post.p_command = a.toUpperCase() + '_OBSESSING_OVER_SVC';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        a = service.event_handler_enabled ? 'Disable' : 'Enable';
+        text = a + ' event handler for this service';
+        item = menu.add({
+            text: text,
+            handler: function(o) {
+                post.p_command = a.toUpperCase() + '_SVC_EVENT_HANDLER';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        a = service.event_handler_enabled ? 'Disable' : 'Enable';
+        text = a + ' flap detection for this service';
+        item = menu.add({
+            text: text,
+            handler: function(o) {
+                post.p_command = a.toUpperCase() + '_SVC_FLAP_DETECTION';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        return(menu);
+    }
+
+    function doCommand(msg, post) {
+
+        Ext.Msg.show({
+            title:'Confirm',
+            msg:msg,
+            buttons: Ext.Msg.YESNO,
+            fn: function(btn) {
+                if (btn == 'yes') {
+                    npc.app.aPost(post);
+                }
+            },
+            animEl: 'elId',
+            icon: Ext.MessageBox.QUESTION
+        });
+    }
+
 };

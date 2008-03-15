@@ -125,7 +125,7 @@ class NpcServicesController extends Controller {
     }
 
     /**
-     * services
+     * getServiceStatesByHost
      * 
      * A utility method to simply return the state of every service belonging
      * to the specified host.

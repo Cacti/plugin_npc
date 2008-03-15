@@ -127,7 +127,7 @@ npc.app.portlet.serviceProblems = function(){
     Ext.getCmp(id).addListener(listeners);
 
     function doAutoRefresh() {
-        store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+        store.startAutoRefresh(60);
     }
 
     grid.on('rowdblclick', npc.app.serviceGridClick);

@@ -501,7 +501,7 @@ npc.app = function() {
                     items: [
                         new Ext.TabPanel({
                             id: id + '-inner-panel',
-                            style:'padding:10px 0 10px 10px',
+                            style:'padding:5px 0 5px 5px',
                             deferredRender:false,
                             autoHeight:true,
                             autoWidth:true,

@@ -1,5 +1,30 @@
 /* Add custom overrides here */
 
+// Loadable menu - http://extjs.com/forum/showthread.php?t=5894&highlight=menu+json
+//    var menu = new Ext.menu.Menu();
+//    menu.load({ url: 'npc.php?module=services&action=getCommandsMenu&p_id=' + service_object_id });
+//    $menu = '{menu: [{text:"Menu Item 1",href:"http://harmonicnewmedia.com"}]}';  
+Ext.menu.Menu.prototype.load = function( options ){
+    var loader = new Ext.menu.Item({text: 'Loading...'});
+    var conn = new Ext.data.Connection();
+    
+    this.addItem(loader);
+    
+    conn.on('requestcomplete', function( conn, response ){
+        this.remove(loader);
+        response = Ext.decode(response.responseText);
+        Ext.each( response.menu, function( item ){ this.add( item ) }, this);
+    }, this);
+    
+    conn.on('requestexception', function(){
+        this.remove(loader);
+        this.add({text: 'Failed to load menu items'});
+    }, this);
+    
+    conn.request( options );
+}
+
+// Property grid enhancement
 Ext.grid.PropertyStore.prototype.setSource = function(o){
     this.source = o;
     this.store.removeAll();

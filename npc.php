@@ -7,7 +7,7 @@ include(dirname(__FILE__) . "/config.php");
 
 $params['config'] = $config;
 
-$module = 'layout';
+$module = 'layoutDev';
 $action = 'drawFrame';
 $format = 'json';
 
