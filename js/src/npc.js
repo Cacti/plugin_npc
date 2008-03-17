@@ -554,6 +554,116 @@ npc.app = function() {
             win.show(); 
         },
 
+        submitPassiveCheckResult: function(type, host, service) {
+
+            var cmd = 'PROCESS_' + type.toUpperCase() + '_CHECK_RESULT';
+
+            var hostField = {
+                name: 'p_host_name',
+                value: host,
+                xtype: 'hidden'
+            };
+
+            var data = [['UP', 0], ['DOWN', 1], ['UNREACHABLE', 2], ['PENDING', -1]];
+
+
+            if (typeof host == 'undefined') {
+                hostField.fieldLabel = 'Host Name';
+                hostField.xtype = 'textfield';
+                hostField.allowBlank = false;
+            }
+
+            var serviceField = {
+                name: 'p_service_description',
+                value: service,
+                xtype: 'hidden'
+            };
+
+            if (type == 'service') {
+                data = [['OK', 0], ['WARNING', 1], ['CRITICAL', 2], ['UNKNOWN', 3], ['PENDING', -1]];
+                if (typeof service == 'undefined') {
+                    serviceField.fieldLabel = 'Service Description';
+                    serviceField.xtype = 'textfield';
+                    serviceField.allowBlank = false;
+                }
+            }
+
+            var combo = new Ext.form.ComboBox({
+                store: new Ext.data.SimpleStore({
+                    fields: ['name', 'value'],
+                    data: data
+                }),
+                fieldLabel: 'Check Result',
+                hiddenName: 'p_return_code',
+                displayField:'name',
+                valueField:'value',
+                forceSelection:true,
+                        listeners: {
+                            change: function() {
+                                console.log(form.form.getValues());
+                            }
+                        },
+                mode: 'local',
+                editable:false,
+                width:100,
+                allowBlank:false,
+                emptyText:'',
+                triggerAction: 'all',
+                selectOnFocus:true
+            });
+
+            var form = new Ext.FormPanel({
+                labelWidth: 110,
+                url:'npc.php?module=nagios&action=command',
+                frame:true,
+                bodyStyle:'padding:5px 5px 0',
+                width: 500,
+                defaultType: 'textfield',
+                    items: [
+                    {
+                        name: 'p_command',
+                        value:cmd,
+                        xtype: 'hidden'
+                    },
+                        hostField,
+                        serviceField,
+                        combo,
+                    {
+                        fieldLabel: 'Check Output',
+                        name: 'p_plugin_output',
+                        xtype: 'textfield',
+                        allowBlank: false,
+                        width:350,
+                        labelStyle: 'cursor: help;',
+                        tooltipText: "The check results for this passive check.",
+                        listeners: {
+                            render: function(o) {
+                                npc.app.setFormFieldTooltip(o);
+                            }
+                        }
+                    },{
+                        xtype: 'panel',
+                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the command.</span>',
+                        width: 400
+                    }
+                ],
+                buttons: npc.app.cmdFormButtons
+            });
+
+            var win = new Ext.Window({ 
+                title:'Submit Passive Check Result', 
+                layout:'fit', 
+                modal:true, 
+                closable: true, 
+                width:550, 
+                height:200, 
+                bodyStyle:'padding:5px;', 
+                items: form 
+            }); 
+            win.show(); 
+
+        },
+
         delayNextNotification: function(type, host, service) {
 
             var cmd = 'DELAY_' + type.toUpperCase() + '_NOTIFICATION';
@@ -607,7 +717,7 @@ npc.app = function() {
                 modal:true, 
                 closable: true, 
                 width:400, 
-                height:150, 
+                height:200, 
                 bodyStyle:'padding:5px;', 
                 items: form 
             }); 

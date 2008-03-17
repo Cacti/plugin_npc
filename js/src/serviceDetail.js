@@ -704,8 +704,10 @@ npc.app.serviceDetail = function(record) {
 
         if (service.passive_checks_enabled) {
             item = menu.add({
-                text: font + 'Submit Passive Check Result</b>'
-                //handler: submitPassiveCheck
+                text: font + 'Submit Passive Check Result</b>',
+                handler: function() {
+                    npc.app.submitPassiveCheckResult('service', service.host_name, service.service_description);
+                }
             });
         }
 
