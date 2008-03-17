@@ -18,8 +18,8 @@ background-image:url(../images/icons/cog_go.png) !important;
 background-image:url(../images/icons/add.png) !important;
 }
 
-.appLightning {
-background-image:url(../images/icons/application_lightning.png) !important;
+.cogAdd {
+background-image:url(../images/icons/cog_add.png) !important;
 }
 
 .commentAdd {
@@ -44,6 +44,10 @@ background-image:url(../images/icons/report_go.png) !important;
 
 .monitoring {
 background-image:url(../images/icons/application_view_gallery.png) !important;
+}
+
+.resultsetNext {
+background-image:url(../images/icons/resultset_next.png) !important;
 }
 
 .hosts {

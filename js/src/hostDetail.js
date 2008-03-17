@@ -426,7 +426,7 @@ npc.app.hostDetail = function(record) {
             text:'New Comment',
             iconCls:'commentAdd',
             handler : function(){
-                npc.app.addHostComment(record.data.host_name);
+                npc.app.addComment('host', record.data.host_name);
             }
         }, '-', {
             text:'Delete comments',

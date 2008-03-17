@@ -85,31 +85,109 @@ npc.app = function() {
             npc.app.hostDetail(grid.getStore().getAt(rowIndex));
         },
 
-        addHostComment: function(host) {
+        cmdFormButtons: [{
+            text: 'Submit',
+            handler: function(o){
+                o.ownerCt.getForm().submit({
+                    success: function(f, r) {
+                        o.ownerCt.ownerCt.close();
+                    },
+                    failure: function(f, r) {
+                        o.ownerCt.ownerCt.close();
+                        response = Ext.decode(r.response.responseText);
+                        Ext.Msg.alert('Failed', response.msg);
+                    }
+                });
+            }
+        },{
+            text: 'Cancel',
+            handler: function(o){
+                o.ownerCt.ownerCt.close();
+            }
+        }],
+
+        ackProblem: function(type, host, service) {
+
+            var cmd = 'ACKNOWLEDGE_' + type.toUpperCase() + '_PROBLEM';
+
+            var hostField = {
+                name: 'p_host_name',
+                value: host,
+                xtype: 'hidden'
+            };
+
+            if (typeof host == 'undefined') {
+                hostField.fieldLabel = 'Host Name';
+                hostField.xtype = 'textfield';
+                hostField.allowBlank = false;
+            }
+
+            var serviceField = {
+                name: 'p_service_description',
+                value: service,
+                xtype: 'hidden'
+            };
+
+            if (type == 'svc') {
+                if (typeof service == 'undefined') {
+                    serviceField.fieldLabel = 'Host Name';
+                    serviceField.xtype = 'textfield';
+                    serviceField.allowBlank = false;
+                }
+            }
 
             var form = new Ext.FormPanel({
-                labelWidth: 75,
+                labelWidth: 110,
                 url:'npc.php?module=nagios&action=command',
                 frame:true,
                 bodyStyle:'padding:5px 5px 0',
-                width: 525,
-                defaults: {width: 175},
+                width: 550,
+                defaults: {width: 150},
                 defaultType: 'textfield',
                     items: [
                     {
                         name: 'p_command',
-                        value:'ADD_HOST_COMMENT',
+                        value:cmd,
                         xtype: 'hidden'
+                    },
+                        hostField,
+                        serviceField,
+                    {
+                        fieldLabel: 'Sticky',
+                        name: 'p_sticky',
+                        xtype: 'xcheckbox',
+                        labelStyle: 'cursor: help;',
+                        tooltipText: "Disables notifications until the host recovers.",
+                        listeners: {
+                            render: function(o) {
+                                npc.app.setFormFieldTooltip(o);
+                            }
+                        },
+                        checked:true
                     },{
-                        fieldLabel: 'Host Name',
-                        name: 'p_host_name',
-                        value: host,
-                        allowBlank:false
+                        fieldLabel: 'Send Notification',
+                        name: 'p_notify',
+                        xtype: 'xcheckbox',
+                        labelStyle: 'cursor: help;',
+                        tooltipText: "Send a notification about the acknowledgement to contacts for this service.",
+                        listeners: {
+                            render: function(o) {
+                                npc.app.setFormFieldTooltip(o);
+                            }
+                        },
+                        checked:true
                     },{
                         fieldLabel: 'Persistent',
                         name: 'p_persistent',
                         xtype: 'xcheckbox',
-                        checked:true
+                        labelStyle: 'cursor: help;',
+                        tooltipText: "Keep the service comment even after the acknowledgement is removed.",
+                        listeners: {
+                            render: function(o) {
+                                npc.app.setFormFieldTooltip(o);
+                            }
+                        },
+                        checked:false
                     },{
                         name: 'p_author',
                         value: npc.app.params.userName,
@@ -118,39 +196,23 @@ npc.app = function() {
                         fieldLabel: 'Comment',
                         name: 'p_comment',
                         xtype: 'htmleditor',
+                        height:200,
                         width: 500
                     },{
                         xtype: 'panel',
-                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the comment.</span>',
+                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes this command.</span>',
                         width: 400
                     }
                 ],
-                buttons: [{
-                    text: 'Submit',
-                    handler: function(){
-                        form.getForm().submit({
-                            success: function(f, a) {
-                                win.close();
-                            },
-                            failure: function(f, a) {
-                                Ext.Msg.alert('Error', a.result.msg);
-                            } 
-                        });
-                    }
-                },{
-                    text: 'Cancel',
-                    handler: function(){
-                        win.close();
-                    }
-                }]
+                buttons: npc.app.cmdFormButtons
             });
 
             var win = new Ext.Window({ 
-                title:'New Comment', 
+                title:'Acknowledge Service Problem', 
                 layout:'fit', 
                 modal:true, 
                 closable: true, 
-                width:650, 
+                width:680, 
                 height:400, 
                 bodyStyle:'padding:5px;', 
                 items: form 
@@ -159,35 +221,63 @@ npc.app = function() {
 
         },
 
-        addServiceComment: function(host, service) {
+        addComment: function(type, host, service) {
+
+            var cmd = 'ADD_' + type.toUpperCase() + '_COMMENT';
+
+            var hostField = {
+                name: 'p_host_name',
+                value: host,
+                xtype: 'hidden'
+            };
+
+            if (typeof host == 'undefined') {
+                hostField.fieldLabel = 'Host Name';
+                hostField.xtype = 'textfield';
+                hostField.allowBlank = false;
+            }
+
+            var serviceField = {
+                name: 'p_service_description',
+                value: service,
+                xtype: 'hidden'
+            };
+
+            if (type == 'svc') {
+                if (typeof service == 'undefined') {
+                    serviceField.fieldLabel = 'Service Description';
+                    serviceField.xtype = 'textfield';
+                    serviceField.allowBlank = false;
+                }
+            }
 
             var form = new Ext.FormPanel({
-                labelWidth: 75,
+                labelWidth: 110,
                 url:'npc.php?module=nagios&action=command',
                 frame:true,
                 bodyStyle:'padding:5px 5px 0',
-                width: 525,
+                width: 550,
                 defaults: {width: 175},
                 defaultType: 'textfield',
                     items: [
                     {
                         name: 'p_command',
-                        value:'ADD_SVC_COMMENT',
+                        value:cmd,
                         xtype: 'hidden'
-                    },{
-                        fieldLabel: 'Host Name',
-                        name: 'p_host_name',
-                        value: host,
-                        allowBlank:false
-                    },{
-                        fieldLabel: 'Service',
-                        name: 'p_service_description',
-                        value: service,
-                        allowBlank:false
-                    },{
+                    },
+                        hostField,
+                        serviceField,
+                    {
                         fieldLabel: 'Persistent',
                         name: 'p_persistent',
                         xtype: 'xcheckbox',
+                        labelStyle: 'cursor: help;',
+                        tooltipText: "Persists the comment across Nagios restarts.",
+                        listeners: {
+                            render: function(o) {
+                                npc.app.setFormFieldTooltip(o);
+                            }
+                        },
                         checked:true
                     },{
                         name: 'p_author',
@@ -197,31 +287,15 @@ npc.app = function() {
                         fieldLabel: 'Comment',
                         name: 'p_comment',
                         xtype: 'htmleditor',
-                        width: 550
+                        height:200,
+                        width: 500
                     },{
                         xtype: 'panel',
                         html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the comment.</span>',
                         width: 400
                     }
                 ],
-                buttons: [{
-                    text: 'Submit',
-                    handler: function(){
-                        form.getForm().submit({
-                            success: function(f, a) {
-                                win.close();
-                            },
-                            failure: function(f, a) {
-                                Ext.Msg.alert('Error', a.result.msg);
-                            } 
-                        });
-                    }
-                },{
-                    text: 'Cancel',
-                    handler: function(){
-                        win.close();
-                    }
-                }]
+                buttons: npc.app.cmdFormButtons
             });
 
             var win = new Ext.Window({ 
@@ -229,13 +303,325 @@ npc.app = function() {
                 layout:'fit', 
                 modal:true, 
                 closable: true, 
-                width:650, 
-                height:500, 
+                width:680, 
+                height:400, 
                 bodyStyle:'padding:5px;', 
                 items: form 
             }); 
             win.show(); 
 
+        },
+
+        sendCustomNotification: function(type, host, service) {
+
+            var cmd = 'SEND_CUSTOM_' + type.toUpperCase() + '_NOTIFICATION';
+
+            var hostField = {
+                name: 'p_host_name',
+                value: host,
+                xtype: 'hidden'
+            };
+
+            if (typeof host == 'undefined') {
+                hostField.fieldLabel = 'Host Name';
+                hostField.xtype = 'textfield';
+                hostField.allowBlank = false;
+            }
+
+            var serviceField = {
+                name: 'p_service_description',
+                value: service,
+                xtype: 'hidden'
+            };
+
+            if (type == 'svc') {
+                if (typeof service == 'undefined') {
+                    serviceField.fieldLabel = 'Service Description';
+                    serviceField.xtype = 'textfield';
+                    serviceField.allowBlank = false;
+                }
+            }
+
+            var form = new Ext.FormPanel({
+                labelWidth: 110,
+                url:'npc.php?module=nagios&action=command',
+                frame:true,
+                bodyStyle:'padding:5px 5px 0',
+                width: 550,
+                defaults: {width: 175},
+                defaultType: 'textfield',
+                    items: [
+                    {
+                        name: 'p_command',
+                        value:cmd,
+                        xtype: 'hidden'
+                    },
+                        hostField,
+                        serviceField,
+                    {
+                        name: 'p_options',
+                        value:0,
+                        xtype: 'hidden'
+                    },{
+                        fieldLabel: 'Forced',
+                        name: 'p_force_notification',
+                        xtype: 'xcheckbox',
+                        labelStyle: 'cursor: help;',
+                        tooltipText: "Selecting the Forced option will force the notification to be sent out, regardless of the time restrictions, whether or not notifications are enabled, etc.",
+                        listeners: {
+                            check: function() {
+                                var v = 2;
+                                var options = parseInt(form.form.getValues().p_options);
+                                if (this.checked) {
+                                    options = options + v;
+                                } else {
+                                    options = options - v;
+                                }
+                                form.form.setValues({p_options: options});
+                            },
+                            render: function(o) {
+                                npc.app.setFormFieldTooltip(o);
+                            }
+                        },
+                        checked:false
+                    },{
+                        fieldLabel: 'Broadcast',
+                        name: 'p_broadcast_notification',
+                        xtype: 'xcheckbox',
+                        labelStyle: 'cursor: help;',
+                        tooltipText: "Selecting the Broadcast option causes the notification to be sent out to all normal (non-escalated) and escalated contacts.",
+                        listeners: {
+                            check: function() {
+                                var v = 1;
+                                var options = parseInt(form.form.getValues().p_options);
+                                if (this.checked) {
+                                    options = options + v;
+                                } else {
+                                    options = options - v;
+                                }
+                                form.form.setValues({p_options: options});
+                            },
+                            render: function(o) {
+                                npc.app.setFormFieldTooltip(o);
+                            }
+                        },
+                        checked:false
+                    },{
+                        name: 'p_author',
+                        value: npc.app.params.userName,
+                        xtype: 'hidden'
+                    },{
+                        fieldLabel: 'Comment',
+                        name: 'p_comment',
+                        xtype: 'htmleditor',
+                        height:200,
+                        width: 500
+                    },{
+                        xtype: 'panel',
+                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the command.</span>',
+                        width: 400
+                    }
+                ],
+                buttons: npc.app.cmdFormButtons
+            });
+
+            var win = new Ext.Window({ 
+                title:'New Comment', 
+                layout:'fit', 
+                modal:true, 
+                closable: true, 
+                width:680, 
+                height:400, 
+                bodyStyle:'padding:5px;', 
+                items: form 
+            }); 
+            win.show(); 
+
+        },
+
+        scheduleNextCheck: function(type, host, service) {
+
+            var cmd = 'SCHEDULE_FORCED_' + type.toUpperCase() + '_CHECK';
+
+            var dt = new Date();
+
+            var nowDate = dt.format('Y-m-d H:i:s');
+            var nowEpoch = dt.format('U'); 
+
+            var hostField = {
+                name: 'p_host_name',
+                value: host,
+                xtype: 'hidden'
+            };
+
+            if (typeof host == 'undefined') {
+                hostField.fieldLabel = 'Host Name';
+                hostField.xtype = 'textfield';
+                hostField.allowBlank = false;
+            }
+
+            var serviceField = {
+                name: 'p_service_description',
+                value: service,
+                xtype: 'hidden'
+            };
+
+            if (type == 'svc' && typeof service == 'undefined') {
+                serviceField.fieldLabel = 'Service Description';
+                serviceField.xtype = 'textfield';
+                serviceField.allowBlank = false;
+            }
+
+            var form = new Ext.FormPanel({
+                labelWidth: 100,
+                url:'npc.php?module=nagios&action=command',
+                frame:true,
+                bodyStyle:'padding:5px 5px 0',
+                width: 350,
+                defaults: {width: 175},
+                defaultType: 'textfield',
+                    items: [
+                    {
+                        name: 'p_command',
+                        value:cmd,
+                        xtype: 'hidden'
+                    },
+                        hostField,
+                        serviceField,
+                    {
+                        fieldLabel: 'Force',
+                        name: 'p_force_notification',
+                        xtype: 'xcheckbox',
+                        checked:true,
+                        labelStyle: 'cursor: help;',
+                        tooltipText: "Force a check of the service regardless of what time the scheduled check occurs and whether or not checks are enabled for the service.",
+                        listeners: {
+                            change: function() {
+                                var cmd = parseInt(form.form.getValues().p_cmd);
+                                if (this.checked) {
+                                    cmd = cmd.replace(/SCHEDULE_/, 'SCHEDULE_FORCED_');
+                                } else {
+                                    cmd = cmd.replace(/FORCED_/, '');
+                                }
+                                form.form.setValues({p_cmd: cmd});
+                            },
+                            render: function(o) {
+                                npc.app.setFormFieldTooltip(o);
+                            }
+                        }
+                    },{
+                        fieldLabel: 'Check Time',
+                        name: 'p_date',
+                        value:nowDate,
+                        labelStyle: 'cursor: help;',
+                        tooltipText: "The date/time must be in the format YYYY-MM-DD HH:MM:SS.",
+                        listeners: {
+                            change: function() {
+                                console.log(form.form.getValues());
+                                var v = form.form.getValues().p_date;
+                                var d = new Date(v.replace(/-/g,' '));
+                                form.form.setValues({p_check_time: d.format('U')});
+                                console.log(form.form.getValues());
+                            },
+                            render: function(o) {
+                                npc.app.setFormFieldTooltip(o);
+                            }
+                        },
+                        xtype: 'textfield'
+                    },{
+                        name: 'p_check_time',
+                        value:nowEpoch,
+                        xtype:'hidden'
+                    },{
+                        xtype: 'panel',
+                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the command.</span>',
+                        width: 400
+                    }
+                ],
+                buttons: npc.app.cmdFormButtons
+            });
+
+            var win = new Ext.Window({ 
+                title:'Schedule Check', 
+                layout:'fit', 
+                modal:true, 
+                closable: true, 
+                width:400, 
+                height:200, 
+                bodyStyle:'padding:5px;', 
+                items: form 
+            }); 
+            win.show(); 
+        },
+
+        delayNextNotification: function(type, host, service) {
+
+            var cmd = 'DELAY_' + type.toUpperCase() + '_NOTIFICATION';
+
+            var form = new Ext.FormPanel({
+                labelWidth: 110,
+                url:'npc.php?module=nagios&action=command',
+                frame:true,
+                bodyStyle:'padding:5px 5px 0',
+                width: 250,
+                defaults: {width: 50},
+                defaultType: 'textfield',
+                    items: [
+                    {
+                        name: 'p_command',
+                        value:cmd,
+                        xtype: 'hidden'
+                    },{
+                        name: 'p_host_name',
+                        value:host,
+                        xtype: 'hidden'
+                    },{
+                        name: 'p_service_description',
+                        value:service,
+                        xtype: 'hidden'
+                    },{
+                        fieldLabel: 'Delay (minutes)',
+                        name: 'p_notification_time',
+                        xtype: 'textfield',
+                        labelStyle: 'cursor: help;',
+                        tooltipText: "The number of minutes from now that the notification should be delayed.",
+                        allowBlank: false,
+                        listeners: {
+                            render: function(o) {
+                                npc.app.setFormFieldTooltip(o);
+                            }
+                        },
+                        checked:true
+                    },{
+                        xtype: 'panel',
+                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes this command.</span>',
+                        width: 400
+                    }
+                ],
+                buttons: npc.app.cmdFormButtons
+            });
+
+            var win = new Ext.Window({ 
+                title:'Acknowledge Service Problem', 
+                layout:'fit', 
+                modal:true, 
+                closable: true, 
+                width:400, 
+                height:150, 
+                bodyStyle:'padding:5px;', 
+                items: form 
+            }); 
+            win.show(); 
+            win.doLayout();
+        },
+
+        setFormFieldTooltip: function(component) {
+            var label = Ext.get('x-form-el-' + component.id).prev('label');
+            Ext.QuickTips.register({
+                target: label,
+                text: component.tooltipText,
+                title: ''
+            });
         },
 
         // A simple ajax post
@@ -364,7 +750,7 @@ npc.app = function() {
                 img = String.format('&nbsp;<img ext:qtip="There are comments for this item" src="images/icons/comment.png">') + img;
             }
             if (record.data.is_flapping) {
-                img = String.format('&nbsp;<img ext:qtip="This service is flapping between states" src="images/icons/link_error.png">') + img;
+                img = String.format('&nbsp;<img ext:qtip="Flapping between states" src="images/icons/text_align_justify.png">') + img;
             }
             if (!record.data.active_checks_enabled && !record.data.passive_checks_enabled) {
                 img = String.format('&nbsp;<img ext:qtip="Active and passive checks have been disabled" src="images/icons/cross.png">') + img;

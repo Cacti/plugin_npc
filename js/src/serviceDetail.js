@@ -259,7 +259,7 @@ npc.app.serviceDetail = function(record) {
         stripeRows: true,
         tbar: [{
             text:'Commands',
-            iconCls:'appLightning',
+            iconCls:'cogAdd',
             menu: menu
         }],
         view: new Ext.grid.GridView({
@@ -525,7 +525,7 @@ npc.app.serviceDetail = function(record) {
             text:'New Comment',
             iconCls:'commentAdd',
             handler : function(){
-                npc.app.addServiceComment(record.data.host_name,record.data.service_description);
+                npc.app.addComment('svc', record.data.host_name, record.data.service_description);
             }
         }, '-', {
             text:'Delete comments',
@@ -557,11 +557,6 @@ npc.app.serviceDetail = function(record) {
             store: scStore,
             displayInfo: true
         })
-        // The search field won't render :(
-        //plugins:[new Ext.ux.grid.Search({
-        //    mode:'remote',
-        //    iconCls:false
-        //})]
     });
 
     // Add the grids to the tabs
@@ -662,15 +657,19 @@ npc.app.serviceDetail = function(record) {
             p_service_description: service.service_description
         };
 
+        var font = '<b style="font-size: xx-small">';
+
         if (service.current_state == 2) {
             item = menu.add({
-                text: 'Acknowledge this service problem'
-                //handler: ackProblemk
+                text: font + 'Acknowledge Problem</b>',
+                handler: function(o) {
+                    npc.app.ackProblem('svc', service.host_name, service.service_description);
+                }
             });
         }
 
         a = service.active_checks_enabled ? 'Disable' : 'Enable';
-        text = a + ' active checks of this service';
+        text = font + a + ' Active Checks</b>';
         item = menu.add({
             text: text,
             handler: function(o) {
@@ -680,7 +679,7 @@ npc.app.serviceDetail = function(record) {
         });
 
         a = service.notifications_enabled ? 'Disable' : 'Enable';
-        text = a + ' notifications for this service';
+        text = font + a + ' Notifications</b>';
         item = menu.add({
             text: text,
             handler: function(o) {
@@ -690,39 +689,43 @@ npc.app.serviceDetail = function(record) {
         });
 
         item = menu.add({
-            text: 'Send custom service notification'
-            //handler: sendCustomNotification
+            text: font + 'Send Custom Notification</b>',
+            handler: function() {
+                npc.app.sendCustomNotification('svc', service.host_name, service.service_description);
+            }
         });
 
         item = menu.add({
-            text: 'Re-schedule the next check of this service'
-            //handler: scheduleNextCheck
+            text: font + 'Re-schedule Next Check</b>',
+            handler: function() {
+                npc.app.scheduleNextCheck('svc', service.host_name, service.service_description);
+            }
         });
 
         if (service.passive_checks_enabled) {
             item = menu.add({
-                text: 'Submit Passive Check Result For This Service'
+                text: font + 'Submit Passive Check Result</b>'
                 //handler: submitPassiveCheck
             });
         }
 
         item = menu.add({
-            text: 'Schedule downtime for this service'
+            text: font + 'Schedule Downtime</b>'
             //handler: scheduleNextCheck
         });
 
         a = service.passive_checks_enabled ? 'Stop' : 'Start';
-        text = a + ' accepting passive checks for this service';
+        text = font + a + ' Accepting Passive Checks</b>';
         item = menu.add({
             text: text,
             handler: function(o) {
-                post.p_command = a.toUpperCase() + '_PASSIVE_SVC_CHECKS';
+                post.p_command = a.toUpperCase() + '_PASSIVE_SVC_CHECKS</b>';
                 doCommand(o.text+'?',post);
             }
         });
 
         a = service.obsess_over_service ? 'Stop' : 'Start';
-        text = a + ' obsessing over this service';
+        text = font + a + ' Obsessing</b>';
         item = menu.add({
             text: text,
             handler: function(o) {
@@ -732,7 +735,7 @@ npc.app.serviceDetail = function(record) {
         });
 
         a = service.event_handler_enabled ? 'Disable' : 'Enable';
-        text = a + ' event handler for this service';
+        text = font + a + ' Event Handler</b>';
         item = menu.add({
             text: text,
             handler: function(o) {
@@ -742,7 +745,7 @@ npc.app.serviceDetail = function(record) {
         });
 
         a = service.event_handler_enabled ? 'Disable' : 'Enable';
-        text = a + ' flap detection for this service';
+        text = font + a + ' Flap Detection</b>';
         item = menu.add({
             text: text,
             handler: function(o) {
@@ -750,6 +753,15 @@ npc.app.serviceDetail = function(record) {
                 doCommand(o.text+'?',post);
             }
         });
+
+        if (service.current_state == 2) {
+            item = menu.add({
+                text: font + 'Delay next notification</b>',
+                handler: function() {
+                    npc.app.delayNextNotification('svc', service.host_name,service.service_description);
+                }
+            });
+        }
 
         return(menu);
     }
