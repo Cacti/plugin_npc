@@ -1,60 +1,67 @@
-npc.app.portlet.hostSummary = function(){
+npc.portlet.serviceSummary = function(){
 
     // Portlet name
-    var name = 'Host Status Summary';
+    var name = 'Service Status Summary';
 
     // Portlet ID
-    var id = 'hostSummary';
+    var id = 'serviceSummary';
 
     // Portlet URL
-    var url = 'npc.php?module=hosts&action=summary';
+    var url = 'npc.php?module=services&action=summary';
 
     // Default column
     var column = 'dashcol1';
 
     // Refresh rate
-    var refresh = npc.app.params.npc_portlet_refresh;
+    var refresh = npc.params.npc_portlet_refresh;
 
     var store = new Ext.data.JsonStore({
         url:url,
         totalProperty:'totalCount',
         root:'data',
-        fields:['down', 'unreachable', 'up', 'pending'],
+        fields:['critical', 'warning', 'unknown', 'ok', 'pending'],
         autoload:true
     });
 
     var cm = new Ext.grid.ColumnModel([{
-        id: 'hostTotalsDOWN',
-        header:"Down",
-        dataIndex:'down',
-        renderer: npc.app.renderStatusBg,
-        width:100,
+        id: 'serviceTotalsCRITICAL',
+        header:"Critical",
+        dataIndex:'critical',
+        renderer: npc.renderStatusBg,
+        width:80,
         align:'center'
     },{
-        id: 'hostTotalsUNREACHABLE',
-        header:"Unreachable",
-        dataIndex:'unreachable',
-        renderer: npc.app.renderStatusBg,
-        width:100,
+        id: 'serviceTotalsWARNING',
+        header:"Warning",
+        dataIndex:'warning',
+        renderer: npc.renderStatusBg,
+        width:80,
         align:'center'
     }, {
-        id: 'hostTotalsUP',
-        header:"Up",
-        dataIndex:'up',
-        renderer: npc.app.renderStatusBg,
-        width:100,
+        id: 'serviceTotalsUNKNOWN',
+        header:"Unknown",
+        dataIndex:'unknown',
+        renderer: npc.renderStatusBg,
+        width:80,
         align:'center'
     }, {
-        id: 'hostTotalsPENDING',
+        id: 'serviceTotalsOK',
+        header:"Ok",
+        dataIndex:'ok',
+        renderer: npc.renderStatusBg,
+        width:80,
+        align:'center'
+    }, {
+        id: 'serviceTotalsPENDING',
         header:"Pending",
         dataIndex:'pending',
-        renderer: npc.app.renderStatusBg,
-        width:100,
+        renderer: npc.renderStatusBg,
+        width:80,
         align:'center'
     }]);
 
     var grid = new Ext.grid.GridPanel({
-        id:'host-status-summary-grid',
+        id: id + '-grid',
         autoHeight:true,
         width:400,
         store:store,
@@ -67,7 +74,7 @@ npc.app.portlet.hostSummary = function(){
     });
 
     // Create a portlet to hold the grid
-    npc.app.addPortlet(id, name, column);
+    npc.addPortlet(id, name, column);
 
     // Add the grid to the portlet
     Ext.getCmp(id).items.add(grid);

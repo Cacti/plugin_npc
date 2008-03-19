@@ -1,13 +1,13 @@
-npc.app.portlet.hostgroupServiceStatus = function(){
+npc.portlet.hostgroupHostStatus = function(){
 
     // Portlet name
-    var name = 'Hostgroup: Service Status';
+    var name = 'Hostgroup: Host Status';
 
     // Portlet ID
-    var id = 'hostgroupServiceStatus';
+    var id = 'hostgroupHostStatus';
 
     // Portlet URL
-    var url = 'npc.php?module=hostgroups&action=getHostgroupServiceStatus';
+    var url = 'npc.php?module=hostgroups&action=getHostgroupHostStatus';
 
     // Default column
     var column = 'dashcol2';
@@ -26,10 +26,9 @@ npc.app.portlet.hostgroupServiceStatus = function(){
             'alias',
             {name: 'instance_id', type: 'int'},
             {name: 'hostgroup_object_id', type: 'int'},
-            {name: 'critical', type: 'int'},
-            {name: 'warning', type: 'int'},
-            {name: 'unknown', type: 'int'},
-            {name: 'ok', type: 'int'},
+            {name: 'down', type: 'int'},
+            {name: 'unreachable', type: 'int'},
+            {name: 'up', type: 'int'},
             {name: 'pending', type: 'int'}
         ]
     });
@@ -40,45 +39,38 @@ npc.app.portlet.hostgroupServiceStatus = function(){
         dataIndex:'alias',
         sortable:true
     },{
-        id: 'hgSSCRITICAL',
-        header:"Critical",
-        dataIndex:'critical',
+        id: 'hgHSDOWN',
+        header:"Down",
+        dataIndex:'down',
         align:'center',
         width:40,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     },{
-        id: 'hgSSWARNING',
-        header:"Warning",
-        dataIndex:'warning',
+        id: 'hgHSUNREACHABLE',
+        header:"Unreachable",
+        dataIndex:'unreachable',
         align:'center',
         width:40,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     },{
-        id: 'hgSSUNKNOWN',
-        header:"Unknown",
-        dataIndex:'unknown',
-        align:'center',
-        width:40,
-        renderer: npc.app.renderStatusBg
-    },{
-        id: 'hgSSOK',
-        header:"Ok",
-        dataIndex:'ok',
+        id: 'hgHSUP',
+        header:"Up",
+        dataIndex:'up',
         align:'center',
         width:20,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     },{
-        id: 'hgSSPENDING',
+        id: 'hgHSPENDING',
         header:"Pending",
         dataIndex:'pending',
         align:'center',
         width:40,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     }]);
 
     // Setup the grid
     var grid = new Ext.grid.GridPanel({
-        id: 'hostgroup-service-status-grid',
+        id: 'hostgroup-host-status-grid',
         autoHeight:true,
         autoExpandColumn: 'alias',
         store:store,
@@ -99,7 +91,7 @@ npc.app.portlet.hostgroupServiceStatus = function(){
     });
 
     // Create a portlet to hold the grid
-    npc.app.addPortlet(id, name, column);
+    npc.addPortlet(id, name, column);
 
     // Add the grid to the portlet
     Ext.getCmp(id).items.add(grid);
@@ -138,7 +130,7 @@ npc.app.portlet.hostgroupServiceStatus = function(){
     Ext.getCmp(id).addListener(listeners);
 
     function doAutoRefresh() {
-        store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+        store.startAutoRefresh(npc.params.npc_portlet_refresh);
     }
 
     grid.on('rowdblclick', hgClick);
@@ -146,6 +138,6 @@ npc.app.portlet.hostgroupServiceStatus = function(){
     function hgClick(grid, rowIndex, e) {
         var hoi = grid.getStore().getAt(rowIndex).json.hostgroup_object_id;
         var name = grid.getStore().getAt(rowIndex).json.alias;
-        npc.app.hostgroupGrid('hostgroupGrid-'+hoi, 'Hostgroup: '+name, hoi);
+        npc.hostGroupGrid('hostGroupGrid-'+hoi, 'Hostgroup: '+name, hoi);
     }
 };

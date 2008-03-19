@@ -1,10 +1,10 @@
-npc.app.processInfo = function(){
+npc.processInfo = function(){
 
     var title = 'Process Info';
 
     var outerTabId = 'processinfo-tab';
 
-    npc.app.addCenterNestedTab(outerTabId, 'Process Information');
+    npc.addCenterNestedTab(outerTabId, 'Process Information');
 
     var centerTabPanel = Ext.getCmp('centerTabPanel');
 
@@ -167,7 +167,7 @@ npc.app.processInfo = function(){
             buttons: Ext.Msg.YESNO,
             fn: function(btn) {
                 if (btn == 'yes') {
-                    npc.app.aPost({
+                    npc.aPost({
                         module : 'nagios',
                         action : 'command',
                         p_command :cmd

@@ -43,8 +43,14 @@ class NpcLayoutDevController {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/ext/adapter/ext/ext-base.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/ext/ext-all-debug.js"></script>
 
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/plugins.js"></script>
+          <!-- Plugins -->
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/plugins/Ext.state.HttpProvider.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/plugins/Ext.ux.form.XCheckbox.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/plugins/Ext.ux.grid.Search.js"></script>
+
+          <!-- Overrides -->
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/overrides.js"></script>
+
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/Portal.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/PortalColumn.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/Portlet.js"></script>
@@ -63,22 +69,23 @@ class NpcLayoutDevController {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/processInfo.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/reporting.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/eventLog.js"></script>
-          
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/commandForms.js"></script>
+
           <script type="text/javascript">
 
             // Add some properties to the params array
-            npc.app.params.npc_portlet_refresh = "<?php echo read_config_option('npc_portlet_refresh'); ?>";
-            npc.app.params.npc_portlet_rows    = "<?php echo read_config_option('npc_portlet_rows'); ?>";
-            npc.app.params.npc_date_format     = "<?php echo read_config_option('npc_date_format'); ?>";
-            npc.app.params.npc_time_format     = "<?php echo read_config_option('npc_time_format'); ?>";
-            npc.app.params.npc_nagios_url      = "<?php echo read_config_option('npc_nagios_url'); ?>";
-            npc.app.params.userName            = "<?php echo db_fetch_cell('SELECT username FROM user_auth WHERE id = ' . $_SESSION['sess_user_id']); ?>";
+            npc.params.npc_portlet_refresh = "<?php echo read_config_option('npc_portlet_refresh'); ?>";
+            npc.params.npc_portlet_rows    = "<?php echo read_config_option('npc_portlet_rows'); ?>";
+            npc.params.npc_date_format     = "<?php echo read_config_option('npc_date_format'); ?>";
+            npc.params.npc_time_format     = "<?php echo read_config_option('npc_time_format'); ?>";
+            npc.params.npc_nagios_url      = "<?php echo read_config_option('npc_nagios_url'); ?>";
+            npc.params.userName            = "<?php echo db_fetch_cell('SELECT username FROM user_auth WHERE id = ' . $_SESSION['sess_user_id']); ?>";
 
             <?php $state = unserialize(db_fetch_cell('SELECT settings FROM npc_settings WHERE user_id = ' . $_SESSION['sess_user_id'])); ?>
             var ExtState = Ext.decode('<?php echo json_encode($state); ?>');
 
             // Launch the app
-            Ext.onReady(npc.app.init, npc.app);
+            Ext.onReady(npc.init, npc);
 
             Ext.onReady(function() {
                 //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
@@ -88,21 +95,21 @@ class NpcLayoutDevController {
           </script>
 
           <!-- Portlets -->
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/host-problems-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/host-summary-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/service-summary-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/eventlog-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/service-problems-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring-performance-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/servicegroup-service-status-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/servicegroup-host-status-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hostgroup-host-status-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hostgroup-service-status-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/host-problems-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/host-summary-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/service-summary-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/eventlog-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/service-problems-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/monitoring-performance-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/servicegroup-service-status-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/servicegroup-host-status-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/hostgroup-host-status-portlet.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/hostgroup-service-status-portlet.js"></script>
 
           <script type="text/javascript">
             Ext.onReady(function() {
               //console.log(Ext.state.Manager.get('serviceProblems'));
-              npc.app.initPortlets();
+              npc.initPortlets();
             });
           </script>
 

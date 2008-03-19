@@ -1,4 +1,4 @@
-npc.app.eventLog = function(){
+npc.eventLog = function(){
 
     var title = 'Event Log';
 
@@ -25,7 +25,7 @@ npc.app.eventLog = function(){
 
     var cm = new Ext.grid.ColumnModel([{
         dataIndex:'logentry_data',
-        renderer: npc.app.renderEventIcon,
+        renderer: npc.renderEventIcon,
         width:25
     },{
         header:"Instance",
@@ -37,7 +37,7 @@ npc.app.eventLog = function(){
         header:"Date",
         dataIndex:'entry_time',
         width:100,
-        renderer:npc.app.formatDate,
+        renderer:npc.formatDate,
         align:'left'
     }, {
         header:"Log Entry",

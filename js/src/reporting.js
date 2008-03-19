@@ -1,4 +1,4 @@
-npc.app.reporting = function(report, url){
+npc.reporting = function(report, url){
 
     var title = 'Reporting';
 
@@ -6,7 +6,7 @@ npc.app.reporting = function(report, url){
 
     var outerTabId = 'reporting-tab';
 
-    npc.app.addCenterNestedTab(outerTabId, title);
+    npc.addCenterNestedTab(outerTabId, title);
 
     var centerTabPanel = Ext.getCmp('centerTabPanel');
 

@@ -1,4 +1,4 @@
-npc.app.portlet.monitoringPerf = function(){
+npc.portlet.monitoringPerf = function(){
 
     // Portlet name
     var name = 'Monitoring Performance';
@@ -74,11 +74,11 @@ npc.app.portlet.monitoringPerf = function(){
     };
 
     function doAutoRefresh() {
-        store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+        store.startAutoRefresh(npc.params.npc_portlet_refresh);
     };
 
     // Create a portlet to hold the grid
-    npc.app.addPortlet(id, name, column);
+    npc.addPortlet(id, name, column);
 
     // Add the grid to the portlet
     Ext.getCmp(id).items.add(grid);

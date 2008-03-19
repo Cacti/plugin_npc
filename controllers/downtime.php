@@ -34,41 +34,109 @@ class NpcDowntimeController extends Controller {
      * @return string   json output
      */
     function getDowntime() {
-        return($this->jsonOutput($this->downtime()));
+        return($this->jsonOutput($this->downtimeHistory()));
     }
 
     /**
      * getHostDowntime
      *
-     * An accessor method to return all host comments
+     * An accessor method to return all host downtime
      *
      * @return string   json output
      */
     function getHostDowntime() {
-        $results = $this->flattenArray($this->downtime(null, 'o.objecttype_id = 1'));
+        $results = $this->flattenArray($this->downtimeHistory(null, 'o.objecttype_id = 1'));
         return($this->jsonOutput($results));
     }
 
     /**
      * getServiceDowntime
      *
-     * An accessor method to return all service comments
+     * An accessor method to return all service downtime
      *
      * @return string   json output
      */
     function getServiceDowntime() {
-        $results = $this->flattenArray($this->downtime(null, 'o.objecttype_id = 2'));
+        $results = $this->flattenArray($this->downtimeHistory(null, 'o.objecttype_id = 2'));
         return($this->jsonOutput($results));
     }
 
     /**
-     * downtime
+     * getTriggeredByCombo
+     *
+     * Creates a json encoded name/value list of downtime ID's
+     * and descriptions. These results are used to build a combobox
+     * for selecting downtime triggers on the schedule downtime form.
+     *
+     * @return string   json output
+     */
+    function getTriggeredByCombo() {
+        $results = $this->flattenArray($this->scheduledDowntime());
+
+        for ($i = 0; $i < count($results); $i++) {
+            $entry = $results[$i];
+
+            $name = $entry['host_name'] . ": ";
+
+            if ($entry['objecttype_id'] == 2) {
+                $name .= $entry['service_description'] . " - ";
+            }
+
+            $format = read_config_option('npc_date_format') . ' ' . read_config_option('npc_time_format');
+            $start = date($format, strtotime($entry['scheduled_start_time']));
+
+            $name .= "Starting @ " . $start;
+
+            $output[$i] = array(
+                'name' => $name, 
+                'value' => $entry['internal_downtime_id']
+            );
+        }
+
+        return($this->jsonOutput($output));
+    }
+
+    /**
+     * scheduledDowntime
+     * 
+     * Returns scheduled downtime
+     *
+     * @return array
+     */
+    function scheduledDowntime($id=null, $where='') {
+
+        if ($this->id || $id) {
+            if ($where != '') {
+                $where .= ' AND ';
+            }
+            $where .= sprintf("d.object_id = %d", is_null($id) ? $this->id : $id);
+        }
+
+        $q = new Doctrine_Query();
+        $q->select('i.instance_name,'
+                  .'o.objecttype_id,'
+                  .'o.name1 AS host_name,'
+                  .'o.name2 AS service_description,'
+                  .'d.*')
+          ->from('NpcScheduleddowntime d')
+          ->leftJoin('d.Object o')
+          ->leftJoin('d.Instance i')
+          ->where("$where")
+          ->orderby( 'd.scheduled_start_time DESC, d.scheduleddowntime_id DESC' );
+
+        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+
+        return($results);
+    }
+
+    /**
+     * downtimeHistory
      * 
      * Returns downtime history
      *
      * @return array
      */
-    function downtime($id=null, $where='') {
+    function downtimeHistory($id=null, $where='') {
 
         if ($this->id || $id) {
             if ($where != '') {

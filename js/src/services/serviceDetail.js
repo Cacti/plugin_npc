@@ -1,4 +1,4 @@
-npc.app.serviceDetail = function(record) {
+npc.serviceDetail = function(record) {
 
     var service_object_id = (typeof record.data.service_object_id != 'undefined') ? record.data.service_object_id : record.data.object_id;
 
@@ -13,7 +13,7 @@ npc.app.serviceDetail = function(record) {
 
     var outerTabId = 'services-tab';
 
-    npc.app.addCenterNestedTab(outerTabId, 'Services');
+    npc.addCenterNestedTab(outerTabId, 'Services');
 
     var centerTabPanel = Ext.getCmp('centerTabPanel');
 
@@ -302,12 +302,12 @@ npc.app.serviceDetail = function(record) {
         header:"",
         dataIndex:'state',
         width:40,
-        renderer:npc.app.serviceStatusImage
+        renderer:npc.serviceStatusImage
     },{
         header:"Date",
         dataIndex:'start_time',
         width:120,
-        renderer: npc.app.formatDate
+        renderer: npc.formatDate
     },{
         header:"Message",
         dataIndex:'output',
@@ -352,12 +352,12 @@ npc.app.serviceDetail = function(record) {
     var shCm = new Ext.grid.ColumnModel([{
         header:"",
         dataIndex:'state',
-        renderer:npc.app.serviceStatusImage,
+        renderer:npc.serviceStatusImage,
         width:40
     },{
         header:"Date",
         dataIndex:'state_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"State Type",
@@ -412,17 +412,17 @@ npc.app.serviceDetail = function(record) {
     var sdCm = new Ext.grid.ColumnModel([{
         header:"Entry Time",
         dataIndex:'entry_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"Start Time",
         dataIndex:'scheduled_start_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"End Time",
         dataIndex:'scheduled_end_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"User",
@@ -475,7 +475,7 @@ npc.app.serviceDetail = function(record) {
     var scCm = new Ext.grid.ColumnModel([{
         header:"Entry Time",
         dataIndex:'comment_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"Author",
@@ -488,17 +488,17 @@ npc.app.serviceDetail = function(record) {
     },{
         header:"Persistent",
         dataIndex:'is_persistent',
-        renderer:npc.app.renderPersistent,
+        renderer:npc.renderPersistent,
         width:80
     },{
         header:"Type",
         dataIndex:'entry_type',
-        renderer:npc.app.renderCommentType,
+        renderer:npc.renderCommentType,
         width:100
     },{
         header:"Expires",
         dataIndex:'expiration_time',
-        renderer: npc.app.renderCommentExpires,
+        renderer: npc.renderCommentExpires,
         width:120
     },{
         header:"Delete",
@@ -525,7 +525,7 @@ npc.app.serviceDetail = function(record) {
             text:'New Comment',
             iconCls:'commentAdd',
             handler : function(){
-                npc.app.addComment('svc', record.data.host_name, record.data.service_description);
+                npc.addComment('svc', record.data.host_name, record.data.service_description);
             }
         }, '-', {
             text:'Delete comments',
@@ -538,7 +538,7 @@ npc.app.serviceDetail = function(record) {
                     buttons: Ext.Msg.YESNO,
                     fn: function(btn) {
                         if (btn == 'yes') {
-                            npc.app.aPost({
+                            npc.aPost({
                                 module : 'nagios',
                                 action : 'command',
                                 p_command : 'DEL_ALL_SVC_COMMENTS',
@@ -627,7 +627,7 @@ npc.app.serviceDetail = function(record) {
                             p_command : 'DEL_SVC_COMMENT',
                             p_comment_id : rec.get(fieldName)
                         };
-                        npc.app.aPost(args);
+                        npc.aPost(args);
                     }
                 },
                 animEl: 'elId',
@@ -663,7 +663,7 @@ npc.app.serviceDetail = function(record) {
             item = menu.add({
                 text: font + 'Acknowledge Problem</b>',
                 handler: function(o) {
-                    npc.app.ackProblem('svc', service.host_name, service.service_description);
+                    npc.ackProblem('svc', service.host_name, service.service_description);
                 }
             });
         }
@@ -691,14 +691,14 @@ npc.app.serviceDetail = function(record) {
         item = menu.add({
             text: font + 'Send Custom Notification</b>',
             handler: function() {
-                npc.app.sendCustomNotification('svc', service.host_name, service.service_description);
+                npc.sendCustomNotification('svc', service.host_name, service.service_description);
             }
         });
 
         item = menu.add({
             text: font + 'Re-schedule Next Check</b>',
             handler: function() {
-                npc.app.scheduleNextCheck('svc', service.host_name, service.service_description);
+                npc.scheduleNextCheck('svc', service.host_name, service.service_description);
             }
         });
 
@@ -706,14 +706,16 @@ npc.app.serviceDetail = function(record) {
             item = menu.add({
                 text: font + 'Submit Passive Check Result</b>',
                 handler: function() {
-                    npc.app.submitPassiveCheckResult('service', service.host_name, service.service_description);
+                    npc.submitPassiveCheckResult('service', service.host_name, service.service_description);
                 }
             });
         }
 
         item = menu.add({
-            text: font + 'Schedule Downtime</b>'
-            //handler: scheduleNextCheck
+            text: font + 'Schedule Downtime</b>',
+            handler: function() {
+                npc.scheduleDowntime('svc', service.host_name, service.service_description);
+            }
         });
 
         a = service.passive_checks_enabled ? 'Stop' : 'Start';
@@ -760,7 +762,7 @@ npc.app.serviceDetail = function(record) {
             item = menu.add({
                 text: font + 'Delay next notification</b>',
                 handler: function() {
-                    npc.app.delayNextNotification('svc', service.host_name,service.service_description);
+                    npc.delayNextNotification('svc', service.host_name,service.service_description);
                 }
             });
         }
@@ -776,7 +778,7 @@ npc.app.serviceDetail = function(record) {
             buttons: Ext.Msg.YESNO,
             fn: function(btn) {
                 if (btn == 'yes') {
-                    npc.app.aPost(post);
+                    npc.aPost(post);
                 }
             },
             animEl: 'elId',

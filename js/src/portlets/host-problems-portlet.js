@@ -1,4 +1,4 @@
-npc.app.portlet.hostProblems = function(){
+npc.portlet.hostProblems = function(){
 
     // Portlet name
     var name = 'Host Problems';
@@ -42,7 +42,7 @@ npc.app.portlet.hostProblems = function(){
         header:"Host",
         dataIndex:'host_name',
         sortable:true,
-        renderer:npc.app.renderExtraIcons,
+        renderer:npc.renderExtraIcons,
         width:100
     },{
         header:"Alias",
@@ -52,7 +52,7 @@ npc.app.portlet.hostProblems = function(){
     },{
         header:"Status",
         dataIndex:'current_state',
-        renderer:npc.app.hostStatusImage,
+        renderer:npc.hostStatusImage,
         align:'center',
         width:50
     },{
@@ -83,7 +83,7 @@ npc.app.portlet.hostProblems = function(){
     });
 
     // Create a portlet to hold the grid
-    npc.app.addPortlet(id, name, column);
+    npc.addPortlet(id, name, column);
 
     // Add the grid to the portlet
     Ext.getCmp(id).items.add(grid);
@@ -123,9 +123,9 @@ npc.app.portlet.hostProblems = function(){
     Ext.getCmp(id).addListener(listeners);
 
     function doAutoRefresh() {
-        store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+        store.startAutoRefresh(npc.params.npc_portlet_refresh);
     }
 
-    grid.on('rowdblclick', npc.app.hostGridClick);
+    grid.on('rowdblclick', npc.hostGridClick);
 
 };

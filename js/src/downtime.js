@@ -1,4 +1,4 @@
-npc.app.downtime = function(){
+npc.downtime = function(){
 
     var title = 'Scheduled Downtime';
 
@@ -7,7 +7,7 @@ npc.app.downtime = function(){
 
     var outerTabId = 'downtime-tab';
 
-    npc.app.addCenterNestedTab(outerTabId, title);
+    npc.addCenterNestedTab(outerTabId, title);
 
     var centerTabPanel = Ext.getCmp('centerTabPanel');
 
@@ -71,17 +71,17 @@ npc.app.downtime = function(){
     },{
         header:"Entry Time",
         dataIndex:'entry_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"Start Time",
         dataIndex:'scheduled_start_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"End Time",
         dataIndex:'scheduled_end_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"User",
@@ -149,17 +149,17 @@ npc.app.downtime = function(){
     },{
         header:"Entry Time",
         dataIndex:'entry_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"Start Time",
         dataIndex:'scheduled_start_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"End Time",
         dataIndex:'scheduled_end_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"User",
@@ -226,6 +226,6 @@ npc.app.downtime = function(){
     Ext.getCmp('host-downtime-tab').addListener(listeners);
     Ext.getCmp('service-downtime-tab').addListener(listeners);
 
-    hostGrid.on('rowdblclick', npc.app.hostGridClick);
-    serviceGrid.on('rowdblclick', npc.app.serviceGridClick);
+    hostGrid.on('rowdblclick', npc.hostGridClick);
+    serviceGrid.on('rowdblclick', npc.serviceGridClick);
 };

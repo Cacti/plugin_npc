@@ -5,7 +5,9 @@
  */
 class NpcScheduleddowntime extends BaseNpcScheduleddowntime
 {
-
-
-
+    public function setUp()
+    {
+        $this->hasOne('NpcObjects as Object', array('local' => 'object_id', 'foreign' => 'object_id'));
+        $this->hasOne('NpcInstances as Instance', array('local' => 'instance_id', 'foreign' => 'instance_id'));
+    }
 }

@@ -1,24 +1,24 @@
-npc.app.hostgroupOverview = function(){
+npc.servicegroupOverview = function(){
 
     // Panel title
-    var title = 'Hostgroup Overview';
+    var title = 'Servicegroup Overview';
 
     // Panel ID
-    var id = 'hostgroupOverview-tab';
+    var id = 'servicegroupOverview-tab';
 
     // Portlet URL
-    var url = 'npc.php?module=hostgroups&action=getOverview';
+    var url = 'npc.php?module=servicegroups&action=getOverview';
 
     // Default # of rows to display
     var pageSize = 25;
 
-    var outerTabId = 'hosts-tab';
+    var outerTabId = 'services-tab';
 
-    npc.app.addCenterNestedTab(outerTabId, 'Hosts');
+    npc.addCenterNestedTab(outerTabId, 'Services');
 
     var centerTabPanel = Ext.getCmp('centerTabPanel');
 
-    var innerTabId = 'hosts-tab-inner-panel';
+    var innerTabId = 'services-tab-inner-panel';
 
     var innerTabPanel = Ext.getCmp(innerTabId);
 
@@ -47,7 +47,7 @@ npc.app.hostgroupOverview = function(){
             root:'data'
         }, [
             {name: 'instance_id', type: 'int'},
-            {name: 'hostgroup_object_id', type: 'int'},
+            {name: 'servicegroup_object_id', type: 'int'},
             'alias',
             'host_name',
             {name: 'host_state', type: 'int'},
@@ -61,7 +61,7 @@ npc.app.hostgroupOverview = function(){
     });
 
     var cm = new Ext.grid.ColumnModel([{
-        header:"Hostgroup",
+        header:"Servicegroup",
         dataIndex:'alias',
         hidden:true
     },{
@@ -74,47 +74,47 @@ npc.app.hostgroupOverview = function(){
         dataIndex:'host_state',
         align:'center',
         width:40,
-        renderer:npc.app.hostStatusImage
+        renderer:npc.hostStatusImage
     },{
-        id: 'hgHostTotalsCRITICAL',
+        id: 'sgHostTotalsCRITICAL',
         header:"Critical",
         dataIndex:'critical',
         align:'center',
         width:40,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     },{
-        id: 'hgHostTotalsWARNING',
+        id: 'sgHostTotalsWARNING',
         header:"Warning",
         dataIndex:'warning',
         align:'center',
         width:45,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     },{
-        id: 'hgHostTotalsUNKNOWN',
+        id: 'sgHostTotalsUNKNOWN',
         header:"Unknown",
         dataIndex:'unknown',
         align:'center',
         width:45,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     },{
-        id: 'hgHostTotalsOK',
+        id: 'sgHostTotalsOK',
         header:"Ok",
         dataIndex:'ok',
         align:'center',
         width:25,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     },{
-        id: 'hgHostTotalsPENDING',
+        id: 'sgHostTotalsPENDING',
         header:"Pending",
         dataIndex:'pending',
         align:'center',
         width:45,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     }]);
 
 
     var grid = new Ext.grid.GridPanel({
-        id: 'hostgroup-overview-portlet-grid',
+        id: 'servicegroup-overview-portlet-grid',
         autoHeight:true,
         autoExpandColumn: 'host_name',
         store:store,
@@ -151,7 +151,7 @@ npc.app.hostgroupOverview = function(){
     grid.store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
-    store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    store.startAutoRefresh(npc.params.npc_portlet_refresh);
 
     // Stop auto refresh if the tab is closed
     var listeners = {
@@ -166,11 +166,12 @@ npc.app.hostgroupOverview = function(){
     // Add the listener to the tab
     tab.addListener(listeners);
 
-    grid.on('rowclick', hgOverviewClick);
+    grid.on('rowclick', sgOverviewClick);
 
-    function hgOverviewClick(grid, rowIndex, e) {
-        var hoi = grid.getStore().getAt(rowIndex).json.hostgroup_object_id;
+    function sgOverviewClick(grid, rowIndex, e) {
+        //console.log(grid.getStore().getAt(rowIndex).json.servicegroup_object_id);
+        var soi = grid.getStore().getAt(rowIndex).json.servicegroup_object_id;
         var name = grid.getStore().getAt(rowIndex).json.alias;
-        npc.app.hostgroupGrid('hostgroupGrid-'+hoi, 'Hostgroup: '+name, hoi);
+        npc.servicegroupGrid('servicegroupGrid-'+soi, 'Servicegroup: '+name, soi);
     }
 };

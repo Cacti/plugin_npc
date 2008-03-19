@@ -1,4 +1,4 @@
-npc.app.comments = function(){
+npc.comments = function(){
 
     var title = 'Comments';
 
@@ -7,7 +7,7 @@ npc.app.comments = function(){
 
     var outerTabId = 'comments-tab';
 
-    npc.app.addCenterNestedTab(outerTabId, 'Comments');
+    npc.addCenterNestedTab(outerTabId, 'Comments');
 
     var centerTabPanel = Ext.getCmp('centerTabPanel');
 
@@ -78,7 +78,7 @@ npc.app.comments = function(){
     },{
         header:"Entry Time",
         dataIndex:'comment_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"Author",
@@ -91,17 +91,17 @@ npc.app.comments = function(){
     },{
         header:"Persistent",
         dataIndex:'is_persistent',
-        renderer:npc.app.renderPersistent,
+        renderer:npc.renderPersistent,
         width:80
     },{
         header:"Type",
         dataIndex:'entry_type',
-        renderer:npc.app.renderCommentType,
+        renderer:npc.renderCommentType,
         width:100
     },{
         header:"Expires",
         dataIndex:'expiration_time',
-        renderer: npc.app.renderCommentExpires,
+        renderer: npc.renderCommentExpires,
         width:120
     },{
         header:"Delete",
@@ -133,7 +133,7 @@ npc.app.comments = function(){
             msg: 'Add a new host comment.',
             iconCls:'commentAdd',
             handler : function(){
-                npc.app.addHostComment();
+                npc.addHostComment();
             }
         }, '-', {
             text:'Delete comments',
@@ -146,7 +146,7 @@ npc.app.comments = function(){
                     buttons: Ext.Msg.YESNO,
                     fn: function(btn) {
                         if (btn == 'yes') {
-                            npc.app.aPost({
+                            npc.aPost({
                                 module : 'comments',
                                 action : 'deleteAllHostComments'
                             });
@@ -202,7 +202,7 @@ npc.app.comments = function(){
     },{
         header:"Entry Time",
         dataIndex:'comment_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"Author",
@@ -215,17 +215,17 @@ npc.app.comments = function(){
     },{
         header:"Persistent",
         dataIndex:'is_persistent',
-        renderer:npc.app.renderPersistent,
+        renderer:npc.renderPersistent,
         width:80
     },{
         header:"Type",
         dataIndex:'entry_type',
-        renderer:npc.app.renderCommentType,
+        renderer:npc.renderCommentType,
         width:100
     },{
         header:"Expires",
         dataIndex:'expiration_time',
-        renderer: npc.app.renderCommentExpires,
+        renderer: npc.renderCommentExpires,
         width:120
     },{
         header:"Delete",
@@ -256,7 +256,7 @@ npc.app.comments = function(){
             text:'New Comment',
             iconCls:'commentAdd',
             handler : function(){
-                npc.app.addServiceComment();
+                npc.addServiceComment();
             }
         }, '-', {
             text:'Delete comments',
@@ -269,7 +269,7 @@ npc.app.comments = function(){
                     buttons: Ext.Msg.YESNO,
                     fn: function(btn) {
                         if (btn == 'yes') {
-                            npc.app.aPost({
+                            npc.aPost({
                                 module : 'comments',
                                 action : 'deleteAllServiceComments'
                             });
@@ -303,8 +303,8 @@ npc.app.comments = function(){
     scGrid.store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
-    hcStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    scStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    hcStore.startAutoRefresh(npc.params.npc_portlet_refresh);
+    scStore.startAutoRefresh(npc.params.npc_portlet_refresh);
 
     // Stop auto refresh if the tab is closed
     var listeners = {
@@ -318,5 +318,5 @@ npc.app.comments = function(){
     Ext.getCmp('host-comments-tab').addListener(listeners);
     Ext.getCmp('service-comments-tab').addListener(listeners);
 
-    //hcGrid.on('rowclick', npc.app.serviceGridClick);
+    //hcGrid.on('rowclick', npc.serviceGridClick);
 };

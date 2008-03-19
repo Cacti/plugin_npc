@@ -1,4 +1,4 @@
-npc.app.portlet.serviceProblems = function(){
+npc.portlet.serviceProblems = function(){
 
     // Portlet name
     var name = 'Service Problems';
@@ -13,7 +13,7 @@ npc.app.portlet.serviceProblems = function(){
     var column = 'dashcol2';
 
     // Default # of events to display
-    var pageSize = parseInt(npc.app.params.npc_portlet_rows);
+    var pageSize = parseInt(npc.params.npc_portlet_rows);
 
     var store = new Ext.data.GroupingStore({
         url:url,
@@ -44,12 +44,12 @@ npc.app.portlet.serviceProblems = function(){
     var cm = new Ext.grid.ColumnModel([{
         header:"Service",
         dataIndex:'service_description',
-        renderer:npc.app.renderExtraIcons,
+        renderer:npc.renderExtraIcons,
         width:100
     },{
         header:"Status",
         dataIndex:'current_state',
-        renderer:npc.app.serviceStatusImage,
+        renderer:npc.serviceStatusImage,
         width:45
     },{
         header:"Host",
@@ -87,7 +87,7 @@ npc.app.portlet.serviceProblems = function(){
     });
 
     // Create a portlet to hold the grid
-    npc.app.addPortlet(id, name, column);
+    npc.addPortlet(id, name, column);
 
     // Add the grid to the portlet
     Ext.getCmp(id).items.add(grid);
@@ -130,6 +130,6 @@ npc.app.portlet.serviceProblems = function(){
         store.startAutoRefresh(60);
     }
 
-    grid.on('rowdblclick', npc.app.serviceGridClick);
+    grid.on('rowdblclick', npc.serviceGridClick);
 
 };

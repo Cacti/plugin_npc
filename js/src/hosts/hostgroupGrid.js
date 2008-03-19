@@ -1,26 +1,26 @@
-npc.app.servicegroupGrid = function(id, title, soi){
+npc.hostgroupGrid = function(id, title, hoi){
 
     // Panel title
-    title = (typeof title == 'undefined') ? 'Servicegroup Grid' : title;
+    title = (typeof title == 'undefined') ? 'Hostgroup Grid' : title;
 
     // Panel ID
-    id = (typeof id == 'undefined') ? 'servicegroupGrid-tab' : id;
+    id = (typeof id == 'undefined') ? 'hostgroupGrid-tab' : id;
 
-    soi = (typeof soi == 'undefined') ? '' : '&p_id='+soi;
+    hoi = (typeof hoi == 'undefined') ? '' : '&p_id='+hoi;
 
     // Grid URL
-    var url = 'npc.php?module=servicegroups&action=getServices'+soi;
+    var url = 'npc.php?module=hostgroups&action=getHosts'+hoi;
 
     // Default # of rows to display
     var pageSize = 25;
 
-    var outerTabId = 'services-tab';
+    var outerTabId = 'hosts-tab';
 
-    npc.app.addCenterNestedTab(outerTabId, 'Services');
+    npc.addCenterNestedTab(outerTabId, 'Hosts');
 
     var centerTabPanel = Ext.getCmp('centerTabPanel');
 
-    var innerTabId = 'services-tab-inner-panel';
+    var innerTabId = 'hosts-tab-inner-panel';
 
     var innerTabPanel = Ext.getCmp(innerTabId);
 
@@ -47,32 +47,23 @@ npc.app.servicegroupGrid = function(id, title, soi){
     var store = new Ext.data.GroupingStore({
         url:url,
         autoload:true,
-        sortInfo:{field: 'service_description', direction: "ASC"},
+        sortInfo:{field: 'host_name', direction: "ASC"},
         reader: new Ext.data.JsonReader({
             totalProperty:'totalCount',
             root:'data'
         }, [
-            'servicegroup_id',
-            'instance_id',
-            'config_type',
-            'servicegroup_object_id',
+            {name: 'hostgroup_id', type: 'int'},
+            {name: 'instance_id', type: 'int'},
+            {name: 'config_type', type: 'int'},
+            {name: 'hostgroup_object_id', type: 'int'},
             'alias',
             'instance_name',
-            'servicegroup_name',
-            'servicestatus_id',
-            'current_state',
+            'hostgroup_name',
+            {name: 'hoststatus_id', type: 'int'},
+            {name: 'host_object_id', type: 'int'},
+            {name: 'current_state', type: 'int'},
             'output',
-            'service_object_id',
-            'host_name',
-            'service_description',
-            'comment',
-            'acknowledgement',
-            {name: 'problem_has_been_acknowledged', type: 'int'},
-            {name: 'notifications_enabled', type: 'int'},
-            {name: 'active_checks_enabled', type: 'int'},
-            {name: 'passive_checks_enabled', type: 'int'},
-            {name: 'is_flapping', type: 'int'}
-
+            'host_name'
         ]),
         groupField:'alias'
     });
@@ -83,21 +74,17 @@ npc.app.servicegroupGrid = function(id, title, soi){
         sortable:true,
         width:75
     },{
-        header:"Service",
-        dataIndex:'service_description',
-        renderer:npc.app.renderExtraIcons,
-        width:75
-    },{
         header:"Status",
         dataIndex:'current_state',
-        renderer: npc.app.serviceStatusImage,
+        align:'center',
+        renderer: npc.hostStatusImage,
         width:40
     },{
         header:"Plugin Output",
         dataIndex:'output',
         width:400
     },{
-        header:"Serivce Group",
+        header:"Host Group",
         dataIndex:'alias',
         hidden:true,
         width:75
@@ -118,7 +105,7 @@ npc.app.servicegroupGrid = function(id, title, soi){
             enableGroupingMenu: false,
             enableNoGroups: true,
             scrollOffset:0,
-            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Services" : "Service"]})' 
+            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Hosts" : "Host"]})' 
         }),
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,
@@ -145,7 +132,7 @@ npc.app.servicegroupGrid = function(id, title, soi){
     grid.store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
-    store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    store.startAutoRefresh(npc.params.npc_portlet_refresh);
 
     // Stop auto refresh if the tab is closed
     var listeners = {
@@ -160,6 +147,6 @@ npc.app.servicegroupGrid = function(id, title, soi){
     // Add the listener to the tab
     tab.addListener(listeners);
 
-    grid.on('rowclick', npc.app.serviceGridClick);
+    grid.on('rowclick', npc.hostGridClick);
 
 };

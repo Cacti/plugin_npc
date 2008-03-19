@@ -1,4 +1,4 @@
-npc.app.n2c = function() {
+npc.n2c = function() {
 
     // Set a grid object
     var xg = Ext.grid;

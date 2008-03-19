@@ -1,4 +1,4 @@
-npc.app.portlet.servicegroupServiceStatus = function(){
+npc.portlet.servicegroupServiceStatus = function(){
 
     // Portlet name
     var name = 'Servicegroup: Service Status';
@@ -45,35 +45,35 @@ npc.app.portlet.servicegroupServiceStatus = function(){
         dataIndex:'critical',
         align:'center',
         width:40,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     },{
         id: 'sgSSWARNING',
         header:"Warning",
         dataIndex:'warning',
         align:'center',
         width:40,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     },{
         id: 'sgSSUNKNOWN',
         header:"Unknown",
         dataIndex:'unknown',
         align:'center',
         width:40,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     },{
         id: 'sgSSOK',
         header:"Ok",
         dataIndex:'ok',
         align:'center',
         width:20,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     },{
         id: 'sgSSPENDING',
         header:"Pending",
         dataIndex:'pending',
         align:'center',
         width:40,
-        renderer: npc.app.renderStatusBg
+        renderer: npc.renderStatusBg
     }]);
 
     // Setup the grid
@@ -99,7 +99,7 @@ npc.app.portlet.servicegroupServiceStatus = function(){
     });
 
     // Create a portlet to hold the grid
-    npc.app.addPortlet(id, name, column);
+    npc.addPortlet(id, name, column);
 
     // Add the grid to the portlet
     Ext.getCmp(id).items.add(grid);
@@ -138,7 +138,7 @@ npc.app.portlet.servicegroupServiceStatus = function(){
     Ext.getCmp(id).addListener(listeners);
 
     function doAutoRefresh() {
-        store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+        store.startAutoRefresh(npc.params.npc_portlet_refresh);
     }
 
     grid.on('rowdblclick', sgClick);
@@ -146,6 +146,6 @@ npc.app.portlet.servicegroupServiceStatus = function(){
     function sgClick(grid, rowIndex, e) {
         var soi = grid.getStore().getAt(rowIndex).json.servicegroup_object_id;
         var name = grid.getStore().getAt(rowIndex).json.alias;
-        npc.app.servicegroupGrid('servicegroupGrid-'+soi, 'Servicegroup: '+name, soi);
+        npc.servicegroupGrid('servicegroupGrid-'+soi, 'Servicegroup: '+name, soi);
     }
 };

@@ -1,4 +1,4 @@
-npc.app.hostDetail = function(record) {
+npc.hostDetail = function(record) {
 
     var host_object_id = (typeof record.data.host_object_id != 'undefined') ? record.data.host_object_id : record.data.object_id;
 
@@ -13,7 +13,7 @@ npc.app.hostDetail = function(record) {
 
     var outerTabId = 'hosts-tab';
 
-    npc.app.addCenterNestedTab(outerTabId, 'Hosts');
+    npc.addCenterNestedTab(outerTabId, 'Hosts');
 
     var centerTabPanel = Ext.getCmp('centerTabPanel');
 
@@ -203,12 +203,12 @@ npc.app.hostDetail = function(record) {
         header:"",
         dataIndex:'state',
         width:40,
-        renderer:npc.app.hostStatusImage
+        renderer:npc.hostStatusImage
     },{
         header:"Date",
         dataIndex:'start_time',
         width:120,
-        renderer: npc.app.formatDate
+        renderer: npc.formatDate
     },{
         header:"Message",
         dataIndex:'output',
@@ -253,12 +253,12 @@ npc.app.hostDetail = function(record) {
     var hhCm = new Ext.grid.ColumnModel([{
         header:"",
         dataIndex:'state',
-        renderer:npc.app.hostStatusImage,
+        renderer:npc.hostStatusImage,
         width:40
     },{
         header:"Date",
         dataIndex:'state_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"State Type",
@@ -313,17 +313,17 @@ npc.app.hostDetail = function(record) {
     var hdCm = new Ext.grid.ColumnModel([{
         header:"Entry Time",
         dataIndex:'entry_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"Start Time",
         dataIndex:'scheduled_start_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"End Time",
         dataIndex:'scheduled_end_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"User",
@@ -376,7 +376,7 @@ npc.app.hostDetail = function(record) {
     var hcCm = new Ext.grid.ColumnModel([{
         header:"Entry Time",
         dataIndex:'comment_time',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:120
     },{
         header:"Author",
@@ -389,17 +389,17 @@ npc.app.hostDetail = function(record) {
     },{
         header:"Persistent",
         dataIndex:'is_persistent',
-        renderer:npc.app.renderPersistent,
+        renderer:npc.renderPersistent,
         width:80
     },{
         header:"Type",
         dataIndex:'entry_type',
-        renderer:npc.app.renderCommentType,
+        renderer:npc.renderCommentType,
         width:100
     },{
         header:"Expires",
         dataIndex:'expiration_time',
-        renderer: npc.app.renderCommentExpires,
+        renderer: npc.renderCommentExpires,
         width:120
     },{
         header:"Delete",
@@ -426,7 +426,7 @@ npc.app.hostDetail = function(record) {
             text:'New Comment',
             iconCls:'commentAdd',
             handler : function(){
-                npc.app.addComment('host', record.data.host_name);
+                npc.addComment('host', record.data.host_name);
             }
         }, '-', {
             text:'Delete comments',
@@ -439,7 +439,7 @@ npc.app.hostDetail = function(record) {
                     buttons: Ext.Msg.YESNO,
                     fn: function(btn) {
                         if (btn == 'yes') {
-                            npc.app.aPost({
+                            npc.aPost({
                                 module : 'nagios',
                                 action : 'command',
                                 p_command : 'DEL_ALL_HOST_COMMENTS',
@@ -484,11 +484,11 @@ npc.app.hostDetail = function(record) {
     hcStore.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh
-    hiStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    hnStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    hhStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    hdStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
-    hcStore.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    hiStore.startAutoRefresh(npc.params.npc_portlet_refresh);
+    hnStore.startAutoRefresh(npc.params.npc_portlet_refresh);
+    hhStore.startAutoRefresh(npc.params.npc_portlet_refresh);
+    hdStore.startAutoRefresh(npc.params.npc_portlet_refresh);
+    hcStore.startAutoRefresh(npc.params.npc_portlet_refresh);
 
     // Add listeners to stop auto refresh on the store if the tab is closed
     var listeners = {
@@ -524,7 +524,7 @@ npc.app.hostDetail = function(record) {
                             p_command : 'DEL_HOST_COMMENT',
                             p_comment_id : rec.get(fieldName)
                         };
-                        npc.app.aPost(args);
+                        npc.aPost(args);
                     }
                 },
                 animEl: 'elId',

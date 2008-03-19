@@ -1,4 +1,4 @@
-npc.app.portlet.eventLog = function(){
+npc.portlet.eventLog = function(){
 
     // Portlet name
     var name = 'Event Log';
@@ -29,13 +29,13 @@ npc.app.portlet.eventLog = function(){
 
     var cm = new Ext.grid.ColumnModel([{
         dataIndex:'logentry_data',
-        renderer: npc.app.renderEventIcon,
+        renderer: npc.renderEventIcon,
         width:25
     },{
         header:"Date",
         dataIndex:'entry_time',
         width:125,
-        renderer:npc.app.formatDate,
+        renderer:npc.formatDate,
         align:'left'
     }, {
         header:"Log Entry",
@@ -66,7 +66,7 @@ npc.app.portlet.eventLog = function(){
     });
 
     // Create a portlet to hold the grid
-    npc.app.addPortlet(id, name, column);
+    npc.addPortlet(id, name, column);
 
     // Add the grid to the portlet
     Ext.getCmp(id).items.add(grid);
@@ -105,6 +105,6 @@ npc.app.portlet.eventLog = function(){
     Ext.getCmp(id).addListener(listeners);
 
     function doAutoRefresh() {
-        store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+        store.startAutoRefresh(npc.params.npc_portlet_refresh);
     }
 };

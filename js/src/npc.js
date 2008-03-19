@@ -5,7 +5,7 @@ Ext.BLANK_IMAGE_URL = 'js/ext/resources/images/default/s.gif';
 Ext.namespace('npc');
  
 // create application module
-npc.app = function() {
+npc = function() {
 
     /* Private Variables */
 	
@@ -78,11 +78,11 @@ npc.app = function() {
         // public methods
 
         serviceGridClick: function(grid, rowIndex, e) {
-            npc.app.serviceDetail(grid.getStore().getAt(rowIndex));
+            npc.serviceDetail(grid.getStore().getAt(rowIndex));
         },
 
         hostGridClick: function(grid, rowIndex, e) {
-            npc.app.hostDetail(grid.getStore().getAt(rowIndex));
+            npc.hostDetail(grid.getStore().getAt(rowIndex));
         },
 
         cmdFormButtons: [{
@@ -105,625 +105,6 @@ npc.app = function() {
                 o.ownerCt.ownerCt.close();
             }
         }],
-
-        ackProblem: function(type, host, service) {
-
-            var cmd = 'ACKNOWLEDGE_' + type.toUpperCase() + '_PROBLEM';
-
-            var hostField = {
-                name: 'p_host_name',
-                value: host,
-                xtype: 'hidden'
-            };
-
-            if (typeof host == 'undefined') {
-                hostField.fieldLabel = 'Host Name';
-                hostField.xtype = 'textfield';
-                hostField.allowBlank = false;
-            }
-
-            var serviceField = {
-                name: 'p_service_description',
-                value: service,
-                xtype: 'hidden'
-            };
-
-            if (type == 'svc') {
-                if (typeof service == 'undefined') {
-                    serviceField.fieldLabel = 'Host Name';
-                    serviceField.xtype = 'textfield';
-                    serviceField.allowBlank = false;
-                }
-            }
-
-            var form = new Ext.FormPanel({
-                labelWidth: 110,
-                url:'npc.php?module=nagios&action=command',
-                frame:true,
-                bodyStyle:'padding:5px 5px 0',
-                width: 550,
-                defaults: {width: 150},
-                defaultType: 'textfield',
-                    items: [
-                    {
-                        name: 'p_command',
-                        value:cmd,
-                        xtype: 'hidden'
-                    },
-                        hostField,
-                        serviceField,
-                    {
-                        fieldLabel: 'Sticky',
-                        name: 'p_sticky',
-                        xtype: 'xcheckbox',
-                        labelStyle: 'cursor: help;',
-                        tooltipText: "Disables notifications until the host recovers.",
-                        listeners: {
-                            render: function(o) {
-                                npc.app.setFormFieldTooltip(o);
-                            }
-                        },
-                        checked:true
-                    },{
-                        fieldLabel: 'Send Notification',
-                        name: 'p_notify',
-                        xtype: 'xcheckbox',
-                        labelStyle: 'cursor: help;',
-                        tooltipText: "Send a notification about the acknowledgement to contacts for this service.",
-                        listeners: {
-                            render: function(o) {
-                                npc.app.setFormFieldTooltip(o);
-                            }
-                        },
-                        checked:true
-                    },{
-                        fieldLabel: 'Persistent',
-                        name: 'p_persistent',
-                        xtype: 'xcheckbox',
-                        labelStyle: 'cursor: help;',
-                        tooltipText: "Keep the service comment even after the acknowledgement is removed.",
-                        listeners: {
-                            render: function(o) {
-                                npc.app.setFormFieldTooltip(o);
-                            }
-                        },
-                        checked:false
-                    },{
-                        name: 'p_author',
-                        value: npc.app.params.userName,
-                        xtype: 'hidden'
-                    },{
-                        fieldLabel: 'Comment',
-                        name: 'p_comment',
-                        xtype: 'htmleditor',
-                        height:200,
-                        width: 500
-                    },{
-                        xtype: 'panel',
-                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes this command.</span>',
-                        width: 400
-                    }
-                ],
-                buttons: npc.app.cmdFormButtons
-            });
-
-            var win = new Ext.Window({ 
-                title:'Acknowledge Service Problem', 
-                layout:'fit', 
-                modal:true, 
-                closable: true, 
-                width:680, 
-                height:400, 
-                bodyStyle:'padding:5px;', 
-                items: form 
-            }); 
-            win.show(); 
-
-        },
-
-        addComment: function(type, host, service) {
-
-            var cmd = 'ADD_' + type.toUpperCase() + '_COMMENT';
-
-            var hostField = {
-                name: 'p_host_name',
-                value: host,
-                xtype: 'hidden'
-            };
-
-            if (typeof host == 'undefined') {
-                hostField.fieldLabel = 'Host Name';
-                hostField.xtype = 'textfield';
-                hostField.allowBlank = false;
-            }
-
-            var serviceField = {
-                name: 'p_service_description',
-                value: service,
-                xtype: 'hidden'
-            };
-
-            if (type == 'svc') {
-                if (typeof service == 'undefined') {
-                    serviceField.fieldLabel = 'Service Description';
-                    serviceField.xtype = 'textfield';
-                    serviceField.allowBlank = false;
-                }
-            }
-
-            var form = new Ext.FormPanel({
-                labelWidth: 110,
-                url:'npc.php?module=nagios&action=command',
-                frame:true,
-                bodyStyle:'padding:5px 5px 0',
-                width: 550,
-                defaults: {width: 175},
-                defaultType: 'textfield',
-                    items: [
-                    {
-                        name: 'p_command',
-                        value:cmd,
-                        xtype: 'hidden'
-                    },
-                        hostField,
-                        serviceField,
-                    {
-                        fieldLabel: 'Persistent',
-                        name: 'p_persistent',
-                        xtype: 'xcheckbox',
-                        labelStyle: 'cursor: help;',
-                        tooltipText: "Persists the comment across Nagios restarts.",
-                        listeners: {
-                            render: function(o) {
-                                npc.app.setFormFieldTooltip(o);
-                            }
-                        },
-                        checked:true
-                    },{
-                        name: 'p_author',
-                        value: npc.app.params.userName,
-                        xtype: 'hidden'
-                    },{
-                        fieldLabel: 'Comment',
-                        name: 'p_comment',
-                        xtype: 'htmleditor',
-                        height:200,
-                        width: 500
-                    },{
-                        xtype: 'panel',
-                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the comment.</span>',
-                        width: 400
-                    }
-                ],
-                buttons: npc.app.cmdFormButtons
-            });
-
-            var win = new Ext.Window({ 
-                title:'New Comment', 
-                layout:'fit', 
-                modal:true, 
-                closable: true, 
-                width:680, 
-                height:400, 
-                bodyStyle:'padding:5px;', 
-                items: form 
-            }); 
-            win.show(); 
-
-        },
-
-        sendCustomNotification: function(type, host, service) {
-
-            var cmd = 'SEND_CUSTOM_' + type.toUpperCase() + '_NOTIFICATION';
-
-            var hostField = {
-                name: 'p_host_name',
-                value: host,
-                xtype: 'hidden'
-            };
-
-            if (typeof host == 'undefined') {
-                hostField.fieldLabel = 'Host Name';
-                hostField.xtype = 'textfield';
-                hostField.allowBlank = false;
-            }
-
-            var serviceField = {
-                name: 'p_service_description',
-                value: service,
-                xtype: 'hidden'
-            };
-
-            if (type == 'svc') {
-                if (typeof service == 'undefined') {
-                    serviceField.fieldLabel = 'Service Description';
-                    serviceField.xtype = 'textfield';
-                    serviceField.allowBlank = false;
-                }
-            }
-
-            var form = new Ext.FormPanel({
-                labelWidth: 110,
-                url:'npc.php?module=nagios&action=command',
-                frame:true,
-                bodyStyle:'padding:5px 5px 0',
-                width: 550,
-                defaults: {width: 175},
-                defaultType: 'textfield',
-                    items: [
-                    {
-                        name: 'p_command',
-                        value:cmd,
-                        xtype: 'hidden'
-                    },
-                        hostField,
-                        serviceField,
-                    {
-                        name: 'p_options',
-                        value:0,
-                        xtype: 'hidden'
-                    },{
-                        fieldLabel: 'Forced',
-                        name: 'p_force_notification',
-                        xtype: 'xcheckbox',
-                        labelStyle: 'cursor: help;',
-                        tooltipText: "Selecting the Forced option will force the notification to be sent out, regardless of the time restrictions, whether or not notifications are enabled, etc.",
-                        listeners: {
-                            check: function() {
-                                var v = 2;
-                                var options = parseInt(form.form.getValues().p_options);
-                                if (this.checked) {
-                                    options = options + v;
-                                } else {
-                                    options = options - v;
-                                }
-                                form.form.setValues({p_options: options});
-                            },
-                            render: function(o) {
-                                npc.app.setFormFieldTooltip(o);
-                            }
-                        },
-                        checked:false
-                    },{
-                        fieldLabel: 'Broadcast',
-                        name: 'p_broadcast_notification',
-                        xtype: 'xcheckbox',
-                        labelStyle: 'cursor: help;',
-                        tooltipText: "Selecting the Broadcast option causes the notification to be sent out to all normal (non-escalated) and escalated contacts.",
-                        listeners: {
-                            check: function() {
-                                var v = 1;
-                                var options = parseInt(form.form.getValues().p_options);
-                                if (this.checked) {
-                                    options = options + v;
-                                } else {
-                                    options = options - v;
-                                }
-                                form.form.setValues({p_options: options});
-                            },
-                            render: function(o) {
-                                npc.app.setFormFieldTooltip(o);
-                            }
-                        },
-                        checked:false
-                    },{
-                        name: 'p_author',
-                        value: npc.app.params.userName,
-                        xtype: 'hidden'
-                    },{
-                        fieldLabel: 'Comment',
-                        name: 'p_comment',
-                        xtype: 'htmleditor',
-                        height:200,
-                        width: 500
-                    },{
-                        xtype: 'panel',
-                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the command.</span>',
-                        width: 400
-                    }
-                ],
-                buttons: npc.app.cmdFormButtons
-            });
-
-            var win = new Ext.Window({ 
-                title:'New Comment', 
-                layout:'fit', 
-                modal:true, 
-                closable: true, 
-                width:680, 
-                height:400, 
-                bodyStyle:'padding:5px;', 
-                items: form 
-            }); 
-            win.show(); 
-
-        },
-
-        scheduleNextCheck: function(type, host, service) {
-
-            var cmd = 'SCHEDULE_FORCED_' + type.toUpperCase() + '_CHECK';
-
-            var dt = new Date();
-
-            var nowDate = dt.format('Y-m-d H:i:s');
-            var nowEpoch = dt.format('U'); 
-
-            var hostField = {
-                name: 'p_host_name',
-                value: host,
-                xtype: 'hidden'
-            };
-
-            if (typeof host == 'undefined') {
-                hostField.fieldLabel = 'Host Name';
-                hostField.xtype = 'textfield';
-                hostField.allowBlank = false;
-            }
-
-            var serviceField = {
-                name: 'p_service_description',
-                value: service,
-                xtype: 'hidden'
-            };
-
-            if (type == 'svc' && typeof service == 'undefined') {
-                serviceField.fieldLabel = 'Service Description';
-                serviceField.xtype = 'textfield';
-                serviceField.allowBlank = false;
-            }
-
-            var form = new Ext.FormPanel({
-                labelWidth: 100,
-                url:'npc.php?module=nagios&action=command',
-                frame:true,
-                bodyStyle:'padding:5px 5px 0',
-                width: 350,
-                defaults: {width: 175},
-                defaultType: 'textfield',
-                    items: [
-                    {
-                        name: 'p_command',
-                        value:cmd,
-                        xtype: 'hidden'
-                    },
-                        hostField,
-                        serviceField,
-                    {
-                        fieldLabel: 'Force',
-                        name: 'p_force_notification',
-                        xtype: 'xcheckbox',
-                        checked:true,
-                        labelStyle: 'cursor: help;',
-                        tooltipText: "Force a check of the service regardless of what time the scheduled check occurs and whether or not checks are enabled for the service.",
-                        listeners: {
-                            change: function() {
-                                var cmd = parseInt(form.form.getValues().p_cmd);
-                                if (this.checked) {
-                                    cmd = cmd.replace(/SCHEDULE_/, 'SCHEDULE_FORCED_');
-                                } else {
-                                    cmd = cmd.replace(/FORCED_/, '');
-                                }
-                                form.form.setValues({p_cmd: cmd});
-                            },
-                            render: function(o) {
-                                npc.app.setFormFieldTooltip(o);
-                            }
-                        }
-                    },{
-                        fieldLabel: 'Check Time',
-                        name: 'p_date',
-                        value:nowDate,
-                        labelStyle: 'cursor: help;',
-                        tooltipText: "The date/time must be in the format YYYY-MM-DD HH:MM:SS.",
-                        listeners: {
-                            change: function() {
-                                console.log(form.form.getValues());
-                                var v = form.form.getValues().p_date;
-                                var d = new Date(v.replace(/-/g,' '));
-                                form.form.setValues({p_check_time: d.format('U')});
-                                console.log(form.form.getValues());
-                            },
-                            render: function(o) {
-                                npc.app.setFormFieldTooltip(o);
-                            }
-                        },
-                        xtype: 'textfield'
-                    },{
-                        name: 'p_check_time',
-                        value:nowEpoch,
-                        xtype:'hidden'
-                    },{
-                        xtype: 'panel',
-                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the command.</span>',
-                        width: 400
-                    }
-                ],
-                buttons: npc.app.cmdFormButtons
-            });
-
-            var win = new Ext.Window({ 
-                title:'Schedule Check', 
-                layout:'fit', 
-                modal:true, 
-                closable: true, 
-                width:400, 
-                height:200, 
-                bodyStyle:'padding:5px;', 
-                items: form 
-            }); 
-            win.show(); 
-        },
-
-        submitPassiveCheckResult: function(type, host, service) {
-
-            var cmd = 'PROCESS_' + type.toUpperCase() + '_CHECK_RESULT';
-
-            var hostField = {
-                name: 'p_host_name',
-                value: host,
-                xtype: 'hidden'
-            };
-
-            var data = [['UP', 0], ['DOWN', 1], ['UNREACHABLE', 2], ['PENDING', -1]];
-
-
-            if (typeof host == 'undefined') {
-                hostField.fieldLabel = 'Host Name';
-                hostField.xtype = 'textfield';
-                hostField.allowBlank = false;
-            }
-
-            var serviceField = {
-                name: 'p_service_description',
-                value: service,
-                xtype: 'hidden'
-            };
-
-            if (type == 'service') {
-                data = [['OK', 0], ['WARNING', 1], ['CRITICAL', 2], ['UNKNOWN', 3], ['PENDING', -1]];
-                if (typeof service == 'undefined') {
-                    serviceField.fieldLabel = 'Service Description';
-                    serviceField.xtype = 'textfield';
-                    serviceField.allowBlank = false;
-                }
-            }
-
-            var combo = new Ext.form.ComboBox({
-                store: new Ext.data.SimpleStore({
-                    fields: ['name', 'value'],
-                    data: data
-                }),
-                fieldLabel: 'Check Result',
-                hiddenName: 'p_return_code',
-                displayField:'name',
-                valueField:'value',
-                forceSelection:true,
-                        listeners: {
-                            change: function() {
-                                console.log(form.form.getValues());
-                            }
-                        },
-                mode: 'local',
-                editable:false,
-                width:100,
-                allowBlank:false,
-                emptyText:'',
-                triggerAction: 'all',
-                selectOnFocus:true
-            });
-
-            var form = new Ext.FormPanel({
-                labelWidth: 110,
-                url:'npc.php?module=nagios&action=command',
-                frame:true,
-                bodyStyle:'padding:5px 5px 0',
-                width: 500,
-                defaultType: 'textfield',
-                    items: [
-                    {
-                        name: 'p_command',
-                        value:cmd,
-                        xtype: 'hidden'
-                    },
-                        hostField,
-                        serviceField,
-                        combo,
-                    {
-                        fieldLabel: 'Check Output',
-                        name: 'p_plugin_output',
-                        xtype: 'textfield',
-                        allowBlank: false,
-                        width:350,
-                        labelStyle: 'cursor: help;',
-                        tooltipText: "The check results for this passive check.",
-                        listeners: {
-                            render: function(o) {
-                                npc.app.setFormFieldTooltip(o);
-                            }
-                        }
-                    },{
-                        xtype: 'panel',
-                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the command.</span>',
-                        width: 400
-                    }
-                ],
-                buttons: npc.app.cmdFormButtons
-            });
-
-            var win = new Ext.Window({ 
-                title:'Submit Passive Check Result', 
-                layout:'fit', 
-                modal:true, 
-                closable: true, 
-                width:550, 
-                height:200, 
-                bodyStyle:'padding:5px;', 
-                items: form 
-            }); 
-            win.show(); 
-
-        },
-
-        delayNextNotification: function(type, host, service) {
-
-            var cmd = 'DELAY_' + type.toUpperCase() + '_NOTIFICATION';
-
-            var form = new Ext.FormPanel({
-                labelWidth: 110,
-                url:'npc.php?module=nagios&action=command',
-                frame:true,
-                bodyStyle:'padding:5px 5px 0',
-                width: 250,
-                defaults: {width: 50},
-                defaultType: 'textfield',
-                    items: [
-                    {
-                        name: 'p_command',
-                        value:cmd,
-                        xtype: 'hidden'
-                    },{
-                        name: 'p_host_name',
-                        value:host,
-                        xtype: 'hidden'
-                    },{
-                        name: 'p_service_description',
-                        value:service,
-                        xtype: 'hidden'
-                    },{
-                        fieldLabel: 'Delay (minutes)',
-                        name: 'p_notification_time',
-                        xtype: 'textfield',
-                        labelStyle: 'cursor: help;',
-                        tooltipText: "The number of minutes from now that the notification should be delayed.",
-                        allowBlank: false,
-                        listeners: {
-                            render: function(o) {
-                                npc.app.setFormFieldTooltip(o);
-                            }
-                        },
-                        checked:true
-                    },{
-                        xtype: 'panel',
-                        html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes this command.</span>',
-                        width: 400
-                    }
-                ],
-                buttons: npc.app.cmdFormButtons
-            });
-
-            var win = new Ext.Window({ 
-                title:'Acknowledge Service Problem', 
-                layout:'fit', 
-                modal:true, 
-                closable: true, 
-                width:400, 
-                height:200, 
-                bodyStyle:'padding:5px;', 
-                items: form 
-            }); 
-            win.show(); 
-            win.doLayout();
-        },
 
         setFormFieldTooltip: function(component) {
             var label = Ext.get('x-form-el-' + component.id).prev('label');
@@ -910,7 +291,7 @@ npc.app = function() {
                 if(val.getYear() == '69') {
                     return String.format('NA');
                 } else {
-                    return String.format(val.dateFormat(npc.app.params.npc_date_format + ' ' + npc.app.params.npc_time_format));
+                    return String.format(val.dateFormat(npc.params.npc_date_format + ' ' + npc.params.npc_time_format));
                 }
             }
             return val;
@@ -937,7 +318,7 @@ npc.app = function() {
                 if(val.getYear() == '69') {
                     return String.format('NA');
                 } else {
-                    return String.format(val.dateFormat(npc.app.params.npc_date_format + ' ' + npc.app.params.npc_time_format));
+                    return String.format(val.dateFormat(npc.params.npc_date_format + ' ' + npc.params.npc_time_format));
                 }
             }
             return val;
@@ -1134,7 +515,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.hosts('Hosts', 'any');
+                                                        npc.hosts('Hosts', 'any');
                                                     }
                                                 }
                                             },{
@@ -1143,7 +524,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.hosts('Host Problems', 'not_ok');
+                                                        npc.hosts('Host Problems', 'not_ok');
                                                     }
                                                 }
                                             },{
@@ -1152,7 +533,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.hostgroupOverview();
+                                                        npc.hostgroupOverview();
                                                     }
                                                 }
                                             },{
@@ -1161,7 +542,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.hostgroupGrid();
+                                                        npc.hostgroupGrid();
                                                     }
                                                 }
                                             }]
@@ -1175,7 +556,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.services('Services', 'any');
+                                                        npc.services('Services', 'any');
                                                     }
                                                 }
                                             },{
@@ -1184,7 +565,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.services('Service Problems', 'not_ok');
+                                                        npc.services('Service Problems', 'not_ok');
                                                     }
                                                 }
                                             },{
@@ -1193,7 +574,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.servicegroupOverview();
+                                                        npc.servicegroupOverview();
                                                     }
                                                 }
                                             },{
@@ -1202,7 +583,7 @@ npc.app = function() {
                                                 leaf:true,
                                                 listeners: {
                                                     click: function() {
-                                                        npc.app.servicegroupGrid();
+                                                        npc.servicegroupGrid();
                                                     }
                                                 }
                                             }]
@@ -1212,7 +593,7 @@ npc.app = function() {
                                             leaf:true,
                                             listeners: {
                                                 click: function() {
-                                                    npc.app.addTabExt('StatusMap','Status Map',npc.app.params.npc_nagios_url+'/cgi-bin/statusmap.cgi?host=all');
+                                                    npc.addTabExt('StatusMap','Status Map',npc.params.npc_nagios_url+'/cgi-bin/statusmap.cgi?host=all');
                                                 }
                                             }
                                         },{
@@ -1221,7 +602,7 @@ npc.app = function() {
                                             leaf:true,
                                             listeners: {
                                                 click: function() {
-                                                    npc.app.comments();
+                                                    npc.comments();
                                                 }
                                             }
                                         },{
@@ -1230,7 +611,7 @@ npc.app = function() {
                                             leaf:true,
                                             listeners: {
                                                 click: function() {
-                                                    npc.app.downtime();
+                                                    npc.downtime();
                                                 }
                                             }
                                         },{
@@ -1239,7 +620,7 @@ npc.app = function() {
                                             leaf:true,
                                             listeners: {
                                                 click: function() {
-                                                    npc.app.processInfo();
+                                                    npc.processInfo();
                                                 }
                                             }
                                         },{
@@ -1248,7 +629,7 @@ npc.app = function() {
                                             leaf:true,
                                             listeners: {
                                                 click: function() {
-                                                    npc.app.eventLog();
+                                                    npc.eventLog();
                                                 }
                                             }
                                         }]
@@ -1262,7 +643,7 @@ npc.app = function() {
                                             leaf:true,
                                             listeners: {
                                                 click: function() {
-                                                    npc.app.reporting('Trends',npc.app.params.npc_nagios_url+'/cgi-bin/trends.cgi');
+                                                    npc.reporting('Trends',npc.params.npc_nagios_url+'/cgi-bin/trends.cgi');
                                                 }
                                             }
                                         },{
@@ -1271,7 +652,7 @@ npc.app = function() {
                                             leaf:true,
                                             listeners: {
                                                 click: function() {
-                                                    npc.app.reporting('Availability',npc.app.params.npc_nagios_url+'/cgi-bin/avail.cgi');
+                                                    npc.reporting('Availability',npc.params.npc_nagios_url+'/cgi-bin/avail.cgi');
                                                 }
                                             }
                                         },{
@@ -1280,7 +661,7 @@ npc.app = function() {
                                             leaf:true,
                                             listeners: {
                                                 click: function() {
-                                                    npc.app.reporting('Alert Histogram',npc.app.params.npc_nagios_url+'/cgi-bin/histogram.cgi');
+                                                    npc.reporting('Alert Histogram',npc.params.npc_nagios_url+'/cgi-bin/histogram.cgi');
                                                 }
                                             }
                                         },{
@@ -1289,7 +670,7 @@ npc.app = function() {
                                             leaf:true,
                                             listeners: {
                                                 click: function() {
-                                                    npc.app.reporting('Alert History',npc.app.params.npc_nagios_url+'/cgi-bin/history.cgi?host=all');
+                                                    npc.reporting('Alert History',npc.params.npc_nagios_url+'/cgi-bin/history.cgi?host=all');
                                                 }
                                             }
                                         },{
@@ -1298,7 +679,7 @@ npc.app = function() {
                                             leaf:true,
                                             listeners: {
                                                 click: function() {
-                                                    npc.app.reporting('Alert Summary',npc.app.params.npc_nagios_url+'/cgi-bin/summary.cgi');
+                                                    npc.reporting('Alert Summary',npc.params.npc_nagios_url+'/cgi-bin/summary.cgi');
                                                 }
                                             }
                                         },{
@@ -1307,7 +688,7 @@ npc.app = function() {
                                             leaf:true,
                                             listeners: {
                                                 click: function() {
-                                                    npc.app.reporting('Notifications',npc.app.params.npc_nagios_url+'/cgi-bin/notifications.cgi?contact=all');
+                                                    npc.reporting('Notifications',npc.params.npc_nagios_url+'/cgi-bin/notifications.cgi?contact=all');
                                                 }
                                             }
                                         }]
@@ -1317,7 +698,7 @@ npc.app = function() {
                                         leaf:true,
                                         listeners: {
                                             click: function() {
-                                                npc.app.addTabExt('Nagios','Nagios',npc.app.params.npc_nagios_url);
+                                                npc.addTabExt('Nagios','Nagios',npc.params.npc_nagios_url);
                                             }
                                         }
                                     },{
@@ -1326,7 +707,7 @@ npc.app = function() {
                                         leaf:true,
                                         listeners: {
                                             click: function() {
-                                                npc.app.n2c();
+                                                npc.n2c();
                                             }
                                         }
                                     }]

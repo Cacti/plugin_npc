@@ -1,4 +1,4 @@
-npc.app.timedEventQueue = function(){
+npc.timedEventQueue = function(){
 
     var title = 'Scheduling Queue';
 

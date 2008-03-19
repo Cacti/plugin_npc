@@ -48,18 +48,18 @@ class NpcLayoutController {
           <script type="text/javascript">
 
             // Add some properties to the params array
-            npc.app.params.npc_portlet_refresh = "<?php echo read_config_option('npc_portlet_refresh'); ?>";
-            npc.app.params.npc_portlet_rows    = "<?php echo read_config_option('npc_portlet_rows'); ?>";
-            npc.app.params.npc_date_format     = "<?php echo read_config_option('npc_date_format'); ?>";
-            npc.app.params.npc_time_format     = "<?php echo read_config_option('npc_time_format'); ?>";
-            npc.app.params.npc_nagios_url      = "<?php echo read_config_option('npc_nagios_url'); ?>";
-            npc.app.params.userName            = "<?php echo db_fetch_cell('SELECT username FROM user_auth WHERE id = ' . $_SESSION['sess_user_id']); ?>";
+            npc.params.npc_portlet_refresh = "<?php echo read_config_option('npc_portlet_refresh'); ?>";
+            npc.params.npc_portlet_rows    = "<?php echo read_config_option('npc_portlet_rows'); ?>";
+            npc.params.npc_date_format     = "<?php echo read_config_option('npc_date_format'); ?>";
+            npc.params.npc_time_format     = "<?php echo read_config_option('npc_time_format'); ?>";
+            npc.params.npc_nagios_url      = "<?php echo read_config_option('npc_nagios_url'); ?>";
+            npc.params.userName            = "<?php echo db_fetch_cell('SELECT username FROM user_auth WHERE id = ' . $_SESSION['sess_user_id']); ?>";
 
             <?php $state = unserialize(db_fetch_cell('SELECT settings FROM npc_settings WHERE user_id = ' . $_SESSION['sess_user_id'])); ?>
             var ExtState = Ext.decode('<?php echo json_encode($state); ?>');
 
             // Launch the app
-            Ext.onReady(npc.app.init, npc.app);
+            Ext.onReady(npc.init, npc);
 
             Ext.onReady(function() {
                 //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
@@ -74,7 +74,7 @@ class NpcLayoutController {
           <script type="text/javascript">
             Ext.onReady(function() {
               //console.log(Ext.state.Manager.get('serviceProblems'));
-              npc.app.initPortlets();
+              npc.initPortlets();
             });
           </script>
 

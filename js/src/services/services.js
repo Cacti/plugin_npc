@@ -1,21 +1,21 @@
-npc.app.hosts = function(title, filter){
+npc.services = function(title, filter){
 
     // Panel ID
     var id = title.replace(/[-' ']/g,'') + '-tab';
 
     // Grid URL
-    var url = 'npc.php?module=hosts&action=getHosts&p_state=' + filter;
+    var url = 'npc.php?module=services&action=getServices&p_state=' + filter;
 
     // Default # of rows to display
     var pageSize = 20;
 
-    var outerTabId = 'hosts-tab';
+    var outerTabId = 'services-tab';
 
-    npc.app.addCenterNestedTab(outerTabId, 'Hosts');
+    npc.addCenterNestedTab(outerTabId, 'Services');
 
     var centerTabPanel = Ext.getCmp('centerTabPanel');
 
-    var innerTabId = 'hosts-tab-inner-panel';
+    var innerTabId = 'services-tab-inner-panel';
 
     var innerTabPanel = Ext.getCmp(innerTabId);
 
@@ -40,23 +40,25 @@ npc.app.hosts = function(title, filter){
         return String.format('{0}/{1}', val, record.data.max_check_attempts);
     };
 
-    var store = new Ext.data.JsonStore({
+    var store = new Ext.data.GroupingStore({
         url:url,
         autoload:true,
-        sortInfo:{field: 'host_name', direction: "ASC"},
-        totalProperty:'totalCount',
-        root:'data',
-        fields: [
-            {name: 'host_object_id', type: 'int'},
+        sortInfo:{field: 'service_description', direction: "ASC"},
+        reader: new Ext.data.JsonReader({
+            totalProperty:'totalCount',
+            root:'data'
+        }, [
+            'host_object_id',
             'host_name',
-            'alias',
+            'service_id',
+            'service_object_id',
+            'service_description',
+            'acknowledgement',
             'comment',
-            {name: 'service_count', type: 'int'},
-            {name: 'current_state', type: 'int'},
+            'output',
+            'current_state',
             'current_check_attempt',
             'max_check_attempts',
-            'output',
-            'acknowledgement',
             {name: 'last_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
             {name: 'next_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
             {name: 'last_state_change', type: 'date', dateFormat: 'Y-m-d H:i:s'},
@@ -65,54 +67,46 @@ npc.app.hosts = function(title, filter){
             {name: 'active_checks_enabled', type: 'int'},
             {name: 'passive_checks_enabled', type: 'int'},
             {name: 'is_flapping', type: 'int'}
-        ]
+        ]),
+        groupField:'host_name'
     });
 
     var cm = new Ext.grid.ColumnModel([{
-        header:"Host",
-        dataIndex:'host_name',
+        header:"Service",
+        dataIndex:'service_description',
+        renderer:npc.renderExtraIcons,
         sortable:true,
-        renderer:npc.app.renderExtraIcons,
-        width:100
-    },{
-        header:"Alias",
-        dataIndex:'alias',
-        hidden:true,
         width:100
     },{
         header:"Status",
         dataIndex:'current_state',
-        renderer:npc.app.hostStatusImage,
-        align:'center',
-        width:50
+        renderer:npc.serviceStatusImage,
+        width:45
     },{
         header:"Last Check",
         dataIndex:'last_check',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:110
     },{
         header:"Next Check",
         dataIndex:'next_check',
-        renderer: npc.app.formatDate,
+        renderer: npc.formatDate,
         width:110
     },{
         header:"Duration",
         dataIndex:'last_state_change',
-        hidden:true,
-        renderer: npc.app.getDuration,
+        renderer: npc.getDuration,
         width:110
     },{
         header:"Attempt",
         dataIndex:'current_check_attempt',
         renderer: renderAttempt,
-        align:'center',
         width:50
     },{
-        header:"Services",
-        dataIndex:'service_count',
+        header:"Host",
+        dataIndex:'host_name',
         hidden:true,
-        align:'center',
-        width:50
+        width:75
     },{
         header:"Plugin Output",
         dataIndex:'output',
@@ -122,16 +116,19 @@ npc.app.hosts = function(title, filter){
     var grid = new Ext.grid.GridPanel({
         id: id + '-grid',
         autoHeight:true,
-        autoExpandColumn: 'host_name',
+        autoExpandColumn: 'service_description',
         store:store,
         autoScroll: true,
         cm:cm,
         sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
         stripeRows: true,
-        view: new Ext.grid.GridView({
-             forceFit:true,
-             autoFill:true,
-             scrollOffset:0
+        view: new Ext.grid.GroupingView({
+            forceFit:true,
+            autoFill:true,
+            hideGroupedColumn: true,
+            enableGroupingMenu: false,
+            enableNoGroups: true,
+            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Services" : "Service"]})' 
         }),
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,
@@ -144,7 +141,6 @@ npc.app.hosts = function(title, filter){
             disableIndexes:[
                 'last_check', 
                 'next_check', 
-                'service_count', 
                 'last_state_change', 
                 'current_check_attempt', 
                 'current_state'
@@ -165,7 +161,7 @@ npc.app.hosts = function(title, filter){
     grid.store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
-    store.startAutoRefresh(npc.app.params.npc_portlet_refresh);
+    store.startAutoRefresh(npc.params.npc_portlet_refresh);
 
     // Stop auto refresh if the tab is closed
     var listeners = {
@@ -180,5 +176,5 @@ npc.app.hosts = function(title, filter){
     // Add the listener to the tab
     tab.addListener(listeners);
 
-    grid.on('rowdblclick', npc.app.hostGridClick);
+    grid.on('rowdblclick', npc.serviceGridClick);
 };
