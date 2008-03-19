@@ -56,14 +56,19 @@ class NpcLayoutDevController {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/Portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/npc.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/n2c.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hosts.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hostDetail.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hostgroupGrid.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hostgroupOverview.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/services.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/serviceDetail.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/servicegroupGrid.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/servicegroupOverview.js"></script>
+
+          <!-- Host screens -->
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hosts/hosts.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hosts/hostDetail.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hosts/hostgroupGrid.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hosts/hostgroupOverview.js"></script>
+
+          <!-- Service screens -->
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/services/services.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/services/serviceDetail.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/services/servicegroupGrid.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/services/servicegroupOverview.js"></script>
+
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/comments.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/downtime.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/processInfo.js"></script>
