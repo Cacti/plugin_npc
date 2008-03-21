@@ -106,7 +106,7 @@ npc.ackProblem = function(type, host, service) {
     });
 
     var win = new Ext.Window({
-        title:'Acknowledge Service Problem',
+        title:'Acknowledge Service Problem -  ' + host + ': ' + service,
         layout:'fit',
         modal:true,
         closable: true,

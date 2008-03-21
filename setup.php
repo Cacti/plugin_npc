@@ -82,16 +82,18 @@ function npc_config_arrays () {
     $npc_default_settings = array(
         'date_format' => "s%3AY-m-d",
         'time_format' => "s%3AH%3Ai%3As",
+
         "serviceProblems" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "serviceSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+        "serviceSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
         "servicegroupServiceStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "hostgroupServiceStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "monitoringPerf" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "hostProblems" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "hostSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "servicegroupHostStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "hostgroupHostStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "eventLog" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A1%5Eindex%3Ds%253A5%5Erefresh%3Dn%253A60%5Erows%3Dn%253A5'
+        "servicegroupHostStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+        "monitoringPerf" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A1%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+
+        "hostProblems" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+        "hostSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+        "hostgroupServiceStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+        "hostgroupHostStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+        "eventLog" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A1%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A60%5Erows%3Dn%253A5'
     );
 
 }

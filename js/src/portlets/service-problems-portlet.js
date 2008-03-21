@@ -131,5 +131,25 @@ npc.portlet.serviceProblems = function(){
     }
 
     grid.on('rowdblclick', npc.serviceGridClick);
+    //grid.on('rowcontextmenu', npc.serviceGridClick);
+    
+    grid.on('rowcontextmenu', function(grid, rowIndex, e) {
+        e.stopEvent();
+        var record = grid.getStore().getAt(rowIndex).data;
+
+        var contextMenu = new Ext.menu.Menu({
+            id: 'gridCtxMenu',
+            items: [{
+                text: 'Acknowledge Problem',
+                handler: function() {
+                    npc.ackProblem('svc', record.host_name, record.service_description);
+                }
+            }]
+        });    
+
+        var xy = e.getXY();
+        contextMenu.showAt(xy);
+
+    });
 
 };

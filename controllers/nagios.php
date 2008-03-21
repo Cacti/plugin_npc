@@ -32,13 +32,13 @@ require_once("plugins/npc/nagioscmd.php");
 class NpcNagiosController extends Controller {
 
     /**
-     * getProcessInfo
+     * getProcessInfoGrid
      * 
      * Gets and formats Nagios process state information
      *
      * @return string   json output
      */
-    function getProcessInfo() {
+    function getProcessInfoGrid() {
 
         $fields = array(
             'program_version',
@@ -62,6 +62,26 @@ class NpcNagiosController extends Controller {
             'obsess_over_services'
         );
 
+        $results = $this->processInfo();
+
+        $x = 0;
+        foreach ($fields as $key) {
+            $output[$x] = array('name' => $this->columnAlias[$key], 'value' => $this->formatProcessInfo($key, $results[0]));
+            $x++;
+        }
+
+        return($this->jsonOutput($output));
+    }
+
+    /**
+     * processInfo
+     * 
+     * Gets and formats Nagios process state information
+     *
+     * @return string   json output
+     */
+    function processInfo() {
+
         $q = new Doctrine_Query();
         $q->select('ps.*')->from('NpcProgramstatus ps');
 
@@ -77,13 +97,7 @@ class NpcNagiosController extends Controller {
 
         $results[0]['program_version'] = $version[0]['program_version'];
 
-        $x = 0;
-        foreach ($fields as $key) {
-            $output[$x] = array('name' => $this->columnAlias[$key], 'value' => $this->formatProcessInfo($key, $results[0]));
-            $x++;
-        }
-
-        return($this->jsonOutput($output));
+        return($results);
     }
 
 

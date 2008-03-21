@@ -30,7 +30,7 @@ npc.processInfo = function(){
     }
 
     var piStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=nagios&action=getProcessInfo',
+        url: 'npc.php?module=nagios&action=getProcessInfoGrid',
         totalProperty:'totalCount',
         root:'data',
         fields:[
