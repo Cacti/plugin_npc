@@ -1215,7 +1215,7 @@ class NagiosCmd {
             'host_name' => array(
                 'required' => true,
                 'type' => 'string'),
-        	'service_desription' => array(
+        	'service_description' => array(
                 'required' => true,
                 'type' => 'string'),
         	'start_time' => array(

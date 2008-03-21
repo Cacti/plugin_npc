@@ -27,6 +27,10 @@ npc.hostDetail = function(record) {
     // Default # of rows to display
     var pageSize = 20;
 
+    // build the command menu
+    var menu = new Ext.menu.Menu();
+    buildCommandMenu();
+
     // Build the tool bar for the graph mapping
     var sgTbar = new Ext.Toolbar();
 
@@ -134,11 +138,6 @@ npc.hostDetail = function(record) {
                         disabled:true,
                         id: id + '-sg',
                         tbar: sgTbar
-                    },{
-                        title: 'Commands',
-                        //listeners: {activate: handleActivate},
-                        disabled:true,
-                        html: 'Execute commands if you have permission.'
                     }]
                 })
             ]
@@ -150,6 +149,25 @@ npc.hostDetail = function(record) {
 
     // Add the graph selector to the graph tab
     sgTbar.addField(combo);
+
+    var hostStore = new Ext.data.JsonStore({
+        url:'npc.php?module=hosts&action=getHosts&p_id=' + host_object_id,
+        autoload:true,
+        totalProperty:'totalCount',
+        root:'data',
+        fields: [
+            'host_name',
+            {name: 'host_object_id', type: 'int'},
+            {name: 'current_state', type: 'int'},
+            {name: 'problem_has_been_acknowledged', type: 'int'},
+            {name: 'notifications_enabled', type: 'int'},
+            {name: 'active_checks_enabled', type: 'int'},
+            {name: 'passive_checks_enabled', type: 'int'},
+            {name: 'obsess_over_host', type: 'int'},
+            {name: 'event_handler_enabled', type: 'int'},
+            {name: 'flap_detection_enabled', type: 'int'}
+        ]
+    });
 
     var hiStore = new Ext.data.JsonStore({
         url: 'npc.php?module=hosts&action=getStateInfo&p_id=' + host_object_id,
@@ -180,6 +198,11 @@ npc.hostDetail = function(record) {
         cm:hiCm,
         autoExpandColumn:'Value',
         stripeRows: true,
+        tbar: [{
+            text:'Commands',
+            iconCls:'cogAdd',
+            menu: menu
+        }],
         view: new Ext.grid.GridView({
              forceFit:true,
              autoFill:true,
@@ -477,6 +500,7 @@ npc.hostDetail = function(record) {
     hcGrid.render();
 
     // Load the data stores
+    hostStore.load();
     hiStore.load();
     hnStore.load({params:{start:0, limit:pageSize}});
     hhStore.load({params:{start:0, limit:pageSize}});
@@ -484,15 +508,17 @@ npc.hostDetail = function(record) {
     hcStore.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh
-    hiStore.startAutoRefresh(npc.params.npc_portlet_refresh);
-    hnStore.startAutoRefresh(npc.params.npc_portlet_refresh);
-    hhStore.startAutoRefresh(npc.params.npc_portlet_refresh);
-    hdStore.startAutoRefresh(npc.params.npc_portlet_refresh);
-    hcStore.startAutoRefresh(npc.params.npc_portlet_refresh);
+    hostStore.startAutoRefresh(60);
+    hiStore.startAutoRefresh(60);
+    hnStore.startAutoRefresh(60);
+    hhStore.startAutoRefresh(60);
+    hdStore.startAutoRefresh(60);
+    hcStore.startAutoRefresh(60);
 
     // Add listeners to stop auto refresh on the store if the tab is closed
     var listeners = {
         destroy: function() {
+            hostStore.stopAutoRefresh();
             hiStore.stopAutoRefresh();
             hnStore.stopAutoRefresh();
             hhStore.stopAutoRefresh();
@@ -532,4 +558,209 @@ npc.hostDetail = function(record) {
             });
         }
     });
+
+    hostStore.on('load', function() {
+        buildCommandMenu(menu);
+    });
+
+    function buildCommandMenu() {
+
+        var item;
+        var text;
+        var a;
+
+        var host = hostStore ? hostStore.data.items[0].data : record.data;
+
+        menu.removeAll();
+
+        var post = {
+            module: 'nagios',
+            action: 'command',
+            p_host_name: host.host_name
+        };
+
+        var font = '<b style="font-size: xx-small">';
+
+        if (host.current_state == 1) {
+            if (host.problem_has_been_acknowledged) {
+                item = menu.add({
+                    text: font + 'Remove Problem Acknowledgement</b>',
+                    handler: function(o) {
+                        post.p_command = 'REMOVE_HOST_ACKNOWLEDGEMENT';
+                        doCommand(o.text+'?',post);
+                    }
+                });
+            } else {
+                item = menu.add({
+                    text: font + 'Acknowledge Problem</b>',
+                    handler: function(o) {
+                        npc.ackProblem('host', host.host_name);
+                    }
+                });
+            }
+        }
+
+        a = host.active_checks_enabled ? 'Disable' : 'Enable';
+        text = font + a + ' Active Checks</b>';
+        item = menu.add({
+            action: a,
+            text: text,
+            handler: function(o) {
+                post.p_command = o.action.toUpperCase() + '_HOST_CHECK';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        a = host.notifications_enabled ? 'Disable' : 'Enable';
+        text = font + a + ' Notifications</b>';
+        item = menu.add({
+            action: a,
+            text: text,
+            handler: function(o) {
+                post.p_command = o.action.toUpperCase() + '_HOST_NOTIFICATIONS';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        item = menu.add({
+            text: font + 'Send Custom Notification</b>',
+            handler: function() {
+                npc.sendCustomNotification('host', host.host_name);
+            }
+        });
+
+        item = menu.add({
+            text: font + 'Re-schedule Next Check</b>',
+            handler: function() {
+                npc.scheduleNextCheck('host', host.host_name);
+            }
+        });
+
+        if (host.passive_checks_enabled) {
+            item = menu.add({
+                text: font + 'Submit Passive Check Result</b>',
+                handler: function() {
+                    npc.submitPassiveCheckResult('host', host.host_name);
+                }
+            });
+        }
+
+        item = menu.add({
+            text: font + 'Schedule Downtime</b>',
+            handler: function() {
+                npc.scheduleDowntime('host', host.host_name);
+            }
+        });
+
+        a = host.passive_checks_enabled ? 'Stop' : 'Start';
+        text = font + a + ' Accepting Passive Checks</b>';
+        item = menu.add({
+            action: a,
+            text: text,
+            handler: function(o) {
+                post.p_command = o.action.toUpperCase() + '_PASSIVE_HOST_CHECKS</b>';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        a = host.event_handler_enabled ? 'Disable' : 'Enable';
+        text = font + a + ' Event Handler</b>';
+        item = menu.add({
+            action: a,
+            text: text,
+            handler: function(o) {
+                post.p_command = o.action.toUpperCase() + '_HOST_EVENT_HANDLER';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        a = host.flap_detection_enabled ? 'Disable' : 'Enable';
+        text = font + a + ' Flap Detection</b>';
+        item = menu.add({
+            action: a,
+            text: text,
+            handler: function(o) {
+                post.p_command = o.action.toUpperCase() + '_HOST_FLAP_DETECTION';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        if (host.current_state == 1) {
+            item = menu.add({
+                text: font + 'Delay next notification</b>',
+                handler: function() {
+                    npc.delayNextNotification('host', host.host_name);
+                }
+            });
+        }
+
+        a = host.obsess_over_host ? 'Stop' : 'Start';
+        text = font + a + ' Obsessing</b>';
+        item = menu.add({
+            action: a,
+            text: text,
+            handler: function(o) {
+                post.p_command = o.action.toUpperCase() + '_OBSESSING_OVER_HOST';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        item = menu.add({
+            text: font + 'Schedule Check of all Services on ' + host.host_name + '</b>',
+            handler: function() {
+                npc.scheduleNextCheck('host_svc', host.host_name);
+            }
+        });
+
+        item = menu.add({
+            text: font + 'Disable notifications for all services on ' + host.host_name + '</b>',
+            handler: function(o) {
+                post.p_command = 'DISABLE_HOST_SVC_NOTIFICATIONS';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        item = menu.add({
+            text: font + 'Enable notifications for all services on ' + host.host_name + '</b>',
+            handler: function(o) {
+                post.p_command = 'ENABLE_HOST_SVC_NOTIFICATIONS';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        item = menu.add({
+            text: font + 'Disable checks of all services on ' + host.host_name + '</b>',
+            handler: function(o) {
+                post.p_command = 'DISABLE_HOST_SVC_CHECKS';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        item = menu.add({
+            text: font + 'Enable checks of all services on ' + host.host_name + '</b>',
+            handler: function(o) {
+                post.p_command = 'ENABLE_HOST_SVC_CHECKS';
+                doCommand(o.text+'?',post);
+            }
+        });
+
+        return(menu);
+    }
+
+    function doCommand(msg, post) {
+
+        Ext.Msg.show({
+            title:'Confirm',
+            msg:msg,
+            buttons: Ext.Msg.YESNO,
+            fn: function(btn) {
+                if (btn == 'yes') {
+                    npc.aPost(post);
+                }
+            },
+            animEl: 'elId',
+            icon: Ext.MessageBox.QUESTION
+        });
+    }
+
 };

@@ -55,26 +55,26 @@ class NpcLayoutDevController {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/PortalColumn.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/Portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/npc.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/n2c.js"></script>
 
           <!-- Host screens -->
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hosts/hosts.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hosts/hostDetail.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hosts/hostgroupGrid.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/hosts/hostgroupOverview.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/hosts/hosts.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/hosts/hostDetail.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/hosts/hostgroupGrid.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/hosts/hostgroupOverview.js"></script>
 
           <!-- Service screens -->
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/services/services.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/services/serviceDetail.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/services/servicegroupGrid.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/services/servicegroupOverview.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/services.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/serviceDetail.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/servicegroupGrid.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/servicegroupOverview.js"></script>
 
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/comments.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/downtime.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/processInfo.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/reporting.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/eventLog.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/commandForms.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/n2c.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/comments.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/downtime.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/processInfo.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/reporting.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/eventLog.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/commandForms.js"></script>
 
           <script type="text/javascript">
 

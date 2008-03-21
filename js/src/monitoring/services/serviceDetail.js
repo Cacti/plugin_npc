@@ -671,9 +671,10 @@ npc.serviceDetail = function(record) {
         a = service.active_checks_enabled ? 'Disable' : 'Enable';
         text = font + a + ' Active Checks</b>';
         item = menu.add({
+            action: a,
             text: text,
             handler: function(o) {
-                post.p_command = a.toUpperCase() + '_SVC_CHECK';
+                post.p_command = o.action.toUpperCase() + '_SVC_CHECK';
                 doCommand(o.text+'?',post);
             }
         });
@@ -681,9 +682,10 @@ npc.serviceDetail = function(record) {
         a = service.notifications_enabled ? 'Disable' : 'Enable';
         text = font + a + ' Notifications</b>';
         item = menu.add({
+            action: a,
             text: text,
             handler: function(o) {
-                post.p_command = a.toUpperCase() + '_SVC_NOTIFICATIONS';
+                post.p_command = o.action.toUpperCase() + '_SVC_NOTIFICATIONS';
                 doCommand(o.text+'?',post);
             }
         });
@@ -721,9 +723,10 @@ npc.serviceDetail = function(record) {
         a = service.passive_checks_enabled ? 'Stop' : 'Start';
         text = font + a + ' Accepting Passive Checks</b>';
         item = menu.add({
+            action: a,
             text: text,
             handler: function(o) {
-                post.p_command = a.toUpperCase() + '_PASSIVE_SVC_CHECKS</b>';
+                post.p_command = o.action.toUpperCase() + '_PASSIVE_SVC_CHECKS</b>';
                 doCommand(o.text+'?',post);
             }
         });
@@ -731,9 +734,10 @@ npc.serviceDetail = function(record) {
         a = service.obsess_over_service ? 'Stop' : 'Start';
         text = font + a + ' Obsessing</b>';
         item = menu.add({
+            action: a,
             text: text,
             handler: function(o) {
-                post.p_command = a.toUpperCase() + '_OBSESSING_OVER_SVC';
+                post.p_command = o.action.toUpperCase() + '_OBSESSING_OVER_SVC';
                 doCommand(o.text+'?',post);
             }
         });
@@ -741,19 +745,21 @@ npc.serviceDetail = function(record) {
         a = service.event_handler_enabled ? 'Disable' : 'Enable';
         text = font + a + ' Event Handler</b>';
         item = menu.add({
+            action: a,
             text: text,
             handler: function(o) {
-                post.p_command = a.toUpperCase() + '_SVC_EVENT_HANDLER';
+                post.p_command = o.action.toUpperCase() + '_SVC_EVENT_HANDLER';
                 doCommand(o.text+'?',post);
             }
         });
 
-        a = service.event_handler_enabled ? 'Disable' : 'Enable';
+        a = service.flap_detection_enabled ? 'Disable' : 'Enable';
         text = font + a + ' Flap Detection</b>';
         item = menu.add({
+            action: a,
             text: text,
             handler: function(o) {
-                post.p_command = a.toUpperCase() + '_SVC_FLAP_DETECTION';
+                post.p_command = o.action.toUpperCase() + '_SVC_FLAP_DETECTION';
                 doCommand(o.text+'?',post);
             }
         });

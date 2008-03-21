@@ -1,3 +1,10 @@
+npc.commandNote = {
+    xtype: 'panel',
+    html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the command.</span>',
+    width: 400
+};
+
+
 npc.ackProblem = function(type, host, service) {
 
     var cmd = 'ACKNOWLEDGE_' + type.toUpperCase() + '_PROBLEM';
@@ -334,6 +341,12 @@ npc.scheduleNextCheck = function(type, host, service) {
 
     var cmd = 'SCHEDULE_FORCED_' + type.toUpperCase() + '_CHECK';
 
+    var title = 'Schedule Check';
+    if (type == 'host_svc') {
+        title = 'Schedule check of all services on ' + host;
+        cmd = cmd + 'S';
+    } 
+
     var dt = new Date();
 
     var nowDate = dt.format('Y-m-d H:i:s');
@@ -432,7 +445,7 @@ npc.scheduleNextCheck = function(type, host, service) {
     });
 
     var win = new Ext.Window({
-        title:'Schedule Check',
+        title:title,
         layout:'fit',
         modal:true,
         closable: true,
@@ -546,38 +559,22 @@ npc.submitPassiveCheckResult = function(type, host, service) {
     win.show();
 };
 
-/*
-    'start_time' => array(
-        'required' => true,
-        'type' => 'integer'),
-    'end_time' => array(
-        'required' => true,
-        'type' => 'integer'),
-    'fixed' => array(
-        'required' => true,
-        'type' => 'boolean'),
-    'trigger_id' => array(
-        'required' => true,
-        'type' => 'integer'),
-    'duration' => array(
-        'required' => true,
-        'type' => 'integer'),
-    'author' => array(
-        'required' => true,
-        'type' => 'string'),
-    'comment' => array(
-        'required' => true,
-        'type' => 'string')
-
-SCHEDULE_SVC_DOWNTIME;localhost;Sendmail;1206446541;1206453741;1;0;7200;Nagios Admin;Upgrading sendmail
-SCHEDULE_SVC_DOWNTIME;localhost;SSH;1205841839;1205849039;1;3;7200;Nagios Admin;A triggered downtime
-*/
-
-
-
 npc.scheduleDowntime = function(type, host, service) {
 
     var cmd = 'SCHEDULE_' + type.toUpperCase() + '_DOWNTIME';
+
+    var sd = new Date();
+    var ed = new Date();
+
+    var startDate = sd.format('Y-m-d H:i:s');
+
+    ed.setHours(ed.getHours() + 2);
+    var endDate = ed.format('Y-m-d H:i:s');
+
+
+    var startEpoch = sd.format('U');
+    var endEpoch = ed.format('U');
+
 
     var hostField = {
         name: 'p_host_name',
@@ -660,12 +657,38 @@ npc.scheduleDowntime = function(type, host, service) {
                     selectOnFocus:true
                 }),
             {
-                fieldLabel: 'Start Time',
                 name: 'p_start_time',
+                value: startEpoch,
+                xtype: 'hidden'
+            },{
+                name: 'p_end_time',
+                value: endEpoch,
+                xtype: 'hidden',
+            },{
+                fieldLabel: 'Start Time',
+                name: 'p_stime',
+                value: startDate,
+                listeners: {
+                    change: function(comboBox) {
+                        var v = form.form.getValues().p_stime;
+                        var d = new Date(v.replace(/-/g,' '));
+                        form.form.setValues({p_start_time: d.format('U')});
+                    }
+                },
+                xtype:'textfield',
                 allowBlank: false
             },{
                 fieldLabel: 'End Time',
-                name: 'p_end_time',
+                name: 'p_etime',
+                value: endDate,
+                listeners: {
+                    change: function(comboBox) {
+                        var v = form.form.getValues().p_etime;
+                        var d = new Date(v.replace(/-/g,' '));
+                        form.form.setValues({p_end_time: d.format('U')});
+                    }
+                },
+                xtype:'textfield',
                 allowBlank: false
             },
                 new Ext.form.ComboBox({
@@ -683,17 +706,6 @@ npc.scheduleDowntime = function(type, host, service) {
                     editable:false,
                     width:100,
                     allowBlank:false,
-                    listeners: {
-                        change: function(comboBox) {
-                            var fixed = form.form.getValues().p_fixed;
-                            if (fixed) {
-                                // disable field
-                            } else {
-                                // enable field
-                            }
-                        }
-                    },
-                    emptyText:'Select type...',
                     triggerAction: 'all',
                     selectOnFocus:true
                 }),
@@ -702,18 +714,62 @@ npc.scheduleDowntime = function(type, host, service) {
                 value: 0,
                 xtype: 'hidden'
             },{
-                fieldLabel: 'Duration',
+                fieldLabel: 'Duration (minutes)',
                 name: 'p_minutes',
                 width: 50,
-                disabled:true
-            },{
-                xtype: 'panel',
-                html: '<br /><span style="font-size:10px;"><b>Note:</b> It may take a while before Nagios processes the command.</span>',
-                width: 400
+                listeners: {
+                    change: function(comboBox) {
+                        var min = parseInt(form.form.getValues().p_minutes);
+                        var sec = min ? (min * 60) : 0
+                        form.form.setValues({p_duration: sec});
+                    }
+                }
             }
         ],
         buttons: npc.cmdFormButtons
     });
+
+    if (type == 'host') {
+        var childrenField = new Ext.form.ComboBox({
+            store: new Ext.data.SimpleStore({
+                fields: ['name', 'value'],
+                data: [
+                    ['Do nothing with child hosts', 0], 
+                    ['Schedule triggered downtime for all child hosts', 1],
+                    ['Schedule non-triggered downtime for all child hosts', 2]
+                ]
+            }),
+            fieldLabel: 'Child Hosts',
+            hiddenName: 'p_child',
+            value: 0,
+            displayField:'name',
+            valueField:'value',
+            forceSelection:true,
+            listeners: {
+                change: function(comboBox) {
+                    var v = parseInt(form.form.getValues().p_child);
+                    if (v == 1) {
+                        form.form.setValues({
+                            p_cmd: 'SCHEDULE_AND_PROPAGATE_TRIGGERED_HOST_DOWNTIME'
+                        });
+                    } 
+                    if (v == 2) {
+                        form.form.setValues({
+                            p_cmd: 'SCHEDULE_AND_PROPAGATE_HOST_DOWNTIME'
+                        });
+                    }
+                }
+            },
+            mode: 'local',
+            editable:false,
+            width:300,
+            allowBlank:false,
+            triggerAction: 'all',
+            selectOnFocus:true
+        });
+        
+        form.items.add(childrenField);
+    }
 
     var win = new Ext.Window({
         title:'Schedule Downtime',
