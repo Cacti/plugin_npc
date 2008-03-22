@@ -14,8 +14,6 @@
  * @version             $Id: $
  */
 
-require_once("include/auth.php");
-
 /**
  * Comments controller class
  *

@@ -15,13 +15,32 @@ npc.serviceCommandMenu = function(service, menu) {
     var font = '<b style="font-size: xx-small">';
 
     if (service.current_state == 2) {
-        menu.add({
-            text: font + 'Acknowledge Problem</b>',
-            handler: function(o) {
-                npc.ackProblem('svc', service.host_name, service.service_description);
-            }
-        });
+        if (!service.problem_has_been_acknowledged) {
+            menu.add({
+                text: font + 'Acknowledge Problem</b>',
+                handler: function(o) {
+                    npc.ackProblem('svc', service.host_name, service.service_description);
+                }
+            });
+        } else {
+            menu.add({
+                text: font + 'Remove problem acknowledgement</b>',
+                handler: function(o) {
+                    post.p_command = 'REMOVE_SVC_ACKNOWLEDGEMENT';
+                    post.p_host_name = service.host_name;
+                    post.p_service_description = service.service_description;
+                    npc.doCommand(o.text+'?',post);
+                }
+            });
+        }
     }
+
+    menu.add({
+        text: font + 'Re-schedule Next Check</b>',
+        handler: function() {
+            npc.scheduleNextCheck('svc', service.host_name, service.service_description);
+        }
+    });
 
     a = service.active_checks_enabled ? 'Disable' : 'Enable';
     text = font + a + ' Active Checks</b>';
@@ -49,13 +68,6 @@ npc.serviceCommandMenu = function(service, menu) {
         text: font + 'Send Custom Notification</b>',
         handler: function() {
             npc.sendCustomNotification('svc', service.host_name, service.service_description);
-        }
-    });
-
-    menu.add({
-        text: font + 'Re-schedule Next Check</b>',
-        handler: function() {
-            npc.scheduleNextCheck('svc', service.host_name, service.service_description);
         }
     });
 

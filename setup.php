@@ -1329,8 +1329,11 @@ function npc_setup_table () {
 function npc_show_tab() {
         global $config;
         if (api_user_realm_auth('npc.php')) {
-                print '<a href="' . $config['url_path'] . 'plugins/npc/npc.php"><img src="' . $config['url_path'] 
-                    . 'plugins/npc/images/tab_npc.gif" alt="Nagios" align="absmiddle" border="0"></a>';
+            $cp = false;
+            if (basename($_SERVER["PHP_SELF"]) == "npc.php")
+                $cp = true;
+
+            print '<a href="' . $config['url_path'] . 'plugins/npc/npc.php"><img src="' . $config['url_path'] . 'plugins/npc/images/tab_npc' . ($cp ? "_down": "") . '.gif" alt="npc" align="absmiddle" border="0"></a>';
         }
         npc_check_upgrade ();
 }

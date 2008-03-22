@@ -127,7 +127,7 @@ npc.hostDetail = function(record) {
                         title: 'Notification History',
                         id: id + '-hn'
                     },{
-                        title: 'Downtime History',
+                        title: 'Scheduled Downtime History',
                         id: id + '-hd'
                     },{
                         title: 'Comments',

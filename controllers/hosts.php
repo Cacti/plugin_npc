@@ -14,8 +14,7 @@
  * @version             $Id: $
  */
 
-require_once("include/auth.php");
-require_once("plugins/npc/controllers/comments.php");
+require_once($config["base_path"]."/plugins/npc/controllers/comments.php");
 
 /**
  * Hosts controller class
@@ -235,6 +234,12 @@ class NpcHostsController extends Controller {
 
         if ($key == 'current_state') {
             $return = $cs[$results[$key]];
+            if ($results['problem_has_been_acknowledged']) {
+                $comments = new NpcCommentsController;
+                $string = $comments->getAck($results['host_object_id']);
+                $ack = preg_split("/\*\|\*/", $string);
+                $return = '<pre>' . $return . '   (Acknowledged by ' . $ack[0] . ')</pre>';
+            }
         }
 
         if ($key == 'current_check_attempt') {

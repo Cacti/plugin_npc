@@ -19,6 +19,7 @@ npc.hostCommandMenu = function(host, menu) {
                 text: font + 'Remove Problem Acknowledgement</b>',
                 handler: function(o) {
                     post.p_command = 'REMOVE_HOST_ACKNOWLEDGEMENT';
+                    post.p_host_name = host.host_name;
                     npc.doCommand(o.text+'?',post);
                 }
             });
@@ -31,6 +32,13 @@ npc.hostCommandMenu = function(host, menu) {
             });
         }
     }
+
+    menu.add({
+        text: font + 'Re-schedule Next Check</b>',
+        handler: function() {
+            npc.scheduleNextCheck('host', host.host_name);
+        }
+    });
 
     a = host.active_checks_enabled ? 'Disable' : 'Enable';
     text = font + a + ' Active Checks</b>';
@@ -58,13 +66,6 @@ npc.hostCommandMenu = function(host, menu) {
         text: font + 'Send Custom Notification</b>',
         handler: function() {
             npc.sendCustomNotification('host', host.host_name);
-        }
-    });
-
-    menu.add({
-        text: font + 'Re-schedule Next Check</b>',
-        handler: function() {
-            npc.scheduleNextCheck('host', host.host_name);
         }
     });
 

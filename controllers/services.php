@@ -14,8 +14,7 @@
  * @version             $Id: $
  */
 
-require_once("include/auth.php");
-require_once("plugins/npc/controllers/comments.php");
+require_once($config["base_path"]."/plugins/npc/controllers/comments.php");
 
 /**
  * Services controller class
@@ -69,6 +68,7 @@ class NpcServicesController extends Controller {
             'perfdata',
             'last_state_change',
             'check_command',
+            'command_line',
             'current_check_attempt',
             'last_check',
             'next_check',
@@ -201,11 +201,13 @@ class NpcServicesController extends Controller {
         return($services);
     }
 
-    function getPerfData($id) {
+    function getPerfData($id=null) {
+
+        $id = $this->id ? $this->id : $id;
 
         $q = new Doctrine_Pager(
             Doctrine_Query::create()
-                ->select('n.perfdata')
+                ->select('n.*')
             	->from('NpcServicechecks n, NpcServices n2')
           	    ->where('n.service_object_id = ? AND n2.service_object_id = n.service_object_id AND n.start_time'
                        .' > now() - INTERVAL n2.check_interval * 2 MINUTE', $id)
@@ -253,6 +255,12 @@ class NpcServicesController extends Controller {
 
         if ($key == 'current_state') {
             $return = $cs[$results[$key]];
+            if ($results['problem_has_been_acknowledged']) {
+                $comments = new NpcCommentsController;
+                $string = $comments->getAck($results['service_object_id']);
+                $ack = preg_split("/\*\|\*/", $string);
+                $return = '<pre>' . $return . '   (Acknowledged by ' . $ack[0] . ')</pre>';
+            }
         }
 
         if ($key == 'current_check_attempt') {
@@ -278,6 +286,12 @@ class NpcServicesController extends Controller {
             } else {
                 $return = 'No';
             }
+        }
+
+        // Add the full command as a tooltip
+        if ($key == 'command_line') {
+            $perf = $this->getPerfData($results['service_object_id']);
+            $return = $perf[0]['command_line'];
         }
 
         if ($return == '' || !$return) {

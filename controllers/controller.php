@@ -212,6 +212,7 @@ class Controller {
         'modified_service_attributes'   => 'Modified Service Attributes', 
         'event_handler'                 => 'Event Handler', 
         'check_command'                 => 'Check Command', 
+        'command_line'                  => 'Command Line', 
         'normal_check_interval'         => 'Normal Check Interval', 
         'retry_check_interval'          => 'Retry Check Interval', 
         'process_id'                    => 'Process ID', 

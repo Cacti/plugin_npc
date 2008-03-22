@@ -183,7 +183,7 @@ npc.serviceDetail = function(record) {
                         title: 'Notification History',
                         id: id + '-sn'
                     },{
-                        title: 'Downtime History',
+                        title: 'Scheduled Downtime History',
                         id: id + '-sd'
                     },{
                         title: 'Comments',
@@ -484,12 +484,12 @@ npc.serviceDetail = function(record) {
     },{
         header:"Comment",
         dataIndex:'comment_data',
-        width:400
+        width:500
     },{
         header:"Persistent",
         dataIndex:'is_persistent',
         renderer:npc.renderPersistent,
-        width:80
+        width:75
     },{
         header:"Type",
         dataIndex:'entry_type',

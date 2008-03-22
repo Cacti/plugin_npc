@@ -96,6 +96,7 @@ npc.services = function(title, filter){
         header:"Duration",
         dataIndex:'last_state_change',
         renderer: npc.getDuration,
+        hidden:true,
         width:110
     },{
         header:"Attempt",

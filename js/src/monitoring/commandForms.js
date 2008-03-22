@@ -87,7 +87,7 @@ npc.ackProblem = function(type, host, service) {
             fieldLabel: 'Comment',
             name: 'p_comment',
             xtype: 'htmleditor',
-            height:200,
+            height:150,
             width: 500
         },{
             xtype: 'panel',
@@ -104,7 +104,7 @@ npc.ackProblem = function(type, host, service) {
         modal:true,
         closable: true,
         width:680,
-        height:400,
+        height:375,
         bodyStyle:'padding:5px;',
         items: form
     });
@@ -556,6 +556,12 @@ npc.scheduleDowntime = function(type, host, service) {
 
     var cmd = 'SCHEDULE_' + type.toUpperCase() + '_DOWNTIME';
 
+    var title = 'Schedule Host Downtime - ' + host;
+
+    if (type == 'svc') {
+        title = 'Schedule Service Downtime - ' + host + ': ' + service;
+    }
+
     var sd = new Date();
     var ed = new Date();
 
@@ -635,10 +641,15 @@ npc.scheduleDowntime = function(type, host, service) {
                     displayField:'name',
                     valueField:'value',
                     forceSelection:true,
+                    labelStyle: 'cursor: help;',
+                    tooltipText: "Trigger the start of the downtime by the start of some other scheduled host or service downtime.",
                     listeners: {
                         expand: function(comboBox) {
                             comboBox.list.setWidth( 'auto' );
                             comboBox.innerList.setWidth( 'auto' );
+                        },
+                        render: function(o) {
+                            npc.setFormFieldTooltip(o);
                         }
                     },
                     mode: 'remote',
@@ -661,11 +672,16 @@ npc.scheduleDowntime = function(type, host, service) {
                 fieldLabel: 'Start Time',
                 name: 'p_stime',
                 value: startDate,
+                labelStyle: 'cursor: help;',
+                tooltipText: "Start time must be in the format 'YYYY-MM-DD HH:MM:SS'.",
                 listeners: {
                     change: function(comboBox) {
                         var v = form.form.getValues().p_stime;
                         var d = new Date(v.replace(/-/g,' '));
                         form.form.setValues({p_start_time: d.format('U')});
+                    },
+                    render: function(o) {
+                        npc.setFormFieldTooltip(o);
                     }
                 },
                 xtype:'textfield',
@@ -674,11 +690,16 @@ npc.scheduleDowntime = function(type, host, service) {
                 fieldLabel: 'End Time',
                 name: 'p_etime',
                 value: endDate,
+                labelStyle: 'cursor: help;',
+                tooltipText: "End time must be in the format 'YYYY-MM-DD HH:MM:SS'.",
                 listeners: {
                     change: function(comboBox) {
                         var v = form.form.getValues().p_etime;
                         var d = new Date(v.replace(/-/g,' '));
                         form.form.setValues({p_end_time: d.format('U')});
+                    },
+                    render: function(o) {
+                        npc.setFormFieldTooltip(o);
                     }
                 },
                 xtype:'textfield',
@@ -694,6 +715,13 @@ npc.scheduleDowntime = function(type, host, service) {
                     value: 1,
                     displayField:'name',
                     valueField:'value',
+                    labelStyle: 'cursor: help;',
+                    tooltipText: "Flexible downtime starts when the service enters a non-OK state (sometime between the start and end times you specified) and lasts as long as the duration of time you enter. Fixed downtime is starts and ands strictly based on start and end times provided. The duration field does not apply for fixed downtime.",
+                    listeners: {
+                        render: function(o) {
+                            npc.setFormFieldTooltip(o);
+                        }
+                    },
                     forceSelection:true,
                     mode: 'local',
                     editable:false,
@@ -709,6 +737,7 @@ npc.scheduleDowntime = function(type, host, service) {
             },{
                 fieldLabel: 'Duration (minutes)',
                 name: 'p_minutes',
+                value: 120,
                 width: 50,
                 listeners: {
                     change: function(comboBox) {
@@ -765,12 +794,12 @@ npc.scheduleDowntime = function(type, host, service) {
     }
 
     var win = new Ext.Window({
-        title:'Schedule Downtime',
+        title:title,
         layout:'fit',
         modal:true,
         closable: true,
         width:700,
-        height:500,
+        height:450,
         bodyStyle:'padding:5px;',
         items: form
     });
