@@ -85,6 +85,36 @@ npc = function() {
             npc.hostDetail(grid.getStore().getAt(rowIndex));
         },
 
+        hostContextMenu: function(grid, rowIndex, e) {
+            e.stopEvent();
+            var cmdMenu = new Ext.menu.Menu();
+            cmdMenu = npc.hostCommandMenu(grid.getStore().getAt(rowIndex).data, cmdMenu);
+            cmdMenu.showAt(e.getXY());
+        },
+
+        serviceContextMenu: function(grid, rowIndex, e) {
+            e.stopEvent();
+            var cmdMenu = new Ext.menu.Menu();
+            cmdMenu = npc.serviceCommandMenu(grid.getStore().getAt(rowIndex).data, cmdMenu);
+            cmdMenu.showAt(e.getXY());
+        },
+
+        doCommand: function(msg, post) {
+
+            Ext.Msg.show({
+                title:'Confirm',
+                msg:msg,
+                buttons: Ext.Msg.YESNO,
+                fn: function(btn) {
+                    if (btn == 'yes') {
+                        npc.aPost(post);
+                    }
+                },
+                animEl: 'elId',
+                icon: Ext.MessageBox.QUESTION
+            });
+        },
+
         cmdFormButtons: [{
             text: 'Submit',
             handler: function(o){
@@ -693,21 +723,21 @@ npc = function() {
                                             }
                                         }]
                                     },{
-                                        text:'Nagios',
-                                        iconCls:'tleaf',
-                                        leaf:true,
-                                        listeners: {
-                                            click: function() {
-                                                npc.addTabExt('Nagios','Nagios',npc.params.npc_nagios_url);
-                                            }
-                                        }
-                                    },{
                                         text:'N2C',
                                         iconCls:'tleaf',
                                         leaf:true,
                                         listeners: {
                                             click: function() {
                                                 npc.n2c();
+                                            }
+                                        }
+                                    },{
+                                        text:'Nagios',
+                                        iconCls:'tleaf',
+                                        leaf:true,
+                                        listeners: {
+                                            click: function() {
+                                                npc.addTabExt('Nagios','Nagios',npc.params.npc_nagios_url);
                                             }
                                         }
                                     }]

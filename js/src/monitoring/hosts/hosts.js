@@ -181,4 +181,7 @@ npc.hosts = function(title, filter){
     tab.addListener(listeners);
 
     grid.on('rowdblclick', npc.hostGridClick);
+
+    // Right click action
+    grid.on('rowcontextmenu', npc.hostContextMenu);
 };

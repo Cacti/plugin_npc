@@ -1386,23 +1386,7 @@ function npc_config_settings() {
                     "method" => "drop_array",
                     "default" => "H:i",
                     "array" => $npc_time_format,
-                ),
-                "npc_portlets_header" => array(
-                        "friendly_name" => "Portlet Settings",
-                        "method" => "spacer",
-                ),
-                "npc_portlet_rows" => array(
-                        "friendly_name" => "Rows per portlet",
-                        "description" => "The number of rows to display per page in a portlet.",
-                        "method" => "textbox",
-                        "max_length" => 255,
-                ),
-                "npc_portlet_refresh" => array(
-                        "friendly_name" => "Portlet Refresh Rate",
-                        "description" => "The time in seconds to wait before refreshing a portlet.",
-                        "method" => "textbox",
-                        "max_length" => 255,
-                ),
+                )
         );
 }
 

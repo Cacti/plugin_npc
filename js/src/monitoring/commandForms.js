@@ -9,31 +9,23 @@ npc.ackProblem = function(type, host, service) {
 
     var cmd = 'ACKNOWLEDGE_' + type.toUpperCase() + '_PROBLEM';
 
+    var title = 'Acknowledge Host Problem - ' + host;
+
+    if (type == 'svc') {
+        title = 'Acknowledge Service Problem - ' + host + ': ' + service;
+    }
+
     var hostField = {
         name: 'p_host_name',
         value: host,
         xtype: 'hidden'
     };
 
-    if (typeof host == 'undefined') {
-        hostField.fieldLabel = 'Host Name';
-        hostField.xtype = 'textfield';
-        hostField.allowBlank = false;
-    }
-
     var serviceField = {
         name: 'p_service_description',
         value: service,
         xtype: 'hidden'
     };
-
-    if (type == 'svc') {
-        if (typeof service == 'undefined') {
-            serviceField.fieldLabel = 'Host Name';
-            serviceField.xtype = 'textfield';
-            serviceField.allowBlank = false;
-        }
-    }
 
     var form = new Ext.FormPanel({
         labelWidth: 110,
@@ -106,7 +98,8 @@ npc.ackProblem = function(type, host, service) {
     });
 
     var win = new Ext.Window({
-        title:'Acknowledge Service Problem -  ' + host + ': ' + service,
+        //title:'Acknowledge Service Problem -  ' + host + ': ' + service,
+        title:title,
         layout:'fit',
         modal:true,
         closable: true,

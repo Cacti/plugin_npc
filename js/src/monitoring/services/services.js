@@ -176,5 +176,9 @@ npc.services = function(title, filter){
     // Add the listener to the tab
     tab.addListener(listeners);
 
+    // Double click action
     grid.on('rowdblclick', npc.serviceGridClick);
+
+    // Right click action
+    grid.on('rowcontextmenu', npc.serviceContextMenu);
 };

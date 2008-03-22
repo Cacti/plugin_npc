@@ -110,10 +110,6 @@ class NpcHostsController extends Controller {
         return($this->jsonOutput($output));
     }
 
-    function getGraphs() {
-
-    }
-
     /**
      * summary
      * 

@@ -33,6 +33,9 @@ npc.portlet.hostProblems = function(){
             {name: 'problem_has_been_acknowledged', type: 'int'},
             {name: 'notifications_enabled', type: 'int'},
             {name: 'active_checks_enabled', type: 'int'},
+            {name: 'obsess_over_host', type: 'int'},
+            {name: 'event_handler_enabled', type: 'int'},
+            {name: 'flap_detection_enabled', type: 'int'},
             {name: 'passive_checks_enabled', type: 'int'},
             {name: 'is_flapping', type: 'int'}
         ]
@@ -126,6 +129,10 @@ npc.portlet.hostProblems = function(){
         store.startAutoRefresh(npc.params.npc_portlet_refresh);
     }
 
+    // Double click action
     grid.on('rowdblclick', npc.hostGridClick);
+
+    // Right click action
+    grid.on('rowcontextmenu', npc.hostContextMenu);
 
 };

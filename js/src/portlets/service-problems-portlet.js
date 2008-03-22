@@ -23,19 +23,22 @@ npc.portlet.serviceProblems = function(){
             totalProperty:'totalCount',
             root:'data'
         }, [
-            'host_object_id',
+            {name: 'host_object_id', type: 'int'},
+            {name: 'service_object_id', type: 'int'},
+            {name: 'service_id', type: 'int'},
             'host_name',
-            'service_object_id',
-            'service_id',
             'service_description',
             'acknowledgement',
             'comment',
-            'current_state',
             'output',
+            {name: 'current_state', type: 'int'},
             {name: 'problem_has_been_acknowledged', type: 'int'},
             {name: 'notifications_enabled', type: 'int'},
             {name: 'active_checks_enabled', type: 'int'},
             {name: 'passive_checks_enabled', type: 'int'},
+            {name: 'obsess_over_service', type: 'int'},
+            {name: 'event_handler_enabled', type: 'int'},
+            {name: 'flap_detection_enabled', type: 'int'},
             {name: 'is_flapping', type: 'int'}
         ]),
         groupField:'host_name'
@@ -130,26 +133,10 @@ npc.portlet.serviceProblems = function(){
         store.startAutoRefresh(60);
     }
 
+    // Double click action
     grid.on('rowdblclick', npc.serviceGridClick);
-    //grid.on('rowcontextmenu', npc.serviceGridClick);
     
-    grid.on('rowcontextmenu', function(grid, rowIndex, e) {
-        e.stopEvent();
-        var record = grid.getStore().getAt(rowIndex).data;
-
-        var contextMenu = new Ext.menu.Menu({
-            id: 'gridCtxMenu',
-            items: [{
-                text: 'Acknowledge Problem',
-                handler: function() {
-                    npc.ackProblem('svc', record.host_name, record.service_description);
-                }
-            }]
-        });    
-
-        var xy = e.getXY();
-        contextMenu.showAt(xy);
-
-    });
+    // Right click action
+    grid.on('rowcontextmenu', npc.serviceContextMenu);
 
 };

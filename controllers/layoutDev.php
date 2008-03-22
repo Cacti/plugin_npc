@@ -61,12 +61,14 @@ class NpcLayoutDevController {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/hosts/hostDetail.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/hosts/hostgroupGrid.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/hosts/hostgroupOverview.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/hosts/hostCommandMenu.js"></script>
 
           <!-- Service screens -->
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/services.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/serviceDetail.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/servicegroupGrid.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/servicegroupOverview.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/serviceCommandMenu.js"></script>
 
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/n2c.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/comments.js"></script>
