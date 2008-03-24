@@ -79,6 +79,7 @@ npc.portlet.serviceProblems = function(){
             enableGroupingMenu: false,
             enableNoGroups: true,
             groupTextTpl: '{text}',
+            emptyText:'No problems.',
             scrollOffset:0
         }),
         bbar: new Ext.PagingToolbar({

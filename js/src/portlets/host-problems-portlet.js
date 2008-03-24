@@ -76,6 +76,7 @@ npc.portlet.hostProblems = function(){
         view: new Ext.grid.GridView({
              forceFit:true,
              autoFill:true,
+             emptyText:'No problems.',
              scrollOffset:0
         }),
         bbar: new Ext.PagingToolbar({
