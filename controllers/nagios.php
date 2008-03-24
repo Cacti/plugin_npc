@@ -115,6 +115,18 @@ class NpcNagiosController extends Controller {
         $nagios = new NagiosCmd;
         $args = array();
 
+        // Do some sanity checking:
+
+        if (!read_config_option('npc_nagios_commands')) {
+            $response = array('success' => false, 'msg' => 'Remote Commands must be enabled under console->Settings->NPC');
+            return(json_encode($response));
+        }
+
+        if (!read_config_option('npc_nagios_cmd_path')) {
+            $response = array('success' => false, 'msg' => 'The Nagios Command File Path must be set under console->Settings->NPC');
+            return(json_encode($response));
+        }
+
         if (!$nagios->setCommandFile(read_config_option('npc_nagios_cmd_path'))) {
             $response = array('success' => false, 'msg' => $nagios->message);
             return(json_encode($response));
