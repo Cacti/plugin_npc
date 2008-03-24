@@ -226,9 +226,56 @@ class NpcServicesController extends Controller {
     function listServicesCli() {
 
         $q = new Doctrine_Query();
-        $q->select('display_name as name, service_object_id as id')->from('NpcServices')->orderBy('display_name ASC');
+        $q->select('s.*,'
+                  .'h.display_name AS host,'
+                  .'i.instance_name AS instance')
+          ->from('NpcServices s, s.Host h, s.Instance i');
 
-        return($q->execute(array(), Doctrine::FETCH_ARRAY));
+        return($this->flattenArray($q->execute(array(), Doctrine::FETCH_ARRAY)));
+    }
+
+    /**
+     * getMappedGraph
+     *
+     * Returns the url to the currently mapped graph
+     *
+     * @return string   json encoded results
+     */
+    function getMappedGraph() {
+
+        $q = new Doctrine_Query();
+        $q->select('sg.*')
+          ->from('NpcServiceGraphs sg')
+          ->where('sg.service_object_id = ?', $this->id);
+
+        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+
+        return($this->jsonOutput($results));
+    }
+
+    /**
+     * setMappedGraph
+     *
+     * Sets the graph mapping
+     *
+     * @return string   json encoded results
+     */
+    function setMappedGraph($params) {
+
+        $table = $this->conn->getTable('NpcServiceGraphs');
+
+        $results = $table->findByDql("service_object_id = ?", array($params['service_object_id']));
+        $graph = $results[0];
+
+        if (!isset($graph->local_graph_id)) {
+            $graph = new NpcServiceGraphs();
+        }
+
+        $graph->service_object_id = $params['service_object_id'];
+        $graph->local_graph_id = $params['local_graph_id'];
+        $graph->save();
+
+        return(json_encode(array('success' => true)));
     }
 
     /**

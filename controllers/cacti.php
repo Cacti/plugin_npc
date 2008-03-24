@@ -55,5 +55,39 @@ class NpcCactiController extends Controller {
         return(db_fetch_assoc("SELECT id, hostname FROM host"));
     }
 
+    /**
+     * getGraphList
+     * 
+     * Returns a list of graphs and properties for populating a 
+     * client side graph select box.
+     *
+     * @return boolean
+     */
+    function getGraphList($npc_id, $cacti_id) {
+        $sql = "
+            SELECT
+                graph_templates_graph.id,          
+                graph_templates_graph.local_graph_id,          
+                graph_templates_graph.height, 
+                graph_templates_graph.width, 
+                graph_templates_graph.title_cache as title, 
+                graph_templates.name, 
+                graph_local.host_id 
+            FROM
+                (graph_local,graph_templates_graph)
+            LEFT JOIN 
+                graph_templates ON graph_local.graph_template_id = graph_templates.id
+            WHERE
+                graph_local.id = graph_templates_graph.local_graph_id
+                AND graph_templates_graph.title_cache like '%'          
+            ORDER BY   
+                graph_templates_graph.title_cache, graph_local.host_id
+        ";
+
+        $results = array_merge(array(array('title' => 'None', 'local_graph_id' => 0)), db_fetch_assoc($sql));
+
+        return($this->jsonOutput($results));
+    }
+
 }
 ?>

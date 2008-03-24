@@ -49,7 +49,7 @@ class NpcLayoutDevController {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/plugins/Ext.ux.grid.Search.js"></script>
 
           <!-- Overrides -->
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/overrides.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/overrides/overrides.js"></script>
 
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/Portal.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/PortalColumn.js"></script>

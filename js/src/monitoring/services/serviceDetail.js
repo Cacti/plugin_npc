@@ -31,47 +31,6 @@ npc.serviceDetail = function(record) {
     var menu = new Ext.menu.Menu();
     menu = npc.serviceCommandMenu(record.data, menu);
 
-    // Build the tool bar for the graph mapping
-    var sgTbar = new Ext.Toolbar();
-
-    var store = new Ext.data.JsonStore({
-        url: 'npc.php?module=services&action=getGraphs',
-        totalProperty:'totalCount',
-        root:'data',
-        fields:[
-           'local_graph_id',
-           'height',
-           'width',
-           'title'
-        ],
-        autoload:true
-    });
-    store.load();
-
-    var combo = new Ext.form.ComboBox({
-        store: store,
-        displayField:'title',
-        valueField:'local_graph_id',
-        typeAhead: true,
-        mode: 'local',
-        triggerAction: 'all',
-        emptyText:'Select a graph...',
-        selectOnFocus:true,
-        listWidth:300,
-        width:300,
-        listeners: {
-            select: function(c, r) {
-                sgStore.url = 'npc.php?module=services&action=getServiceGraph&p_local_graph_id=' + r.data.local_graph_id;
-                sgStore.proxy.conn.url = 'npc.php?module=services&action=getServiceGraph&p_local_graph_id=' + r.data.local_graph_id;
-                sgStore.reload();
-            }
-        }
-    });
-
-    function onItemClick() {
-        console.log(arguments);
-    }
-
     function renderCheckAttempt(val, p, r){
         return String.format('{0}/{1}', val, r.data.max_check_attempts);
     }
@@ -90,8 +49,8 @@ npc.serviceDetail = function(record) {
     }
 
     function renderGraph(val, p, r) {
-        // '<img src="/graph_image.php?action=view&local_graph_id='.$this->local_graph_id.'&rra_id=1&graph_height='.$this->height.'&graph_width='.$this->width.'">';
-        return(val);
+        console.log(r);
+        return String.format('<img src="/graph_image.php?action=view&local_graph_id={0}&rra_id=1&graph_height=120&graph_width=500">', r.data.local_graph_id);
     }
 
     function renderAction(v, p, r) {
@@ -188,12 +147,6 @@ npc.serviceDetail = function(record) {
                     },{
                         title: 'Comments',
                         id: id + '-sc'
-                    },{
-                        title: 'Graph',
-                        //autoLoad: 'graphProxy.php'
-                        disabled:true,
-                        id: id + '-sg',
-                        tbar: sgTbar
                     }]
                 })
             ]
@@ -202,9 +155,6 @@ npc.serviceDetail = function(record) {
         innerTabPanel.setActiveTab(tab);
         tab = Ext.getCmp(id);
     }
-
-    // Add the graph selector to the graph tab
-    sgTbar.addField(combo);
 
     var serviceStore = new Ext.data.JsonStore({
         url:'npc.php?module=services&action=getServices&p_id=' + service_object_id,
@@ -261,6 +211,97 @@ npc.serviceDetail = function(record) {
             text:'Commands',
             iconCls:'cogAdd',
             menu: menu
+        },
+            '-',
+        {
+            text: 'Map Graph',
+            iconCls:'chartBarAdd',
+            handler : function(){
+                var graphGrid = new Ext.grid.GridPanel({
+                    id: 'graphGrid',
+                    autoHeight:true,
+                    autoWidth:true,
+                    store: new Ext.data.JsonStore({
+                        url: 'npc.php?module=services&action=getMappedGraph&p_id=' + service_object_id,
+                        totalProperty:'totalCount',
+                        root:'data',
+                        fields:[
+                            'local_graph_id'
+                        ],
+                        autoload:true
+                    }),
+                    cm: new Ext.grid.ColumnModel([{
+                        header:"", 
+                        menuDisabled: true,
+                        dataIndex:'graph',
+                        renderer: renderGraph,
+                        width:550
+                    }]),
+                    autoExpandColumn:'Value',
+                    stripeRows: true,
+                    tbar: [
+                        new Ext.form.ComboBox({
+                            store: new Ext.data.JsonStore({
+                                url: 'npc.php?module=cacti&action=getGraphList',
+                                totalProperty:'totalCount',
+                                root:'data',
+                                fields:[
+                                    'local_graph_id',
+                                    'height',
+                                    'width',
+                                    'title'
+                                ],
+                                autoload:true
+                            }),
+                            fieldLabel: 'Graph',
+                            displayField:'title',
+                            valueField:'local_graph_id',
+                            typeAhead: false,
+                            forceSelection:true,
+                            editable:false,
+                            mode: 'remote',
+                            listeners: {
+                                select: function(o, n, rowIndex) {
+                                   var local_graph_id = o.store.getAt(rowIndex).data.local_graph_id;
+                                   var args = {
+                                        module: 'services',
+                                        action: 'setMappedGraph',
+                                        p_service_object_id: service_object_id,
+                                        p_local_graph_id: local_graph_id
+                                    };
+                                    npc.aPost(args);
+                                    graphGrid.store.reload();
+                                }
+                            },
+                            triggerAction: 'all',
+                            emptyText:'Select a graph...',
+                            selectOnFocus:true,
+                            listWidth:400,
+                            width:400,
+                        })
+                    ],
+                    view: new Ext.grid.GridView({
+                        forceFit:true,
+                        autoFill:true,
+                        scrollOffset:0
+                    })
+                });
+
+                var win = new Ext.Window({ 
+                    title:'Map Graph',
+                    layout:'fit',
+                    modal:true,
+                    closable: true,
+                    width:600, 
+                    height:400, 
+                    bodyStyle:'padding:5px;',
+                    items: graphGrid
+                });
+
+                win.show();
+                Ext.getCmp('graphGrid').store.load();
+                win.doLayout();
+            }
         }],
         view: new Ext.grid.GridView({
              forceFit:true,

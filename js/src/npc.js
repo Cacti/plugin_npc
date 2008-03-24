@@ -517,8 +517,8 @@ npc = function() {
                         split:true,
                         title: 'Navigation',
                         collapsible:true,
-                        width: 220,
-                        minSize: 220,
+                        width: 210,
+                        minSize: 100,
                         maxSize: 400,
                         margins:'0 0 0 5',
                         items: [

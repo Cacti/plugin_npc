@@ -102,6 +102,7 @@ npc.services = function(title, filter){
         header:"Attempt",
         dataIndex:'current_check_attempt',
         renderer: renderAttempt,
+        hidden:true,
         width:50
     },{
         header:"Host",

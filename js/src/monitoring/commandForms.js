@@ -716,7 +716,10 @@ npc.scheduleDowntime = function(type, host, service) {
                     displayField:'name',
                     valueField:'value',
                     labelStyle: 'cursor: help;',
-                    tooltipText: "Flexible downtime starts when the service enters a non-OK state (sometime between the start and end times you specified) and lasts as long as the duration of time you enter. Fixed downtime is starts and ands strictly based on start and end times provided. The duration field does not apply for fixed downtime.",
+                    tooltipText: "Flexible downtime starts when the service enters a non-OK state (sometime between the " 
+                               + "start and end times you specified) and lasts as long as the duration of time you enter. "
+                               + "Fixed downtime is starts and ands strictly based on start and end times provided. "
+                               + "The duration field does not apply for fixed downtime.",
                     listeners: {
                         render: function(o) {
                             npc.setFormFieldTooltip(o);

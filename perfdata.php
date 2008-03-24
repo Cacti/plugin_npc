@@ -89,9 +89,9 @@ function listServices() {
     $results = $obj->listServicesCli();
 
     $x = 1;
-    echo "ID   Name\n";
+    echo "\n" . sprintf("%-20s %-20s %-20s %-20s\n", 'Instance', 'Host', 'Service', 'Service Object ID') . "\n"; 
     foreach($results as $result) {
-        echo $result['id'] . "   " . $result['name'] . "\n";
+        echo sprintf("%-20s %-20s %-20s %-20s\n", $result['instance'], $result['host'], $result['display_name'], $result['service_object_id']); 
     }
 
     exit;

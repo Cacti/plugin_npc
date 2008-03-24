@@ -1293,6 +1293,16 @@ function npc_setup_table () {
                   ) ENGINE=InnoDB COMMENT='Timeperiod definitions';";
     }
 
+    if (!in_array('npc_service_graphs', $tables)) {
+        $sql[] = "CREATE TABLE `npc_service_graphs` (
+                    `service_graph_id` int(11) NOT NULL auto_increment,
+                    `service_object_id` int(11) NOT NULL,
+                    `local_graph_id` mediumint(8) unsigned NOT NULL,
+                    `pri` tinyint(1) default 1,
+                    PRIMARY KEY  (`service_graph_id`)
+                  ) ENGINE=InnoDB;";
+    }
+
     if (!in_array('npc_settings', $tables)) {
         $sql[] = "CREATE TABLE `npc_settings` (
                     `user_id` mediumint(8) unsigned NOT NULL,
@@ -1333,7 +1343,9 @@ function npc_show_tab() {
             if (basename($_SERVER["PHP_SELF"]) == "npc.php")
                 $cp = true;
 
-            print '<a href="' . $config['url_path'] . 'plugins/npc/npc.php"><img src="' . $config['url_path'] . 'plugins/npc/images/tab_npc' . ($cp ? "_down": "") . '.gif" alt="npc" align="absmiddle" border="0"></a>';
+            print '<a href="' . $config['url_path'] . 'plugins/npc/npc.php"><img src="' 
+                  . $config['url_path'] . 'plugins/npc/images/tab_npc' 
+                  . ($cp ? "_down": "") . '.gif" alt="npc" align="absmiddle" border="0"></a>';
         }
         npc_check_upgrade ();
 }
