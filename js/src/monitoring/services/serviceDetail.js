@@ -49,7 +49,6 @@ npc.serviceDetail = function(record) {
     }
 
     function renderGraph(val, p, r) {
-        console.log(r);
         return String.format('<img src="/graph_image.php?action=view&local_graph_id={0}&rra_id=1&graph_height=120&graph_width=500">', r.data.local_graph_id);
     }
 
@@ -107,7 +106,7 @@ npc.serviceDetail = function(record) {
             p_service_description: record.data.service_description
         };
 
-        doCommand(msg, post);
+        npc.doCommand(msg, post);
     }
 
     // If the tab exists set it active and return or else create it.
@@ -235,7 +234,7 @@ npc.serviceDetail = function(record) {
                         menuDisabled: true,
                         dataIndex:'graph',
                         renderer: renderGraph,
-                        width:550
+                        width:600
                     }]),
                     autoExpandColumn:'Value',
                     stripeRows: true,
@@ -292,15 +291,15 @@ npc.serviceDetail = function(record) {
                     layout:'fit',
                     modal:true,
                     closable: true,
-                    width:600, 
-                    height:400, 
+                    width:700, 
+                    height:500, 
                     bodyStyle:'padding:5px;',
                     items: graphGrid
                 });
 
                 win.show();
-                Ext.getCmp('graphGrid').store.load();
-                win.doLayout();
+                graphGrid.render()
+                graphGrid.store.load();
             }
         }],
         view: new Ext.grid.GridView({
