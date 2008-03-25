@@ -40,6 +40,15 @@ npc.services = function(title, filter){
         return String.format('{0}/{1}', val, record.data.max_check_attempts);
     };
 
+    function renderGraphIcon(val, p, record){
+        var icon = '';
+        if (val) {
+            // <img id="graph'+val+'" src="/graph_image.php?action=view&local_graph_id='+val+'&rra_id=1" style="position:absolute;left:0;top:0;"/>
+            icon = '<img src="images/icons/chart_bar.png">';
+        }
+        return String.format('{0}', icon);
+    };
+
     var store = new Ext.data.GroupingStore({
         url:url,
         autoload:true,
@@ -48,10 +57,11 @@ npc.services = function(title, filter){
             totalProperty:'totalCount',
             root:'data'
         }, [
-            'host_object_id',
+            'instance_name',
+            {name: 'host_object_id', type: 'int'},
             'host_name',
-            'service_id',
-            'service_object_id',
+            {name: 'service_object_id', type: 'int'},
+            {name: 'local_graph_id', type: 'int'},
             'service_description',
             'acknowledgement',
             'comment',
@@ -81,17 +91,27 @@ npc.services = function(title, filter){
         header:"Status",
         dataIndex:'current_state',
         renderer:npc.serviceStatusImage,
+        width:30
+    },{
+        header:"Graph",
+        dataIndex:'local_graph_id',
+        renderer:renderGraphIcon,
+        width:30
+    },{
+        header:"Instance",
+        dataIndex:'instance_name',
+        hidden:true,
         width:45
     },{
         header:"Last Check",
         dataIndex:'last_check',
         renderer: npc.formatDate,
-        width:110
+        width:100
     },{
         header:"Next Check",
         dataIndex:'next_check',
         renderer: npc.formatDate,
-        width:110
+        width:100
     },{
         header:"Duration",
         dataIndex:'last_state_change',
@@ -118,7 +138,7 @@ npc.services = function(title, filter){
     var grid = new Ext.grid.GridPanel({
         id: id + '-grid',
         autoHeight:true,
-        autoExpandColumn: 'service_description',
+        autoExpandColumn: 'plugin_output',
         store:store,
         autoScroll: true,
         cm:cm,
@@ -183,4 +203,23 @@ npc.services = function(title, filter){
 
     // Right click action
     grid.on('rowcontextmenu', npc.serviceContextMenu);
+
+    // If the graph icon is clicked popup the associated graph
+    grid.on('cellclick', function(grid, rowIndex, columnIndex) {
+        var record = grid.getStore().getAt(rowIndex);
+        var fieldName = grid.getColumnModel().getDataIndex(columnIndex);
+        var data = record.get(fieldName);
+
+        if (fieldName == 'local_graph_id' && !Ext.getCmp('serviceGraph'+data)) {
+            var win = new Ext.Window({
+                title:record.data.host_name + ': ' + record.data.service_description,
+                id:'serviceGraph'+data,
+                layout:'fit',
+                modal:false,
+                closable: true,
+                html: '<img src="/graph_image.php?action=view&local_graph_id='+data+'&rra_id=1">',
+                width:600
+            }).show();
+        }
+    });
 };

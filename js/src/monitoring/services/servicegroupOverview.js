@@ -166,7 +166,10 @@ npc.servicegroupOverview = function(){
     // Add the listener to the tab
     tab.addListener(listeners);
 
-    grid.on('rowclick', sgOverviewClick);
+    grid.on('rowdblclick', sgOverviewClick);
+
+    // Right click action
+    grid.on('rowcontextmenu', npc.serviceContextMenu);
 
     function sgOverviewClick(grid, rowIndex, e) {
         //console.log(grid.getStore().getAt(rowIndex).json.servicegroup_object_id);

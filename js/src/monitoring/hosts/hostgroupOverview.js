@@ -166,7 +166,10 @@ npc.hostgroupOverview = function(){
     // Add the listener to the tab
     tab.addListener(listeners);
 
-    grid.on('rowclick', hgOverviewClick);
+    grid.on('rowdblclick', hgOverviewClick);
+
+    // Right click action
+    grid.on('rowcontextmenu', npc.hostContextMenu);
 
     function hgOverviewClick(grid, rowIndex, e) {
         var hoi = grid.getStore().getAt(rowIndex).json.hostgroup_object_id;

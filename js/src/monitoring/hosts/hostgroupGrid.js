@@ -147,6 +147,9 @@ npc.hostgroupGrid = function(id, title, hoi){
     // Add the listener to the tab
     tab.addListener(listeners);
 
-    grid.on('rowclick', npc.hostGridClick);
+    // Double click action
+    grid.on('rowdblclick', npc.hostGridClick);
 
+    // Right click action
+    grid.on('rowcontextmenu', npc.hostContextMenu);
 };

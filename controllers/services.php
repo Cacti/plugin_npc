@@ -182,11 +182,13 @@ class NpcServicesController extends Controller {
                         .'s.host_object_id,'
                         .'o.name1 AS host_name,'
                         .'o.name2 AS service_description,'
+                        .'g.local_graph_id,'
                         .'ss.*')
                 ->from('NpcServicestatus ss')
                 ->leftJoin('ss.Object o')
                 ->leftJoin('ss.Service s')
                 ->leftJoin('ss.Instance i')
+                ->leftJoin('ss.Graph g')
                 ->where("$where")
                 ->orderby( 'i.instance_name ASC, host_name ASC, service_description ASC' ),
             $this->currentPage,

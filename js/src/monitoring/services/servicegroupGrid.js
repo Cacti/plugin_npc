@@ -160,6 +160,9 @@ npc.servicegroupGrid = function(id, title, soi){
     // Add the listener to the tab
     tab.addListener(listeners);
 
-    grid.on('rowclick', npc.serviceGridClick);
+    // Double click action
+    grid.on('rowdblclick', npc.serviceGridClick);
 
+    // Right click action
+    grid.on('rowcontextmenu', npc.serviceContextMenu);
 };

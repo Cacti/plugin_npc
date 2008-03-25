@@ -33,6 +33,7 @@ class NpcServices extends BaseNpcServices
         $this->hasOne('NpcHosts as Host', array('local' => 'host_object_id', 'foreign' => 'host_object_id'));
         $this->hasOne('NpcHoststatus as Hoststatus', array('local' => 'host_object_id', 'foreign' => 'host_object_id'));
         $this->hasOne('NpcServicestatus as Status', array('local' => 'service_object_id', 'foreign' => 'service_object_id'));
+        $this->hasOne('NpcServiceGraphs as Graph', array('local' => 'service_object_id', 'foreign' => 'service_object_id'));
         $this->hasMany('NpcComments as Comment', array('local' => 'service_object_id', 'foreign' => 'object_id'));
         $this->hasMany('NpcServicechecks as Check', array('local' => 'service_object_id', 'foreign' => 'service_object_id'));
         $this->hasMany('NpcServicegroups as Groups', array('local' => 'service_object_id', 'foreign' => 'servicegroup_id', 'refClass' => 'NpcServicegroupMembers'));
