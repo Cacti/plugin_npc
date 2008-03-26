@@ -327,6 +327,96 @@ npc = function() {
             return val;
         },
 
+        renderGraph: function(val, p, r) {
+            return String.format('<img src="/graph_image.php?action=view&local_graph_id={0}&rra_id=1&graph_height=120&graph_width=500">', r.data.local_graph_id);
+        },
+
+        mapGraph: function(module, object_id) {
+    
+            var graphGrid = new Ext.grid.GridPanel({
+                id: 'graphGrid',
+                autoHeight:true,
+                autoWidth:true,
+                store: new Ext.data.JsonStore({
+                    url: 'npc.php?module='+module+'&action=getMappedGraph&p_id=' + object_id,
+                    totalProperty:'totalCount',
+                    root:'data',
+                    fields:[
+                        'local_graph_id'
+                    ],
+                    autoload:true
+                }),
+                cm: new Ext.grid.ColumnModel([{
+                    header:"", 
+                    menuDisabled: true,
+                    dataIndex:'graph',
+                    renderer: npc.renderGraph,
+                    width:600
+                }]),
+                autoExpandColumn:'Value',
+                stripeRows: true,
+                tbar: [
+                    new Ext.form.ComboBox({
+                        store: new Ext.data.JsonStore({
+                            url: 'npc.php?module=cacti&action=getGraphList',
+                            totalProperty:'totalCount',
+                            root:'data',
+                            fields:[
+                                'local_graph_id',
+                                'height',
+                                'width',
+                                'title'
+                            ],
+                            autoload:true
+                        }),
+                        fieldLabel: 'Graph',
+                        displayField:'title',
+                        valueField:'local_graph_id',
+                        typeAhead: false,
+                        forceSelection:true,
+                        editable:false,
+                        mode: 'remote',
+                        listeners: {
+                            select: function(o, n, rowIndex) {
+                               var local_graph_id = o.store.getAt(rowIndex).data.local_graph_id;
+                               var args = {
+                                    module: module,
+                                    action: 'setMappedGraph',
+                                    p_object_id: object_id,
+                                    p_local_graph_id: local_graph_id
+                                };
+                                npc.aPost(args);
+                                graphGrid.store.reload();
+                            }
+                        },
+                        triggerAction: 'all',
+                        emptyText:'Select a graph...',
+                        selectOnFocus:true,
+                        listWidth:400,
+                        width:400,
+                    })
+                ],
+                view: new Ext.grid.GridView({
+                    forceFit:true,
+                    autoFill:true,
+                    scrollOffset:0
+                })
+            });
+
+            var win = new Ext.Window({ 
+                title:'Map Graph',
+                layout:'fit',
+                modal:true,
+                closable: true,
+                width:640, 
+                items: graphGrid
+            });
+    
+            win.show();
+            graphGrid.render()
+            graphGrid.store.load();
+        },
+
         getDuration: function(val) {
             var d = new Date();
             var t = d.dateFormat('U') - val.dateFormat('U');

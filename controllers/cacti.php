@@ -1,6 +1,8 @@
 <?php
 
 require_once("include/auth.php");
+require_once($config["base_path"]."/plugins/npc/controllers/hosts.php");
+require_once($config["base_path"]."/plugins/npc/controllers/services.php");
 
 class NpcCactiController extends Controller {
 
@@ -53,6 +55,60 @@ class NpcCactiController extends Controller {
      */
     function getHostnames() {
         return(db_fetch_assoc("SELECT id, hostname FROM host"));
+    }
+
+    /**
+     * addDataInputMethod
+     * 
+     * Adds a data input method for Nagios perf data
+     *
+     * @return string   json encoded results
+     */
+    function addDataInputMethod($params) {
+
+        $type = mysql_real_escape_string($params['type']);
+        $name = 'NPC - Perfdata - ' . mysql_real_escape_string($params['host']) . ': ' . mysql_real_escape_string($params['service']);
+
+        $object_id = mysql_real_escape_string($params['object_id']);
+
+        $input = 'php <path_cacti>/plugins/npc/perfdata.php --type=' . $type . ' --id=' . $object_id;
+
+        $sql = sprintf("INSERT INTO data_input (hash, name, input_string, type_id) VALUES ('%s', '%s', '%s', 1)", $this->generateHash(), $name, $input);
+
+        db_execute($sql);
+        $data_input_id = db_fetch_insert_id();
+
+        if ($type == 'host') {
+            $class = 'NpcHostsController';
+        } else {
+            $class = 'NpcServicesController';
+        }
+
+        $obj = new $class;
+        $results = $obj->getPerfData($object_id);
+
+        $perfParts = explode(";", $results[0]['perfdata']);
+
+        foreach ($perfParts as $perf) {
+            if (preg_match("/=/", $perf)) {
+                $ds = explode("=", $perf);
+                $sql = sprintf("INSERT INTO data_input_fields (hash, data_input_id, name, data_name, input_output, update_rra, sequence) VALUES ('%s', %d, '%s', '%s', 'out', 'on', 0)", 
+                       $this->generateHash(), $data_input_id, $ds[0], $ds[0]);
+                db_execute($sql);
+            }
+        }
+
+    }
+
+    /**
+     * generateHash
+     * 
+     * Generates a unique has for populating the hash column
+     *
+     * @return string   a 128-bit, hexadecimal hash
+     */
+    function generateHash() {
+        return md5(session_id() . microtime() . rand(0,1000));
     }
 
     /**

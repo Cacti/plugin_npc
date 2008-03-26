@@ -31,44 +31,6 @@ npc.hostDetail = function(record) {
     var menu = new Ext.menu.Menu();
     menu = npc.hostCommandMenu(record.data, menu);
 
-    // Build the tool bar for the graph mapping
-    var sgTbar = new Ext.Toolbar();
-
-    var store = new Ext.data.JsonStore({
-        url: 'npc.php?module=hosts&action=getGraphs',
-        totalProperty:'totalCount',
-        root:'data',
-        fields:[
-           'local_graph_id',
-           'height',
-           'width',
-           'title'
-        ],
-        autoload:true
-    });
-    store.load();
-
-    var combo = new Ext.form.ComboBox({
-        store: store,
-        displayField:'title',
-        valueField:'local_graph_id',
-        typeAhead: true,
-        mode: 'local',
-        triggerAction: 'all',
-        emptyText:'Select a graph...',
-        selectOnFocus:true,
-        listWidth:300,
-        width:300,
-        listeners: {
-            select: function(c, r) {
-                hgStore.url = 'npc.php?module=hosts&action=getHostGraph&p_local_graph_id=' + r.data.local_graph_id;
-                hgStore.proxy.conn.url = 'npc.php?module=hosts&action=getHostGraph&p_local_graph_id=' + r.data.local_graph_id;
-                hgStore.reload();
-            }
-        }
-    });
-
-
     function renderCheckAttempt(val, p, r){
         return String.format('{0}/{1}', val, r.data.max_check_attempts);
     };
@@ -132,12 +94,6 @@ npc.hostDetail = function(record) {
                     },{
                         title: 'Comments',
                         id: id + '-hc'
-                    },{
-                        title: 'Graph',
-                        //autoLoad: 'graphProxy.php'
-                        disabled:true,
-                        id: id + '-sg',
-                        tbar: sgTbar
                     }]
                 })
             ]
@@ -147,9 +103,6 @@ npc.hostDetail = function(record) {
         tab = Ext.getCmp(id);
     }
 
-    // Add the graph selector to the graph tab
-    sgTbar.addField(combo);
-
     var hostStore = new Ext.data.JsonStore({
         url:'npc.php?module=hosts&action=getHosts&p_id=' + host_object_id,
         autoload:true,
@@ -158,6 +111,7 @@ npc.hostDetail = function(record) {
         fields: [
             'host_name',
             {name: 'host_object_id', type: 'int'},
+            {name: 'local_graph_id', type: 'int'},
             {name: 'current_state', type: 'int'},
             {name: 'problem_has_been_acknowledged', type: 'int'},
             {name: 'notifications_enabled', type: 'int'},
@@ -202,6 +156,37 @@ npc.hostDetail = function(record) {
             text:'Commands',
             iconCls:'cogAdd',
             menu: menu
+        },
+            '-',
+        {
+            text:'View Graph',
+            iconCls:'chartBar',
+            handler: function() {
+                var gid = hostStore.data.items[0].data.local_graph_id;
+                if (gid) {
+                    if (!Ext.getCmp('hostGraph'+gid)) {
+                        var win = new Ext.Window({
+                            title:record.data.host_name,
+                            id:'hostGraph'+gid,
+                            layout:'fit',
+                            modal:false,
+                            closable: true,
+                            html: '<img src="/graph_image.php?action=view&local_graph_id='+gid+'&rra_id=1">',
+                            width:640
+                        }).show();
+                    }
+                } else {
+                    npc.mapGraph('hosts', host_object_id);
+                }
+            }
+        },
+            '-',
+        {
+            text: 'Map Graph',
+            iconCls:'chartBarAdd',
+            handler: function() {
+                npc.mapGraph('hosts', host_object_id);
+            }
         }],
         view: new Ext.grid.GridView({
              forceFit:true,

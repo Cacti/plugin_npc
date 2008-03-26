@@ -178,12 +178,14 @@ class NpcHostsController extends Controller {
                         .'h.alias,'
                         .'s.service_object_id,'
                         .'s.display_name,'
+                        .'g.local_graph_id,'
                         .'hs.*')
                 ->from('NpcHoststatus hs')
                 ->leftJoin('hs.Object o')
                 ->leftJoin('hs.Host h')
                 ->leftJoin('hs.Instance i')
                 ->leftJoin('hs.Services s')
+                ->leftJoin('hs.Graph g')
                 ->where("$where")
                 ->orderby( 'i.instance_name ASC, host_name ASC' ),
             $this->currentPage,
@@ -212,6 +214,52 @@ class NpcHostsController extends Controller {
 
         return($q->execute(array(), Doctrine::FETCH_ARRAY));
     }
+
+    /**
+     * getMappedGraph
+     *
+     * Returns the requested npc_host_graphs record
+     *
+     * @return string   json encoded results
+     */
+    function getMappedGraph() {
+
+        $q = new Doctrine_Query();
+        $q->select('hg.*')
+          ->from('NpcHostGraphs hg')
+          ->where('hg.host_object_id = ?', $this->id);
+
+        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+
+        return($this->jsonOutput($results));
+    }
+
+    /**
+     * setMappedGraph
+     *
+     * Sets the graph mapping
+     *
+     * @return string   json encoded results
+     */
+    function setMappedGraph($params) {
+
+        $table = $this->conn->getTable('NpcHostGraphs');
+
+        $results = $table->findByDql("host_object_id = ?", array($params['object_id']));
+        $graph = $results[0];
+
+        if (!isset($graph->local_graph_id)) {
+            $graph = new NpcServiceGraphs();
+        }
+
+        $graph->host_object_id = $params['object_id'];
+        $graph->local_graph_id = $params['local_graph_id'];
+        $graph->save();
+
+        return(json_encode(array('success' => true)));
+    }
+
+
 
     /**
      * formatStateInfo

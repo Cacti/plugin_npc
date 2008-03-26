@@ -38,7 +38,15 @@ npc.hosts = function(title, filter){
 
     function renderAttempt(val, p, record){
         return String.format('{0}/{1}', val, record.data.max_check_attempts);
-    };
+    }
+
+    function renderGraphIcon(val, p, record){
+        var icon = '';
+        if (val) {
+            icon = '<img src="images/icons/chart_bar.png">';
+        }
+        return String.format('{0}', icon);
+    }
 
     var store = new Ext.data.JsonStore({
         url:url,
@@ -57,6 +65,7 @@ npc.hosts = function(title, filter){
             'max_check_attempts',
             'output',
             'acknowledgement',
+            {name: 'local_graph_id', type: 'int'},
             {name: 'last_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
             {name: 'next_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
             {name: 'last_state_change', type: 'date', dateFormat: 'Y-m-d H:i:s'},
@@ -84,17 +93,22 @@ npc.hosts = function(title, filter){
         dataIndex:'current_state',
         renderer:npc.hostStatusImage,
         align:'center',
-        width:50
+        width:30
+    },{
+        header:"Graph",
+        dataIndex:'local_graph_id',
+        renderer:renderGraphIcon,
+        width:30
     },{
         header:"Last Check",
         dataIndex:'last_check',
         renderer: npc.formatDate,
-        width:110
+        width:100
     },{
         header:"Next Check",
         dataIndex:'next_check',
         renderer: npc.formatDate,
-        width:110
+        width:100
     },{
         header:"Duration",
         dataIndex:'last_state_change',
@@ -105,6 +119,7 @@ npc.hosts = function(title, filter){
         header:"Attempt",
         dataIndex:'current_check_attempt',
         renderer: renderAttempt,
+        hidden:true,
         align:'center',
         width:50
     },{
@@ -184,4 +199,23 @@ npc.hosts = function(title, filter){
 
     // Right click action
     grid.on('rowcontextmenu', npc.hostContextMenu);
+
+    // If the graph icon is clicked popup the associated graph
+    grid.on('cellclick', function(grid, rowIndex, columnIndex) {
+        var record = grid.getStore().getAt(rowIndex);
+        var fieldName = grid.getColumnModel().getDataIndex(columnIndex);
+        var data = record.get(fieldName);
+
+        if (fieldName == 'local_graph_id' && data && !Ext.getCmp('hostGraph'+data)) {
+            var win = new Ext.Window({
+                title:record.data.host_name,
+                id:'hostGraph'+data,
+                layout:'fit',
+                modal:false,
+                closable: true,
+                html: '<img src="/graph_image.php?action=view&local_graph_id='+data+'&rra_id=1">',
+                width:600
+            }).show();
+        }
+    });
 };

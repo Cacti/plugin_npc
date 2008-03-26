@@ -48,10 +48,6 @@ npc.serviceDetail = function(record) {
         return String.format('{0}', state);
     }
 
-    function renderGraph(val, p, r) {
-        return String.format('<img src="/graph_image.php?action=view&local_graph_id={0}&rra_id=1&graph_height=120&graph_width=500">', r.data.local_graph_id);
-    }
-
     function renderAction(v, p, r) {
         return String.format('<img src="images/icons/comment_delete.png">');
     }
@@ -163,6 +159,8 @@ npc.serviceDetail = function(record) {
         fields: [
             'host_name',
             'service_description',
+            'perfdata',
+            {name: 'local_graph_id', type: 'int'},
             {name: 'service_object_id', type: 'int'},
             {name: 'current_state', type: 'int'},
             {name: 'problem_has_been_acknowledged', type: 'int'},
@@ -213,93 +211,45 @@ npc.serviceDetail = function(record) {
         },
             '-',
         {
+            text:'View Graph',
+            iconCls:'chartBar',
+            handler: function() {
+                var gid = serviceStore.data.items[0].data.local_graph_id;
+                if (gid) {
+                    if (!Ext.getCmp('serviceGraph'+gid)) {
+                        var win = new Ext.Window({
+                            title:record.data.host_name + ': ' + record.data.service_description,
+                            id:'serviceGraph'+gid,
+                            layout:'fit',
+                            modal:false,
+                            closable: true,
+                            html: '<img src="/graph_image.php?action=view&local_graph_id='+gid+'&rra_id=1">',
+                            width:640
+                        }).show();
+                    }
+                } else {
+                    npc.mapGraph('services', service_object_id);
+                }
+            }
+        },
+            '-',
+        {
             text: 'Map Graph',
             iconCls:'chartBarAdd',
-            handler : function(){
-                var graphGrid = new Ext.grid.GridPanel({
-                    id: 'graphGrid',
-                    autoHeight:true,
-                    autoWidth:true,
-                    store: new Ext.data.JsonStore({
-                        url: 'npc.php?module=services&action=getMappedGraph&p_id=' + service_object_id,
-                        totalProperty:'totalCount',
-                        root:'data',
-                        fields:[
-                            'local_graph_id'
-                        ],
-                        autoload:true
-                    }),
-                    cm: new Ext.grid.ColumnModel([{
-                        header:"", 
-                        menuDisabled: true,
-                        dataIndex:'graph',
-                        renderer: renderGraph,
-                        width:600
-                    }]),
-                    autoExpandColumn:'Value',
-                    stripeRows: true,
-                    tbar: [
-                        new Ext.form.ComboBox({
-                            store: new Ext.data.JsonStore({
-                                url: 'npc.php?module=cacti&action=getGraphList',
-                                totalProperty:'totalCount',
-                                root:'data',
-                                fields:[
-                                    'local_graph_id',
-                                    'height',
-                                    'width',
-                                    'title'
-                                ],
-                                autoload:true
-                            }),
-                            fieldLabel: 'Graph',
-                            displayField:'title',
-                            valueField:'local_graph_id',
-                            typeAhead: false,
-                            forceSelection:true,
-                            editable:false,
-                            mode: 'remote',
-                            listeners: {
-                                select: function(o, n, rowIndex) {
-                                   var local_graph_id = o.store.getAt(rowIndex).data.local_graph_id;
-                                   var args = {
-                                        module: 'services',
-                                        action: 'setMappedGraph',
-                                        p_service_object_id: service_object_id,
-                                        p_local_graph_id: local_graph_id
-                                    };
-                                    npc.aPost(args);
-                                    graphGrid.store.reload();
-                                }
-                            },
-                            triggerAction: 'all',
-                            emptyText:'Select a graph...',
-                            selectOnFocus:true,
-                            listWidth:400,
-                            width:400,
-                        })
-                    ],
-                    view: new Ext.grid.GridView({
-                        forceFit:true,
-                        autoFill:true,
-                        scrollOffset:0
-                    })
-                });
-
-                var win = new Ext.Window({ 
-                    title:'Map Graph',
-                    layout:'fit',
-                    modal:true,
-                    closable: true,
-                    width:700, 
-                    height:500, 
-                    bodyStyle:'padding:5px;',
-                    items: graphGrid
-                });
-
-                win.show();
-                graphGrid.render()
-                graphGrid.store.load();
+            handler: function() {
+                npc.mapGraph('services', service_object_id);
+            }
+        },
+            '-',
+        {
+            text: 'Data Input Method',
+            iconCls:'scriptAdd',
+            handler: function() {
+                console.log(serviceStore.data.items[0].data);
+                var perfdata = serviceStore.data.items[0].data.perfdata;
+                if (perfdata == '') {
+                    Ext.Msg.alert('Alert', 'This service does not have any associated performance data.');
+                }
             }
         }],
         view: new Ext.grid.GridView({
@@ -679,4 +629,5 @@ npc.serviceDetail = function(record) {
     serviceStore.on('load', function() {
         npc.serviceCommandMenu(serviceStore.data.items[0].data, menu);
     });
+
 };

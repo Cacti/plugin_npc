@@ -1303,6 +1303,16 @@ function npc_setup_table () {
                   ) ENGINE=InnoDB;";
     }
 
+    if (!in_array('npc_host_graphs', $tables)) {
+        $sql[] = "CREATE TABLE `npc_host_graphs` (
+                    `host_graph_id` int(11) NOT NULL auto_increment,
+                    `host_object_id` int(11) NOT NULL,
+                    `local_graph_id` mediumint(8) unsigned NOT NULL,
+                    `pri` tinyint(1) default 1,
+                    PRIMARY KEY  (`host_graph_id`)
+                  ) ENGINE=InnoDB;";
+    }
+
     if (!in_array('npc_settings', $tables)) {
         $sql[] = "CREATE TABLE `npc_settings` (
                     `user_id` mediumint(8) unsigned NOT NULL,

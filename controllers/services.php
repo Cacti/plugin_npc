@@ -266,14 +266,14 @@ class NpcServicesController extends Controller {
 
         $table = $this->conn->getTable('NpcServiceGraphs');
 
-        $results = $table->findByDql("service_object_id = ?", array($params['service_object_id']));
+        $results = $table->findByDql("service_object_id = ?", array($params['object_id']));
         $graph = $results[0];
 
         if (!isset($graph->local_graph_id)) {
             $graph = new NpcServiceGraphs();
         }
 
-        $graph->service_object_id = $params['service_object_id'];
+        $graph->service_object_id = $params['object_id'];
         $graph->local_graph_id = $params['local_graph_id'];
         $graph->save();
 

@@ -22,8 +22,16 @@ background-image:url(../images/icons/add.png) !important;
 background-image:url(../images/icons/cog_add.png) !important;
 }
 
+.chartBar {
+background-image:url(../images/icons/chart_bar.png) !important;
+}
+
 .chartBarAdd {
 background-image:url(../images/icons/chart_bar_add.png) !important;
+}
+
+.scriptAdd {
+background-image:url(../images/icons/script_add.png) !important;
 }
 
 .commentAdd {

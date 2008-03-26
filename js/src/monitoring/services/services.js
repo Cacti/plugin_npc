@@ -38,16 +38,15 @@ npc.services = function(title, filter){
 
     function renderAttempt(val, p, record){
         return String.format('{0}/{1}', val, record.data.max_check_attempts);
-    };
+    }
 
     function renderGraphIcon(val, p, record){
         var icon = '';
         if (val) {
-            // <img id="graph'+val+'" src="/graph_image.php?action=view&local_graph_id='+val+'&rra_id=1" style="position:absolute;left:0;top:0;"/>
             icon = '<img src="images/icons/chart_bar.png">';
         }
         return String.format('{0}', icon);
-    };
+    }
 
     var store = new Ext.data.GroupingStore({
         url:url,
@@ -210,7 +209,7 @@ npc.services = function(title, filter){
         var fieldName = grid.getColumnModel().getDataIndex(columnIndex);
         var data = record.get(fieldName);
 
-        if (fieldName == 'local_graph_id' && !Ext.getCmp('serviceGraph'+data)) {
+        if (fieldName == 'local_graph_id' && data && !Ext.getCmp('serviceGraph'+data)) {
             var win = new Ext.Window({
                 title:record.data.host_name + ': ' + record.data.service_description,
                 id:'serviceGraph'+data,
