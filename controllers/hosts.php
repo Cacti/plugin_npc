@@ -77,6 +77,7 @@ class NpcHostsController extends Controller {
         $fields = array(
             'current_state',
             'output',
+            'perfdata',
             'last_state_change',
             'check_command',
             'current_check_attempt',

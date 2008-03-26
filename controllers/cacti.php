@@ -66,8 +66,16 @@ class NpcCactiController extends Controller {
      */
     function addDataInputMethod($params) {
 
-        $type = mysql_real_escape_string($params['type']);
-        $name = 'NPC - Perfdata - ' . mysql_real_escape_string($params['host']) . ': ' . mysql_real_escape_string($params['service']);
+        $name = 'NPC - Perfdata - ' . mysql_real_escape_string($params['host']);
+
+        if (isset($params['service'])) {
+            $type = 'service';
+            $class = 'NpcServicesController';
+            $name .= ': ' . mysql_real_escape_string($params['service']);
+        } else {
+            $type = 'host';
+            $class = 'NpcHostsController';
+        }
 
         $object_id = mysql_real_escape_string($params['object_id']);
 
@@ -78,12 +86,6 @@ class NpcCactiController extends Controller {
         db_execute($sql);
         $data_input_id = db_fetch_insert_id();
 
-        if ($type == 'host') {
-            $class = 'NpcHostsController';
-        } else {
-            $class = 'NpcServicesController';
-        }
-
         $obj = new $class;
         $results = $obj->getPerfData($object_id);
 
@@ -92,12 +94,12 @@ class NpcCactiController extends Controller {
         foreach ($perfParts as $perf) {
             if (preg_match("/=/", $perf)) {
                 $ds = explode("=", $perf);
-                $sql = sprintf("INSERT INTO data_input_fields (hash, data_input_id, name, data_name, input_output, update_rra, sequence) VALUES ('%s', %d, '%s', '%s', 'out', 'on', 0)", 
-                       $this->generateHash(), $data_input_id, $ds[0], $ds[0]);
+                $sql = sprintf("INSERT INTO data_input_fields (hash, data_input_id, name, data_name, input_output, update_rra, sequence) VALUES ('%s', %d, '%s', '%s', 'out', 'on', 0)", $this->generateHash(), $data_input_id, $ds[0], $ds[0]);
                 db_execute($sql);
             }
         }
 
+        return(json_encode(array('success' => true)));
     }
 
     /**

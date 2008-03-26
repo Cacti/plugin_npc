@@ -239,18 +239,6 @@ npc.serviceDetail = function(record) {
             handler: function() {
                 npc.mapGraph('services', service_object_id);
             }
-        },
-            '-',
-        {
-            text: 'Data Input Method',
-            iconCls:'scriptAdd',
-            handler: function() {
-                console.log(serviceStore.data.items[0].data);
-                var perfdata = serviceStore.data.items[0].data.perfdata;
-                if (perfdata == '') {
-                    Ext.Msg.alert('Alert', 'This service does not have any associated performance data.');
-                }
-            }
         }],
         view: new Ext.grid.GridView({
              forceFit:true,
@@ -628,6 +616,38 @@ npc.serviceDetail = function(record) {
 
     serviceStore.on('load', function() {
         npc.serviceCommandMenu(serviceStore.data.items[0].data, menu);
+        
+        if (!Ext.getCmp('dimb'+service_object_id)) {
+            var perfdata = serviceStore.data.items[0].data.perfdata;
+            if (perfdata != '') {
+                siGrid.getTopToolbar().add('-', {
+                    text: 'Data Input Method',
+                    id:'dimb'+service_object_id,
+                    iconCls:'scriptAdd',
+                    handler: function() {
+                        Ext.Msg.show({
+                            title:'Create Data Input Method',
+                            msg: 'Are you sure you want to create a data input method for this service?',
+                            buttons: Ext.Msg.YESNO,
+                            fn: function(btn) {
+                                if (btn == 'yes') {
+                                    var args = {
+                                        module: 'cacti',
+                                        action: 'addDataInputMethod',
+                                        p_host: record.data.host_name,
+                                        p_service: record.data.service_description,
+                                        p_object_id: service_object_id
+                                    };
+                                    npc.aPost(args);
+                                }
+                            },
+                            animEl: 'elId',
+                            icon: Ext.MessageBox.QUESTION
+                        });
+                    }
+                });
+            }
+        }
     });
 
 };

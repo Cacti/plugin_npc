@@ -103,6 +103,58 @@ npc.hostDetail = function(record) {
         tab = Ext.getCmp(id);
     }
 
+    function toggleEnabled(v, toggle) {
+
+        var cmd;
+        var msg;
+        var m;
+
+        switch(v) {
+            case 'Active Checks Enabled':
+                m = ' active checks for this host?';
+                cmd = '_HOST_CHECK';
+                break;
+            case 'Passive Checks Enabled':
+                m = ' passive checks for this host?';
+                cmd = '_PASSIVE_HOST_CHECKS';
+                break;
+            case 'Event Handler Enabled':
+                m = ' event handler for this host?';
+                cmd = '_HOST_EVENT_HANDLER';
+                break;
+            case 'Flap Detection Enabled':
+                m = ' flap detection for this host?';
+                cmd = '_HOST_FLAP_DETECTION';
+                break;
+            case 'Notifications Enabled':
+                m = ' notifications for this host?';
+                cmd = '_HOST_NOTIFICATIONS';
+                break;
+            case 'Obsess Over Host':
+                var c = 'Stop';
+                if (toggle == 'Enable') {
+                    c = 'Start';
+                }
+                msg = c + ' obsessing over this host?';
+                cmd = c.toUpperCase() + '_OBSESSING_OVER_HOST';
+                break;
+        }
+
+        if (v.match('Enabled')) {
+            cmd = toggle.toUpperCase() + cmd;
+            msg = toggle + m;
+        }
+
+        var post = {
+            module: 'nagios',
+            action: 'command',
+            p_command: cmd,
+            p_host_name: record.data.host_name
+        };
+
+        npc.doCommand(msg, post);
+    }
+
     var hostStore = new Ext.data.JsonStore({
         url:'npc.php?module=hosts&action=getHosts&p_id=' + host_object_id,
         autoload:true,
@@ -110,6 +162,7 @@ npc.hostDetail = function(record) {
         root:'data',
         fields: [
             'host_name',
+            'perfdata',
             {name: 'host_object_id', type: 'int'},
             {name: 'local_graph_id', type: 'int'},
             {name: 'current_state', type: 'int'},
@@ -193,6 +246,23 @@ npc.hostDetail = function(record) {
              autoFill:true,
              scrollOffset:0
         })
+    });
+
+    // Add some action handlers to the SSI grid
+    hiGrid.on('rowdblclick', function(grid, row) {
+        var n = grid.getStore().getAt(row).data.name;
+        var v = grid.getStore().getAt(row).data.value;
+        var toggle = false;
+
+        if (v.match('tick.png')) {
+            toggle = 'Disable';
+        } else if (v.match('cross.png')) {
+            toggle = 'Enable';
+        }
+
+        if (toggle) {
+            toggleEnabled(n, toggle);
+        }
     });
 
     var hnStore = new Ext.data.JsonStore({
@@ -546,5 +616,36 @@ npc.hostDetail = function(record) {
 
     hostStore.on('load', function() {
         npc.hostCommandMenu(hostStore.data.items[0].data, menu);
+
+        if (!Ext.getCmp('dimb'+host_object_id)) {
+            var perfdata = hostStore.data.items[0].data.perfdata;
+            if (perfdata != '') {
+                hiGrid.getTopToolbar().add('-', {
+                    text: 'Data Input Method',
+                    id:'dimb'+host_object_id,
+                    iconCls:'scriptAdd',
+                    handler: function() {
+                        Ext.Msg.show({
+                            title:'Create Data Input Method',
+                            msg: 'Are you sure you want to create a data input method for this host?',
+                            buttons: Ext.Msg.YESNO,
+                            fn: function(btn) {
+                                if (btn == 'yes') {
+                                    var args = {
+                                        module: 'cacti',
+                                        action: 'addDataInputMethod',
+                                        p_host: record.data.host_name,
+                                        p_object_id: host_object_id
+                                    };
+                                    npc.aPost(args);
+                                }
+                            },
+                            animEl: 'elId',
+                            icon: Ext.MessageBox.QUESTION
+                        });
+                    }
+                });
+            }
+        }
     });
 };
