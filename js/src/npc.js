@@ -393,7 +393,7 @@ npc = function() {
                         emptyText:'Select a graph...',
                         selectOnFocus:true,
                         listWidth:400,
-                        width:400,
+                        width:400
                     })
                 ],
                 view: new Ext.grid.GridView({
@@ -487,20 +487,29 @@ npc = function() {
             var tab = Ext.getCmp(id);
             if (tab)  {
                 tabPanel.setActiveTab(tab);
+                tabPanel.doLayout();
             } else {
                 tabPanel.add({
                     id: id, 
                     title: title,
                     closable: true,
+                    deferredRender:false,
+                    layoutOnTabChange:true,
                     autoScroll: true,
                     layout:'fit',
                     containerScroll: true,
+                    listeners: {
+                        activate: function(tab) {
+                            tab.doLayout();
+                        }
+                    },
                     items: [
                         new Ext.TabPanel({
                             id: id + '-inner-panel',
                             style:'padding:5px 0 5px 5px',
                             deferredRender:false,
-                            autoHeight:true,
+                            layoutOnTabChange:true,
+                            height:600,
                             autoWidth:true,
                             plain:true,
                             defaults:{autoScroll: true}

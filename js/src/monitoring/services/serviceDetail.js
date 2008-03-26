@@ -108,12 +108,15 @@ npc.serviceDetail = function(record) {
     // If the tab exists set it active and return or else create it.
     if (tab)  { 
         innerTabPanel.setActiveTab(tab);
+        innerTabPanel.doLayout();
         return; 
     } else {
         innerTabPanel.add({
             id: id, 
             title: title,
             autoHeight:true,
+            deferredRender:false,
+            layoutOnTabChange:true,
             closable: true,
             autoScroll: true,
             containerScroll: true,
@@ -121,11 +124,12 @@ npc.serviceDetail = function(record) {
                 new Ext.TabPanel({
                     style:'padding:5px 0 5px 5px',
                     activeTab: 0,
-                    autoHeight:true,
+                    height:600,
                     autoWidth:true,
                     plain:true,
+                    border:false,
                     deferredRender:false,
-                    defaults:{autoScroll: true},
+                    layoutOnTabChange:true,
                     items:[{
                         title: 'Service State Information',
                         id: id + '-si'

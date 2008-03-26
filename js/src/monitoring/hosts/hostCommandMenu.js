@@ -119,7 +119,7 @@ npc.hostCommandMenu = function(host, menu) {
     });
 
     if (host.current_state == 1) {
-        item = menu.add({
+        menu.add({
             text: font + 'Delay next notification</b>',
             handler: function() {
                 npc.delayNextNotification('host', host.host_name);

@@ -667,7 +667,7 @@ npc.scheduleDowntime = function(type, host, service) {
             },{
                 name: 'p_end_time',
                 value: endEpoch,
-                xtype: 'hidden',
+                xtype: 'hidden'
             },{
                 fieldLabel: 'Start Time',
                 name: 'p_stime',

@@ -23,12 +23,14 @@ npc.services = function(title, filter){
 
     if (tab) {
         innerTabPanel.setActiveTab(tab);
+        innerTabPanel.doLayout();
         return;
     } else {
         innerTabPanel.add({ 
             id: id, 
             title: title, 
             deferredRender:false,
+            layoutOnTabChange:true,
             closable: true, 
             items: [{}] 
         }).show(); 
@@ -149,6 +151,7 @@ npc.services = function(title, filter){
             hideGroupedColumn: true,
             enableGroupingMenu: false,
             enableNoGroups: true,
+            scrollOffset:0,
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Services" : "Service"]})' 
         }),
         bbar: new Ext.PagingToolbar({

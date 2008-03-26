@@ -90,7 +90,7 @@ Ext.extend(Ext.state.HttpProvider, Ext.state.Provider, {
         var conn = new Ext.data.Connection();
         conn.request({
             url: this.url,
-            params: {task: 'set', 'p_name': name, 'p_value': this.encodeValue(value) },
+            params: {task: 'set', 'p_name': name, 'p_value': this.encodeValue(value) }
         });
 
     },
@@ -100,7 +100,7 @@ Ext.extend(Ext.state.HttpProvider, Ext.state.Provider, {
         var conn = new Ext.data.Connection();
         conn.request({
             url: this.url,
-            params: {task: 'set', 'name': name, 'value': 'null' },
+            params: {task: 'set', 'name': name, 'value': 'null' }
         });
     }
 });

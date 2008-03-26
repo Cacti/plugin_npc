@@ -73,7 +73,7 @@ npc.hostDetail = function(record) {
                 new Ext.TabPanel({
                     style:'padding:10px 0 10px 10px',
                     activeTab: 0,
-                    autoHeight:true,
+                    height:600,
                     autoWidth:true,
                     plain:true,
                     deferredRender:false,
