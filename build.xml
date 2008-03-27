@@ -17,9 +17,19 @@
       nocache="true"
       repositoryurl="${repo}"
       todir="${src.dir}"/>
+
+    <svnupdate
+      svnpath="/usr/bin/svn"
+      nocache="true"
+      todir="${base.dir}/trunk"/>
+
+    <svnlastrevision
+      svnpath="/usr/bin/svn"
+      workingcopy="${base.dir}/trunk"
+      propertyname="svn.lastrevision"/>
   </target>
 
-  <target name="js.concat">
+  <target name="js.concat" depends="svnexport">
     <concat destfile="${tmp.dir}/npc-all.js">
         <fileset dir="${build.dir}" >
             <include name="plugins/*.js" />
@@ -54,8 +64,8 @@
   </target>
 
   <target name="zip" depends="js.minify">
-    <zip destfile="${base.dir}/npc-2.0.0.xxxx.zip" basedir="${build.dir}"/>
-    <tar destfile="${base.dir}/npc-2.0.0.xxxx.tar.gz" basedir="${build.dir}" compression="gzip"/>
+    <zip destfile="${base.dir}/npc-2.0.0a.${svn.lastrevision}.zip" basedir="${build.dir}"/>
+    <tar destfile="${base.dir}/npc-2.0.0a.${svn.lastrevision}.tar.gz" basedir="${build.dir}" compression="gzip"/>
     <delete dir="${src.dir}" />
   </target>
 
