@@ -195,9 +195,6 @@ function npc_setup_table () {
         // Add some default values
         $sql[] = "INSERT INTO settings VALUES ('npc_date_format','Y-m-d');";
         $sql[] = "INSERT INTO settings VALUES ('npc_time_format','H:i');";
-        $sql[] = "INSERT INTO settings VALUES ('npc_portlet_refresh',60);";
-        $sql[] = "INSERT INTO settings VALUES ('npc_portlet_rows',10);";
-
     }
 
     if (!in_array('npc_commands', $tables)) {
