@@ -79,7 +79,7 @@ class NpcCactiController extends Controller {
 
         $object_id = mysql_real_escape_string($params['object_id']);
 
-        $input = 'php <path_cacti>/plugins/npc/perfdata.php --type=' . $type . ' --id=' . $object_id;
+        $input = "php <path_cacti>/plugins/npc/perfdata.php --type=$type --id=$object_id 2> /dev/null";
 
         $sql = sprintf("INSERT INTO data_input (hash, name, input_string, type_id) VALUES ('%s', '%s', '%s', 1)", $this->generateHash(), $name, $input);
 
