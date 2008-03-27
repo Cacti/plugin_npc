@@ -127,6 +127,7 @@ npc.hostgroupOverview = function(){
             hideGroupedColumn: true,
             enableGroupingMenu: false,
             enableNoGroups: true,
+            emptyText:'No hostgroups.',
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Hosts" : "Host"]})',
             scrollOffset:0
         }),

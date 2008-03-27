@@ -83,6 +83,7 @@ npc.n2c = function() {
         clicksToEdit:1,
         view: new Ext.grid.GridView({
             forceFit:true,
+            emptyText:'No hosts.',
             autoFill:true
         }),
         tbar:[{

@@ -152,6 +152,7 @@ npc.services = function(title, filter){
             enableGroupingMenu: false,
             enableNoGroups: true,
             scrollOffset:0,
+            emptyText:'No services.',
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Services" : "Service"]})' 
         }),
         bbar: new Ext.PagingToolbar({

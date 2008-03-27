@@ -105,6 +105,7 @@ npc.hostgroupGrid = function(id, title, hoi){
             enableGroupingMenu: false,
             enableNoGroups: true,
             scrollOffset:0,
+            emptyText:'No hostgroups.',
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Hosts" : "Host"]})' 
         }),
         bbar: new Ext.PagingToolbar({

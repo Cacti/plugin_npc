@@ -118,6 +118,7 @@ npc.servicegroupGrid = function(id, title, soi){
             enableGroupingMenu: false,
             enableNoGroups: true,
             scrollOffset:0,
+            emptyText:'No servicegroups.',
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Services" : "Service"]})' 
         }),
         bbar: new Ext.PagingToolbar({

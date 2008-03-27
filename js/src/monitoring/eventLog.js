@@ -55,9 +55,10 @@ npc.eventLog = function(){
         autoExpandColumn:'logentry_data',
         stripeRows: true,
         view: new Ext.grid.GridView({
-             forceFit:true,
-             autoFill:true,
-             scrollOffset:0
+            forceFit:true,
+            autoFill:true,
+            emptyText:'No events.',
+            scrollOffset:0
         }),
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,

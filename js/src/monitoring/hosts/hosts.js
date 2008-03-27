@@ -144,9 +144,10 @@ npc.hosts = function(title, filter){
         sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
         stripeRows: true,
         view: new Ext.grid.GridView({
-             forceFit:true,
-             autoFill:true,
-             scrollOffset:0
+            forceFit:true,
+            autoFill:true,
+            emptyText:'No hosts.',
+            scrollOffset:0
         }),
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,
