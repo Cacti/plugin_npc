@@ -2,75 +2,78 @@
 <project name="npc" description="NPC build file" default="main" >
 
   <property name="base.dir"  value="/home/bgunn/workspace/npc" />
-  <property name="build.dir"  value="/home/bgunn/workspace/npc/build" />
-  <property name="src.dir"  value="/home/bgunn/workspace/npc/build/npc" />
+  <property name="build.dir"  value="/home/bgunn/workspace/npc/build/npc" />
+  <property name="src.dir"  value="/home/bgunn/workspace/npc/trunk" />
+  <property name="js.src.dir"  value="/home/bgunn/workspace/npc/build/npc/js/src" />
   <property name="tmp.dir"  value="/tmp" />
   <property name="svnpath" value="/usr/bin/svn" />
   <property name="repo" value="http://svn2.assembla.com/svn/npc/trunk" />
   <property name="yuicompressor"  value="/home/bgunn/workspace/yuicompressor-2.3.4.jar" />
 
-  <target name="main" depends="production"/>
+  <target name="main" depends="package"/>
 
-  <target name="svnexport">
-    <svnexport
-      svnpath="${svnpath}"
-      nocache="true"
-      repositoryurl="${repo}"
-      todir="${src.dir}"/>
-
+  <target name="src.update">
     <svnupdate
       svnpath="/usr/bin/svn"
       nocache="true"
-      todir="${base.dir}/trunk"/>
+      todir="${src.dir}"/>
 
     <svnlastrevision
       svnpath="/usr/bin/svn"
-      workingcopy="${base.dir}/trunk"
+      workingcopy="${src.dir}"
       propertyname="svn.lastrevision"/>
   </target>
 
-  <target name="js.concat" depends="svnexport">
+  <target name="src.copy" depends="src.update">
+    <copy todir="${build.dir}" >
+      <fileset dir="${src.dir}">
+        <include name="**" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="js.concat" depends="src.copy">
     <concat destfile="${tmp.dir}/npc-all.js">
-        <fileset dir="${build.dir}" >
+        <fileset dir="${js.src.dir}" >
             <include name="plugins/*.js" />
         </fileset>
-        <fileset dir="${build.dir}" >
+        <fileset dir="${js.src.dir}" >
             <include name="overrides/*.js" />
         </fileset>
-        <fileset dir="${build.dir}" >
+        <fileset dir="${js.src.dir}" >
             <include name="Portal.js" />
             <include name="PortalColumn.js" />
             <include name="Portlet.js" />
             <include name="npc.js" />
         </fileset>
-        <fileset dir="${build.dir}" >
+        <fileset dir="${js.src.dir}" >
             <include name="monitoring/*.js" />
             <include name="monitoring/services/*.js" />
             <include name="monitoring/hosts/*.js" />
         </fileset>
     </concat>
     <concat destfile="${tmp.dir}/portlets-all.js">
-        <fileset dir="${build.dir}" >
+        <fileset dir="${js.src.dir}" >
             <include name="portlets/*.js" />
         </fileset>
     </concat>
   </target>
 
   <target name="js.minify" depends="js.concat">
-    <exec command="java -jar ${yuicompressor} --type js -o ${src.dir}/js/npc-all-min.js ${tmp.dir}/npc-all.js" />
-    <exec command="java -jar ${yuicompressor} --type js -o ${src.dir}/js/portlets-all-min.js ${tmp.dir}/portlets-all.js" />
+    <exec command="java -jar ${yuicompressor} --type js -o ${build.dir}/js/npc-all-min.js ${tmp.dir}/npc-all.js" />
+    <exec command="java -jar ${yuicompressor} --type js -o ${build.dir}/js/portlets-all-min.js ${tmp.dir}/portlets-all.js" />
     <delete file="${tmp.dir}/npc-all.js" />
     <delete file="${tmp.dir}/portlets-all.js" />
   </target>
 
-  <target name="zip" depends="js.minify">
-    <zip destfile="${base.dir}/npc-2.0.0a.${svn.lastrevision}.zip" basedir="${build.dir}"/>
-    <tar destfile="${base.dir}/npc-2.0.0a.${svn.lastrevision}.tar.gz" basedir="${build.dir}" compression="gzip"/>
-    <delete dir="${src.dir}" />
+  <target name="prod" depends="js.minify">
+    <exec command="perl -i -p -e 's/layoutDev/layout/ig' ${build.dir}/npc.php" />
   </target>
 
-  <target name="production" depends="zip">
-    <exec command="perl -i -p -e 's/layoutDev/layout/ig' ${src.dir}/npc.php" />
+  <target name="package" depends="prod">
+    <zip destfile="${base.dir}/npc-2.0.0a.${svn.lastrevision}.zip" basedir="${base.dir}/build"/>
+    <tar destfile="${base.dir}/npc-2.0.0a.${svn.lastrevision}.tar.gz" basedir="${base.dir}/build" compression="gzip"/>
+    <delete dir="${build.dir}" />
   </target>
 
 </project>
