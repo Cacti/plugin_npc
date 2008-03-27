@@ -33,12 +33,12 @@ function plugin_init_npc() {
 
 function npc_version () {
     return array(   'name'          => 'npc',
-                    'version'       => '0.2.0',
+                    'version'       => '2.0.0a',
                     'longname'      => 'Nagios plugin for Cacti',
                     'author'        => 'Billy Gunn',
-                    'homepage'      => 'http://cactiusers.org',
+                    'homepage'      => 'http://trac2.assembla.com/npc',
                     'email'         => 'billy@gunn.org',
-                    'url'           => 'http://cactiusers.org/cacti/versions.php'
+                    'url'           => 'http://trac2.assembla.com/npc'
     );
 }
 
@@ -195,8 +195,6 @@ function npc_setup_table () {
         // Add some default values
         $sql[] = "INSERT INTO settings VALUES ('npc_date_format','Y-m-d');";
         $sql[] = "INSERT INTO settings VALUES ('npc_time_format','H:i');";
-        $sql[] = "INSERT INTO settings VALUES ('npc_eventlog_portlet','on');";
-        $sql[] = "INSERT INTO settings VALUES ('npc_host_summary_portlet','on');";
         $sql[] = "INSERT INTO settings VALUES ('npc_portlet_refresh',60);";
         $sql[] = "INSERT INTO settings VALUES ('npc_portlet_rows',10);";
 

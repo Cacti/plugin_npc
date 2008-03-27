@@ -13,7 +13,7 @@ npc.portlet.serviceProblems = function(){
     var column = 'dashcol2';
 
     // Default # of events to display
-    var pageSize = parseInt(npc.params.npc_portlet_rows);
+    var pageSize = 10;
 
     var store = new Ext.data.GroupingStore({
         url:url,
