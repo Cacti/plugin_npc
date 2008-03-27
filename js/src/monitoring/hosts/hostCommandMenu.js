@@ -178,4 +178,4 @@ npc.hostCommandMenu = function(host, menu) {
     });
 
     return(menu);
-}
+};

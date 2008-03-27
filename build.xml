@@ -9,7 +9,7 @@
   <property name="repo" value="http://svn2.assembla.com/svn/npc/trunk" />
   <property name="yuicompressor"  value="/home/bgunn/workspace/yuicompressor-2.3.4.jar" />
 
-  <target name="main" depends="zip"/>
+  <target name="main" depends="production"/>
 
   <target name="svnexport">
     <svnexport
@@ -19,21 +19,34 @@
       todir="${src.dir}"/>
   </target>
 
-  <target name="js.prepare" depends="svnexport">
-
+  <target name="js.concat">
     <concat destfile="${tmp.dir}/npc-all.js">
-        <filelist dir="${src.dir}/js/src/" files="plugins.js,overrides.js,Portal.js,PortalColumn.js,Portlet.js,npc.js,n2c.js,hosts.js,hostDetail.js,hostgroupGrid.js,hostgroupOverview.js,services.js,serviceDetail.js,servicegroupGrid.js,servicegroupOverview.js,comments.js,downtime.js,processInfo.js,reporting.js,eventLog.js"/>
+        <fileset dir="${build.dir}" >
+            <include name="plugins/*.js" />
+        </fileset>
+        <fileset dir="${build.dir}" >
+            <include name="overrides/*.js" />
+        </fileset>
+        <fileset dir="${build.dir}" >
+            <include name="Portal.js" />
+            <include name="PortalColumn.js" />
+            <include name="Portlet.js" />
+            <include name="npc.js" />
+        </fileset>
+        <fileset dir="${build.dir}" >
+            <include name="monitoring/*.js" />
+            <include name="monitoring/services/*.js" />
+            <include name="monitoring/hosts/*.js" />
+        </fileset>
     </concat>
-
     <concat destfile="${tmp.dir}/portlets-all.js">
-        <filelist dir="${src.dir}/js/src/" files="host-problems-portlet.js,host-summary-portlet.js,service-summary-portlet.js,eventlog-portlet.js,service-problems-portlet.js,monitoring-performance-portlet.js,servicegroup-service-status-portlet.js,servicegroup-host-status-portlet.js,hostgroup-host-status-portlet.js,hostgroup-service-status-portlet.js"/>
+        <fileset dir="${build.dir}" >
+            <include name="portlets/*.js" />
+        </fileset>
     </concat>
-
-    <exec command="perl -i -p -e 's/layoutDev/layout/ig' ${src.dir}/npc.php" />
-
   </target>
 
-  <target name="js.minify" depends="js.prepare">
+  <target name="js.minify" depends="js.concat">
     <exec command="java -jar ${yuicompressor} --type js -o ${src.dir}/js/npc-all-min.js ${tmp.dir}/npc-all.js" />
     <exec command="java -jar ${yuicompressor} --type js -o ${src.dir}/js/portlets-all-min.js ${tmp.dir}/portlets-all.js" />
     <delete file="${tmp.dir}/npc-all.js" />
@@ -44,6 +57,10 @@
     <zip destfile="${base.dir}/npc-2.0.0.xxxx.zip" basedir="${build.dir}"/>
     <tar destfile="${base.dir}/npc-2.0.0.xxxx.tar.gz" basedir="${build.dir}" compression="gzip"/>
     <delete dir="${src.dir}" />
+  </target>
+
+  <target name="production" depends="zip">
+    <exec command="perl -i -p -e 's/layoutDev/layout/ig' ${src.dir}/npc.php" />
   </target>
 
 </project>

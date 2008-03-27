@@ -22,7 +22,7 @@ Ext.menu.Menu.prototype.load = function( options ){
     }, this);
     
     conn.request( options );
-}
+};
 
 // Property grid enhancement
 Ext.grid.PropertyStore.prototype.setSource = function(o){
@@ -51,7 +51,7 @@ Ext.grid.PropertyStore.prototype.setSource = function(o){
         }
     }
     this.store.loadRecords({records: data}, {}, true);
-}
+};
 
 Ext.grid.PropertyColumnModel.prototype.renderCell = function(val, p, record, rowIndex, colIndex, ds){ 
     var rv = val; 

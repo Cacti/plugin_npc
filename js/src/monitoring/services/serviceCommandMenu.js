@@ -142,4 +142,3 @@ npc.serviceCommandMenu = function(service, menu) {
 
     return(menu);
 };
-

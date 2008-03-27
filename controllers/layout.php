@@ -62,7 +62,6 @@ class NpcLayoutController {
             Ext.onReady(npc.init, npc);
 
             Ext.onReady(function() {
-                //Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
                 Ext.state.Manager.setProvider(new Ext.state.HttpProvider({url: 'npc.php?module=settings&action=save'}));
                 Ext.QuickTips.init();
             });
@@ -73,7 +72,6 @@ class NpcLayoutController {
 
           <script type="text/javascript">
             Ext.onReady(function() {
-              //console.log(Ext.state.Manager.get('serviceProblems'));
               npc.initPortlets();
             });
           </script>

@@ -112,4 +112,4 @@ npc.eventLog = function(){
     // Add the listener to the tab
     tab.addListener(listeners);
 
-}
+};

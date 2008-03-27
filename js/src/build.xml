@@ -7,18 +7,34 @@
 
   <target name="main" depends="js.minify"/>
 
-  <target name="js.prepare">
-
+  <target name="js.concat">
     <concat destfile="${tmp.dir}/npc-all.js">
-        <filelist dir="${build.dir}" files="plugins.js,overrides.js,Portal.js,PortalColumn.js,Portlet.js,npc.js,n2c.js,hosts.js,hostDetail.js,hostgroupGrid.js,hostgroupOverview.js,services.js,serviceDetail.js,servicegroupGrid.js,servicegroupOverview.js,comments.js,downtime.js,processInfo.js,reporting.js,eventLog.js"/>
+        <fileset dir="${build.dir}" >
+            <include name="plugins/*.js" />
+        </fileset>
+        <fileset dir="${build.dir}" >
+            <include name="overrides/*.js" />
+        </fileset>
+        <fileset dir="${build.dir}" >
+            <include name="Portal.js" />
+            <include name="PortalColumn.js" />
+            <include name="Portlet.js" />
+            <include name="npc.js" />
+        </fileset>
+        <fileset dir="${build.dir}" >
+            <include name="monitoring/*.js" />
+            <include name="monitoring/services/*.js" />
+            <include name="monitoring/hosts/*.js" />
+        </fileset>
     </concat>
     <concat destfile="${tmp.dir}/portlets-all.js">
-        <filelist dir="${build.dir}" files="host-problems-portlet.js,host-summary-portlet.js,service-summary-portlet.js,eventlog-portlet.js,service-problems-portlet.js,monitoring-performance-portlet.js,servicegroup-service-status-portlet.js,servicegroup-host-status-portlet.js,hostgroup-host-status-portlet.js,hostgroup-service-status-portlet.js"/>
+        <fileset dir="${build.dir}" >
+            <include name="portlets/*.js" />
+        </fileset>
     </concat>
-
   </target>
 
-  <target name="js.minify" depends="js.prepare">
+  <target name="js.minify" depends="js.concat">
     <exec command="java -jar ${yuicompressor} --type js -o ../npc-all-min.js ${tmp.dir}/npc-all.js" />
     <exec command="java -jar ${yuicompressor} --type js -o ../portlets-all-min.js ${tmp.dir}/portlets-all.js" />
     <delete file="${tmp.dir}/npc-all.js" />

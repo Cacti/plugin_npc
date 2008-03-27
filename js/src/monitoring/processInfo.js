@@ -180,4 +180,4 @@ npc.processInfo = function(){
     }
 
 
-}
+};
