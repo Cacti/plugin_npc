@@ -148,10 +148,6 @@ npc.n2c = function() {
 
     function doImport(nodes) {
         
-        if (!nodes.length){
-            return(Ext.Msg.alert('Error', 'There are no hosts available for import in the selected hostgroup.'));
-        }
-
         upBar = Ext.MessageBox.progress('Import Progress');
         results = [];
 
@@ -296,12 +292,19 @@ npc.n2c = function() {
                 action : 'getHosts',
                 p_data : data
             },
-            success: function (response) {
-                doImport(Ext.util.JSON.decode(response.responseText));
-            },
-            failure: function (response) { 
-                alert('Import failed.'); 
-            } 
+            callback: function (o, s, r) {
+                var response = Ext.util.JSON.decode(r.responseText)
+                if(response.msg) {
+                    Ext.Msg.alert('Error', response.msg);
+                    return;
+                }
+
+                if (!response.length){ 
+                    return(Ext.Msg.alert('Error', 'There are no hosts available for import in the selected hostgroup.')); 
+                } 
+
+                doImport(response);
+            }
         });
     }
 

@@ -5,10 +5,16 @@ chdir('../../');
 require_once("include/auth.php");
 include(dirname(__FILE__) . "/config.php");
 
+// Setup a timer
+$mtime = microtime(); 
+$mtime = explode(' ', $mtime); 
+$mtime = $mtime[1] + $mtime[0]; 
+$starttime = $mtime; 
+
+
 $params['config'] = $config;
 
-//$module = 'layoutDev';
-$module = 'layout';
+$module = 'layoutDev';
 $action = 'drawFrame';
 $format = 'json';
 
@@ -55,6 +61,12 @@ if ($out = $obj->$action($params)) {
 }
 
 
+$mtime = microtime(); 
+$mtime = explode(" ", $mtime); 
+$mtime = $mtime[1] + $mtime[0]; 
+$endtime = $mtime; 
+$totaltime = sprintf("%01.2f", ($endtime - $starttime)); 
 
+$obj->logger('debug', get_class($obj), get_request_var_request('action'), "Script execution time: $totaltime seconds");
 
 

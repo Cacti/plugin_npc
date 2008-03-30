@@ -103,8 +103,7 @@ npc.portlet.serviceProblems = function(){
     grid.render();
 
     // Load the data store
-    //grid.store.load({params:{start:0, limit:pageSize}});
-    store.load({params:{start:0, limit:10}});
+    store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
     if (Ext.getCmp(id).isVisible()) {

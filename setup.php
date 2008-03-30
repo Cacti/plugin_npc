@@ -50,13 +50,21 @@ function npc_top_graph_refresh() {
 function npc_config_arrays () {
 
     global $user_auth_realms, $user_auth_realm_filenames, $npc_date_format, $npc_time_format;
-    global $npc_default_settings;
+    global $npc_default_settings, $npc_log_level;
 
     $user_auth_realms[32]='View NPC';
     $user_auth_realm_filenames['npc.php'] = 32;
     $user_auth_realm_filenames['test.php'] = 32;
     $user_auth_realm_filenames['npc_layout.php'] = 32;
     $user_auth_realm_filenames['npc_service_detail.php'] = 32;
+
+    $npc_log_level = array(
+        "0" => "None",
+        "1" => "ERROR - Log errors only",
+        "2" => "WARN  - Log errors and warnings",
+        "3" => "INFO  - Log errors, warnings, and info messages",
+        "4" => "DEBUG - Log everything"
+    );
 
     $npc_date_format = array(
         "Y-m-d" => "2007-12-27",
@@ -195,6 +203,7 @@ function npc_setup_table () {
         // Add some default values
         $sql[] = "INSERT INTO settings VALUES ('npc_date_format','Y-m-d');";
         $sql[] = "INSERT INTO settings VALUES ('npc_time_format','H:i');";
+        $sql[] = "INSERT INTO settings VALUES ('npc_log_level','0');";
     }
 
     if (!in_array('npc_commands', $tables)) {
@@ -1367,7 +1376,7 @@ function npc_check_upgrade() {
 
 function npc_config_settings() {
 
-        global $tabs, $settings, $npc_date_format, $npc_time_format;
+        global $tabs, $settings, $npc_date_format, $npc_time_format, $npc_log_level;
 
         $tabs["npc"] = " NPC ";
 
@@ -1406,6 +1415,17 @@ function npc_config_settings() {
                     "method" => "drop_array",
                     "default" => "H:i",
                     "array" => $npc_time_format,
+                ),
+                "npc_logging_header" => array(
+                        "friendly_name" => "Logging",
+                        "method" => "spacer",
+                ),
+                "npc_log_level" => array(
+                    "friendly_name" => "Logging Level",
+                    "description" => "The level of detail you want sent to the Cacti log file.",
+                    "method" => "drop_array",
+                    "default" => "0",
+                    "array" => $npc_log_level,
                 )
         );
 }

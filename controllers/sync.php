@@ -1,8 +1,8 @@
 <?php
 /**
- * Hosts controller class
+ * Sync controller class
  *
- * This is the access point to the npc_hosts table.
+ * This class handles importing Nagios hosts to Cacti
  *
  * @filesource
  * @author              Billy Gunn <billy@gunn.org>
@@ -19,10 +19,9 @@ require_once("plugins/npc/controllers/hostgroups.php");
 require_once("plugins/npc/controllers/cacti.php");
 
 /**
- * Hosts controller class
+ * Sync controller class
  *
- * Hosts controller provides functionality, such as building the 
- * Doctrine querys and formatting output.
+ * This class handles importing Nagios hosts to Cacti
  * 
  * @package     npc
  * @subpackage  npc.controllers
@@ -98,6 +97,11 @@ class NpcSyncController extends Controller {
 
         $data = json_decode($params['data']);
 
+        if (!is_object($data)) {
+            $this->logger('error', get_class($this), __FUNCTION__ , "json_decode(".$params['data'].") returned: $data");
+            return(json_encode(array('success' => false, 'msg' => 'Server received bad data')));
+        }
+
         $results = array();
 
         foreach ($data as $hostgroup) {
@@ -152,7 +156,7 @@ class NpcSyncController extends Controller {
      * 
      * This method checks to see if a host exists in 
      * Cacti by comparing IP addresses. If a match is 
-     * the found, the Cacti host ID is returned.
+     * found the Cacti host ID is returned.
      *
      * The first time this method is called a cache of 
      * id to ip address mappings will be built.

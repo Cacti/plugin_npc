@@ -327,5 +327,32 @@ class Controller {
         return($results);
     }
 
+    /**
+     * logger
+     * 
+     * A utility method to wrap the Cacti logging mechanism
+     *
+     * @param string $level     The log level of the message (error, warn, etc.)
+     * @param string $class     The calling class
+     * @param string $method    The calling method
+     * @param string $message   The log message
+     */
+    function logger($level, $class, $method, $message) {
+
+        $logLevelConf = read_config_option('npc_log_level'); 
+
+        $logLevels = array(
+            "error" => 1,
+            "warn"  => 2,
+            "info"  => 3,
+            "debug" => 4
+        );
+
+        if ($logLevels[$level] <= $logLevelConf) {
+            $message = strtoupper($level) . " [$class] ($method) - $message";
+            cacti_log($message, false, 'NPC');
+        }
+    }
+
 }
 
