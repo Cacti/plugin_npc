@@ -290,11 +290,15 @@ class Controller {
 
         $x = 1;
         foreach ($fields as $field) {
-            $where .= $fieldMap[$field] . " LIKE '%" . $this->searchString . "%' ";
-            if ($x < $count) {
-                $where .= " OR ";
+            if (isset($fieldMap[$field])) {
+                $where .= $fieldMap[$field] . " LIKE '%" . $this->searchString . "%' ";
+                if ($x < $count) {
+                    $where .= " OR ";
+                }
+                $x++;
+            } else {
+                $count = $count - 1;
             }
-            $x++;
         }
 
         $where .= " ) ";
