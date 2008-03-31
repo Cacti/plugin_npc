@@ -160,6 +160,7 @@ npc.hosts = function(title, filter){
             disableIndexes:[
                 'last_check', 
                 'next_check', 
+                'local_graph_id', 
                 'service_count', 
                 'last_state_change', 
                 'current_check_attempt', 

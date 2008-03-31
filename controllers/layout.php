@@ -1,7 +1,7 @@
 <?php /* ex: set tabstop=4 expandtab: */
 
 
-class NpcLayoutController {
+class NpcLayoutController extends controller {
 
     var $params = array();
 

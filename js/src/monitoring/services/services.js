@@ -166,6 +166,7 @@ npc.services = function(title, filter){
             disableIndexes:[
                 'last_check', 
                 'next_check', 
+                'local_graph_id', 
                 'last_state_change', 
                 'current_check_attempt', 
                 'current_state'

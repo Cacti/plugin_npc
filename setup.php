@@ -1422,7 +1422,7 @@ function npc_config_settings() {
                 ),
                 "npc_log_level" => array(
                     "friendly_name" => "Logging Level",
-                    "description" => "The level of detail you want sent to the Cacti log file.",
+                    "description" => "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log.",
                     "method" => "drop_array",
                     "default" => "0",
                     "array" => $npc_log_level,
