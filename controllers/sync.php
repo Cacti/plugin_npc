@@ -98,8 +98,7 @@ class NpcSyncController extends Controller {
         $data = json_decode($params['data']);
 
         if (!is_object($data)) {
-            $this->logger('error', get_class($this), __FUNCTION__ , "json_decode(".$params['data'].") returned: $data");
-            return(json_encode(array('success' => false, 'msg' => 'Server received bad data')));
+            return($this->logger('error', get_class($this), __FUNCTION__ , "json_decode(".$params['data'].") returned: $data"));
         }
 
         $results = array();
@@ -164,11 +163,10 @@ class NpcSyncController extends Controller {
      * @return int   The Cacti host ID
      */
     function checkHostExists($ip, $cache_id) {
-        // $myIP = gethostbyname(trim(`hostname`));
+
+        $cacheFile = '/tmp/npc_address_cache.php';
 
         $buildCache = 0;
-
-        $cacheFile = 'plugins/npc/address_cache.php';
 
         if (file_exists($cacheFile)) {
             include($cacheFile);
@@ -180,7 +178,10 @@ class NpcSyncController extends Controller {
         }
 
         if ($buildCache) {
+
             $fh = fopen($cacheFile, 'w') or die("can't open file");
+
+            $hosts = array();
 
             $string = "<?php\n\n";
             $string .= "\$cacheKey = '" . $cache_id . "';\n";
@@ -191,6 +192,7 @@ class NpcSyncController extends Controller {
             for ($i = 0; $i < count($results); $i++) {
                 $address = gethostbyname($results[$i]['hostname']);
                 $string .= "'" . $address . "' => '" . $results[$i]['id'] . "',\n";
+                $hosts[$address] = $results[$i]['id'];
             }
 
             $string .= ");";
@@ -205,7 +207,6 @@ class NpcSyncController extends Controller {
         }
 
         return(null);
-
     }
 
 }
