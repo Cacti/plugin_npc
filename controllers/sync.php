@@ -95,7 +95,7 @@ class NpcSyncController extends Controller {
      */
     function getHosts($params) {
 
-        $data = json_decode($params['data']);
+        $data = json_decode(stripslashes($params['data']));
 
         if (!is_object($data)) {
             return($this->logger('error', get_class($this), __FUNCTION__ , "json_decode(".$params['data'].") returned: $data"));

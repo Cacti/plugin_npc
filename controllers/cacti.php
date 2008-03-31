@@ -94,7 +94,10 @@ class NpcCactiController extends Controller {
         foreach ($perfParts as $perf) {
             if (preg_match("/=/", $perf)) {
                 $ds = explode("=", $perf);
-                $sql = sprintf("INSERT INTO data_input_fields (hash, data_input_id, name, data_name, input_output, update_rra, sequence) VALUES ('%s', %d, '%s', '%s', 'out', 'on', 0)", $this->generateHash(), $data_input_id, $ds[0], $ds[0]);
+
+                $sql = sprintf("INSERT INTO data_input_fields (hash, data_input_id, name, data_name, input_output, update_rra, sequence) "
+                              . "VALUES ('%s', %d, '%s', '%s', 'out', 'on', 0)", $this->generateHash(), $data_input_id, $ds[0], $ds[0]);
+
                 db_execute($sql);
             }
         }

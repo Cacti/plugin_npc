@@ -285,7 +285,7 @@ class Controller {
             $where .= " AND ( ";
         }
 
-        $fields = json_decode($this->searchFields);
+        $fields = json_decode(stripslashes($this->searchFields));
         $count = count($fields);
 
         $x = 1;
@@ -332,10 +332,11 @@ class Controller {
      * 
      * A utility method to wrap the Cacti logging mechanism
      *
-     * @param string $level     The log level of the message (error, warn, etc.)
-     * @param string $class     The calling class
-     * @param string $method    The calling method
-     * @param string $message   The log message
+     * @param  string $level     The log level of the message (error, warn, etc.)
+     * @param  string $class     The calling class
+     * @param  string $method    The calling method
+     * @param  string $message   The log message
+     * @return string  - On error a json encoded error message is returned to the client.
      */
     function logger($level, $class, $method, $message) {
 
@@ -351,6 +352,11 @@ class Controller {
         if ($logLevels[$level] <= $logLevelConf) {
             $message = strtoupper($level) . " [$class] ($method) - $message";
             cacti_log($message, false, 'NPC');
+        }
+
+        // If this was an error send a genric response to the client
+        if ($level == 'error') {
+            return(json_encode(array('success' => false, 'msg' => "An error occurred in $class->$method. See error logs for detail.")));
         }
     }
 
