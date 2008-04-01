@@ -64,20 +64,23 @@ class NpcSyncController extends Controller {
         $importCmd = 'php ' . $path 
                    . ' --description=' . $params['description'] 
                    . ' --ip=' . $params['ip']
-                   . ' --template=' . $params['template_id'];
+                   . ' --template=' . $params['template_id']
+                   . ' 2> /dev/null';
 
         exec($importCmd, $status);
 
         if(is_array($status)) {
+            foreach ($status as $output) {
 
-            preg_match("/Success - new device-id: \((.*)\)/", $status[2], $matches);
+                preg_match("/Success - new device-id: \((.*)\)/", $output, $matches);
 
-            if (isset($matches[1])) {
-                // The import was successful now map the hosts
-                NpcCactiController::mapHost($params['host_object_id'], $matches[1]);
-                $return .= '1|1|' . $status[2];
-            } elseif (isset($matches[0])) {
-                $return .= '1|0|Mapping failed - ' . $status[1];
+                if (isset($matches[1])) {
+                    // Import was successful. Now map the hosts
+                    NpcCactiController::mapHost($params['host_object_id'], $matches[1]);
+                    $return .= '1|1|' . $output;
+                } elseif (isset($matches[0])) {
+                    $return .= '1|0|Failed to map host';
+                }
             }
         } else {
             $return .= '0|0|Unknown failure';
