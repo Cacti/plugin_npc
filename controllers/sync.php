@@ -39,9 +39,12 @@ class NpcSyncController extends Controller {
      *
      * Columns: "description|imported|mapped|message|cacti_host_ID"
      *
+     * @params array    Array of parameters passed from the client
      * @return string   The pipe delimited results
      */
     function import($params) {
+
+        $this->logger('info', get_class($this), __FUNCTION__ , "Starting import of " . $params['description']);
    
         $config = $params['config'];
         $path = $config["base_path"] . "/cli/add_device.php";
@@ -50,6 +53,7 @@ class NpcSyncController extends Controller {
 
         // If the host exists and is already mapped return with notice
         if (NpcCactiController::isMapped($params['host_object_id'])) {
+            $this->logger('info', get_class($this), __FUNCTION__ , $params['description'] . " already exists and is mapped.");
             $return .= '0|0|The host already exists and is mapped';
             return($return);
         }
@@ -57,6 +61,7 @@ class NpcSyncController extends Controller {
         // If the host already exists, map it and return.
         if ($cactiId = $this->checkHostExists($params['ip'], $params['cache_id'])) {
             NpcCactiController::mapHost($params['host_object_id'], $cactiId);
+            $this->logger('info', get_class($this), __FUNCTION__ , $params['description'] . " already existed and was mapped.");
             $return .= '0|1|The host already existed in Cacti with device ID: ' . $cactiId;
             return($return);
         }
@@ -66,6 +71,8 @@ class NpcSyncController extends Controller {
                    . ' --ip=' . $params['ip']
                    . ' --template=' . $params['template_id']
                    . ' 2> /dev/null';
+        
+        $this->logger('debug', get_class($this), __FUNCTION__ , "Import command: $importCmd");
 
         exec($importCmd, $status);
 
@@ -77,12 +84,15 @@ class NpcSyncController extends Controller {
                 if (isset($matches[1])) {
                     // Import was successful. Now map the hosts
                     NpcCactiController::mapHost($params['host_object_id'], $matches[1]);
+                    $this->logger('info', get_class($this), __FUNCTION__ , "Successfully imported and mapped " . $params['description'] . ": $output");
                     $return .= '1|1|' . $output;
                 } elseif (isset($matches[0])) {
-                    $return .= '1|0|Failed to map host';
+                    $this->logger('error', get_class($this), __FUNCTION__ , "Import failed: " . print_r($status, true));
+                    $return .= '1|0|A failure occured during import.';
                 }
             }
         } else {
+            $this->logger('error', get_class($this), __FUNCTION__ , "Import command failed: $importCmd");
             $return .= '0|0|Unknown failure';
         }
 
