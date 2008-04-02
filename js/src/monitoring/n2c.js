@@ -47,25 +47,26 @@ npc.n2c = function() {
         {
             header: "Hostgroup",
             dataIndex: 'alias',
-            width: 200
+            width: 150
         },{
             header: "Hosts",
             dataIndex: 'members',
             align:'center',
-            width: 45
-        },{
+            width: 40
+        }/*,{
             header: "Create Graphs",
             dataIndex: 'create_graphs',
             tooltip: 'Create graphs from the graph templates associated to the selected host template.',
             renderer:renderCheck,
             align:'center',
             editable:false,
+            hidden:true,
             width: 60
-        },{
+        }*/,{
             header: "Template",
             dataIndex: 'template',
             renderer:renderComboDisplay,
-            width: 200,
+            width: 150,
             editor: new Ext.form.ComboBox({
                 triggerAction: 'all',
                 name:'template',
@@ -87,8 +88,9 @@ npc.n2c = function() {
         border:false,
         cm:cm,
         sm:sm,
-        width:500,
+        width:400,
         autoHeight:true,
+        autoExpandColumn:'template',
         frame:false,
         clicksToEdit:1,
         view: new Ext.grid.GridView({
