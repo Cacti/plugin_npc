@@ -83,7 +83,7 @@ class NpcSyncController extends Controller {
 
                 if (isset($matches[1])) {
                     // Import was successful. Now map the hosts
-                    NpcCactiController::mapHost($params['host_object_id'], $matches[1]);
+                    NpcCactiController::mapHost($params['host_object_id'], $matches[1], $params['create_graphs']);
                     $this->logger('info', get_class($this), __FUNCTION__ , "Successfully imported and mapped " . $params['description'] . ": $output");
                     $return .= '1|1|' . $output;
                 } elseif (isset($matches[0])) {
@@ -124,6 +124,7 @@ class NpcSyncController extends Controller {
                         'host_object_id' => $host['host_object_id'], 
                         'display_name' => $host['display_name'],
                         'address' => $host['address'],
+                        'create_graphs' => $hostgroup->create_graphs,
                         'template' => $hostgroup->template
                     );
                 }

@@ -40,10 +40,19 @@ class NpcCactiController extends Controller {
      * 
      * Maps a nagios host to a cacti host
      *
-     * @return boolean
+     * @params int  The NPC object ID
+     * @params int  The Cacti host ID
+     * @params bool true/false to create graphs
      */
-    function mapHost($npc_id, $cacti_id) {
+    function mapHost($npc_id, $cacti_id, $createGraphs) {
         db_execute("UPDATE host SET npc_host_object_id = $npc_id WHERE id = $cacti_id");
+
+        if ($createGraphs) {
+            $results = db_fetch_assoc("SELECT graph_template_id FROM host_graph WHERE host_id = $cacti_id");
+            for ($i = 0; $i < count($results); $i++) {
+                db_execute("INSERT INTO graph_local SET graph_template_id = " . $results[$i]['graph_template_id'] . ", host_id = $cacti_id");
+            }
+        }
     }
 
     /**

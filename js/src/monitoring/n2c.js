@@ -21,6 +21,7 @@ npc.n2c = function() {
         fields:[
             'alias',
             'members',
+            'create_graphs',
             'template'
         ],
         autoload:true
@@ -50,7 +51,16 @@ npc.n2c = function() {
         },{
             header: "Hosts",
             dataIndex: 'members',
-            width: 50
+            align:'center',
+            width: 45
+        },{
+            header: "Create Graphs",
+            dataIndex: 'create_graphs',
+            tooltip: 'Create graphs from the graph templates associated to the selected host template.',
+            renderer:renderCheck,
+            align:'center',
+            editable:false,
+            width: 60
         },{
             header: "Template",
             dataIndex: 'template',
@@ -77,7 +87,7 @@ npc.n2c = function() {
         border:false,
         cm:cm,
         sm:sm,
-        width:600,
+        width:500,
         autoHeight:true,
         frame:false,
         clicksToEdit:1,
@@ -97,7 +107,16 @@ npc.n2c = function() {
                 }
                 getHosts(sm.getSelections());
             }
-        }]
+        }],
+        listeners: {
+            cellclick: function(o, row, cell, e) {
+                // ensure mouseclick occurred within checkbox icon's visible area
+                if (o.getColumnModel().getDataIndex(cell) == 'create_graphs' && e.getTarget('.checkbox', 1)) {
+                    var rec = o.getStore().getAt(row);
+                    rec.set('create_graphs', !rec.get('create_graphs'));
+                }
+            }
+        }
     });
 
     if (tab)  {
@@ -140,6 +159,21 @@ npc.n2c = function() {
     // Load the hostgroup data store
     hostGroupStore.load();
 
+    function renderCheck(value, e, record) {
+        if (typeof value == 'string') { 
+            value = true; 
+            record.set('create_graphs', true);
+        }
+            
+        return [
+            '<img ',
+              'class="checkbox" ', 
+              'src="js/ext/resources/images/default/menu/',
+              value ? 'checked.gif' : 'unchecked.gif',
+            '"/>'
+        ].join("");
+    };
+
     function renderComboDisplay(v) {
         if (v) {
             return String.format('{0}', templateStore.getById(v).get('name'));
@@ -177,6 +211,7 @@ npc.n2c = function() {
                             p_description : node.display_name,
                             p_ip : node.address,
                             p_template_id : node.template,
+                            p_create_graphs : node.create_graphs,
                             p_cache_id : cacheId
                         },
                         success: function(response){
@@ -278,7 +313,11 @@ npc.n2c = function() {
 
         // Get the hosts for the selected hostgroups
         for(var i = 0; i < s.length; i++) {
-            hg[i] = {'alias' : s[i].data.alias, 'template' : s[i].data.template};
+            hg[i] = {
+                'alias' : s[i].data.alias, 
+                'template' : s[i].data.template,
+                'create_graphs' : s[i].data.create_graphs
+            };
         }
 
         // json encode our object
