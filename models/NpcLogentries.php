@@ -11,7 +11,7 @@
  * @package             npc
  * @subpackage          npc.models
  * @since               NPC 2.0
- * @version             $Id: $
+ * @version             $Id$
  */
 
 /**

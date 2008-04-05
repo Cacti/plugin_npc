@@ -1,4 +1,5 @@
 <?php
+/* $Id:$ */
 /*
  +-------------------------------------------------------------------------+
  | Nagios Plugin for Cacti                                                 |
@@ -19,21 +20,31 @@
  +-------------------------------------------------------------------------+
 */
 
-function plugin_init_npc() {
-    global $plugin_hooks;
-    $plugin_hooks['top_header_tabs']['npc'] = 'npc_show_tab';
-    $plugin_hooks['top_graph_header_tabs']['npc'] = 'npc_show_tab';
-    $plugin_hooks['config_arrays']['npc'] = 'npc_config_arrays';
-    $plugin_hooks['draw_navigation_text']['npc'] = 'npc_draw_navigation_text';
-    $plugin_hooks['config_form']['npc'] = 'npc_config_form';
-    $plugin_hooks['api_device_save']['npc'] = 'npc_api_device_save';
-    $plugin_hooks['top_graph_refresh']['npc'] = 'npc_top_graph_refresh';
-    $plugin_hooks['config_settings']['npc'] = 'npc_config_settings';
+/**
+ * Called after install
+ *
+ * if return true, plugin will be installed but disabled
+ * if return false, plugin will be waiting configuration
+ *
+ * @return  bool
+ */
+function plugin_npc_check_config () {
+    return true;
 }
 
+/**
+ * compatibility for plugin update
+ */
 function npc_version () {
+    return plugin_npc_version ();
+}
+
+/**
+ * Version information
+ */
+function plugin_npc_version () {
     return array(   'name'          => 'npc',
-                    'version'       => '2.0.0a',
+                    'version'       => '2.0.0a-136',
                     'longname'      => 'Nagios plugin for Cacti',
                     'author'        => 'Billy Gunn',
                     'homepage'      => 'http://trac2.assembla.com/npc',
@@ -42,8 +53,114 @@ function npc_version () {
     );
 }
 
+function plugin_npc_install () {
+
+    npc_setup_tables();
+
+    api_plugin_register_realm ('npc', 'npc.php', 'Use NPC', 1);
+
+    // setup all arrays needed for npc
+    api_plugin_register_hook ('npc', 'config_arrays', 'npc_config_arrays', 'setup.php');
+
+    // Add the npc tab
+    api_plugin_register_hook ('npc', 'top_header_tabs', 'npc_show_tab', 'setup.php');
+    api_plugin_register_hook ('npc', 'top_graph_header_tabs', 'npc_show_tab', 'setup.php');
+
+    // Provide navigation texts
+    api_plugin_register_hook ('npc', 'draw_navigation_text', 'npc_draw_navigation_text', 'setup.php');
+
+    // Add Nagios host mapping select box
+    api_plugin_register_hook ('npc', 'config_form', 'npc_config_form', 'setup.php');
+
+    // Saves the selection from the host mapping select box
+    api_plugin_register_hook ('npc', 'api_device_save', 'npc_api_device_save', 'setup.php');
+
+    // Alter the page refresh rate
+    api_plugin_register_hook ('npc', 'top_graph_refresh', 'npc_top_graph_refresh', 'setup.php');
+
+    // Add a npc tab to the settings page
+    api_plugin_register_hook ('npc', 'config_settings', 'npc_config_settings', 'setup.php');
+}
+
+/**
+ * Remove all NPC database changes
+ */
+function plugin_npc_uninstall () {
+
+    // Drop all npc tables
+    db_execute("DROP TABLE `npc_acknowledgements`");
+    db_execute("DROP TABLE `npc_commands`");
+    db_execute("DROP TABLE `npc_commenthistory`");
+    db_execute("DROP TABLE `npc_comments`");
+    db_execute("DROP TABLE `npc_configfiles`");
+    db_execute("DROP TABLE `npc_configfilevariables`");
+    db_execute("DROP TABLE `npc_conninfo`");
+    db_execute("DROP TABLE `npc_contact_addresses`");
+    db_execute("DROP TABLE `npc_contact_notificationcommands`");
+    db_execute("DROP TABLE `npc_contactgroup_members`");
+    db_execute("DROP TABLE `npc_contactgroups`");
+    db_execute("DROP TABLE `npc_contactnotificationmethods`");
+    db_execute("DROP TABLE `npc_contactnotifications`");
+    db_execute("DROP TABLE `npc_contacts`");
+    db_execute("DROP TABLE `npc_contactstatus`");
+    db_execute("DROP TABLE `npc_customvariables`");
+    db_execute("DROP TABLE `npc_customvariablestatus`");
+    db_execute("DROP TABLE `npc_dbversion`");
+    db_execute("DROP TABLE `npc_downtimehistory`");
+    db_execute("DROP TABLE `npc_eventhandlers`");
+    db_execute("DROP TABLE `npc_externalcommands`");
+    db_execute("DROP TABLE `npc_flappinghistory`");
+    db_execute("DROP TABLE `npc_host_contactgroups`");
+    db_execute("DROP TABLE `npc_host_contacts`");
+    db_execute("DROP TABLE `npc_host_graphs`");
+    db_execute("DROP TABLE `npc_host_parenthosts`");
+    db_execute("DROP TABLE `npc_hostchecks`");
+    db_execute("DROP TABLE `npc_hostdependencies`");
+    db_execute("DROP TABLE `npc_hostescalation_contactgroups`");
+    db_execute("DROP TABLE `npc_hostescalation_contacts`");
+    db_execute("DROP TABLE `npc_hostescalations`");
+    db_execute("DROP TABLE `npc_hostgroup_members`");
+    db_execute("DROP TABLE `npc_hostgroups`");
+    db_execute("DROP TABLE `npc_hosts`");
+    db_execute("DROP TABLE `npc_hoststatus`");
+    db_execute("DROP TABLE `npc_instances`");
+    db_execute("DROP TABLE `npc_logentries`");
+    db_execute("DROP TABLE `npc_notifications`");
+    db_execute("DROP TABLE `npc_objects`");
+    db_execute("DROP TABLE `npc_processevents`");
+    db_execute("DROP TABLE `npc_programstatus`");
+    db_execute("DROP TABLE `npc_runtimevariables`");
+    db_execute("DROP TABLE `npc_scheduleddowntime`");
+    db_execute("DROP TABLE `npc_service_contactgroups`");
+    db_execute("DROP TABLE `npc_service_contacts`");
+    db_execute("DROP TABLE `npc_service_graphs`");
+    db_execute("DROP TABLE `npc_servicechecks`");
+    db_execute("DROP TABLE `npc_servicedependencies`");
+    db_execute("DROP TABLE `npc_serviceescalation_contactgroups`");
+    db_execute("DROP TABLE `npc_serviceescalation_contacts`");
+    db_execute("DROP TABLE `npc_serviceescalations`");
+    db_execute("DROP TABLE `npc_servicegroup_members`");
+    db_execute("DROP TABLE `npc_servicegroups`");
+    db_execute("DROP TABLE `npc_services`");
+    db_execute("DROP TABLE `npc_servicestatus`");
+    db_execute("DROP TABLE `npc_settings`");
+    db_execute("DROP TABLE `npc_statehistory`");
+    db_execute("DROP TABLE `npc_systemcommands`");
+    db_execute("DROP TABLE `npc_timedeventqueue`");
+    db_execute("DROP TABLE `npc_timedevents`");
+    db_execute("DROP TABLE `npc_timeperiod_timeranges`");
+    db_execute("DROP TABLE `npc_timeperiods`");
+
+    db_execute("ALTER TABLE `host` DROP `npc_host_object_id`");
+    db_execute("DELETE FROM `settings` WHERE `name` like 'npc\_%'");
+  
+    api_plugin_remove_realms ('npc');
+}
+
+/**
+ * Set the page refresh very high
+ */
 function npc_top_graph_refresh() {
-    // Don't want to refresh so set very high
     return('2592000');
 }
 
@@ -52,58 +169,67 @@ function npc_config_arrays () {
     global $user_auth_realms, $user_auth_realm_filenames, $npc_date_format, $npc_time_format;
     global $npc_default_settings, $npc_log_level;
 
-    $user_auth_realms[32]='View NPC';
-    $user_auth_realm_filenames['npc.php'] = 32;
-    $user_auth_realm_filenames['test.php'] = 32;
-    $user_auth_realm_filenames['npc_layout.php'] = 32;
-    $user_auth_realm_filenames['npc_service_detail.php'] = 32;
+      if (isset($_SESSION["sess_user_id"])) {
 
-    $npc_log_level = array(
-        "0" => "None",
-        "1" => "ERROR - Log errors only",
-        "2" => "WARN  - Log errors and warnings",
-        "3" => "INFO  - Log errors, warnings, and info messages",
-        "4" => "DEBUG - Log everything"
-    );
+        $user_id=$_SESSION["sess_user_id"];
 
-    $npc_date_format = array(
-        "Y-m-d" => "2007-12-27",
-        "m-d-Y" => "12-27-2007",
-        "d-m-Y" => "27-12-2007",
-        "Y/m/d" => "2007/12/27",
-        "m/d/Y" => "12/27/2007",
-        "d/m/Y" => "27/12/2007",
-        "Y.m.d" => "2007.12.27",
-        "d.m.Y" => "27.12.2007",
-        "m.d.Y" => "12.27.2007"
-    );
+        $npc_realm = db_fetch_cell("SELECT id FROM plugin_config WHERE directory = 'npc'");
+        $npc_enabled = db_fetch_cell("SELECT status FROM plugin_config WHERE directory = 'npc'");
 
-    $npc_time_format = array(
-        "H:i:s"  => "23:07",
-        "h:i:sa" => "11:07pm",
-        "h:i:sA" => "11:07PM",
-        "H.i.s"  => "23.07",
-        "h.i.sa" => "11.07pm",
-        "h.i.sA" => "11.07PM"
-    );
+        if ($npc_enabled == "1") {
 
-    $npc_default_settings = array(
-        'date_format' => "s%3AY-m-d",
-        'time_format' => "s%3AH%3Ai%3As",
+            $user_auth_realm_filenames['npc.php'] = 9000 + $npc_realm;
 
-        "serviceProblems" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "serviceSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "servicegroupServiceStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "servicegroupHostStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "monitoringPerf" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A1%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+            $npc_log_level = array(
+                "0" => "None",
+                "1" => "ERROR - Log errors only",
+                "2" => "WARN  - Log errors and warnings",
+                "3" => "INFO  - Log errors, warnings, and info messages",
+                "4" => "DEBUG - Log everything"
+            );
 
-        "hostProblems" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "hostSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "hostgroupServiceStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "hostgroupHostStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-        "eventLog" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A1%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A60%5Erows%3Dn%253A5'
-    );
+            $npc_date_format = array(
+                "Y-m-d" => "2007-12-27",
+                "m-d-Y" => "12-27-2007",
+                "d-m-Y" => "27-12-2007",
+                "Y/m/d" => "2007/12/27",
+                "m/d/Y" => "12/27/2007",
+                "d/m/Y" => "27/12/2007",
+                "Y.m.d" => "2007.12.27",
+                "d.m.Y" => "27.12.2007",
+                "m.d.Y" => "12.27.2007"
+            );
 
+            $npc_time_format = array(
+                "H:i:s"  => "23:07",
+                "h:i:sa" => "11:07pm",
+                "h:i:sA" => "11:07PM",
+                "H.i.s"  => "23.07",
+                "h.i.sa" => "11.07pm",
+                "h.i.sA" => "11.07PM"
+            );  
+
+            // Initial settings for server side state handling
+            $npc_default_settings = array(
+                'date_format' => "s%3AY-m-d",
+                'time_format' => "s%3AH%3Ai%3As",
+
+                "serviceProblems" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+                "serviceSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+                "servicegroupServiceStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+                "servicegroupHostStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+                "monitoringPerf" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A1%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+
+                "hostProblems" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+                "hostSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+                "hostgroupServiceStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+                "hostgroupHostStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
+                "eventLog" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A1%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A60%5Erows%3Dn%253A5'
+            );
+
+            api_plugin_load_realms();
+        }
+    }
 }
 
 function npc_config_form () {
@@ -146,8 +272,8 @@ function npc_draw_navigation_text ($nav) {
    return $nav;
 }
 
-function npc_setup_table () {
-    global $config, $database_default, $npc_default_settings;
+function npc_setup_tables() {
+    global $config, $database_default;
 
     include_once($config["library_path"] . "/database.php");
 
@@ -1325,22 +1451,6 @@ function npc_setup_table () {
                   ) ENGINE=InnoDB COMMENT='NPC user settings';";
     } else {
 
-        $cUser = db_fetch_assoc('SELECT id FROM user_auth');
-        $nUser = db_fetch_assoc('SELECT user_id FROM npc_settings');
-
-        // Add exitsting users to npc_settings
-        for ($i = 0; $i < count($cUser); $i++) {
-            if (!db_fetch_cell('SELECT user_id FROM npc_settings WHERE user_id = ' . $cUser[$i]['id'])) {
-                db_execute("INSERT INTO npc_settings VALUES(". $cUser[$i]['id'].",'".serialize($npc_default_settings)."')");
-            }
-        }
-
-        // Delete non existent users from npc_settings
-        for ($i = 0; $i < count($nUser); $i++) {
-            if (isset($nUser[$i]['id']) && !db_fetch_cell('SELECT id FROM user_auth WHERE id = ' . $nUser[$i]['id'])) {
-                db_execute('DELETE FROM npc_settings WHERE user_id = ' . $nUser[$i]['id']);
-            }
-        }
     }
 
     if (!empty($sql)) {
@@ -1351,56 +1461,81 @@ function npc_setup_table () {
 }
 
 function npc_show_tab() {
-        global $config;
-        if (api_user_realm_auth('npc.php')) {
-            $cp = false;
-            if (basename($_SERVER["PHP_SELF"]) == "npc.php")
-                $cp = true;
+    global $config;
 
-            print '<a href="' . $config['url_path'] . 'plugins/npc/npc.php"><img src="' 
-                  . $config['url_path'] . 'plugins/npc/images/tab_npc' 
-                  . ($cp ? "_down": "") . '.gif" alt="npc" align="absmiddle" border="0"></a>';
+    if (isset($_SESSION["sess_user_id"])) {
+  
+        $user_id = $_SESSION["sess_user_id"];
+
+        $npc_realm = db_fetch_cell("SELECT id FROM plugin_config WHERE directory = 'npc'");
+        $npc_enabled = db_fetch_cell("SELECT status FROM plugin_config WHERE directory = 'npc'");
+
+        if ($npc_enabled == "1") {
+            if (api_user_realm_auth('npc.php')) {
+                $cp = false;
+                if (basename($_SERVER["PHP_SELF"]) == "npc.php") { $cp = true; }
+
+                print '<a href="' . $config['url_path'] . 'plugins/npc/npc.php"><img src="' 
+                     . $config['url_path'] . 'plugins/npc/images/tab_npc' 
+                     . ($cp ? "_down": "") . '.gif" alt="npc" align="absmiddle" border="0"></a>';
+            }
         }
-        npc_check_upgrade ();
+    }
 }
-
-function npc_check_upgrade() {
-    $current = npc_version ();
-    $current = $current['version'];
-    $old = read_config_option('plugin_npc_version');
-    //if ($current != $old) {
-        npc_setup_table ();
-    //}
-}
-
 
 function npc_config_settings() {
 
-        global $tabs, $settings, $npc_date_format, $npc_time_format, $npc_log_level;
+    global $tabs, $settings, $npc_date_format, $npc_time_format, $npc_log_level, $npc_default_settings;
 
-        $tabs["npc"] = " NPC ";
+    if (isset($_SESSION["sess_user_id"])) {
+  
+        $user_id = $_SESSION["sess_user_id"];
 
-        $settings['npc'] = array(
+        $npc_realm = db_fetch_cell("SELECT id FROM plugin_config WHERE directory = 'npc'");
+        $npc_enabled = db_fetch_cell("SELECT status FROM plugin_config WHERE directory = 'npc'");
+
+        if ($npc_enabled == "1") {
+
+            $tabs["npc"] = " NPC ";
+
+            $cUser = db_fetch_assoc('SELECT id FROM user_auth');
+            $nUser = db_fetch_assoc('SELECT user_id FROM npc_settings');
+
+            // Add exitsting users to npc_settings
+            for ($i = 0; $i < count($cUser); $i++) {
+                if (!db_fetch_cell('SELECT user_id FROM npc_settings WHERE user_id = ' . $cUser[$i]['id'])) {
+                    db_execute("INSERT INTO npc_settings VALUES(". $cUser[$i]['id'].",'".serialize($npc_default_settings)."')");
+                }
+            }
+
+            // Delete non existent users from npc_settings
+            for ($i = 0; $i < count($nUser); $i++) {
+                if (isset($nUser[$i]['id']) && !db_fetch_cell('SELECT id FROM user_auth WHERE id = ' . $nUser[$i]['id'])) {
+                    db_execute('DELETE FROM npc_settings WHERE user_id = ' . $nUser[$i]['id']);
+                }
+            }
+
+            $settings['npc'] = array(
                 "npc_header" => array(
-                        "friendly_name" => "General Settings",
-                        "method" => "spacer",
+                    "friendly_name" => "General Settings",
+                    "method" => "spacer",
                 ),
                 "npc_nagios_commands" => array(
-                        "friendly_name" => "Remote Commands",
-                        "description" => "Allow commands to be written to the Nagios command file.",
-                        "method" => "checkbox",
+                    "friendly_name" => "Remote Commands",
+                    "description" => "Allow commands to be written to the Nagios command file.",
+                    "method" => "checkbox",
                 ),
                 "npc_nagios_cmd_path" => array(
-                        "friendly_name" => "Nagios Command File Path",
-                        "description" => "The path to the Nagios command file (nagios.cmd).",
-                        "method" => "textbox",
-                        "max_length" => 255,
-                ),
+                    "friendly_name" => "Nagios Command File Path",
+                    "description" => "The path to the Nagios command file (nagios.cmd).",
+                    "method" => "textbox",
+                    "max_length" => 255,
+                ),  
                 "npc_nagios_url" => array(
-                        "friendly_name" => "Nagios URL",
-                        "description" => "The full URL to your Nagios installation (http://nagios.company.com/nagios/)",
-                        "method" => "textbox",
-                        "max_length" => 255,
+                    "friendly_name" => "Nagios URL",
+                    "description" => "The full URL to your Nagios installation (http://nagios.company.com/nagios/)",
+                    "method" => "textbox",
+                    "max_length" => 255,
                 ),
                 "npc_date_format" => array(
                     "friendly_name" => "Date Format",
@@ -1417,8 +1552,8 @@ function npc_config_settings() {
                     "array" => $npc_time_format,
                 ),
                 "npc_logging_header" => array(
-                        "friendly_name" => "Logging",
-                        "method" => "spacer",
+                    "friendly_name" => "Logging",
+                    "method" => "spacer",
                 ),
                 "npc_log_level" => array(
                     "friendly_name" => "Logging Level",
@@ -1427,6 +1562,8 @@ function npc_config_settings() {
                     "default" => "0",
                     "array" => $npc_log_level,
                 )
-        );
+            );
+        }
+    }
 }
 

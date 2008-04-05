@@ -6,7 +6,7 @@
  * @author    Ing. Jozef Sakalos
  * @copyright (c) 2008, by Ing. Jozef Sakalos
  * @date      17. January 2008
- * @version   $Id: Ext.ux.grid.Search.js 634 2008-01-19 17:00:20Z jozo $
+ * @version   $Id$
  */
 
 Ext.namespace('Ext.ux', 'Ext.ux.grid');

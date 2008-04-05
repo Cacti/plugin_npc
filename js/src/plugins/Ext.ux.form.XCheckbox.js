@@ -2,7 +2,7 @@
   * Ext.ux.XCheckbox - nice checkbox with configurable submit values
   *
   * @author  Ing. Jozef Sakalos
-  * @version $Id: Ext.ux.form.XCheckbox.js 704 2008-02-11 04:49:11Z jozo $
+  * @version $Id$
   * @date    10. February 2008
   *
   * Default css:

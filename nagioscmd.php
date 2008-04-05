@@ -11,7 +11,7 @@
  * @link                http://trac2.assembla.com/npc
  * @package             npc
  * @since               NPC 2.0
- * @version             $Id: $
+ * @version             $Id$
  */
 
 require_once("include/auth.php");
