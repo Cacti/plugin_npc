@@ -1,5 +1,5 @@
 <?php
-/* $Id:$ */
+/* $Id$ */
 /*
  +-------------------------------------------------------------------------+
  | Nagios Plugin for Cacti                                                 |
@@ -28,23 +28,23 @@
  *
  * @return  bool
  */
-function plugin_npc_check_config () {
+function plugin_npc_check_config() {
     return true;
 }
 
 /**
  * compatibility for plugin update
  */
-function npc_version () {
-    return plugin_npc_version ();
+function npc_version() {
+    return plugin_npc_version();
 }
 
 /**
  * Version information
  */
-function plugin_npc_version () {
+function plugin_npc_version() {
     return array(   'name'          => 'npc',
-                    'version'       => '2.0.0a-136',
+                    'version'       => '2.0.0a',
                     'longname'      => 'Nagios plugin for Cacti',
                     'author'        => 'Billy Gunn',
                     'homepage'      => 'http://trac2.assembla.com/npc',
@@ -53,7 +53,7 @@ function plugin_npc_version () {
     );
 }
 
-function plugin_npc_install () {
+function plugin_npc_install() {
 
     npc_setup_tables();
 
@@ -246,7 +246,9 @@ function npc_config_form () {
                                 "value" => "|arg1:npc_host_object_id|",
                                 "none_value" => "None",
                                 "default" => "0",
-                                "sql" => "SELECT npc_hosts.host_object_id as id, concat(npc_instances.instance_name, ': ', obj1.name1) AS name FROM `npc_hosts` LEFT JOIN npc_objects as obj1 ON npc_hosts.host_object_id=obj1.object_id LEFT JOIN npc_instances ON npc_hosts.instance_id=npc_instances.instance_id WHERE npc_hosts.config_type='1'",
+                                "sql" => "SELECT npc_hosts.host_object_id as id, concat(npc_instances.instance_name, ': ', obj1.name1) "
+                                       . "AS name FROM `npc_hosts` LEFT JOIN npc_objects as obj1 ON npc_hosts.host_object_id=obj1.object_id "
+                                       . "LEFT JOIN npc_instances ON npc_hosts.instance_id=npc_instances.instance_id",
                                 "form_id" => false
                         );
                 }
@@ -277,10 +279,10 @@ function npc_setup_tables() {
 
     include_once($config["library_path"] . "/database.php");
 
-    // Set the new version
-    $new = npc_version();
-    $new = $new['version'];
-    db_execute("REPLACE INTO settings (name, value) VALUES ('plugin_npc_version', '$new')");
+    // Set the version
+    $version = npc_version();
+    $version = $version['version'];
+    db_execute("REPLACE INTO settings (name, value) VALUES ('plugin_npc_version', '$version')");
 
     $found = false;
     $result = mysql_query("SHOW COLUMNS FROM host FROM " . $database_default) or die (mysql_error());

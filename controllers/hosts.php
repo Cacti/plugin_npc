@@ -127,7 +127,7 @@ class NpcHostsController extends Controller {
         );
 
         $q = new Doctrine_Query();
-        $hosts = $q->from('NpcHosts h')->where('h.config_type = 1')->execute();
+        $hosts = $q->from('NpcHosts h')->execute();
 
         foreach($hosts as $host) {
             $status[$this->hostState[$host->Status->current_state]]++;
@@ -160,13 +160,12 @@ class NpcHostsController extends Controller {
 
 
         // Build the where clause
-        $where = ' h.config_type = 1 ';
+        $where .= " hs.current_state in (" . $this->stringToState[$this->state] . ") ";
+
 
         if ($this->id) {
             $where .= sprintf(" AND hs.host_object_id = %d", $this->id);
         }
-
-        $where .= " AND hs.current_state in (" . $this->stringToState[$this->state] . ") ";
 
         if ($this->searchString) {
             $where = $this->searchClause($where, $fieldMap);
