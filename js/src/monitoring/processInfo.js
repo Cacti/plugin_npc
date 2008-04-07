@@ -2,31 +2,26 @@ npc.processInfo = function(){
 
     var title = 'Process Info';
 
-    var outerTabId = 'processinfo-tab';
-
-    npc.addCenterNestedTab(outerTabId, 'Process Information');
+    var id = 'processinfo-tab';
 
     var centerTabPanel = Ext.getCmp('centerTabPanel');
 
-    var innerTabId = outerTabId + '-inner-panel';
-
-    var innerTabPanel = Ext.getCmp(innerTabId);
-
-    var tab = Ext.getCmp(innerTabPanel);
+    var tab = Ext.getCmp(id);
 
     if (tab) {
-        innerTabPanel.setActiveTab(tab);
+        centerTabPanel.setActiveTab(tab);
         return;
     } else {
-        innerTabPanel.add({
-            id: 'process-instance-tab',
-            title: 'Instance',
+        centerTabPanel.add({
+            id: id,
+            title: title,
             deferredRender:false,
-            closable: false,
+            closable: true,
             items: [{}]
         });
-        innerTabPanel.show();
-        innerTabPanel.setActiveTab(0);
+        centerTabPanel.show();
+        tab = Ext.getCmp(id);
+        centerTabPanel.setActiveTab(tab);
     }
 
     var piStore = new Ext.data.JsonStore({
@@ -67,7 +62,7 @@ npc.processInfo = function(){
     });
 
     // Add the grids to the tabs
-    Ext.getCmp('process-instance-tab').add(piGrid);
+    tab.add(piGrid);
 
     // Refresh the dashboard
     centerTabPanel.doLayout();
