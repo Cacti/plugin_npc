@@ -139,6 +139,6 @@ npc.portlet.hostgroupHostStatus = function(){
     function hgClick(grid, rowIndex, e) {
         var hoi = grid.getStore().getAt(rowIndex).json.hostgroup_object_id;
         var name = grid.getStore().getAt(rowIndex).json.alias;
-        npc.hostGroupGrid('hostGroupGrid-'+hoi, 'Hostgroup: '+name, hoi);
+        npc.hostgroupGrid('hostgroupGrid-'+hoi, 'Hostgroup: '+name, hoi);
     }
 };
