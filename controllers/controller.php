@@ -360,7 +360,7 @@ class Controller {
 
         // If this was an error send a genric response to the client
         if ($level == 'error') {
-            return(json_encode(array('success' => false, 'msg' => "An error occurred in $class->$method. See error logs for detail.")));
+            return(json_encode(array('success' => false, 'msg' => "An error occurred in $class -> $method. See error logs for detail.")));
         }
     }
 
