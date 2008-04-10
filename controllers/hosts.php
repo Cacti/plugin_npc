@@ -160,7 +160,7 @@ class NpcHostsController extends Controller {
 
 
         // Build the where clause
-        $where .= " hs.current_state in (" . $this->stringToState[$this->state] . ") ";
+        $where = " hs.current_state in (" . $this->stringToState[$this->state] . ") ";
 
 
         if ($this->id) {
