@@ -4,7 +4,7 @@
     Contact ........ billy@gunn.org
     Home Site ...... http://trac2.assembla.com/npc
     Program ........ Nagios Plugin for Cacti
-    Version ........ 2.0.0a.136
+    Version ........ $Id $
     Purpose ........ Cacti and Nagios integrtion
 
 *******************************************************************************/
