@@ -290,7 +290,9 @@ class NpcServicesController extends Controller {
     function formatStateInfo($key, $results) {
 
         // Set the default return value
-        $return = $results[$key];
+        if (isset($results[$key])) {
+            $return = $results[$key];
+        }
 
         $cs = array(
             '0'  => '<img ext:qtip="OK" src="images/icons/greendot.gif">',
