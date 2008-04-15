@@ -12,8 +12,11 @@ npc.portlet.serviceProblems = function(){
     // Default column
     var column = 'dashcol2';
 
-    // Default # of events to display
-    var pageSize = 10;
+    // Get the number of rows to display
+    var rows = Ext.state.Manager.get(id).rows;
+
+    // Refresh rate
+    var refresh = Ext.state.Manager.get(id).refresh;
 
     var store = new Ext.data.GroupingStore({
         url:url,
@@ -83,7 +86,7 @@ npc.portlet.serviceProblems = function(){
             scrollOffset:0
         }),
         bbar: new Ext.PagingToolbar({
-            pageSize: pageSize,
+            pageSize: rows,
             store: store,
             displayInfo: true,
             displayMsg: ''
@@ -103,7 +106,7 @@ npc.portlet.serviceProblems = function(){
     grid.render();
 
     // Load the data store
-    store.load({params:{start:0, limit:pageSize}});
+    store.load({params:{start:0, limit:rows}});
 
     // Start auto refresh of the grid
     if (Ext.getCmp(id).isVisible()) {
@@ -130,7 +133,7 @@ npc.portlet.serviceProblems = function(){
     Ext.getCmp(id).addListener(listeners);
 
     function doAutoRefresh() {
-        store.startAutoRefresh(60);
+        store.startAutoRefresh(refresh);
     }
 
     // Double click action

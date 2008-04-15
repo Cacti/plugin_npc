@@ -14,16 +14,110 @@ npc = function() {
 
     // create some portlet tools using built in Ext tool ids
     var tools = [{
-//        id:'gear',
-//        handler: function(){
-//            Ext.Msg.alert('Message', 'The Settings tool was clicked.');
-//        }
-//    },{
+        id:'gear',
+        handler: function(btn, e, o){
+            configurePortlet(o);
+        }
+    },{
         id:'close',
         handler: function(e, target, panel){
             panel.hide();
         }
     }];
+
+    function configurePortlet(portlet) {
+        var state = Ext.state.Manager.get(portlet.id);
+
+        var currentRefresh = state.refresh; 
+        var currentRows = state.rows; 
+        var height = 125;
+
+        var rowField = {
+            name: 'rows',
+            xtype: 'hidden'
+        };
+
+        if (currentRows) {
+            height = 150;
+            rowField = {
+                fieldLabel: 'Display Rows',
+                name: 'rows',
+                value: currentRows,
+                labelStyle: 'cursor: help;',
+                tooltipText: "The number of rows to display.",
+                allowBlank: false,
+                xtype: 'textfield',
+                listeners: {
+                    render: function(o) {
+                        npc.setFormFieldTooltip(o);
+                    }
+                }
+            }
+        }
+
+        var form = new Ext.FormPanel({
+            labelWidth: 75,
+            frame:true,
+            bodyStyle:'padding:5px 5px 0',
+            width: 200,
+            defaults: {width: 50},
+            defaultType: 'textfield',
+            items: [
+                {
+                    fieldLabel: 'Refresh Rate',
+                    name: 'refresh',
+                    value: currentRefresh,
+                    labelStyle: 'cursor: help;',
+                    tooltipText: "The refresh rate in seconds.",
+                    allowBlank: false,
+                    listeners: {
+                        render: function(o) {
+                            npc.setFormFieldTooltip(o);
+                        }
+                    }
+                },
+                rowField
+            ],
+            buttons: [
+            {
+                text: 'Save',
+                handler: function(o){
+                    var r = parseInt(form.form.getValues().refresh);
+                    var store = portlet.items.items[0].store;
+
+                    if (r != currentRefresh) {
+                        state.refresh = (r >= 10) ? r : 10;
+                        store.startAutoRefresh(state.refresh);
+                    }
+
+                    if (currentRows) {
+                        state.rows = parseInt(form.form.getValues().rows);
+                        portlet.items.items[0].getBottomToolbar().pageSize = state.rows;
+                        store.load({params:{start:0, limit:state.rows}});
+                    }
+
+                    Ext.state.Manager.set(portlet.id, state);
+                    o.ownerCt.ownerCt.close();
+                }
+            },{
+                text: 'Cancel',
+                handler: function(o){
+                    o.ownerCt.ownerCt.close();
+                }
+            }]
+        });
+
+        var win = new Ext.Window({
+            title:'Portlet Configuration',
+            layout:'fit',
+            modal:true,
+            closable: true,
+            height: height,
+            width:250,
+            items: form
+        }).show();
+
+    };
 
     /* Private Functions */
     // Override Ext.data.Store to add an auto refresh option
@@ -566,6 +660,8 @@ npc = function() {
                         var d = 0;
                         var column;
                         var index;
+                        var refresh = Ext.state.Manager.get(id).refresh;
+                        var rows = Ext.state.Manager.get(id).rows;
 
                         // Find the new column and index
                         if (this.ownerCt) {
@@ -596,7 +692,7 @@ npc = function() {
 
                         // A place holder for the current index value
                         this.index = index;
-                        return {collapsed:this.collapsed, hidden:this.hidden, column:column, index:index, dt:d};
+                        return {collapsed:this.collapsed, hidden:this.hidden, column:column, index:index, dt:d, refresh:refresh, rows:rows};
                     },
                     tools: tools
                 });
