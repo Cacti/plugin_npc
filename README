@@ -42,9 +42,9 @@
     - login to cacti as an admin.
     - install the plugin in Cacti :
         Go to Console -> Plugin Management -> Uninstalled
-        Click "Install" under the npc section
+        Click the "Install" link in the npc section
         Click the "Installed" tab
-        Click "Enable" link under the npc section
+        Click the "Enable" link in the npc section. The npc tab should be viewableat this point.
     - You can find the plugin options under the Cacti Settings section
 
 ----[ Usage
@@ -95,7 +95,7 @@
 
 ----[ Changelog
 
-    --- 2.0.0a ---
+    --- 2.0.0a 2008-03-27 ---
     Complete re-write with full Nagios feature support
 
     --- 1.0 2005-11-12  ---
