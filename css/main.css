@@ -22,6 +22,10 @@ background-image:url(../images/icons/add.png) !important;
 background-image:url(../images/icons/cog_add.png) !important;
 }
 
+.appViewDetail {
+background-image:url(../images/icons/application_view_detail.png) !important;
+}
+
 .chartBar {
 background-image:url(../images/icons/chart_bar.png) !important;
 }

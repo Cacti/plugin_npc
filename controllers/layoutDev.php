@@ -47,6 +47,7 @@ class NpcLayoutDevController extends controller {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/plugins/Ext.state.HttpProvider.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/plugins/Ext.ux.form.XCheckbox.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/plugins/Ext.ux.grid.Search.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/plugins/Ext.ux.Andrie.pPageSize.js"></script>
 
           <!-- Overrides -->
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/overrides/overrides.js"></script>

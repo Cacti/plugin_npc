@@ -183,14 +183,46 @@ npc = function() {
             e.stopEvent();
             var cmdMenu = new Ext.menu.Menu();
             cmdMenu = npc.hostCommandMenu(grid.getStore().getAt(rowIndex).data, cmdMenu);
-            cmdMenu.showAt(e.getXY());
+
+            var menu = new Ext.menu.Menu({
+                items: [
+                    {
+                        text: 'Commands',
+                        iconCls: 'cogAdd',
+                        menu: cmdMenu
+                    },{
+                        text: 'Host Detail',
+                        iconCls: 'appViewDetail',
+                        handler: function() {
+                            npc.hostGridClick(grid, rowIndex, e)
+                        }
+                    }
+                ] 
+            });
+            menu.showAt(e.getXY());
         },
 
         serviceContextMenu: function(grid, rowIndex, e) {
             e.stopEvent();
             var cmdMenu = new Ext.menu.Menu();
             cmdMenu = npc.serviceCommandMenu(grid.getStore().getAt(rowIndex).data, cmdMenu);
-            cmdMenu.showAt(e.getXY());
+
+            var menu = new Ext.menu.Menu({
+                items: [
+                    {
+                        text: 'Commands',
+                        iconCls: 'cogAdd',
+                        menu: cmdMenu
+                    },{
+                        text: 'Service Detail',
+                        iconCls: 'appViewDetail',
+                        handler: function() {
+                            npc.serviceGridClick(grid, rowIndex, e)
+                        }
+                    }
+                ] 
+            });
+            menu.showAt(e.getXY());
         },
 
         doCommand: function(msg, post) {

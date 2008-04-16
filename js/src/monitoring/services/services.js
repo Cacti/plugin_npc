@@ -3,11 +3,14 @@ npc.services = function(title, filter){
     // Panel ID
     var id = title.replace(/[-' ']/g,'') + '-tab';
 
+    var gridId = id + '-grid';
+
     // Grid URL
     var url = 'npc.php?module=services&action=getServices&p_state=' + filter;
 
-    // Default # of rows to display
-    var pageSize = 20;
+    // Set the number of rows to display
+    var state = Ext.state.Manager.get(gridId);
+    var pageSize = (state && state.rows) ? state.rows : 15;
 
     var outerTabId = 'services-tab';
 
@@ -137,11 +140,19 @@ npc.services = function(title, filter){
     }]);
 
     var grid = new Ext.grid.GridPanel({
-        id: id + '-grid',
+        id: gridId,
         autoHeight:true,
         autoExpandColumn: 'plugin_output',
         store:store,
         autoScroll: true,
+        listeners: {
+            // Intercept the state save to add our custom rows attribute
+            beforestatesave: function(o, s) {
+                s.rows = pageSize;
+                Ext.state.Manager.set(gridId, s);
+                return false;
+            }
+        },
         cm:cm,
         sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
         stripeRows: true,
@@ -158,7 +169,8 @@ npc.services = function(title, filter){
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,
             store: store,
-            displayInfo: true
+            displayInfo: true,
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: gridId })
         }),
         plugins:[new Ext.ux.grid.Search({
             mode:'remote',
