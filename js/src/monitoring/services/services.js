@@ -11,6 +11,7 @@ npc.services = function(title, filter){
     // Set the number of rows to display
     var state = Ext.state.Manager.get(gridId);
     var pageSize = (state && state.rows) ? state.rows : 15;
+    var refresh = (state && state.refresh) ? state.refresh : 60;
 
     var outerTabId = 'services-tab';
 
@@ -170,6 +171,40 @@ npc.services = function(title, filter){
             pageSize: pageSize,
             store: store,
             displayInfo: true,
+            items: ['-', ' ', ' ', ' ', ' ', 'Refresh',
+                new Ext.form.ComboBox({
+                    store: new Ext.data.SimpleStore({
+                        fields: ['name', 'value'],
+                        data: [
+                            ['10', 10],
+                            ['30', 30],
+                            ['60', 60],
+                            ['120', 120],
+                            ['180', 180],
+                            ['240', 240],
+                            ['300', 300]
+                        ]
+                    }),
+                    name: 'refresh',
+                    value: refresh,
+                    displayField:'name',
+                    valueField:'value',
+                    forceSelection:true,
+                    listeners: {
+                        select: function(comboBox) {
+                            state.refresh = comboBox.getValue();
+                            Ext.state.Manager.set(gridId, state);
+                            store.startAutoRefresh(state.refresh);
+                        }
+                    },
+                    mode: 'local',
+                    editable:false,
+                    width:60,
+                    allowBlank:false,
+                    triggerAction: 'all',
+                    selectOnFocus:true
+                }), ' ', ' ', ' ', ' ' 
+            ],
             plugins: new Ext.ux.Andrie.pPageSize({ gridId: gridId })
         }),
         plugins:[new Ext.ux.grid.Search({
@@ -199,7 +234,7 @@ npc.services = function(title, filter){
     grid.store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
-    store.startAutoRefresh(npc.params.npc_portlet_refresh);
+    store.startAutoRefresh(refresh);
 
     // Stop auto refresh if the tab is closed
     var listeners = {

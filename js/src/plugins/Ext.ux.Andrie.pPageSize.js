@@ -19,13 +19,13 @@ Ext.extend(Ext.ux.Andrie.pPageSize, Ext.util.Observable, {
      * @cfg {String} beforeText
      * Text to display before the comboBox
      */
-    beforeText: 'Show',
+    beforeText: 'Rows',
     
     /**
      * @cfg {String} afterText
      * Text to display after the comboBox
      */
-    afterText: 'items',
+    afterText: '',
     
     /**
      * @cfg {Mixed} addBefore
