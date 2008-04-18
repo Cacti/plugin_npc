@@ -125,7 +125,7 @@ class NpcCactiController extends Controller {
      *
      * @return boolean
      */
-    function getGraphList($npc_id, $cacti_id) {
+    function getGraphList() {
         $sql = "
             SELECT
                 graph_templates_graph.id,          
