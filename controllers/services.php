@@ -115,7 +115,7 @@ class NpcServicesController extends Controller {
                         'pending'  => 0);
 
         $q = new Doctrine_Query();
-        $services = $q->from('NpcServices s')->execute();
+        $services = $q->from('NpcServices s')->where('s.config_type = 1')->execute();
 
         foreach($services as $service) {
             $status[$this->serviceState[$service->Status->current_state]]++;
@@ -164,7 +164,7 @@ class NpcServicesController extends Controller {
             $where .= ' AND ';
         }
 
-        $where .= " ss.current_state in (" . $this->stringToState[$this->state] . ") ";
+        $where .= " ss.current_state in (" . $this->stringToState[$this->state] . ") AND s.config_type = 1 ";
 
         if ($this->id || $id) {
             $where .= sprintf(" AND s.service_object_id = %d", is_null($id) ? $this->id : $id);;
