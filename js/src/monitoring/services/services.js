@@ -147,9 +147,10 @@ npc.services = function(title, filter){
         store:store,
         autoScroll: true,
         listeners: {
-            // Intercept the state save to add our custom rows attribute
+            // Intercept the state save to add our custom attributes
             beforestatesave: function(o, s) {
                 s.rows = pageSize;
+                s.refresh = refresh
                 Ext.state.Manager.set(gridId, s);
                 return false;
             }
@@ -171,40 +172,7 @@ npc.services = function(title, filter){
             pageSize: pageSize,
             store: store,
             displayInfo: true,
-            items: ['-', ' ', ' ', ' ', ' ', 'Refresh',
-                new Ext.form.ComboBox({
-                    store: new Ext.data.SimpleStore({
-                        fields: ['name', 'value'],
-                        data: [
-                            ['10', 10],
-                            ['30', 30],
-                            ['60', 60],
-                            ['120', 120],
-                            ['180', 180],
-                            ['240', 240],
-                            ['300', 300]
-                        ]
-                    }),
-                    name: 'refresh',
-                    value: refresh,
-                    displayField:'name',
-                    valueField:'value',
-                    forceSelection:true,
-                    listeners: {
-                        select: function(comboBox) {
-                            state.refresh = comboBox.getValue();
-                            Ext.state.Manager.set(gridId, state);
-                            store.startAutoRefresh(state.refresh);
-                        }
-                    },
-                    mode: 'local',
-                    editable:false,
-                    width:60,
-                    allowBlank:false,
-                    triggerAction: 'all',
-                    selectOnFocus:true
-                }), ' ', ' ', ' ', ' ' 
-            ],
+            items: npc.setRefreshCombo(gridId, store, state),
             plugins: new Ext.ux.Andrie.pPageSize({ gridId: gridId })
         }),
         plugins:[new Ext.ux.grid.Search({

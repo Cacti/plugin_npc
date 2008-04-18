@@ -24,9 +24,6 @@ npc.serviceDetail = function(record) {
     // Get the tab
     var tab = Ext.getCmp(id);
 
-    // Default # of rows to display
-    var pageSize = 20;
-
     // build the command menu
     var menu = new Ext.menu.Menu();
     menu = npc.serviceCommandMenu(record.data, menu);
@@ -122,6 +119,7 @@ npc.serviceDetail = function(record) {
             containerScroll: true,
             items: [
                 new Ext.TabPanel({
+                    id: 'blabla',
                     style:'padding:5px 0 5px 5px',
                     activeTab: 0,
                     height:600,
@@ -136,15 +134,19 @@ npc.serviceDetail = function(record) {
                     },{
                         title: 'State History',
                         autoHeight:true,
+                        autoScroll:true,
                         id: id + '-sh'
                     },{
                         title: 'Notification History',
+                        autoScroll:true,
                         id: id + '-sn'
                     },{
                         title: 'Scheduled Downtime History',
+                        autoScroll:true,
                         id: id + '-sd'
                     },{
                         title: 'Comments',
+                        autoScroll:true,
                         id: id + '-sc'
                     }]
                 })
@@ -296,23 +298,41 @@ npc.serviceDetail = function(record) {
         width:600
     }]);
 
+    /* Notification History Grid */
+    var snGridId = id + '-snGrid';
+    var snGridState = Ext.state.Manager.get(snGridId);
+    var snGridRows = (snGridState && snGridState.rows) ? snGridState.rows : 15;
+    var snGridRefresh = (snGridState && snGridState.refresh) ? snGridState.refresh : 60;
+
     var snGrid = new Ext.grid.GridPanel({
         autoHeight:true,
         autoWidth:true,
+        autoScroll: true,
+        layout: 'fit',
         store:snStore,
         cm:snCm,
         autoExpandColumn:'output',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom state attributes
+            beforestatesave: function(o, s) {
+                s.rows = snGridRows;
+                s.refresh = snGridRefresh;
+                Ext.state.Manager.set(snGridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
-            emptyText:'No notifications.',
-            scrollOffset:0
+            emptyText:'No notifications.'
         }),
         bbar: new Ext.PagingToolbar({
-            pageSize:pageSize,
+            pageSize:snGridRows,
             store:snStore,
-            displayInfo:true
+            displayInfo:true,
+            items: npc.setRefreshCombo(snGridId, snStore, snGridState),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: snGridId })
         })
     });
 
@@ -357,13 +377,32 @@ npc.serviceDetail = function(record) {
         width:500
     }]);
 
+
+
+    /* State History Grid */
+    var shGridId = id + '-shGrid';
+    var shGridState = Ext.state.Manager.get(shGridId);
+    var shGridRows = (shGridState && shGridState.rows) ? shGridState.rows : 15;
+    var shGridRefresh = (shGridState && shGridState.refresh) ? shGridState.refresh : 60;
+
     var shGrid = new Ext.grid.GridPanel({
+        id: shGridId,
         autoHeight:true,
+        autoExpandColumn:'output',
         autoWidth:true,
+        autoScroll: true,
         store:shStore,
         cm:shCm,
-        autoExpandColumn:'output',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom state attributes
+            beforestatesave: function(o, s) {
+                s.rows = shGridRows;
+                s.refresh = shGridRefresh;
+                Ext.state.Manager.set(shGridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
@@ -371,9 +410,11 @@ npc.serviceDetail = function(record) {
             scrollOffset:0
         }),
         bbar: new Ext.PagingToolbar({
-            pageSize:pageSize,
+            pageSize:shGridRows,
             store:shStore,
-            displayInfo:true
+            displayInfo:true,
+            items: npc.setRefreshCombo(shGridId, shStore, shGridState),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: shGridId })
         })
     });
 
@@ -416,6 +457,12 @@ npc.serviceDetail = function(record) {
         width:400
     }]);
 
+    /* Scheduled Downtime History Grid */
+    var sdGridId = id + '-snGrid';
+    var sdGridState = Ext.state.Manager.get(sdGridId);
+    var sdGridRows = (sdGridState && sdGridState.rows) ? sdGridState.rows : 15;
+    var sdGridRefresh = (sdGridState && sdGridState.refresh) ? sdGridState.refresh : 60;
+
     var sdGrid = new Ext.grid.GridPanel({
         autoHeight:true,
         autoWidth:true,
@@ -423,6 +470,15 @@ npc.serviceDetail = function(record) {
         cm:sdCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom state attributes
+            beforestatesave: function(o, s) {
+                s.rows = sdGridRows;
+                s.refresh = sdGridRefresh;
+                Ext.state.Manager.set(sdGridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
@@ -430,9 +486,11 @@ npc.serviceDetail = function(record) {
             scrollOffset:0
         }),
         bbar: new Ext.PagingToolbar({
-            pageSize:pageSize,
+            pageSize:sdGridRows,
             store:sdStore,
-            displayInfo:true
+            displayInfo:true,
+            items: npc.setRefreshCombo(shGridId, sdStore, sdGridState),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: sdGridId })
         })
     });
 
@@ -561,17 +619,17 @@ npc.serviceDetail = function(record) {
     // Load the data stores
     siStore.load();
     serviceStore.load();
-    snStore.load({params:{start:0, limit:pageSize}});
-    shStore.load({params:{start:0, limit:pageSize}});
-    sdStore.load({params:{start:0, limit:pageSize}});
+    snStore.load({params:{start:0, limit:snGridRows}});
+    shStore.load({params:{start:0, limit:shGridRows}});
+    sdStore.load({params:{start:0, limit:sdGridRows}});
     scStore.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh
     serviceStore.startAutoRefresh(60);
     siStore.startAutoRefresh(60);
-    snStore.startAutoRefresh(60);
-    shStore.startAutoRefresh(60);
-    sdStore.startAutoRefresh(60);
+    snStore.startAutoRefresh(snGridRefresh);
+    shStore.startAutoRefresh(shGridRefresh);
+    sdStore.startAutoRefresh(sdGridRefresh);
     scStore.startAutoRefresh(60);
 
     // Add listeners to stop auto refresh on the store if the tab is closed
@@ -653,5 +711,4 @@ npc.serviceDetail = function(record) {
             }
         }
     });
-
 };

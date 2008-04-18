@@ -225,6 +225,46 @@ npc = function() {
             menu.showAt(e.getXY());
         },
 
+        setRefreshCombo: function(gridId, store, state) {
+            return([
+                ' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' ',
+                ' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' ',
+                ' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', '-', 'Refresh',
+                new Ext.form.ComboBox({
+                    store: new Ext.data.SimpleStore({
+                        fields: ['name', 'value'],
+                        data: [
+                            ['10', 10],
+                            ['30', 30],
+                            ['60', 60],
+                            ['120', 120],
+                            ['180', 180],
+                            ['240', 240],
+                            ['300', 300]
+                        ]
+                    }),
+                    name: 'refresh',
+                    value: (state && state.refresh) ? state.refresh : 60,
+                    displayField:'name',
+                    valueField:'value',
+                    forceSelection:true,
+                    listeners: {
+                        select: function(comboBox) {
+                            state.refresh = comboBox.getValue();
+                            Ext.state.Manager.set(gridId, state);
+                            store.startAutoRefresh(state.refresh);
+                        }
+                    },
+                    mode: 'local',
+                    editable:false,
+                    width:50,
+                    allowBlank:false,
+                    triggerAction: 'all',
+                    selectOnFocus:true
+                })
+            ])
+        },
+
         doCommand: function(msg, post) {
 
             Ext.Msg.show({
