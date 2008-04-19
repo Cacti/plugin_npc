@@ -458,7 +458,7 @@ npc.serviceDetail = function(record) {
     }]);
 
     /* Scheduled Downtime History Grid */
-    var sdGridId = id + '-snGrid';
+    var sdGridId = id + '-sdGrid';
     var sdGridState = Ext.state.Manager.get(sdGridId);
     var sdGridRows = (sdGridState && sdGridState.rows) ? sdGridState.rows : 15;
     var sdGridRefresh = (sdGridState && sdGridState.refresh) ? sdGridState.refresh : 60;
@@ -489,7 +489,7 @@ npc.serviceDetail = function(record) {
             pageSize:sdGridRows,
             store:sdStore,
             displayInfo:true,
-            items: npc.setRefreshCombo(shGridId, sdStore, sdGridState),
+            items: npc.setRefreshCombo(sdGridId, sdStore, sdGridState),
             plugins: new Ext.ux.Andrie.pPageSize({ gridId: sdGridId })
         })
     });
@@ -548,6 +548,12 @@ npc.serviceDetail = function(record) {
         width:50
     }]);
 
+    /* Notification History Grid */
+    var scGridId = id + '-scGrid';
+    var scGridState = Ext.state.Manager.get(scGridId);
+    var scGridRows = (scGridState && scGridState.rows) ? scGridState.rows : 15;
+    var scGridRefresh = (scGridState && scGridState.refresh) ? scGridState.refresh : 60;
+
     var scGrid = new Ext.grid.GridPanel({
         autoHeight:true,
         autoWidth:true,
@@ -555,6 +561,15 @@ npc.serviceDetail = function(record) {
         cm:scCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom state attributes
+            beforestatesave: function(o, s) {
+                s.rows = scGridRows;
+                s.refresh = scGridRefresh;
+                Ext.state.Manager.set(scGridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
@@ -593,9 +608,11 @@ npc.serviceDetail = function(record) {
             }
         }],
         bbar: new Ext.PagingToolbar({
-            pageSize: pageSize,
+            pageSize: scGridRows,
             store: scStore,
-            displayInfo: true
+            displayInfo: true,
+            items: npc.setRefreshCombo(scGridId, scStore, scGridState),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: scGridId })
         })
     });
 
@@ -622,7 +639,7 @@ npc.serviceDetail = function(record) {
     snStore.load({params:{start:0, limit:snGridRows}});
     shStore.load({params:{start:0, limit:shGridRows}});
     sdStore.load({params:{start:0, limit:sdGridRows}});
-    scStore.load({params:{start:0, limit:pageSize}});
+    scStore.load({params:{start:0, limit:scGridRows}});
 
     // Start auto refresh
     serviceStore.startAutoRefresh(60);
@@ -630,7 +647,7 @@ npc.serviceDetail = function(record) {
     snStore.startAutoRefresh(snGridRefresh);
     shStore.startAutoRefresh(shGridRefresh);
     sdStore.startAutoRefresh(sdGridRefresh);
-    scStore.startAutoRefresh(60);
+    scStore.startAutoRefresh(scGridRefresh);
 
     // Add listeners to stop auto refresh on the store if the tab is closed
     var listeners = {
