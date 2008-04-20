@@ -44,7 +44,7 @@ function npc_version() {
  */
 function plugin_npc_version() {
     return array(   'name'          => 'npc',
-                    'version'       => '2.0.0a',
+                    'version'       => '2.0.0b',
                     'longname'      => 'Nagios plugin for Cacti',
                     'author'        => 'Billy Gunn',
                     'homepage'      => 'http://trac2.assembla.com/npc',
