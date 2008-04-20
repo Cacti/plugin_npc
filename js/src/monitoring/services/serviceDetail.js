@@ -8,9 +8,6 @@ npc.serviceDetail = function(record) {
     // Set thetitle
     var title = record.data.host_name + ': ' + record.data.service_description;
 
-    // Default # of rows to display
-    var pageSize = 20;
-
     var outerTabId = 'services-tab';
 
     npc.addCenterNestedTab(outerTabId, 'Services');
@@ -18,6 +15,7 @@ npc.serviceDetail = function(record) {
     var centerTabPanel = Ext.getCmp('centerTabPanel');
 
     var innerTabPanelId = 'services-tab-inner-panel';
+    var detailsPanelId = innerTabPanelId + '-details';
 
     var innerTabPanel = Ext.getCmp(innerTabPanelId);
 
@@ -111,44 +109,21 @@ npc.serviceDetail = function(record) {
         innerTabPanel.add({
             id: id, 
             title: title,
-            autoHeight:true,
+            height:600,
+            layout: 'fit',
             deferredRender:false,
             layoutOnTabChange:true,
             closable: true,
-            autoScroll: true,
             containerScroll: true,
             items: [
                 new Ext.TabPanel({
-                    id: 'blabla',
+                    id: detailsPanelId,
                     style:'padding:5px 0 5px 5px',
-                    activeTab: 0,
                     height:600,
-                    autoWidth:true,
                     plain:true,
                     border:false,
                     deferredRender:false,
-                    layoutOnTabChange:true,
-                    items:[{
-                        title: 'Service State Information',
-                        id: id + '-si'
-                    },{
-                        title: 'State History',
-                        autoHeight:true,
-                        autoScroll:true,
-                        id: id + '-sh'
-                    },{
-                        title: 'Notification History',
-                        autoScroll:true,
-                        id: id + '-sn'
-                    },{
-                        title: 'Scheduled Downtime History',
-                        autoScroll:true,
-                        id: id + '-sd'
-                    },{
-                        title: 'Comments',
-                        autoScroll:true,
-                        id: id + '-sc'
-                    }]
+                    layoutOnTabChange:true
                 })
             ]
         }).show();
@@ -203,8 +178,10 @@ npc.serviceDetail = function(record) {
     }]);
 
     var siGrid = new Ext.grid.GridPanel({
+        title: 'Service State Information',
         autoHeight:true,
         autoWidth:true,
+        deferredRender:false,
         store:siStore,
         cm:siCm,
         autoExpandColumn:'Value',
@@ -305,10 +282,12 @@ npc.serviceDetail = function(record) {
     var snGridRefresh = (snGridState && snGridState.refresh) ? snGridState.refresh : 60;
 
     var snGrid = new Ext.grid.GridPanel({
-        autoHeight:true,
-        autoWidth:true,
+        id: snGridId,
+        title: 'Notification History',
+        height:800,
         autoScroll: true,
         layout: 'fit',
+        deferredRender:false,
         store:snStore,
         cm:snCm,
         autoExpandColumn:'output',
@@ -387,10 +366,12 @@ npc.serviceDetail = function(record) {
 
     var shGrid = new Ext.grid.GridPanel({
         id: shGridId,
-        autoHeight:true,
-        autoExpandColumn:'output',
-        autoWidth:true,
+        title: 'State History',
+        height:800,
         autoScroll: true,
+        layout: 'fit',
+        deferredRender:false,
+        autoExpandColumn:'output',
         store:shStore,
         cm:shCm,
         stripeRows: true,
@@ -406,8 +387,7 @@ npc.serviceDetail = function(record) {
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
-            emptyText:'No alerts.',
-            scrollOffset:0
+            emptyText:'No alerts.'
         }),
         bbar: new Ext.PagingToolbar({
             pageSize:shGridRows,
@@ -464,8 +444,11 @@ npc.serviceDetail = function(record) {
     var sdGridRefresh = (sdGridState && sdGridState.refresh) ? sdGridState.refresh : 60;
 
     var sdGrid = new Ext.grid.GridPanel({
-        autoHeight:true,
-        autoWidth:true,
+        id: sdGridId,
+        title: 'Scheduled Downtime History',
+        height:800,
+        layout: 'fit',
+        deferredRender:false,
         store:sdStore,
         cm:sdCm,
         autoExpandColumn:'comment_data',
@@ -482,8 +465,7 @@ npc.serviceDetail = function(record) {
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
-            emptyText:'No downtime.',
-            scrollOffset:0
+            emptyText:'No downtime.'
         }),
         bbar: new Ext.PagingToolbar({
             pageSize:sdGridRows,
@@ -555,8 +537,11 @@ npc.serviceDetail = function(record) {
     var scGridRefresh = (scGridState && scGridState.refresh) ? scGridState.refresh : 60;
 
     var scGrid = new Ext.grid.GridPanel({
-        autoHeight:true,
-        autoWidth:true,
+        id: scGridId,
+        title: 'Comments',
+        height:800,
+        layout: 'fit',
+        deferredRender:false,
         store:scStore,
         cm:scCm,
         autoExpandColumn:'comment_data',
@@ -573,8 +558,7 @@ npc.serviceDetail = function(record) {
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
-            emptyText:'No comments.',
-            scrollOffset:0
+            emptyText:'No comments.'
         }),
         tbar:[{
             text:'New Comment',
@@ -617,11 +601,12 @@ npc.serviceDetail = function(record) {
     });
 
     // Add the grids to the tabs
-    Ext.getCmp(id+'-si').add(siGrid);
-    Ext.getCmp(id+'-sn').add(snGrid);
-    Ext.getCmp(id+'-sh').add(shGrid);
-    Ext.getCmp(id+'-sd').add(sdGrid);
-    Ext.getCmp(id+'-sc').add(scGrid);
+    var detailsPanel = Ext.getCmp(detailsPanelId);
+    detailsPanel.add(siGrid);
+    detailsPanel.add(snGrid);
+    detailsPanel.add(shGrid);
+    detailsPanel.add(sdGrid);
+    detailsPanel.add(scGrid);
 
     // Refresh the dashboard
     centerTabPanel.doLayout();
@@ -632,6 +617,8 @@ npc.serviceDetail = function(record) {
     shGrid.render();
     sdGrid.render();
     scGrid.render();
+
+    detailsPanel.setActiveTab(siGrid);
 
     // Load the data stores
     siStore.load();

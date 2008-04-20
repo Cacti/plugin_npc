@@ -2,9 +2,6 @@ npc.comments = function(){
 
     var title = 'Comments';
 
-    // Default # of rows to display
-    var pageSize = 20;
-
     var outerTabId = 'comments-tab';
 
     npc.addCenterNestedTab(outerTabId, 'Comments');
@@ -24,16 +21,18 @@ npc.comments = function(){
         innerTabPanel.add({ 
             id: 'host-comments-tab', 
             title: 'Host Comments', 
+            height:600,
+            layout: 'fit',
             deferredRender:false,
-            closable: false, 
-            items: [{}] 
+            closable: false
         });
         innerTabPanel.add({ 
             id: 'service-comments-tab', 
             title: 'Service Comments', 
+            height:600,
+            layout: 'fit',
             deferredRender:false,
-            closable: false, 
-            items: [{}] 
+            closable: false
         });
         innerTabPanel.show(); 
         innerTabPanel.setActiveTab(0); 
@@ -111,13 +110,30 @@ npc.comments = function(){
         width:50
     }]);
 
+    /* Host Comments Grid */
+    var hcGridId = title + '-hcGrid';
+    var hcGridState = Ext.state.Manager.get(hcGridId);
+    var hcGridRows = (hcGridState && hcGridState.rows) ? hcGridState.rows : 15;
+    var hcGridRefresh = (hcGridState && hcGridState.refresh) ? hcGridState.refresh : 60;
+
     var hcGrid = new Ext.grid.GridPanel({
-        autoHeight:true,
-        autoWidth:true,
+        id:hcGridId,
+        height:800,
+        layout: 'fit',
+        autoScroll:true,
         store:hcStore,
         cm:hcCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom attributes
+            beforestatesave: function(o, s) {
+                s.rows = hcGridRows;
+                s.refresh = hcGridRefresh;
+                Ext.state.Manager.set(hcGridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GroupingView({
             forceFit:true,
             autoFill:true,
@@ -158,9 +174,11 @@ npc.comments = function(){
             }
         }],
         bbar: new Ext.PagingToolbar({
-            pageSize: pageSize,
+            pageSize: hcGridRows,
             store: hcStore,
-            displayInfo: true
+            displayInfo: true,
+            items: npc.setRefreshCombo(hcGridId, hcStore, hcGridState),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: hcGridId })
         })
     });
 
@@ -235,13 +253,30 @@ npc.comments = function(){
         width:50
     }]);
 
+    /* Service Comments Grid */
+    var scGridId = title + '-scGrid';
+    var scGridState = Ext.state.Manager.get(scGridId);
+    var scGridRows = (scGridState && scGridState.rows) ? scGridState.rows : 15;
+    var scGridRefresh = (scGridState && scGridState.refresh) ? scGridState.refresh : 60;
+
     var scGrid = new Ext.grid.GridPanel({
-        autoHeight:true,
-        autoWidth:true,
+        id:scGridId,
+        height:800,
+        layout: 'fit',
+        autoScroll:true,
         store:scStore,
         cm:scCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom attributes
+            beforestatesave: function(o, s) {
+                s.rows = scGridRows;
+                s.refresh = scGridRefresh;
+                Ext.state.Manager.set(scGridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GroupingView({
             forceFit:true,
             autoFill:true,
@@ -281,15 +316,17 @@ npc.comments = function(){
             }
         }],
         bbar: new Ext.PagingToolbar({
-            pageSize: pageSize,
-            store: hcStore,
-            displayInfo: true
+            pageSize: scGridRows,
+            store: scStore,
+            displayInfo: true,
+            items: npc.setRefreshCombo(scGridId, scStore, scGridState),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: scGridId })
         })
     });
 
     // Add the grid to the panel
-    Ext.getCmp('host-comments-tab').items.add(hcGrid);
-    Ext.getCmp('service-comments-tab').items.add(scGrid);
+    Ext.getCmp('host-comments-tab').add(hcGrid);
+    Ext.getCmp('service-comments-tab').add(scGrid);
 
     // Refresh the dashboard
     centerTabPanel.doLayout();
@@ -299,12 +336,12 @@ npc.comments = function(){
     scGrid.render();
 
     // Load the data store
-    hcGrid.store.load({params:{start:0, limit:pageSize}});
-    scGrid.store.load({params:{start:0, limit:pageSize}});
+    hcGrid.store.load({params:{start:0, limit:hcGridRows}});
+    scGrid.store.load({params:{start:0, limit:scGridState}});
 
     // Start auto refresh of the grid
-    hcStore.startAutoRefresh(npc.params.npc_portlet_refresh);
-    scStore.startAutoRefresh(npc.params.npc_portlet_refresh);
+    hcStore.startAutoRefresh(hcGridRefresh);
+    scStore.startAutoRefresh(scGridRefresh);
 
     // Stop auto refresh if the tab is closed
     var listeners = {

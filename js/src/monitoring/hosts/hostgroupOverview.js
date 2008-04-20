@@ -6,11 +6,15 @@ npc.hostgroupOverview = function(){
     // Panel ID
     var id = 'hostgroupOverview-tab';
 
+    var gridId = id + '-grid';
+
     // Portlet URL
     var url = 'npc.php?module=hostgroups&action=getOverview';
 
-    // Default # of rows to display
-    var pageSize = 25;
+    // Set the number of rows to display and the refresh rate
+    var state = Ext.state.Manager.get(gridId);
+    var pageSize = (state && state.rows) ? state.rows : 15;
+    var refresh = (state && state.refresh) ? state.refresh : 60;
 
     var outerTabId = 'hosts-tab';
 
@@ -31,8 +35,9 @@ npc.hostgroupOverview = function(){
         innerTabPanel.add({
             id: id,
             title: title,
-            closable: true,
-            items: [{}]
+            height:600,
+            layout: 'fit',
+            closable: true
         }).show();
         innerTabPanel.setActiveTab(tab);
         tab = Ext.getCmp(id);
@@ -115,12 +120,23 @@ npc.hostgroupOverview = function(){
 
     var grid = new Ext.grid.GridPanel({
         id: 'hostgroup-overview-portlet-grid',
-        autoHeight:true,
+        height:800,
+        layout: 'fit',
         autoExpandColumn: 'host_name',
+        autoScroll: true,
         store:store,
         cm:cm,
         sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom attributes
+            beforestatesave: function(o, s) {
+                s.rows = pageSize;
+                s.refresh = refresh
+                Ext.state.Manager.set(gridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GroupingView({
             forceFit:true,
             autoFill:true,
@@ -128,19 +144,20 @@ npc.hostgroupOverview = function(){
             enableGroupingMenu: false,
             enableNoGroups: true,
             emptyText:'No hostgroups.',
-            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Hosts" : "Host"]})',
-            scrollOffset:0
+            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Hosts" : "Host"]})'
         }),
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,
             store: store,
             displayInfo: true,
-            displayMsg: ''
+            displayMsg: '',
+            items: npc.setRefreshCombo(gridId, store, state),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: gridId })
         })
     });
 
     // Add the grid to the panel
-    tab.items.add(grid);
+    tab.add(grid);
 
     // Refresh the dashboard
     centerTabPanel.doLayout();
@@ -152,7 +169,7 @@ npc.hostgroupOverview = function(){
     grid.store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
-    store.startAutoRefresh(npc.params.npc_portlet_refresh);
+    store.startAutoRefresh(refresh);
 
     // Stop auto refresh if the tab is closed
     var listeners = {

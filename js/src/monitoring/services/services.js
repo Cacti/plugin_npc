@@ -8,7 +8,7 @@ npc.services = function(title, filter){
     // Grid URL
     var url = 'npc.php?module=services&action=getServices&p_state=' + filter;
 
-    // Set the number of rows to display
+    // Set the number of rows to display and the refresh rate
     var state = Ext.state.Manager.get(gridId);
     var pageSize = (state && state.rows) ? state.rows : 15;
     var refresh = (state && state.refresh) ? state.refresh : 60;
@@ -34,9 +34,10 @@ npc.services = function(title, filter){
             id: id, 
             title: title, 
             deferredRender:false,
+            height:600,
+            layout: 'fit',
             layoutOnTabChange:true,
-            closable: true, 
-            items: [{}] 
+            closable: true
         }).show(); 
         innerTabPanel.setActiveTab(tab); 
         tab = Ext.getCmp(id); 
@@ -142,7 +143,8 @@ npc.services = function(title, filter){
 
     var grid = new Ext.grid.GridPanel({
         id: gridId,
-        autoHeight:true,
+        height:800,
+        layout: 'fit',
         autoExpandColumn: 'plugin_output',
         store:store,
         autoScroll: true,
@@ -190,7 +192,7 @@ npc.services = function(title, filter){
     });
 
     // Add the grid to the panel
-    tab.items.add(grid);
+    tab.add(grid);
 
     // Refresh the dashboard
     centerTabPanel.doLayout();

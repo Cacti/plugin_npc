@@ -6,11 +6,15 @@ npc.servicegroupOverview = function(){
     // Panel ID
     var id = 'servicegroupOverview-tab';
 
+    var gridId = id + '-grid';
+
     // Portlet URL
     var url = 'npc.php?module=servicegroups&action=getOverview';
 
-    // Default # of rows to display
-    var pageSize = 25;
+    // Set the number of rows to display and the refresh rate
+    var state = Ext.state.Manager.get(gridId);
+    var pageSize = (state && state.rows) ? state.rows : 15;
+    var refresh = (state && state.refresh) ? state.refresh : 60;
 
     var outerTabId = 'services-tab';
 
@@ -31,8 +35,9 @@ npc.servicegroupOverview = function(){
         innerTabPanel.add({
             id: id,
             title: title,
-            closable: true,
-            items: [{}]
+            height:600,
+            layout: 'fit',
+            closable: true
         }).show();
         innerTabPanel.setActiveTab(tab);
         tab = Ext.getCmp(id);
@@ -114,9 +119,20 @@ npc.servicegroupOverview = function(){
 
 
     var grid = new Ext.grid.GridPanel({
-        id: 'servicegroup-overview-portlet-grid',
-        autoHeight:true,
+        id: gridId,
+        height:600,
+        layout: 'fit',
         autoExpandColumn: 'host_name',
+        autoScroll:true,
+        listeners: {
+            // Intercept the state save to add our custom attributes
+            beforestatesave: function(o, s) {
+                s.rows = pageSize;
+                s.refresh = refresh
+                Ext.state.Manager.set(gridId, s);
+                return false;
+            }
+        },
         store:store,
         cm:cm,
         sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
@@ -128,19 +144,20 @@ npc.servicegroupOverview = function(){
             enableGroupingMenu: false,
             enableNoGroups: true,
             emptyText:'No servicegroups.',
-            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Hosts" : "Host"]})',
-            scrollOffset:0
+            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Hosts" : "Host"]})'
         }),
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,
             store: store,
             displayInfo: true,
-            displayMsg: ''
+            displayMsg: '',
+            items: npc.setRefreshCombo(gridId, store, state),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: gridId })
         })
     });
 
     // Add the grid to the panel
-    tab.items.add(grid);
+    tab.add(grid);
 
     // Refresh the dashboard
     centerTabPanel.doLayout();
@@ -152,7 +169,7 @@ npc.servicegroupOverview = function(){
     grid.store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
-    store.startAutoRefresh(npc.params.npc_portlet_refresh);
+    store.startAutoRefresh(refresh);
 
     // Stop auto refresh if the tab is closed
     var listeners = {

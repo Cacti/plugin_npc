@@ -226,6 +226,7 @@ npc = function() {
         },
 
         setRefreshCombo: function(gridId, store, state) {
+
             return([
                 ' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' ',
                 ' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' ',' ', ' ', ' ', ' ', ' ',
@@ -250,8 +251,14 @@ npc = function() {
                     forceSelection:true,
                     listeners: {
                         select: function(comboBox) {
+                            if (!state) {
+                                state = Ext.state.Manager.get(gridId)
+                                state = state ? state : {};
+                            }
+
                             state.refresh = comboBox.getValue();
                             Ext.state.Manager.set(gridId, state);
+                            store.stopAutoRefresh();
                             store.startAutoRefresh(state.refresh);
                         }
                     },

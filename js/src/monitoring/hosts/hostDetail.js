@@ -8,9 +8,6 @@ npc.hostDetail = function(record) {
     // Set thetitle
     var title = record.data.host_name;
 
-    // Default # of rows to display
-    var pageSize = 20;
-
     var outerTabId = 'hosts-tab';
 
     npc.addCenterNestedTab(outerTabId, 'Hosts');
@@ -20,6 +17,7 @@ npc.hostDetail = function(record) {
     var innerTabPanelId = 'hosts-tab-inner-panel';
 
     var innerTabPanel = Ext.getCmp(innerTabPanelId);
+    var detailsPanelId = innerTabPanelId + '-details';
 
     // Get the tab
     var tab = Ext.getCmp(id);
@@ -65,36 +63,20 @@ npc.hostDetail = function(record) {
         innerTabPanel.add({
             id: id, 
             title: title,
-            autoHeight:true,
+            height:600,
+            layout: 'fit',
             closable: true,
             autoScroll: true,
             containerScroll: true,
             items: [
                 new Ext.TabPanel({
+                    id: detailsPanelId,
                     style:'padding:10px 0 10px 10px',
-                    activeTab: 0,
                     height:600,
-                    autoWidth:true,
+                    border:false,
                     plain:true,
                     deferredRender:false,
-                    defaults:{autoScroll: true},
-                    items:[{
-                        title: 'Host State Information',
-                        id: id + '-hi'
-                    },{
-                        title: 'State History',
-                        autoHeight:true,
-                        id: id + '-hh'
-                    },{
-                        title: 'Notification History',
-                        id: id + '-hn'
-                    },{
-                        title: 'Scheduled Downtime History',
-                        id: id + '-hd'
-                    },{
-                        title: 'Comments',
-                        id: id + '-hc'
-                    }]
+                    defaults:{autoScroll: true}
                 })
             ]
         }).show();
@@ -199,6 +181,7 @@ npc.hostDetail = function(record) {
     }]);
 
     var hiGrid = new Ext.grid.GridPanel({
+        title: 'Host State Information',
         autoHeight:true,
         autoWidth:true,
         store:hiStore,
@@ -293,23 +276,42 @@ npc.hostDetail = function(record) {
         width:600
     }]);
 
+    /* Notification History Grid */
+    var hnGridId = id + '-hnGrid';
+    var hnGridState = Ext.state.Manager.get(hnGridId);
+    var hnGridRows = (hnGridState && hnGridState.rows) ? hnGridState.rows : 15;
+    var hnGridRefresh = (hnGridState && hnGridState.refresh) ? hnGridState.refresh : 60;
+
     var hnGrid = new Ext.grid.GridPanel({
-        autoHeight:true,
-        autoWidth:true,
+        id: hnGridId,
+        title: 'Notification History',
+        height:800,
+        layout: 'fit',
+        autoScroll:true,
         store:hnStore,
         cm:hnCm,
         autoExpandColumn:'output',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom state attributes
+            beforestatesave: function(o, s) {
+                s.rows = hnGridRows;
+                s.refresh = hnGridRefresh;
+                Ext.state.Manager.set(hnGridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
-            emptyText:'No notifications.',
-            scrollOffset:0
+            emptyText:'No notifications.'
         }),
         bbar: new Ext.PagingToolbar({
-            pageSize:pageSize,
+            pageSize:hnGridRows,
             store:hnStore,
-            displayInfo:true
+            displayInfo:true,
+            items: npc.setRefreshCombo(hnGridId, hnStore, hnGridState),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: hnGridId })
         })
     });
 
@@ -354,23 +356,43 @@ npc.hostDetail = function(record) {
         width:500
     }]);
 
+
+    /* State History Grid */
+    var hhGridId = id + '-hhGrid';
+    var hhGridState = Ext.state.Manager.get(hhGridId);
+    var hhGridRows = (hhGridState && hhGridState.rows) ? hhGridState.rows : 15;
+    var hhGridRefresh = (hhGridState && hhGridState.refresh) ? hhGridState.refresh : 60;
+
     var hhGrid = new Ext.grid.GridPanel({
-        autoHeight:true,
-        autoWidth:true,
+        id: hhGridId,
+        title: 'State History',
+        height:800,
+        layout: 'fit',
+        autoScroll: true,
         store:hhStore,
         cm:hhCm,
         autoExpandColumn:'output',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom state attributes
+            beforestatesave: function(o, s) {
+                s.rows = hhGridRows;
+                s.refresh = hhGridRefresh;
+                Ext.state.Manager.set(hhGridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
-            emptyText:'No alerts.',
-            scrollOffset:0
+            emptyText:'No alerts.'
         }),
         bbar: new Ext.PagingToolbar({
-            pageSize:pageSize,
+            pageSize:hhGridRows,
             store:hhStore,
-            displayInfo:true
+            displayInfo:true,
+            items: npc.setRefreshCombo(hhGridId, hhStore, hhGridState),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: hhGridId })
         })
     });
 
@@ -413,23 +435,43 @@ npc.hostDetail = function(record) {
         width:400
     }]);
 
+
+    /* Scheduled Downtime History Grid */
+    var hdGridId = id + '-hdGrid';
+    var hdGridState = Ext.state.Manager.get(hdGridId);
+    var hdGridRows = (hdGridState && hdGridState.rows) ? hdGridState.rows : 15;
+    var hdGridRefresh = (hdGridState && hdGridState.refresh) ? hdGridState.refresh : 60;
+
     var hdGrid = new Ext.grid.GridPanel({
-        autoHeight:true,
-        autoWidth:true,
+        id: hdGridId,
+        title: 'Scheduled Downtime History',
+        height:800,
+        layout: 'fit',
+        autoScroll:true,
         store:hdStore,
         cm:hdCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom state attributes
+            beforestatesave: function(o, s) {
+                s.rows = hdGridRows;
+                s.refresh = hdGridRefresh;
+                Ext.state.Manager.set(hdGridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
-            emptyText:'No downtime.',
-            scrollOffset:0
+            emptyText:'No downtime.'
         }),
         bbar: new Ext.PagingToolbar({
-            pageSize:pageSize,
+            pageSize:hdGridRows,
             store:hdStore,
-            displayInfo:true
+            displayInfo:true,
+            items: npc.setRefreshCombo(hdGridId, hdStore, hdGridState),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: hdGridId })
         })
     });
 
@@ -487,18 +529,36 @@ npc.hostDetail = function(record) {
         width:50
     }]);
 
+
+    /* Comments Grid */
+    var hcGridId = id + '-hcGrid';
+    var hcGridState = Ext.state.Manager.get(hcGridId);
+    var hcGridRows = (hcGridState && hcGridState.rows) ? hcGridState.rows : 15;
+    var hcGridRefresh = (hcGridState && hcGridState.refresh) ? hcGridState.refresh : 60;
+
     var hcGrid = new Ext.grid.GridPanel({
-        autoHeight:true,
-        autoWidth:true,
+        id: hcGridId,
+        title: 'Comments',
+        height:800,
+        layout: 'fit',
+        autoScroll: true,
         store:hcStore,
         cm:hcCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom state attributes
+            beforestatesave: function(o, s) {
+                s.rows = hcGridRows;
+                s.refresh = hcGridRefresh;
+                Ext.state.Manager.set(hcGridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
-            emptyText:'No comments.',
-            scrollOffset:0
+            emptyText:'No comments.'
         }),
         tbar:[{
             text:'New Comment',
@@ -531,18 +591,21 @@ npc.hostDetail = function(record) {
             }
         }],
         bbar: new Ext.PagingToolbar({
-            pageSize: pageSize,
+            pageSize:hcGridRows,
             store: hcStore,
-            displayInfo: true
+            displayInfo: true,
+            items: npc.setRefreshCombo(hdGridId, hcStore, hcGridState),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: hcGridId })
         })
     });
 
     // Add the grids to the tabs
-    Ext.getCmp(id+'-hi').add(hiGrid);
-    Ext.getCmp(id+'-hn').add(hnGrid);
-    Ext.getCmp(id+'-hh').add(hhGrid);
-    Ext.getCmp(id+'-hd').add(hdGrid);
-    Ext.getCmp(id+'-hc').add(hcGrid);
+    var detailsPanel = Ext.getCmp(detailsPanelId);
+    detailsPanel.add(hiGrid);
+    detailsPanel.add(hnGrid);
+    detailsPanel.add(hhGrid);
+    detailsPanel.add(hdGrid);
+    detailsPanel.add(hcGrid);
 
     // Refresh the dashboard
     centerTabPanel.doLayout();
@@ -554,21 +617,23 @@ npc.hostDetail = function(record) {
     hdGrid.render();
     hcGrid.render();
 
+    detailsPanel.setActiveTab(hiGrid);
+
     // Load the data stores
     hostStore.load();
     hiStore.load();
-    hnStore.load({params:{start:0, limit:pageSize}});
-    hhStore.load({params:{start:0, limit:pageSize}});
-    hdStore.load({params:{start:0, limit:pageSize}});
-    hcStore.load({params:{start:0, limit:pageSize}});
+    hnStore.load({params:{start:0, limit:hnGridRows}});
+    hhStore.load({params:{start:0, limit:hhGridRows}});
+    hdStore.load({params:{start:0, limit:hdGridRows}});
+    hcStore.load({params:{start:0, limit:hcGridRows}});
 
     // Start auto refresh
     hostStore.startAutoRefresh(60);
     hiStore.startAutoRefresh(60);
-    hnStore.startAutoRefresh(60);
-    hhStore.startAutoRefresh(60);
-    hdStore.startAutoRefresh(60);
-    hcStore.startAutoRefresh(60);
+    hnStore.startAutoRefresh(hnGridRefresh);
+    hhStore.startAutoRefresh(hhGridRefresh);
+    hdStore.startAutoRefresh(hdGridRefresh);
+    hcStore.startAutoRefresh(hcGridRefresh);
 
     // Add listeners to stop auto refresh on the store if the tab is closed
     var listeners = {

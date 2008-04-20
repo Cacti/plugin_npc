@@ -2,9 +2,6 @@ npc.downtime = function(){
 
     var title = 'Scheduled Downtime';
 
-    // Default # of rows to display
-    var pageSize = 20;
-
     var outerTabId = 'downtime-tab';
 
     npc.addCenterNestedTab(outerTabId, title);
@@ -24,16 +21,18 @@ npc.downtime = function(){
         innerTabPanel.add({ 
             id: 'host-downtime-tab', 
             title: 'Hosts', 
+            height:600,
+            layout: 'fit',
             deferredRender:false,
-            closable: false, 
-            items: [{}] 
+            closable: false
         });
         innerTabPanel.add({ 
             id: 'service-downtime-tab', 
             title: 'Services', 
+            height:600,
+            layout: 'fit',
             deferredRender:false,
-            closable: false, 
-            items: [{}] 
+            closable: false
         });
         innerTabPanel.show(); 
         innerTabPanel.setActiveTab(0); 
@@ -93,13 +92,30 @@ npc.downtime = function(){
         width:400
     }]);
 
+    /* Host Downtime Grid */
+    var hdGridId ='downtime-hdGrid';
+    var hdGridState = Ext.state.Manager.get(hdGridId);
+    var hdGridRows = (hdGridState && hdGridState.rows) ? hdGridState.rows : 15;
+    var hdGridRefresh = (hdGridState && hdGridState.refresh) ? hdGridState.refresh : 60;
+
     var hostGrid = new Ext.grid.GridPanel({
-        autoHeight:true,
-        autoWidth:true,
+        id: hdGridId,
+        height:800,
+        layout: 'fit',
+        autoScroll:true,
         store:hostStore,
         cm:hostCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom attributes
+            beforestatesave: function(o, s) {
+                s.rows = hdGridRows;
+                s.refresh = hdGridRefresh;
+                Ext.state.Manager.set(hdGridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GroupingView({
             forceFit:true,
             autoFill:true,
@@ -111,9 +127,11 @@ npc.downtime = function(){
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Comments" : "Comment"]})'
         }),
         bbar: new Ext.PagingToolbar({
-            pageSize: pageSize,
+            pageSize: hdGridRows,
             store: hostStore,
-            displayInfo: true
+            displayInfo: true,
+            items: npc.setRefreshCombo(hdGridId, hostStore, hdGridState),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: hdGridId })
         })
     });
 
@@ -171,13 +189,31 @@ npc.downtime = function(){
         width:400
     }]);
 
+
+    /* Service Downtime Grid */
+    var sdGridId = 'downtime-sdGrid';
+    var sdGridState = Ext.state.Manager.get(sdGridId);
+    var sdGridRows = (sdGridState && sdGridState.rows) ? sdGridState.rows : 15;
+    var sdGridRefresh = (sdGridState && sdGridState.refresh) ? sdGridState.refresh : 60;
+
     var serviceGrid = new Ext.grid.GridPanel({
-        autoHeight:true,
-        autoWidth:true,
+        id: sdGridId,
+        height:800,
+        layout: 'fit',
+        autoScroll:true,
         store:serviceStore,
         cm:serviceCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom attributes
+            beforestatesave: function(o, s) {
+                s.rows = sdGridRows;
+                s.refresh = sdGridRefresh;
+                Ext.state.Manager.set(sdGridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GroupingView({
             forceFit:true,
             autoFill:true,
@@ -189,15 +225,17 @@ npc.downtime = function(){
             groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Comments" : "Comment"]})'
         }),
         bbar: new Ext.PagingToolbar({
-            pageSize: pageSize,
-            store: hostStore,
-            displayInfo: true
+            pageSize: sdGridRows,
+            store: serviceStore,
+            displayInfo: true,
+            items: npc.setRefreshCombo(sdGridId, serviceStore, sdGridState),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: sdGridId })
         })
     });
 
     // Add the grid to the panel
-    Ext.getCmp('host-downtime-tab').items.add(hostGrid);
-    Ext.getCmp('service-downtime-tab').items.add(serviceGrid);
+    Ext.getCmp('host-downtime-tab').add(hostGrid);
+    Ext.getCmp('service-downtime-tab').add(serviceGrid);
 
     // Refresh the dashboard
     centerTabPanel.doLayout();
@@ -207,12 +245,12 @@ npc.downtime = function(){
     serviceGrid.render();
 
     // Load the data store
-    hostGrid.store.load({params:{start:0, limit:pageSize}});
-    serviceGrid.store.load({params:{start:0, limit:pageSize}});
+    hostGrid.store.load({params:{start:0, limit:hdGridRows}});
+    serviceGrid.store.load({params:{start:0, limit:sdGridRows}});
 
     // Start auto refresh of the grid
-    hostStore.startAutoRefresh(60);
-    serviceStore.startAutoRefresh(60);
+    hostStore.startAutoRefresh(hdGridRefresh);
+    serviceStore.startAutoRefresh(sdGridRefresh);
 
     // Stop auto refresh if the tab is closed
     var listeners = {

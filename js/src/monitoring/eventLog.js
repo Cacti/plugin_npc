@@ -3,8 +3,13 @@ npc.eventLog = function(){
     var title = 'Event Log';
 
     var id = 'eventlog-tab';
+    var gridId = id + '-grid';
 
-    var pageSize = 20;
+    // Set the number of rows to display and the refresh rate
+    var state = Ext.state.Manager.get(gridId);
+    var pageSize = (state && state.rows) ? state.rows : 15;
+    var refresh = (state && state.refresh) ? state.refresh : 60;
+
 
     var tabPanel = Ext.getCmp('centerTabPanel');
     var tab = Ext.getCmp(id);
@@ -47,24 +52,35 @@ npc.eventLog = function(){
     }]);
 
     var grid = new Ext.grid.GridPanel({
-        id: 'event-log-grid',
-        autoHeight:true,
-        autoWidth:true,
+        id: gridId,
+        //autoHeight:true,
+        height:600,
+        autoScroll:true,
         store:store,
         cm:cm,
         autoExpandColumn:'logentry_data',
         stripeRows: true,
+        listeners: {
+            // Intercept the state save to add our custom attributes
+            beforestatesave: function(o, s) {
+                s.rows = pageSize;
+                s.refresh = refresh
+                Ext.state.Manager.set(gridId, s);
+                return false;
+            }
+        },
         view: new Ext.grid.GridView({
             forceFit:true,
             autoFill:true,
-            emptyText:'No events.',
-            scrollOffset:0
+            emptyText:'No events.'
         }),
         bbar: new Ext.PagingToolbar({
             pageSize: pageSize,
             store: store,
             displayInfo: true,
-            displayMsg: ''
+            displayMsg: '',
+            items: npc.setRefreshCombo(gridId, store, state),
+            plugins: new Ext.ux.Andrie.pPageSize({ gridId: gridId })
         }),
         plugins:[new Ext.ux.grid.Search({
             mode:'remote',
@@ -79,10 +95,7 @@ npc.eventLog = function(){
             id: id,
             title: title,
             closable: true,
-            autoHeight:true,
-            autoWidth:true,
-            //style:'padding:0px 0 0px 0px',
-            autoScroll: true,
+            height:600,
             layout:'fit',
             deferredRender:false,
             containerScroll: true,
@@ -101,7 +114,7 @@ npc.eventLog = function(){
     store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
-    store.startAutoRefresh(60);
+    store.startAutoRefresh(refresh);
 
     // Stop auto refresh if the tab is closed
     var listeners = {
