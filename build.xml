@@ -71,12 +71,12 @@
   </target>
 
   <target name="readme" depends="js.minify">
-    <exec command="perl -i -p -e 's/VERSION/npc-2.0.0a.${svn.lastrevision}/g' ${build.dir}/README" />
+    <exec command="perl -i -p -e 's/VERSION/npc-2.0.0b.${svn.lastrevision}/g' ${build.dir}/README" />
   </target>
 
   <target name="package" depends="readme">
-    <zip destfile="${base.dir}/npc-2.0.0a.${svn.lastrevision}.zip" basedir="${base.dir}/build"/>
-    <tar destfile="${base.dir}/npc-2.0.0a.${svn.lastrevision}.tar.gz" basedir="${base.dir}/build" compression="gzip"/>
+    <zip destfile="${base.dir}/npc-2.0.0b.${svn.lastrevision}.zip" basedir="${base.dir}/build"/>
+    <tar destfile="${base.dir}/npc-2.0.0b.${svn.lastrevision}.tar.gz" basedir="${base.dir}/build" compression="gzip"/>
     <delete dir="${build.dir}" />
   </target>
 
