@@ -1496,6 +1496,15 @@ function npc_config_settings() {
         $npc_realm = db_fetch_cell("SELECT id FROM plugin_config WHERE directory = 'npc'");
         $npc_enabled = db_fetch_cell("SELECT status FROM plugin_config WHERE directory = 'npc'");
 
+        # Check for upgraded NPC
+        $current = plugin_npc_version ();
+        $current_npc_version = $current['version'];
+        $old_npc_version = db_fetch_cell("select version from plugin_config where directory='npc'");
+        if ( ($current_npc_version != $old_npc_version) && ($old_npc_version != "") ) {
+            //npc_setup_tables ();
+            db_execute("UPDATE plugin_config SET version = '".$current_npc_version."' where directory='npc'");
+        }
+
         if ($npc_enabled == "1") {
 
             $tabs["npc"] = " NPC ";
