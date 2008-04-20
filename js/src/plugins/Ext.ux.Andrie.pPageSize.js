@@ -49,7 +49,7 @@ Ext.extend(Ext.ux.Andrie.pPageSize, Ext.util.Observable, {
      * @cfg {Array} variations
      * Variations used for determining pageSize options
      */
-    variations: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 100, 200, 300, 400, 500],
+    variations: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 100, 200, 300, 400, 500, 1000, 2000, 4000],
     
     /**
      * @cfg {Object} comboCfg

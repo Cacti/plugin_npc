@@ -15,9 +15,10 @@ npc.processInfo = function(){
         centerTabPanel.add({
             id: id,
             title: title,
+            height:600,
+            layout: 'fit',
             deferredRender:false,
-            closable: true,
-            items: [{}]
+            closable: true
         });
         centerTabPanel.show();
         tab = Ext.getCmp(id);
@@ -47,8 +48,8 @@ npc.processInfo = function(){
     }]);
 
     var piGrid = new Ext.grid.GridPanel({
-        autoHeight:true,
-        autoWidth:true,
+        height:800,
+        layout: 'fit',
         store:piStore,
         cm:piCm,
         autoExpandColumn:'Value',
