@@ -74,6 +74,14 @@ class Controller {
     var $currentPage = 1;
 
     /**
+     * The host and service config type
+     *
+     * @var integer
+     * @access public
+     */
+    var $config_type = 1;
+
+    /**
      * The total number of records from
      * the last query.
      *
@@ -224,7 +232,10 @@ class Controller {
      *
      */
     function __construct() {
-
+        
+        // Get the config type. Default to 1 if not found.
+        $config_type = read_config_option('npc_config_type');
+        $this->config_type = isset($config_type) ? $config_type : 1;
     }
 
     function jsonOutput($results=array()) {

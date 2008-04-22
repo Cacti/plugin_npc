@@ -167,7 +167,7 @@ function npc_top_graph_refresh() {
 function npc_config_arrays () {
 
     global $user_auth_realms, $user_auth_realm_filenames, $npc_date_format, $npc_time_format;
-    global $npc_default_settings, $npc_log_level;
+    global $npc_default_settings, $npc_log_level, $npc_config_type;
 
       if (isset($_SESSION["sess_user_id"])) {
 
@@ -186,6 +186,11 @@ function npc_config_arrays () {
                 "2" => "WARN  - Log errors and warnings",
                 "3" => "INFO  - Log errors, warnings, and info messages",
                 "4" => "DEBUG - Log everything"
+            );
+
+            $npc_config_type = array(
+                "0" => "0",
+                "1" => "1"
             );
 
             $npc_date_format = array(
@@ -332,6 +337,7 @@ function npc_setup_tables() {
         $sql[] = "INSERT INTO settings VALUES ('npc_date_format','Y-m-d');";
         $sql[] = "INSERT INTO settings VALUES ('npc_time_format','H:i');";
         $sql[] = "INSERT INTO settings VALUES ('npc_log_level','0');";
+        $sql[] = "INSERT INTO settings VALUES ('npc_config_type','1');";
     }
 
     if (!in_array('npc_commands', $tables)) {
@@ -1488,6 +1494,7 @@ function npc_show_tab() {
 function npc_config_settings() {
 
     global $tabs, $settings, $npc_date_format, $npc_time_format, $npc_log_level, $npc_default_settings;
+    global $npc_config_type;
 
     if (isset($_SESSION["sess_user_id"])) {
   
@@ -1561,6 +1568,13 @@ function npc_config_settings() {
                     "method" => "drop_array",
                     "default" => "H:i",
                     "array" => $npc_time_format,
+                ),
+                "npc_config_type" => array(
+                    "friendly_name" => "Host/Service Config Type",
+                    "description" => "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting.",
+                    "method" => "drop_array",
+                    "default" => "1",
+                    "array" => $npc_config_type,
                 ),
                 "npc_logging_header" => array(
                     "friendly_name" => "Logging",
