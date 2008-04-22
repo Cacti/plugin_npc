@@ -337,7 +337,6 @@ function npc_setup_tables() {
         $sql[] = "INSERT INTO settings VALUES ('npc_date_format','Y-m-d');";
         $sql[] = "INSERT INTO settings VALUES ('npc_time_format','H:i');";
         $sql[] = "INSERT INTO settings VALUES ('npc_log_level','0');";
-        $sql[] = "INSERT INTO settings VALUES ('npc_config_type','1');";
     }
 
     if (!in_array('npc_commands', $tables)) {
