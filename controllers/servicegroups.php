@@ -46,6 +46,8 @@ class NpcServicegroupsController extends Controller {
      */
     function getHostStatusPortlet() {
 
+        $startTime = $this->getTime();
+
         // Initialize the output array
         $output = array();
 
@@ -89,6 +91,8 @@ class NpcServicegroupsController extends Controller {
         // Implement paging by slicing the ouput array
         $output = array_slice($output, $this->start, $this->limit);
 
+        $this->logger('debug', get_class($this), 'getHostStatusPortlet', "Method execution time: ".sprintf("%01.2f", ($this->getTime() - $startTime)). " seconds");
+
         return($this->jsonOutput($output));
     }
 
@@ -100,6 +104,8 @@ class NpcServicegroupsController extends Controller {
      * @return string   json output
      */
     function getServicegroupServiceStatus() {
+
+        $startTime = $this->getTime();
 
         // Initialize the output array
         $output = array();
@@ -135,6 +141,8 @@ class NpcServicegroupsController extends Controller {
         // Implement paging by slicing the ouput array
         $output = array_slice($output, $this->start, $this->limit);
 
+        $this->logger('debug', get_class($this), 'getServicegroupServiceStatus', "Method execution time: ".sprintf("%01.2f", ($this->getTime() - $startTime)). " seconds");
+
         return($this->jsonOutput($output));
     }
 
@@ -147,6 +155,8 @@ class NpcServicegroupsController extends Controller {
      * @return string   json output
      */
     function getOverview() {
+
+        $startTime = $this->getTime();
 
         $fields = array('servicegroup_object_id',
                         'alias',
@@ -200,6 +210,8 @@ class NpcServicegroupsController extends Controller {
         // Implement paging by slicing the ouput array
         $output = array_slice($output, $this->start, $this->limit);
 
+        $this->logger('debug', get_class($this), 'getOverview', "Method execution time: ".sprintf("%01.2f", ($this->getTime() - $startTime)). " seconds");
+
         return($this->jsonOutput($output));
     }
 
@@ -227,6 +239,8 @@ class NpcServicegroupsController extends Controller {
      */
     function getServices() {
 
+        $startTime = $this->getTime();
+
         $results = $this->setupResultsArray();
 
         $comments = new NpcCommentsController;
@@ -247,10 +261,14 @@ class NpcServicegroupsController extends Controller {
         // Implement paging by slicing the ouput array
         $services = array_slice($services, $this->start, $this->limit);
 
+        $this->logger('debug', get_class($this), 'getServices', "Method execution time: ".sprintf("%01.2f", ($this->getTime() - $startTime)). " seconds");
+
         return($this->jsonOutput($services));
     }
 
     function getServicegroupMemberHoststatus($hostname) {
+
+        $startTime = $this->getTime();
 
         if(isset($this->hostStatusCache[$hostname])) {
             return($this->hostStatusCache[$hostname]);
@@ -265,10 +283,14 @@ class NpcServicegroupsController extends Controller {
 
         $this->hostStatusCache[$hostname] = $results[0]['current_state'];
 
+        $this->logger('debug', get_class($this), 'getServicegroupMemberHoststatus', "Method execution time: ".sprintf("%01.2f", ($this->getTime() - $startTime)). " seconds");
+
         return($this->hostStatusCache[$hostname]);
     }
 
     function getServicegroups() {
+
+        $startTime = $this->getTime();
 
         $where = '';
 
@@ -303,6 +325,8 @@ class NpcServicegroupsController extends Controller {
             ->orderBy('servicegroup_name ASC, host_name ASC, service_description ASC');
 
         $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+
+        $this->logger('debug', get_class($this), 'getServicegroups', "Method execution time: ".sprintf("%01.2f", ($this->getTime() - $startTime)). " seconds");
 
         return($results);
     }

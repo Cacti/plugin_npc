@@ -343,6 +343,20 @@ class Controller {
     }
 
     /**
+     * getTimer
+     * 
+     * Returns time in seconds used for debug timing
+     *
+     * @return string  - 
+     */
+    function getTime() {
+        $mtime = microtime();
+        $mtime = explode(' ', $mtime);
+        $mtime = $mtime[1] + $mtime[0];
+        return($mtime);
+    }
+
+    /**
      * logger
      * 
      * A utility method to wrap the Cacti logging mechanism
