@@ -228,7 +228,7 @@ class NpcHostgroupsController extends Controller {
           ->from('NpcHosts h, NpcHostgroups hg, NpcHostgroupMembers hgm')
           ->where('hg.hostgroup_id = hgm.hostgroup_id AND hgm.host_object_id = h.host_object_id AND hg.'.$column.' = ?', $value);
 
-        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         return($results);
     }
@@ -272,7 +272,7 @@ class NpcHostgroupsController extends Controller {
      */
     function getHostgroups() {
 
-        $where = '';
+        $where = '1 = 1';
 
         // Maps searchable fields passed in from the client
         $fieldMap = array('service_description' => 'o2.name2',
@@ -296,6 +296,7 @@ class NpcHostgroupsController extends Controller {
                   .'hs.output,'
                   .'o2.name1 AS host_name,'
                   .'hg.*')
+          ->distinct()
           ->from('NpcHostgroups hg')
           ->innerJoin('hg.HostgroupMembers hgm')
           ->innerJoin('hg.Hoststatus hs ON hgm.host_object_id = hs.host_object_id')
@@ -305,7 +306,7 @@ class NpcHostgroupsController extends Controller {
           ->where("$where")
           ->orderBy('hostgroup_name ASC, host_name ASC');
 
-        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         return($results);
     }

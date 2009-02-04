@@ -85,7 +85,7 @@ class NpcNagiosController extends Controller {
         $q = new Doctrine_Query();
         $q->select('ps.*')->from('NpcProgramstatus ps');
 
-        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         $q = new Doctrine_Query();
         $q->select('p.instance_id, p.program_version, max(p.processevent_id)')
@@ -93,7 +93,7 @@ class NpcNagiosController extends Controller {
           ->where('p.instance_id = ?', $results[0]['instance_id'])
           ->groupby('p.program_version');
 
-        $version = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $version = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         $results[0]['program_version'] = $version[0]['program_version'];
 
@@ -204,7 +204,7 @@ class NpcNagiosController extends Controller {
         $q->where('hc.host_object_id = o.object_id AND o.is_active = 1 AND hc.start_time > DATE_SUB(NOW(),INTERVAL ? DAY) '
                 . 'AND hc.host_object_id = h.host_object_id AND h.active_checks_enabled = 1');
 
-        $hostPerf = $q->execute(array($resolution), Doctrine::FETCH_ARRAY);
+        $hostPerf = $q->execute(array($resolution), Doctrine::HYDRATE_ARRAY);
 
         $q = new Doctrine_Query();
         $q->select('ROUND(MIN(sc.execution_time), 3) AS min_execution,
@@ -218,7 +218,7 @@ class NpcNagiosController extends Controller {
         $q->where('sc.service_object_id = o.object_id AND o.is_active = 1 AND sc.start_time > DATE_SUB(NOW(),INTERVAL ? DAY) '
                 . 'AND sc.service_object_id = s.service_object_id AND s.active_checks_enabled = 1');
 
-        $servicePerf = $q->execute(array($resolution), Doctrine::FETCH_ARRAY);
+        $servicePerf = $q->execute(array($resolution), Doctrine::HYDRATE_ARRAY);
 
         $output = array(array_merge(array('name' => 'Service Check Execution Time'), array_slice($servicePerf[0], 0, 3)),
                         array_merge(array('name' => 'Service Check Latency'), array_slice($servicePerf[0], 3)),

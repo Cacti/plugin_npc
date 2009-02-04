@@ -180,7 +180,7 @@ class NpcCommentsController extends Controller {
             $this->limit
         );
 
-        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         // Set the total number of records 
         $this->numRecords = $q->getNumResults();

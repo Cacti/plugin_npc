@@ -141,7 +141,7 @@ class NpcHostsController extends Controller {
         $q = new Doctrine_Query();
         $q->select('perfdata')->from('NpcHostchecks')->where('host_object_id = ?', $id);
         
-        return($q->execute(array(), Doctrine::FETCH_ARRAY));
+        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
     }
 
     /**
@@ -192,7 +192,7 @@ class NpcHostsController extends Controller {
             $this->limit
         );
 
-        $hosts = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $hosts = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         // Set the total number of records
         $this->numRecords = $q->getNumResults();
@@ -212,7 +212,7 @@ class NpcHostsController extends Controller {
         $q = new Doctrine_Query();
         $q->select('display_name as name, host_object_id as id')->from('NpcHosts')->orderBy('display_name ASC');
 
-        return($q->execute(array(), Doctrine::FETCH_ARRAY));
+        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
     }
 
     /**
@@ -229,7 +229,7 @@ class NpcHostsController extends Controller {
           ->from('NpcHostGraphs hg')
           ->where('hg.host_object_id = ?', $this->id);
 
-        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         return($this->jsonOutput($results));
     }

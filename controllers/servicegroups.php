@@ -279,7 +279,7 @@ class NpcServicegroupsController extends Controller {
           ->from('NpcHoststatus hs, NpcHosts h')
           ->where('hs.host_object_id = h.host_object_id AND h.display_name = ?', $hostname);
 
-        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         $this->hostStatusCache[$hostname] = $results[0]['current_state'];
 
@@ -324,7 +324,7 @@ class NpcServicegroupsController extends Controller {
             ->where("$where")
             ->orderBy('servicegroup_name ASC, host_name ASC, service_description ASC');
 
-        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         $this->logger('debug', get_class($this), 'getServicegroups', "Method execution time: ".sprintf("%01.2f", ($this->getTime() - $startTime)). " seconds");
 

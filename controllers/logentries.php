@@ -57,7 +57,7 @@ class NpcLogentriesController extends Controller {
             $this->limit
         );
 
-        $results = $this->flattenArray($q->execute(array(), Doctrine::FETCH_ARRAY));
+        $results = $this->flattenArray($q->execute(array(), Doctrine::HYDRATE_ARRAY));
 
         // Set the total number of records
         $this->numRecords = $q->getNumResults();

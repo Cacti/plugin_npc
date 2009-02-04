@@ -139,7 +139,7 @@ class NpcServicesController extends Controller {
           ->from('NpcServicestatus ss, NpcServices s')
           ->where('ss.service_object_id = s.service_object_id AND s.host_object_id = ?', $host_object_id);
 
-        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         return($results);
     }
@@ -193,7 +193,7 @@ class NpcServicesController extends Controller {
             $this->limit
         );
                 
-        $services = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $services = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         // Set the total number of records
         $this->numRecords = $q->getNumResults();
@@ -213,7 +213,7 @@ class NpcServicesController extends Controller {
                        .' > now() - INTERVAL n2.check_interval * 2 MINUTE', $id)
           	    ->orderby('n.start_time DESC'), 0, 1);
 
-        return($q->execute(array(), Doctrine::FETCH_ARRAY));
+        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
     }
 
     /**
@@ -231,7 +231,7 @@ class NpcServicesController extends Controller {
                   .'i.instance_name AS instance')
           ->from('NpcServices s, s.Host h, s.Instance i');
 
-        return($this->flattenArray($q->execute(array(), Doctrine::FETCH_ARRAY)));
+        return($this->flattenArray($q->execute(array(), Doctrine::HYDRATE_ARRAY)));
     }
 
     /**
@@ -248,7 +248,7 @@ class NpcServicesController extends Controller {
           ->from('NpcServiceGraphs sg')
           ->where('sg.service_object_id = ?', $this->id);
 
-        $results = $q->execute(array(), Doctrine::FETCH_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         return($this->jsonOutput($results));
     }
