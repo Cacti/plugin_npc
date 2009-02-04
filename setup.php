@@ -969,7 +969,8 @@ function npc_setup_tables() {
                     `logentry_data` varchar(255) NOT NULL default '',
                     `realtime_data` smallint(6) NOT NULL default '0',
                     `inferred_data_extracted` smallint(6) NOT NULL default '0',
-                    PRIMARY KEY  (`logentry_id`)
+                    PRIMARY KEY  (`logentry_id`),
+                    KEY `idx1` (`entry_time`,`entry_time_usec`)
                   ) ENGINE=InnoDB COMMENT='Historical record of log entries';";
     }
 

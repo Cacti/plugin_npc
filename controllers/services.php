@@ -36,21 +36,27 @@ class NpcServicesController extends Controller {
      */
     function getServices() {
 
-        $results = $this->services();
+        $services = $this->services();
 
         $comments = new NpcCommentsController;
 
-        $services = $this->flattenArray($results);
-
-
         for ($i = 0; $i < count($services); $i++) {
-            unset($services[$i]['Host']);
-            if ($services[$i]['problem_has_been_acknowledged']) {
-                $services[$i]['acknowledgement'] = $comments->getAck($services[$i]['service_object_id']);
-            }
-            // Add the last comment to the array
-            $services[$i]['comment'] = $comments->getLastComment($services[$i]['service_object_id']);
-        }    
+
+                foreach($services[$i] as $k => $v) {
+                        if (is_array($v)) {
+                                $services[$i] = array_merge($services[$i], $v);
+                                unset($services[$i][$k]);
+                        }
+                }
+
+                unset($services[$i]['Host']);
+                if ($services[$i]['problem_has_been_acknowledged']) {
+                        $services[$i]['acknowledgement'] = $comments->getAck($services[$i]['service_object_id']);
+                }
+
+                // Add the last comment to the array
+                $services[$i]['comment'] = $comments->getLastComment($services[$i]['service_object_id']);
+        }
 
         return($this->jsonOutput($services));
     }
