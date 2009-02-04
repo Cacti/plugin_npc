@@ -30,6 +30,7 @@ npc.portlet.serviceProblems = function(){
             {name: 'service_object_id', type: 'int'},
             {name: 'service_id', type: 'int'},
             'host_name',
+            'host_alias',
             'service_description',
             'acknowledgement',
             'comment',
@@ -61,6 +62,10 @@ npc.portlet.serviceProblems = function(){
         header:"Host",
         dataIndex:'host_name'
     },{
+        header:"Host Alias",
+        dataIndex:'host_alias',
+        hidden:true
+    },{
         header:"Plugin Output",
         dataIndex:'output',
         width:500
@@ -79,7 +84,7 @@ npc.portlet.serviceProblems = function(){
             forceFit:true,
             autoFill:true,
             hideGroupedColumn: true,
-            enableGroupingMenu: false,
+            enableGroupingMenu: true,
             enableNoGroups: true,
             groupTextTpl: '{text}',
             emptyText:'No problems.',

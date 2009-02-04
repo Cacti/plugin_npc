@@ -66,6 +66,7 @@ npc.services = function(title, filter){
             'instance_name',
             {name: 'host_object_id', type: 'int'},
             'host_name',
+            'host_alias',
             {name: 'service_object_id', type: 'int'},
             {name: 'local_graph_id', type: 'int'},
             'service_description',
@@ -136,6 +137,11 @@ npc.services = function(title, filter){
         hidden:true,
         width:75
     },{
+        header:"Host Alias",
+        dataIndex:'host_alias',
+        hidden:true,
+        width:75
+    },{
         header:"Plugin Output",
         dataIndex:'output',
         width:400
@@ -164,7 +170,7 @@ npc.services = function(title, filter){
             forceFit:true,
             autoFill:true,
             hideGroupedColumn: true,
-            enableGroupingMenu: false,
+            enableGroupingMenu: true,
             enableNoGroups: true,
             scrollOffset:0,
             emptyText:'No services.',

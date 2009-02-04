@@ -42,7 +42,9 @@ class NpcServicesController extends Controller {
 
         $services = $this->flattenArray($results);
 
+
         for ($i = 0; $i < count($services); $i++) {
+            unset($services[$i]['Host']);
             if ($services[$i]['problem_has_been_acknowledged']) {
                 $services[$i]['acknowledgement'] = $comments->getAck($services[$i]['service_object_id']);
             }
@@ -151,7 +153,7 @@ class NpcServicesController extends Controller {
      *
      * @return array  list of all services with status
      */
-    function services($id=null, $where='') {
+    function services($id=null, $where=null) {
 
         // Maps searchable fields passed in from the client
         $fieldMap = array('service_description' => 'o.name2',
@@ -160,7 +162,7 @@ class NpcServicesController extends Controller {
 
 
         // Build the where clause
-        if ($where != '') {
+        if ($where) {
             $where .= ' AND ';
         }
 
@@ -174,10 +176,12 @@ class NpcServicesController extends Controller {
             $where = $this->searchClause($where, $fieldMap);    
         }
 
+    // ->leftJoin('s.Hosts h ON s.host_object_id = hs.host_object_id')
         $q = new Doctrine_Pager(
             Doctrine_Query::create()
                 ->select('i.instance_name,'
                         .'s.host_object_id,'
+                        .'h.alias AS host_alias,'
                         .'o.name1 AS host_name,'
                         .'o.name2 AS service_description,'
                         .'g.local_graph_id,'
@@ -185,6 +189,7 @@ class NpcServicesController extends Controller {
                 ->from('NpcServicestatus ss')
                 ->leftJoin('ss.Object o')
                 ->leftJoin('ss.Service s')
+                ->leftJoin('s.Host h')
                 ->leftJoin('ss.Instance i')
                 ->leftJoin('ss.Graph g')
                 ->where("$where")
