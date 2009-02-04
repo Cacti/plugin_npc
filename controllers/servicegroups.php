@@ -292,10 +292,10 @@ class NpcServicegroupsController extends Controller {
 
         $startTime = $this->getTime();
 
-        $where = '';
+        $where = '1 = 1';
 
         if ($this->id) {
-            $where .= "sg.servicegroup_object_id = " . $this->id;
+            $where = "sg.servicegroup_object_id = " . $this->id;
         }
 
         // Maps searchable fields passed in from the client

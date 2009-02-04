@@ -39,7 +39,7 @@ class NpcLogentriesController extends Controller {
                           'instance_name' => 'i.instance_name');
 
 
-        $where = '';
+        $where = '1 = 1';
 
         if ($this->searchString) {
             $where = $this->searchClause($where, $fieldMap);

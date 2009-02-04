@@ -34,10 +34,10 @@ class NpcStatehistoryController extends Controller {
      */
     function getStateHistory() {
 
-        $where = '';
+        $where = '1 = 1';
 
         if ($this->id) {
-            $where .= sprintf("sh.object_id = %d ", $this->id);
+            $where = sprintf("sh.object_id = %d ", $this->id);
         }
 
         $q = new Doctrine_Pager(

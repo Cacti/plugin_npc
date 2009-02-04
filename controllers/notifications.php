@@ -34,10 +34,10 @@ class NpcNotificationsController extends Controller {
      */
     function getNotifications() {
 
-        $where = '';
+        $where = '1 = 1';
 
         if ($this->id) {
-            $where .= sprintf("n.object_id = %d", $this->id);
+            $where = sprintf("n.object_id = %d", $this->id);
         }
 
         $q = new Doctrine_Pager(
