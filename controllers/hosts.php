@@ -127,10 +127,15 @@ class NpcHostsController extends Controller {
         );
 
         $q = new Doctrine_Query();
-        $hosts = $q->from('NpcHosts h')->where('h.config_type = ?', $this->config_type)->execute();
+        $q->select('hs.current_state')
+          ->from('NpcHoststatus hs')
+          ->leftJoin('hs.Host h')
+          ->where('h.config_type = ?', $this->config_type);
 
-        foreach($hosts as $host) {
-            $status[$this->hostState[$host->Status->current_state]]++;
+        $hosts = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+
+        for ($i = 0; $i < count($hosts); $i++) {
+            $status[$this->hostState[$hosts[$i]['current_state']]]++;
         }
 
         return($this->jsonOutput($status));

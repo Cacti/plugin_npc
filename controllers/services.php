@@ -123,10 +123,15 @@ class NpcServicesController extends Controller {
                         'pending'  => 0);
 
         $q = new Doctrine_Query();
-        $services = $q->from('NpcServices s')->where('s.config_type = ?', $this->config_type)->execute();
+        $q->select('ss.current_state')
+          ->from('NpcServicestatus ss')
+          ->leftJoin('ss.Service s')
+          ->where('s.config_type = ?', $this->config_type);
 
-        foreach($services as $service) {
-            $status[$this->serviceState[$service->Status->current_state]]++;
+        $services = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+
+        for ($i = 0; $i < count($services); $i++) {
+            $status[$this->serviceState[$services[$i]['current_state']]]++;
         }
 
         return($this->jsonOutput($status));
