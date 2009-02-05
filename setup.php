@@ -393,7 +393,8 @@ function npc_setup_tables() {
                     `expires` smallint(6) NOT NULL default '0',
                     `expiration_time` datetime NOT NULL default '0000-00-00 00:00:00',
                     PRIMARY KEY  (`comment_id`),
-                    UNIQUE KEY `instance_id` (`instance_id`,`comment_time`,`internal_comment_id`)
+                    UNIQUE KEY `instance_id` (`instance_id`,`comment_time`,`internal_comment_id`),
+                    KEY `idx1` (`object_id`)
                   ) ENGINE=InnoDB;";
     }
 
@@ -892,7 +893,9 @@ function npc_setup_tables() {
                     `y_3d` double NOT NULL default '0',
                     `z_3d` double NOT NULL default '0',
                     PRIMARY KEY  (`host_id`),
-                    UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`host_object_id`)
+                    UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`host_object_id`),
+                    KEY `idx1` (`host_object_id`),
+                    KEY `idx2` (`config_type`)
                   ) ENGINE=InnoDB COMMENT='Host definitions';";
     }
 
@@ -945,7 +948,8 @@ function npc_setup_tables() {
                     `retry_check_interval` double NOT NULL default '0',
                     `check_timeperiod_object_id` int(11) NOT NULL default '0',
                     PRIMARY KEY  (`hoststatus_id`),
-                    UNIQUE KEY `object_id` (`host_object_id`)
+                    UNIQUE KEY `object_id` (`host_object_id`),
+                    KEY `idx1` (`current_state`)
                   ) ENGINE=InnoDB COMMENT='Current host status information';";
     }
 
@@ -1277,7 +1281,10 @@ function npc_setup_tables() {
                     `icon_image` varchar(255) NOT NULL default '',
                     `icon_image_alt` varchar(255) NOT NULL default '',
                     PRIMARY KEY  (`service_id`),
-                    UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`service_object_id`)
+                    UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`service_object_id`),
+                    KEY `idx1` (`config_type`),
+                    KEY `idx2` (`host_object_id`),
+                    KEY `idx3` (`service_object_id`)
                   ) ENGINE=InnoDB COMMENT='Service definitions';";
     }
 
@@ -1331,7 +1338,8 @@ function npc_setup_tables() {
                     `retry_check_interval` double NOT NULL default '0',
                     `check_timeperiod_object_id` int(11) NOT NULL default '0',
                     PRIMARY KEY  (`servicestatus_id`),
-                    UNIQUE KEY `object_id` (`service_object_id`)
+                    UNIQUE KEY `object_id` (`service_object_id`),
+                    KEY `idx1` (`current_state`)
                   ) ENGINE=InnoDB COMMENT='Current service status information';";
     }
 
@@ -1437,7 +1445,8 @@ function npc_setup_tables() {
                     `service_object_id` int(11) NOT NULL,
                     `local_graph_id` mediumint(8) unsigned NOT NULL,
                     `pri` tinyint(1) default 1,
-                    PRIMARY KEY  (`service_graph_id`)
+                    PRIMARY KEY  (`service_graph_id`),
+                    KEY `idx1` (`service_object_id`)
                   ) ENGINE=InnoDB;";
     }
 
@@ -1447,7 +1456,8 @@ function npc_setup_tables() {
                     `host_object_id` int(11) NOT NULL,
                     `local_graph_id` mediumint(8) unsigned NOT NULL,
                     `pri` tinyint(1) default 1,
-                    PRIMARY KEY  (`host_graph_id`)
+                    PRIMARY KEY  (`host_graph_id`),
+                    KEY `idx1` (`host_object_id`)
                   ) ENGINE=InnoDB;";
     }
 
