@@ -1518,7 +1518,7 @@ function npc_config_settings() {
         $current_npc_version = $current['version'];
         $old_npc_version = db_fetch_cell("select version from plugin_config where directory='npc'");
         if ( ($current_npc_version != $old_npc_version) && ($old_npc_version != "") ) {
-            //npc_setup_tables ();
+            npc_upgrade_tables ();
             db_execute("UPDATE plugin_config SET version = '".$current_npc_version."' where directory='npc'");
         }
 

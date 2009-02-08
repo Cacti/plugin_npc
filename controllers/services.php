@@ -58,7 +58,11 @@ class NpcServicesController extends Controller {
                 $services[$i]['comment'] = $comments->getLastComment($services[$i]['service_object_id']);
         }
 
-        return($this->jsonOutput($services));
+        $response['response']['value']['items'] = $services;
+        $response['response']['value']['total_count'] = $this->numRecords;
+        $response['response']['value']['version']     = 1;
+
+        return(json_encode($response));
     }
 
     /**

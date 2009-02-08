@@ -528,6 +528,10 @@ td.x-grid3-hd-over, td.sort-desc, td.sort-asc, td.x-grid3-hd-menu-open {
 .x-tbar-page-prev{
 	background-image:url(../images/slate/grid/page-prev.gif)!important;
 }
+.x-tbar-loading {
+    background-image:url(../images/default/grid/done.gif) !important;
+}
+
 .x-paging-info {
 	color:#FFFFFF;
 }

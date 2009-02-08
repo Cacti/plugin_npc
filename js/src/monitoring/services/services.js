@@ -1,17 +1,75 @@
+npc.servicesGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
+
+    filter: 'any',
+
+    initComponent : function()
+    {
+        var bufferedReader = new Ext.ux.grid.livegrid.JsonReader({
+            root            : 'response.value.items',
+            versionProperty : 'response.value.version',
+            totalProperty   : 'response.value.total_count',
+            id              : 'service_object_id'
+        },[
+            {name: 'instance_name', sortType: 'string'},
+            {name: 'host_object_id', type: 'int', sortType: 'int'},
+            {name: 'host_name', sortType: 'string'},
+            {name: 'host_alias', sortType: 'string'},
+            {name: 'service_object_id', type: 'int', sortType: 'int'},
+            {name: 'local_graph_id', type: 'int', sortType: 'int'},
+            {name: 'service_description', sortType: 'string'},
+            {name: 'acknowledgement', sortType: 'string'},
+            {name: 'comment', sortType: 'string'},
+            {name: 'output', sortType: 'string'},
+            {name: 'current_state', type: 'int', sortType: 'int'},
+            {name: 'current_check_attempt', type: 'int', sortType: 'int'},
+            {name: 'max_check_attempts', type: 'int', sortType: 'int'},
+            {name: 'last_check', type: 'date', sortType: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'next_check', type: 'date', sortType: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'last_state_change', type: 'date', sortType: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'problem_has_been_acknowledged', type: 'int', sortType: 'int'},
+            {name: 'notifications_enabled', type: 'int', sortType: 'int'},
+            {name: 'active_checks_enabled', type: 'int', sortType: 'int'},
+            {name: 'passive_checks_enabled', type: 'int', sortType: 'int'},
+            {name: 'is_flapping', type: 'int', sortType: 'int'}
+          ]
+        );
+
+        this.store = new Ext.ux.grid.livegrid.Store({
+            autoLoad   : true,
+            bufferSize : 100,
+            reader     : bufferedReader,
+            sortInfo   : {field: 'host_name', direction: 'ASC'},
+            url        : 'npc.php?module=services&action=getServices&p_state=' + this.filter
+        });
+
+        this.selModel = new Ext.ux.grid.livegrid.RowSelectionModel();
+
+        this.view = new Ext.ux.grid.livegrid.GridView({
+            nearLimit : 30
+            ,forceFit:true
+            ,autoFill:true
+            ,emptyText:'No services.'
+            ,loadMask: {
+                msg: 'Please wait...'
+            }
+        });
+
+        this.bbar = new Ext.ux.grid.livegrid.Toolbar({
+            view        : this.view,
+            displayInfo : true
+        });
+
+        npc.servicesGrid.superclass.initComponent.call(this);
+    }
+
+});
+
 npc.services = function(title, filter){
 
     // Panel ID
     var id = title.replace(/[-' ']/g,'') + '-tab';
 
     var gridId = id + '-grid';
-
-    // Grid URL
-    var url = 'npc.php?module=services&action=getServices&p_state=' + filter;
-
-    // Set the number of rows to display and the refresh rate
-    var state = Ext.state.Manager.get(gridId);
-    var pageSize = (state && state.rows) ? state.rows : 15;
-    var refresh = (state && state.refresh) ? state.refresh : 60;
 
     var outerTabId = 'services-tab';
 
@@ -55,40 +113,17 @@ npc.services = function(title, filter){
         return String.format('{0}', icon);
     }
 
-    var store = new Ext.data.GroupingStore({
-        url:url,
-        autoload:true,
-        sortInfo:{field: 'service_description', direction: "ASC"},
-        reader: new Ext.data.JsonReader({
-            totalProperty:'totalCount',
-            root:'data'
-        }, [
-            'instance_name',
-            {name: 'host_object_id', type: 'int'},
-            'host_name',
-            'host_alias',
-            {name: 'service_object_id', type: 'int'},
-            {name: 'local_graph_id', type: 'int'},
-            'service_description',
-            'acknowledgement',
-            'comment',
-            'output',
-            'current_state',
-            'current_check_attempt',
-            'max_check_attempts',
-            {name: 'last_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'next_check', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'last_state_change', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'problem_has_been_acknowledged', type: 'int'},
-            {name: 'notifications_enabled', type: 'int'},
-            {name: 'active_checks_enabled', type: 'int'},
-            {name: 'passive_checks_enabled', type: 'int'},
-            {name: 'is_flapping', type: 'int'}
-        ]),
-        groupField:'host_name'
-    });
-
     var cm = new Ext.grid.ColumnModel([{
+        header:"Host",
+        dataIndex:'host_name',
+        sortable:true,
+        width:50
+    },{
+        header:"Host Alias",
+        dataIndex:'host_alias',
+        hidden:true,
+        width:50
+    },{
         header:"Service",
         dataIndex:'service_description',
         renderer:npc.renderExtraIcons,
@@ -132,66 +167,30 @@ npc.services = function(title, filter){
         hidden:true,
         width:50
     },{
-        header:"Host",
-        dataIndex:'host_name',
-        hidden:true,
-        width:75
-    },{
-        header:"Host Alias",
-        dataIndex:'host_alias',
-        hidden:true,
-        width:75
-    },{
         header:"Plugin Output",
         dataIndex:'output',
         width:400
     }]);
 
-    var grid = new Ext.grid.GridPanel({
-        id: gridId,
-        height:800,
-        layout: 'fit',
-        autoExpandColumn: 'plugin_output',
-        store:store,
-        autoScroll: true,
-        listeners: {
-            // Intercept the state save to add our custom attributes
-            beforestatesave: function(o, s) {
-                s.rows = pageSize;
-                s.refresh = refresh
-                Ext.state.Manager.set(gridId, s);
-                return false;
-            }
-        },
-        cm:cm,
-        sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
-        stripeRows: true,
-        view: new Ext.grid.GroupingView({
-            forceFit:true,
-            autoFill:true,
-            hideGroupedColumn: true,
-            enableGroupingMenu: true,
-            enableNoGroups: true,
-            scrollOffset:0,
-            emptyText:'No services.',
-            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Services" : "Service"]})' 
-        }),
-        bbar: new Ext.PagingToolbar({
-            pageSize: pageSize,
-            store: store,
-            displayInfo: true,
-            items: npc.setRefreshCombo(gridId, store, state),
-            plugins: new Ext.ux.Andrie.pPageSize({ gridId: gridId })
-        }),
-        plugins:[new Ext.ux.grid.Search({
+    var grid = new npc.servicesGrid({
+        id: gridId
+        ,height:800
+        ,filter: filter
+        ,enableDragDrop : false
+        ,cm: cm
+        ,stripeRows: true
+        ,loadMask: {
+            msg: 'Loading...'
+        }
+       ,plugins:[new Ext.ux.grid.Search({
             mode:'remote',
             iconCls:false,
             disableIndexes:[
-                'last_check', 
-                'next_check', 
-                'local_graph_id', 
-                'last_state_change', 
-                'current_check_attempt', 
+                'last_check',
+                'next_check',
+                'local_graph_id',
+                'last_state_change',
+                'current_check_attempt',
                 'current_state'
             ]
         })]
@@ -203,19 +202,15 @@ npc.services = function(title, filter){
     // Refresh the dashboard
     centerTabPanel.doLayout();
 
-    // Render the grid
-    grid.render();
-
-    // Load the data store
-    grid.store.load({params:{start:0, limit:pageSize}});
-
     // Start auto refresh of the grid
-    store.startAutoRefresh(refresh);
+    if (filter != 'any') {
+        grid.store.startAutoRefresh(npc.params.npc_portlet_refresh);
+    }
 
     // Stop auto refresh if the tab is closed
     var listeners = {
         destroy: function() {
-            store.stopAutoRefresh();
+            grid.store.stopAutoRefresh();
             if (!innerTabPanel.items.length) {
                 centerTabPanel.remove(outerTabId, true);
             }

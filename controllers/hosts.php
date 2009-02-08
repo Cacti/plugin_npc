@@ -62,7 +62,11 @@ class NpcHostsController extends Controller {
             $hosts[$i]['service_count'] = $services;
         }    
 
-        return($this->jsonOutput($hosts));
+        $response['response']['value']['items'] = $hosts;
+        $response['response']['value']['total_count'] = $this->numRecords;
+        $response['response']['value']['version']     = 1;
+
+        return(json_encode($response));
     }
 
     /**

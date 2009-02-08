@@ -1,113 +1,119 @@
-Ext.namespace('Ext.ux');
+npc.hostsGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
 
-Ext.ux.Livegrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
+    filter: 'any',
 
     initComponent : function()
     {
-        /**
-         * BufferedJsonReader derives from Ext.data.JsonReader and allows to pass
-         * a version value representing the current state of the underlying data
-         * repository.
-         * Version handling on server side is totally up to the user. The version
-         * property should change whenever a record gets added or deleted on the server
-         * side, so the store can be notified of changes between the previous and current
-         * request. If the store notices a version change, it will fire the version change
-         * event. Speaking of data integrity: If there are any selections pending,
-         * the user can react to this event and cancel all pending selections.
-         */
         var bufferedReader = new Ext.ux.grid.livegrid.JsonReader({
             root            : 'response.value.items',
             versionProperty : 'response.value.version',
             totalProperty   : 'response.value.total_count',
-            id              : 'id'
-          }, [ {
-             name : 'number_field', sortType : 'int'
-          },{
-             name : 'string_field', sortType : 'string'
-          },{
-             name : 'date_field',   sortType : 'int'
-        }]);
+            id              : 'host_object_id'
+        },[
+             {name: 'host_object_id', type: 'int', sortType : 'int'},
+             {name: 'host_name', sortType : 'string'},
+             {name: 'alias',   sortType : 'string'},
+             {name: 'comment',   sortType : 'string'},
+             {name: 'service_count', type: 'int', sortType : 'int'},
+             {name: 'current_state', type: 'int', sortType: 'int'},
+             {name: 'current_check_attempt', sortType : 'string'},
+             {name: 'max_check_attempts', sortType : 'string'},
+             {name: 'output', sortType : 'string'},
+             {name: 'acknowledgement', sortType : 'string'},
+             {name: 'local_graph_id', type: 'int', sortType: 'int'},
+             {name: 'last_check', type: 'date', sortType: 'date', dateFormat: 'Y-m-d H:i:s'},
+             {name: 'next_check', type: 'date', sortType: 'date', dateFormat: 'Y-m-d H:i:s'},
+             {name: 'last_state_change', type: 'date', sortType: 'date', dateFormat: 'Y-m-d H:i:s'},
+             {name: 'problem_has_been_acknowledged', type: 'int', sortType: 'int'},
+             {name: 'notifications_enabled', type: 'int', sortType: 'int'},
+             {name: 'active_checks_enabled', type: 'int', sortType: 'int'},
+             {name: 'passive_checks_enabled', type: 'int', sortType: 'int'},
+             {name: 'is_flapping', type: 'int', sortType: 'int'}
+          ]
+        );
 
-
-        /**
-         * Set up your store.
-         * An instance of BufferedJsonReader is needed if you want to listen to
-         * <tt>versionchange</tt> events.
-         * Make sure you set the config option bufferSize high enough
-         * (something between 100 and 300  works good).
-         */
         this.store = new Ext.ux.grid.livegrid.Store({
             autoLoad   : true,
             bufferSize : 100,
             reader     : bufferedReader,
             sortInfo   : {field: 'host_name', direction: 'ASC'},
-            url        : 'npc.php?module=hosts&action=getHosts&p_state=any'
+            url        : 'npc.php?module=hosts&action=getHosts&p_state=' + this.filter
         });
 
-        /**
-         * BufferedRowSelectionModel introduces a different selection model and a
-         * new <tt>selectiondirty</tt> event.
-         * You can keep selections between <b>all</bb> ranges in the grid; records which
-         * are currently in the buffer and are selected will be added to the selection
-         * model as usual. Rows representing records <b>not</b> loaded in the current
-         * buffer will be marked using a predictive index when selected.
-         * Selected rows will be successively read into the selection store
-         * upon scrolling through the view. However, if any records get added or removed,
-         * and selection ranges are pending, the selectiondirty event will be triggered.
-         * It is up to the user to either clear the pending selections or continue
-         * with requesting the pending selection records from the data repository.
-         * To put the whole matter in a nutshell: Selected rows which represent records
-         * <b>not</b> in the current data store will be identified by their assumed
-         * index in the data repository, and <b>not</b> by their id property.
-         * Events such as <tt>versionchange</tt> or <tt>selectiondirty</tt>
-         * can help in telling if their positions in the data repository changed.
-         */
         this.selModel = new Ext.ux.grid.livegrid.RowSelectionModel();
 
-        /**
-         * Here is where the magic happens: BufferedGridView. The nearLimit
-         * is a parameter for the predictive fetch algorithm within the view.
-         * If your bufferSize is small, set this to a value around a third or a quarter
-         * of the store's bufferSize (e.g. a value of 25 for a bufferSize of 100;
-         * a value of 100 for a bufferSize of 300).
-         * The loadMask is optional but should be used to provide some visual feedback
-         * for the user when the store buffers (the loadMask from the GridPanel
-         * will only be used for initial loading, sorting and reloading).
-         */
         this.view = new Ext.ux.grid.livegrid.GridView({
-            nearLimit : 30,
-            //forceFit:true,
-            //autoFill:true,
-            //emptyText:'No hosts.',
-            loadMask  : {
-                msg : 'Please wait...'
+            nearLimit : 30
+            ,forceFit:true
+            ,autoFill:true
+            ,emptyText:'No hosts.'
+            ,loadMask: {
+                msg: 'Please wait...'
             }
         });
 
-        /**
-         * You can use an instance of BufferedGridToolbar for keeping track of the
-         * current scroll position. It also gives you a refresh button and a loading
-         * image that gets activated when the store buffers.
-         * ...Yeah, I pretty much stole this one from the PagingToolbar!
-         */
         this.bbar = new Ext.ux.grid.livegrid.Toolbar({
             view        : this.view,
             displayInfo : true
         });
 
-        Ext.ux.Livegrid.superclass.initComponent.call(this);
+        npc.hostsGrid.superclass.initComponent.call(this);
     }
 
 });
 
+npc.hosts = function(title, filter){
 
-npc.hosts = function(){
+    // Panel ID
+    var id = title.replace(/[-' ']/g,'') + '-tab';
+
+    var gridId = id + '-grid';
+
+    var outerTabId = 'hosts-tab';
+
+    npc.addCenterNestedTab(outerTabId, 'Hosts');
+
+    var centerTabPanel = Ext.getCmp('centerTabPanel');
+
+    var innerTabId = 'hosts-tab-inner-panel';
+
+    var innerTabPanel = Ext.getCmp(innerTabId);
+
+    var tab = Ext.getCmp(id);
+
+    if (tab) {
+        innerTabPanel.setActiveTab(tab);
+        return;
+    } else {
+        innerTabPanel.add({ 
+            id: id, 
+            title: title, 
+            deferredRender:false,
+            height:600,
+            layout: 'fit',
+            closable: true
+        }).show(); 
+        innerTabPanel.setActiveTab(tab); 
+        tab = Ext.getCmp(id); 
+    }
+
+    function renderAttempt(val, p, record){
+        return String.format('{0}/{1}', val, record.data.max_check_attempts);
+    }
+
+    function renderGraphIcon(val, p, record){
+        var icon = '';
+        if (val) {
+            icon = '<img src="images/icons/chart_bar.png">';
+        }
+        return String.format('{0}', icon);
+    }
 
     var cm = new Ext.grid.ColumnModel([{
         header:"Host",
         dataIndex:'host_name',
         sortable:true,
-        //renderer:npc.renderExtraIcons,
+        renderer:npc.renderExtraIcons,
         width:100
     },{
         header:"Alias",
@@ -117,9 +123,43 @@ npc.hosts = function(){
     },{
         header:"Status",
         dataIndex:'current_state',
-        //renderer:npc.hostStatusImage,
+        renderer:npc.hostStatusImage,
         align:'center',
         width:30
+    },{
+        header:"Graph",
+        dataIndex:'local_graph_id',
+        renderer:renderGraphIcon,
+        width:30
+    },{
+        header:"Last Check",
+        dataIndex:'last_check',
+        renderer: npc.formatDate,
+        width:100
+    },{
+        header:"Next Check",
+        dataIndex:'next_check',
+        renderer: npc.formatDate,
+        width:100
+    },{
+        header:"Duration",
+        dataIndex:'last_state_change',
+        hidden:true,
+        renderer: npc.getDuration,
+        width:110
+    },{
+        header:"Attempt",
+        dataIndex:'current_check_attempt',
+        renderer: renderAttempt,
+        hidden:true,
+        align:'center',
+        width:50
+    },{
+        header:"Services",
+        dataIndex:'service_count',
+        hidden:true,
+        align:'center',
+        width:50
     },{
         header:"Plugin Output",
         dataIndex:'output',
@@ -127,39 +167,75 @@ npc.hosts = function(){
     }]);
 
 
-        var grid = new Ext.ux.Livegrid({
-            enableDragDrop : false,
-            layout      : 'fit',
-            cm             : new Ext.grid.ColumnModel([
-                new Ext.grid.RowNumberer({header : '#' }),
-                {header: "Number", align : 'left',   width: 160, sortable: true, dataIndex: 'number_field'},
-                {header: "String", align : 'left',   width: 160, sortable: true, dataIndex: 'string_field'},
-                {header: "Date",   align : 'right',  width: 160, sortable: true, dataIndex: 'date_field'}
-            ]),
-            loadMask       : {
-                msg : 'Loading...'
-            },
-            title          : 'Large table'
-        });
+    var grid = new npc.hostsGrid({
+        id: gridId
+        ,height:800
+        ,filter: filter
+        ,enableDragDrop : false
+        ,cm : cm
+        ,stripeRows: true
+        ,loadMask       : {
+            msg : 'Loading...'
+        }
+        ,plugins:[new Ext.ux.grid.Search({
+            mode:'remote',
+            iconCls:false,
+            disableIndexes:[
+                'last_check',
+                'next_check',
+                'local_graph_id',
+                'service_count',
+                'last_state_change',
+                'current_check_attempt',
+                'current_state'
+            ]
+        })]
+    });
 
-        var w = new Ext.Window({
-            title       : 'Ext.ux.Livegrid',
-            maximizable : true,
-            resizable   : true,
-            layout      : 'fit',
-            items       : [grid],
-            width       : 500,
-            height      : 300,
-            tbar        : new Ext.Toolbar({
-                items : [
-                    new Ext.Button({
-                        text : 'Button 2'
-                    })
-                ]
-            })
-        });
+    // Add the grid to the panel
+    tab.add(grid);
 
-        w.show();
+    // Refresh the dashboard
+    centerTabPanel.doLayout();
 
+    // Start auto refresh for grids with filter not equal to ok
+    if (filter != 'any') {
+        grid.store.startAutoRefresh(npc.params.npc_portlet_refresh);
+    }
 
+    var listeners = {
+        destroy: function() {
+            grid.store.stopAutoRefresh();
+            if (!innerTabPanel.items.length) {
+                centerTabPanel.remove(outerTabId, true);
+            }
+        }
+    };
+
+    // Add the listener to the tab
+    tab.addListener(listeners);
+
+    grid.on('rowdblclick', npc.hostGridClick);
+
+    // Right click action
+    grid.on('rowcontextmenu', npc.hostContextMenu);
+
+    // If the graph icon is clicked popup the associated graph
+    grid.on('cellclick', function(grid, rowIndex, columnIndex) {
+        var record = grid.getStore().getAt(rowIndex);
+        var fieldName = grid.getColumnModel().getDataIndex(columnIndex);
+        var data = record.get(fieldName);
+
+        if (fieldName == 'local_graph_id' && data && !Ext.getCmp('hostGraph'+data)) {
+            var win = new Ext.Window({
+                title:record.data.host_name,
+                id:'hostGraph'+data,
+                layout:'fit',
+                modal:false,
+                closable: true,
+                html: '<img src="/graph_image.php?action=view&local_graph_id='+data+'&rra_id=1">',
+                width:600
+            }).show();
+        }
+    });
 };
