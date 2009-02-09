@@ -12,35 +12,6 @@ npc.portlet.hostProblems = function(){
     // Default column
     var column = 'dashcol2';
 
-    // Default # of events to display
-    var pageSize = 5;
-
-
-    var store = new Ext.data.JsonStore({
-        url:url,
-        autoload:true,
-        sortInfo:{field: 'host_name', direction: "ASC"},
-        totalProperty:'totalCount',
-        root:'data',
-        fields: [
-            {name: 'host_object_id', type: 'int'},
-            'host_name',
-            'alias',
-            'comment',
-            {name: 'current_state', type: 'int'},
-            'output',
-            'acknowledgement',
-            {name: 'problem_has_been_acknowledged', type: 'int'},
-            {name: 'notifications_enabled', type: 'int'},
-            {name: 'active_checks_enabled', type: 'int'},
-            {name: 'obsess_over_host', type: 'int'},
-            {name: 'event_handler_enabled', type: 'int'},
-            {name: 'flap_detection_enabled', type: 'int'},
-            {name: 'passive_checks_enabled', type: 'int'},
-            {name: 'is_flapping', type: 'int'}
-        ]
-    });
-
     var cm = new Ext.grid.ColumnModel([{
         header:"Host",
         dataIndex:'host_name',
@@ -64,26 +35,16 @@ npc.portlet.hostProblems = function(){
         width:400
     }]);
 
-    var grid = new Ext.grid.GridPanel({
-        id: id + '-grid',
-        autoHeight:true,
-        autoExpandColumn: 'host_name',
-        store:store,
-        autoScroll: true,
-        cm:cm,
-        sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
-        stripeRows: true,
-        view: new Ext.grid.GridView({
-             forceFit:true,
-             autoFill:true,
-             emptyText:'No problems.',
-             scrollOffset:0
-        }),
-        bbar: new Ext.PagingToolbar({
-            pageSize: pageSize,
-            store: store,
-            displayInfo: true
-        })
+    var grid = new npc.hostsGrid({
+        id: id + '-grid'
+        ,height:150
+        ,filter: 'not_ok'
+        ,enableDragDrop : false
+        ,cm : cm
+        ,stripeRows: true
+        ,loadMask       : {
+            msg : 'Loading...'
+        }
     });
 
     // Create a portlet to hold the grid
@@ -95,13 +56,6 @@ npc.portlet.hostProblems = function(){
     // Refresh the dashboard
     Ext.getCmp('centerTabPanel').doLayout();
 
-    // Render the grid
-    grid.render();
-
-    // Load the data store
-    //grid.store.load({params:{start:0, limit:pageSize}});
-    store.load({params:{start:0, limit:10}});
-
     // Start auto refresh of the grid
     if (Ext.getCmp(id).isVisible()) {
         doAutoRefresh();
@@ -111,7 +65,7 @@ npc.portlet.hostProblems = function(){
     // depending on wether or not the portlet is visible.
     var listeners = {
         hide: function() {
-            store.stopAutoRefresh();
+            grid.store.stopAutoRefresh();
         },
         show: function() {
             doAutoRefresh();
@@ -127,7 +81,7 @@ npc.portlet.hostProblems = function(){
     Ext.getCmp(id).addListener(listeners);
 
     function doAutoRefresh() {
-        store.startAutoRefresh(npc.params.npc_portlet_refresh);
+        grid.store.startAutoRefresh(npc.params.npc_portlet_refresh);
     }
 
     // Double click action

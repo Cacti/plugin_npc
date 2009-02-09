@@ -62,6 +62,10 @@ class NpcLogentriesController extends Controller {
         // Set the total number of records
         $this->numRecords = $q->getNumResults();
 
-        return($this->jsonOutput($results));
+        $response['response']['value']['items'] = $results;
+        $response['response']['value']['total_count'] = $this->numRecords;
+        $response['response']['value']['version']     = 1;
+
+        return(json_encode($response));
     }
 }

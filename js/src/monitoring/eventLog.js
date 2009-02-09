@@ -1,3 +1,53 @@
+npc.eventLogGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
+
+    filter: 'any',
+
+    initComponent : function()
+    {
+        var bufferedReader = new Ext.ux.grid.livegrid.JsonReader({
+            root            : 'response.value.items',
+            versionProperty : 'response.value.version',
+            totalProperty   : 'response.value.total_count',
+            id              : 'host_object_id'
+        },[
+             {name: 'instance_id', type: 'int', sortType: 'int'},
+             {name: 'instance_name', type: 'string', sortType: 'string'},
+             {name: 'logentry_id', type: 'int', sortType: 'int'},
+             {name: 'entry_time', type: 'date', sortType: 'date', dateFormat: 'Y-m-d H:i:s'},
+             {name: 'logentry_data', type: 'string', sortType: 'string'}
+          ]
+        );
+
+        this.store = new Ext.ux.grid.livegrid.Store({
+            autoLoad   : true,
+            bufferSize : 200,
+            reader     : bufferedReader,
+            sortInfo   : {field: 'host_name', direction: 'ASC'},
+            url        : 'npc.php?module=logentries&action=getLogs'
+        });
+
+        this.selModel = new Ext.ux.grid.livegrid.RowSelectionModel();
+
+        this.view = new Ext.ux.grid.livegrid.GridView({
+            nearLimit : 50
+            ,forceFit:true
+            ,autoFill:true
+            ,emptyText:'No events.'
+            ,loadMask: {
+                msg: 'Please wait...'
+            }
+        });
+
+        this.bbar = new Ext.ux.grid.livegrid.Toolbar({
+            view        : this.view,
+            displayInfo : true
+        });
+
+        npc.eventLogGrid.superclass.initComponent.call(this);
+    }
+
+});
+
 npc.eventLog = function(){
 
     var title = 'Event Log';
@@ -7,26 +57,11 @@ npc.eventLog = function(){
 
     // Set the number of rows to display and the refresh rate
     var state = Ext.state.Manager.get(gridId);
-    var pageSize = (state && state.rows) ? state.rows : 15;
-    var refresh = (state && state.refresh) ? state.refresh : 60;
+    var refresh = (state && state.refresh) ? state.refresh : 300;
 
 
     var tabPanel = Ext.getCmp('centerTabPanel');
     var tab = Ext.getCmp(id);
-
-    var store = new Ext.data.JsonStore({
-        url:'npc.php?module=logentries&action=getLogs',
-        totalProperty:'totalCount',
-        root:'data',
-        fields:[
-            {name: 'instance_id', type: 'int'},
-            'instance_name',
-            {name: 'logentry_id', type: 'int'},
-            {name: 'entry_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            'logentry_data'
-        ],
-        autoload:true
-    });
 
     var cm = new Ext.grid.ColumnModel([{
         dataIndex:'logentry_data',
@@ -51,37 +86,20 @@ npc.eventLog = function(){
         align:'left'
     }]);
 
-    var grid = new Ext.grid.GridPanel({
+    var grid = new npc.eventLogGrid({
         id: gridId,
-        //autoHeight:true,
-        height:600,
-        autoScroll:true,
-        store:store,
+        height:800,
         cm:cm,
         autoExpandColumn:'logentry_data',
         stripeRows: true,
         listeners: {
             // Intercept the state save to add our custom attributes
             beforestatesave: function(o, s) {
-                s.rows = pageSize;
                 s.refresh = refresh
                 Ext.state.Manager.set(gridId, s);
                 return false;
             }
         },
-        view: new Ext.grid.GridView({
-            forceFit:true,
-            autoFill:true,
-            emptyText:'No events.'
-        }),
-        bbar: new Ext.PagingToolbar({
-            pageSize: pageSize,
-            store: store,
-            displayInfo: true,
-            displayMsg: '',
-            items: npc.setRefreshCombo(gridId, store, state),
-            plugins: new Ext.ux.Andrie.pPageSize({ gridId: gridId })
-        }),
         plugins:[new Ext.ux.grid.Search({
             mode:'remote',
             iconCls:false
@@ -107,19 +125,13 @@ npc.eventLog = function(){
     tab = Ext.getCmp(id);
     tabPanel.setActiveTab(id);
 
-    // Render the grid
-    grid.render();
-
-    // Load the data store
-    store.load({params:{start:0, limit:pageSize}});
-
     // Start auto refresh of the grid
-    store.startAutoRefresh(refresh);
+    //grid.store.startAutoRefresh(refresh);
 
     // Stop auto refresh if the tab is closed
     var listeners = {
         destroy: function() {
-            store.stopAutoRefresh();
+            grid.store.stopAutoRefresh();
         }
     };
 

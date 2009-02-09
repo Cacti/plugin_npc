@@ -6,9 +6,6 @@ npc.portlet.serviceProblems = function(){
     // Portlet ID
     var id = 'serviceProblems';
 
-    // Portlet URL
-    var url = 'npc.php?module=services&action=getServices&p_state=not_ok';
-
     // Default column
     var column = 'dashcol2';
 
@@ -18,37 +15,15 @@ npc.portlet.serviceProblems = function(){
     // Refresh rate
     var refresh = Ext.state.Manager.get(id).refresh;
 
-    var store = new Ext.data.GroupingStore({
-        url:url,
-        autoload:true,
-        sortInfo:{field: 'service_description', direction: "ASC"},
-        reader: new Ext.data.JsonReader({
-            totalProperty:'totalCount',
-            root:'data'
-        }, [
-            {name: 'host_object_id', type: 'int'},
-            {name: 'service_object_id', type: 'int'},
-            {name: 'service_id', type: 'int'},
-            'host_name',
-            'host_alias',
-            'service_description',
-            'acknowledgement',
-            'comment',
-            'output',
-            {name: 'current_state', type: 'int'},
-            {name: 'problem_has_been_acknowledged', type: 'int'},
-            {name: 'notifications_enabled', type: 'int'},
-            {name: 'active_checks_enabled', type: 'int'},
-            {name: 'passive_checks_enabled', type: 'int'},
-            {name: 'obsess_over_service', type: 'int'},
-            {name: 'event_handler_enabled', type: 'int'},
-            {name: 'flap_detection_enabled', type: 'int'},
-            {name: 'is_flapping', type: 'int'}
-        ]),
-        groupField:'host_name'
-    });
-
     var cm = new Ext.grid.ColumnModel([{
+        header:"Host",
+        dataIndex:'host_name',
+        hidden:false
+    },{
+        header:"Host Alias",
+        dataIndex:'host_alias',
+        hidden:true
+    },{
         header:"Service",
         dataIndex:'service_description',
         renderer:npc.renderExtraIcons,
@@ -59,43 +34,21 @@ npc.portlet.serviceProblems = function(){
         renderer:npc.serviceStatusImage,
         width:45
     },{
-        header:"Host",
-        dataIndex:'host_name'
-    },{
-        header:"Host Alias",
-        dataIndex:'host_alias',
-        hidden:true
-    },{
         header:"Plugin Output",
         dataIndex:'output',
         width:500
     }]);
 
-
-    var grid = new Ext.grid.GridPanel({
-        id: 'service-problems-grid',
-        autoHeight:true,
-        autoExpandColumn: 'service_description',
-        store:store,
-        cm:cm,
-        sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
-        stripeRows: true,
-        view: new Ext.grid.GroupingView({
-            forceFit:true,
-            autoFill:true,
-            hideGroupedColumn: true,
-            enableGroupingMenu: true,
-            enableNoGroups: true,
-            groupTextTpl: '{text}',
-            emptyText:'No problems.',
-            scrollOffset:0
-        }),
-        bbar: new Ext.PagingToolbar({
-            pageSize: rows,
-            store: store,
-            displayInfo: true,
-            displayMsg: ''
-        })
+    var grid = new npc.servicesGrid({
+        id: id + '-grid'
+        ,height:150
+        ,filter: 'not_ok'
+        ,enableDragDrop : false
+        ,cm: cm
+        ,stripeRows: true
+        ,loadMask: {
+            msg: 'Loading...'
+        }
     });
 
     // Create a portlet to hold the grid
@@ -107,12 +60,6 @@ npc.portlet.serviceProblems = function(){
     // Refresh the dashboard
     Ext.getCmp('centerTabPanel').doLayout();
 
-    // Render the grid
-    grid.render();
-
-    // Load the data store
-    store.load({params:{start:0, limit:rows}});
-
     // Start auto refresh of the grid
     if (Ext.getCmp(id).isVisible()) {
         doAutoRefresh();
@@ -122,7 +69,7 @@ npc.portlet.serviceProblems = function(){
     // depending on wether or not the portlet is visible.
     var listeners = {
         hide: function() {
-            store.stopAutoRefresh();
+            grid.store.stopAutoRefresh();
         },
         show: function() {
             doAutoRefresh();
@@ -138,7 +85,7 @@ npc.portlet.serviceProblems = function(){
     Ext.getCmp(id).addListener(listeners);
 
     function doAutoRefresh() {
-        store.startAutoRefresh(refresh);
+        grid.store.startAutoRefresh(refresh);
     }
 
     // Double click action

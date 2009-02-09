@@ -6,26 +6,8 @@ npc.portlet.eventLog = function(){
     // Portlet ID
     var id = 'eventLog';
 
-    // Portlet URL
-    var url = 'npc.php?module=logentries&action=getLogs';
-
     // Default column
     var column = 'dashcol2';
-
-    // Default # of events to display
-    var pageSize = 5;
-
-    var store = new Ext.data.JsonStore({
-        url:url,
-        totalProperty:'totalCount',
-        root:'data',
-        fields:[
-            'logentry_id',
-            {name: 'entry_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            'logentry_data'
-        ],
-        autoload:true
-    });
 
     var cm = new Ext.grid.ColumnModel([{
         dataIndex:'logentry_data',
@@ -44,25 +26,19 @@ npc.portlet.eventLog = function(){
         align:'left'
     }]);
 
-    var grid = new Ext.grid.GridPanel({
-        id: 'event-log-grid',
-        autoHeight:true,
-        autoWidth:true,
-        store:store,
-        cm:cm,
-        autoExpandColumn:'logentry_data',
-        stripeRows: true,
-        view: new Ext.grid.GridView({
-             forceFit:true,
-             autoFill:true,
-             scrollOffset:0
-        }),
-        bbar: new Ext.PagingToolbar({
-            pageSize: pageSize,
-            store: store,
-            displayInfo: true,
-            displayMsg: ''
-        })
+    var grid = new npc.eventLogGrid({
+        id: id + '-grid'
+        ,height:275
+        ,enableDragDrop : false
+        ,cm : cm
+        ,stripeRows: true
+        ,loadMask       : {
+            msg : 'Loading...'
+        }
+        ,plugins:[new Ext.ux.grid.Search({
+            mode:'remote',
+            iconCls:false
+        })]
     });
 
     // Create a portlet to hold the grid
@@ -74,12 +50,6 @@ npc.portlet.eventLog = function(){
     // Refresh the dashboard
     Ext.getCmp('centerTabPanel').doLayout();
 
-    // Render the grid
-    grid.render();
-
-    // Load the data store
-    store.load({params:{start:0, limit:pageSize}});
-
     // Start auto refresh of the grid
     if (Ext.getCmp(id).isVisible()) {
         doAutoRefresh();
@@ -89,13 +59,13 @@ npc.portlet.eventLog = function(){
     // depending on wether or not the portlet is visible.
     var listeners = {
         hide: function() {
-            store.stopAutoRefresh();
+            grid.store.stopAutoRefresh();
         },
         show: function() {
             doAutoRefresh();
         },
         collapse: function() {
-            store.stopAutoRefresh();
+            grid.store.stopAutoRefresh();
         },
         expand: function() {
             doAutoRefresh();
@@ -105,6 +75,6 @@ npc.portlet.eventLog = function(){
     Ext.getCmp(id).addListener(listeners);
 
     function doAutoRefresh() {
-        store.startAutoRefresh(npc.params.npc_portlet_refresh);
+       grid. store.startAutoRefresh(npc.params.npc_portlet_refresh);
     }
 };
