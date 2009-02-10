@@ -287,7 +287,8 @@ npc.n2c = function() {
                 autoFill:true
             }),
             stripeRows: true,
-            autoHeight:true,
+            autoScroll:true,
+            height:600,
             width:600
         });
 
