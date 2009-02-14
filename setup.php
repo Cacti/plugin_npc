@@ -1139,7 +1139,9 @@ function npc_setup_tables() {
                     `output` varchar(255) NOT NULL default '',
                     `perfdata` varchar(255) NOT NULL default '',
                     PRIMARY KEY  (`servicecheck_id`),
-                    UNIQUE KEY `instance_id` (`instance_id`,`service_object_id`,`start_time`,`start_time_usec`)
+                    UNIQUE KEY `instance_id` (`instance_id`,`service_object_id`,`start_time`,`start_time_usec`),
+                    KEY `idx1` (`service_object_id`,`start_time`),
+                    KEY `idx2` (`instance_id`,`start_time`)
                   ) ENGINE=InnoDB COMMENT='Historical service checks';";
     }
 

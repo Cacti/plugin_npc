@@ -21,3 +21,4 @@ CREATE INDEX idx1 ON npc_service_graphs(service_object_id);
 
 
 CREATE INDEX idx1 ON npc_servicechecks(service_object_id, start_time);
+CREATE INDEX idx2 ON npc_servicechecks(instance_id, start_time);
