@@ -221,17 +221,19 @@ class NpcServicesController extends Controller {
         return($services);
     }
 
+    /**
+     * Returns the last perfdata entry for a particular service
+     *
+     * @return array
+     */
     function getPerfData($id=null) {
 
         $id = $this->id ? $this->id : $id;
 
-        $q = new Doctrine_Pager(
-            Doctrine_Query::create()
-                ->select('n.*')
-            	->from('NpcServicechecks n, NpcServices n2')
-          	    ->where('n.service_object_id = ? AND n2.service_object_id = n.service_object_id AND n.start_time'
-                       .' > now() - INTERVAL n2.check_interval * 2 MINUTE', $id)
-          	    ->orderby('n.start_time DESC'), 0, 1);
+        $q = new Doctrine_Query();
+        $q->select('MAX(n.end_time), n.perfdata')
+        ->from('NpcServicechecks n')
+        ->where('n.service_object_id = ?', $id);
 
         return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
     }

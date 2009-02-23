@@ -254,6 +254,22 @@ class Controller {
         return(json_encode($output));
     }
 
+    function csvOutput($results=array()) {
+
+        header("Content-type: text/csv");
+        header("Cache-Control: no-store, no-cache");
+        header('Content-Disposition: attachment; filename="filename.csv"');
+
+        $outstream = fopen("php://output",'w');
+
+        foreach( $test_data as $row ) {
+            fputcsv($outstream, $row, ',', '"');
+        }
+ 
+        fclose($outstream);
+        exit;
+    }
+
     /**
      * flattenArray
      * 

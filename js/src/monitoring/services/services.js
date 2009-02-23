@@ -228,6 +228,8 @@ npc.services = function(title, filter){
 
     // If the graph icon is clicked popup the associated graph
     grid.on('cellclick', function(grid, rowIndex, columnIndex) {
+
+console.log(grid);
         var record = grid.getStore().getAt(rowIndex);
         var fieldName = grid.getColumnModel().getDataIndex(columnIndex);
         var data = record.get(fieldName);

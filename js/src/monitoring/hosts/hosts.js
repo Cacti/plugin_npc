@@ -174,8 +174,8 @@ npc.hosts = function(title, filter){
         ,enableDragDrop : false
         ,cm : cm
         ,stripeRows: true
-        ,loadMask       : {
-            msg : 'Loading...'
+        ,loadMask: {
+            msg: 'Loading...'
         }
         ,plugins:[new Ext.ux.grid.Search({
             mode:'remote',
