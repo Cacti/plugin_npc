@@ -9,8 +9,9 @@ npc.portlet.serviceProblems = function(){
     // Default column
     var column = 'dashcol2';
 
-    // Get the number of rows to display
-    var rows = Ext.state.Manager.get(id).rows;
+    // Get the portlet height
+    var height = Ext.state.Manager.get(id).height;
+    height = (height > 150) ? height : 150;
 
     // Refresh rate
     var refresh = Ext.state.Manager.get(id).refresh;
@@ -22,6 +23,10 @@ npc.portlet.serviceProblems = function(){
     },{
         header:"Host Alias",
         dataIndex:'host_alias',
+        hidden:true
+    },{
+        header:"Host Address",
+        dataIndex:'host_address',
         hidden:true
     },{
         header:"Service",
@@ -41,7 +46,7 @@ npc.portlet.serviceProblems = function(){
 
     var grid = new npc.servicesGrid({
         id: id + '-grid'
-        ,height:150
+        ,height:height
         ,filter: 'not_ok'
         ,enableDragDrop : false
         ,cm: cm

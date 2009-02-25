@@ -185,6 +185,7 @@ class NpcHostsController extends Controller {
                 ->select('i.instance_name,'
                         .'o.name1 AS host_name,'
                         .'h.alias,'
+                        .'h.address,'
                         .'s.service_object_id,'
                         .'s.display_name,'
                         .'g.local_graph_id,'

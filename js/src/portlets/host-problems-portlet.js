@@ -9,6 +9,10 @@ npc.portlet.hostProblems = function(){
     // Portlet URL
     var url = 'npc.php?module=hosts&action=getHosts&p_state=not_ok';
 
+    // Get the portlet height
+    var height = Ext.state.Manager.get(id).height;
+    height = (height > 150) ? height : 150;
+
     // Default column
     var column = 'dashcol2';
 
@@ -37,7 +41,7 @@ npc.portlet.hostProblems = function(){
 
     var grid = new npc.hostsGrid({
         id: id + '-grid'
-        ,height:150
+        ,height:height
         ,filter: 'not_ok'
         ,enableDragDrop : false
         ,cm : cm

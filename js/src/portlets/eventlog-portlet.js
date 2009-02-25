@@ -9,6 +9,10 @@ npc.portlet.eventLog = function(){
     // Default column
     var column = 'dashcol2';
 
+    // Get the portlet height
+    var height = Ext.state.Manager.get(id).height;
+    height = (height > 150) ? height : 150;
+
     var cm = new Ext.grid.ColumnModel([{
         dataIndex:'logentry_data',
         renderer: npc.renderEventIcon,
@@ -28,7 +32,7 @@ npc.portlet.eventLog = function(){
 
     var grid = new npc.eventLogGrid({
         id: id + '-grid'
-        ,height:275
+        ,height:height
         ,enableDragDrop : false
         ,cm : cm
         ,stripeRows: true

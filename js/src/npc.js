@@ -29,7 +29,7 @@ npc = function() {
         var state = Ext.state.Manager.get(portlet.id);
 
         var currentRefresh = state.refresh; 
-        var currentRows = state.rows; 
+        var currentHeight = state.height; 
         var height = 125;
 
         var rowField = {
@@ -37,14 +37,14 @@ npc = function() {
             xtype: 'hidden'
         };
 
-        if (currentRows) {
+        if (currentHeight) {
             height = 150;
             rowField = {
-                fieldLabel: 'Display Rows',
-                name: 'rows',
-                value: currentRows,
+                fieldLabel: 'Display Height',
+                name: 'height',
+                value: currentHeight,
                 labelStyle: 'cursor: help;',
-                tooltipText: "The number of rows to display.",
+                tooltipText: "The height of the portlet.",
                 allowBlank: false,
                 xtype: 'textfield',
                 listeners: {
@@ -83,17 +83,16 @@ npc = function() {
                 text: 'Save',
                 handler: function(o){
                     var r = parseInt(form.form.getValues().refresh);
-                    var store = portlet.items.items[0].store;
+                    var grid = portlet.items.items[0];
 
                     if (r != currentRefresh) {
                         state.refresh = (r >= 10) ? r : 10;
-                        store.startAutoRefresh(state.refresh);
+                        grid.store.startAutoRefresh(state.refresh);
                     }
 
                     if (currentRows) {
-                        state.rows = parseInt(form.form.getValues().rows);
-                        portlet.items.items[0].getBottomToolbar().pageSize = state.rows;
-                        store.load({params:{start:0, limit:state.rows}});
+                        state.height = parseInt(form.form.getValues().height);
+                        grid.setHeight(state.height);
                     }
 
                     Ext.state.Manager.set(portlet.id, state);

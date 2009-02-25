@@ -44,7 +44,7 @@ function npc_version() {
  */
 function plugin_npc_version() {
     return array(   'name'          => 'npc',
-                    'version'       => '2.0.0b',
+                    'version'       => '2.0.1',
                     'longname'      => 'Nagios plugin for Cacti',
                     'author'        => 'Billy Gunn',
                     'homepage'      => 'http://trac2.assembla.com/npc',
@@ -219,17 +219,17 @@ function npc_config_arrays () {
                 'date_format' => "s%3AY-m-d",
                 'time_format' => "s%3AH%3Ai%3As",
 
-                "serviceProblems" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-                "serviceSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5E',
-                "servicegroupServiceStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-                "servicegroupHostStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-                "monitoringPerf" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A1%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A60%5E',
+                "serviceProblems" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150',
+                "serviceSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A120%5E',
+                "servicegroupServiceStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150',
+                "servicegroupHostStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150',
+                "monitoringPerf" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A1%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A120%5E',
 
-                "hostProblems" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-                "hostSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A60%5E',
-                "hostgroupServiceStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-                "hostgroupHostStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A60%5Erows%3Dn%253A10',
-                "eventLog" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A1%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A60%5Erows%3Dn%253A5'
+                "hostProblems" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150',
+                "hostSummary" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A120%5E',
+                "hostgroupServiceStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150',
+                "hostgroupHostStatus" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150',
+                "eventLog" => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A1%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150'
             );
 
             api_plugin_load_realms();
@@ -1520,7 +1520,11 @@ function npc_config_settings() {
         $current_npc_version = $current['version'];
         $old_npc_version = db_fetch_cell("select version from plugin_config where directory='npc'");
         if ( ($current_npc_version != $old_npc_version) && ($old_npc_version != "") ) {
-            npc_upgrade_tables ();
+            //npc_upgrade_tables ();
+        
+            // Changes have been made that require stored cookie values to be reset.
+            db_execute("DELETE FROM npc_settings");
+
             db_execute("UPDATE plugin_config SET version = '".$current_npc_version."' where directory='npc'");
         }
 
