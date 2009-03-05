@@ -162,6 +162,8 @@ class Controller {
         'host_name'                     => 'Host Name',
         'service_id'                    => 'Service Id',
         'host_id'                       => 'Host Id',
+        'address'                       => 'IP Address',
+        'host_address'                  => 'Host Address',
         'service_description'           => 'Service Description',
         'servicestatus_id'              => 'Servicestatus Id',
         'service_object_id'             => 'Service Object Id',

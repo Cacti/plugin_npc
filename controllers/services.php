@@ -74,6 +74,11 @@ class NpcServicesController extends Controller {
      */
     function getStateInfo() {
 
+	require_once("plugins/npc/controllers/hostgroups.php");
+	$obj = new NpcHostgroupsController;
+	$hg = $obj->setupResultsArray();
+	// $results[$i]['hostgroup_object_id']
+
         $fields = array(
             'current_state',
             'output',
@@ -81,6 +86,8 @@ class NpcServicesController extends Controller {
             'last_state_change',
             'check_command',
             'command_line',
+            'host_address',
+            'Host Groups',
             'current_check_attempt',
             'last_check',
             'next_check',
@@ -102,9 +109,24 @@ class NpcServicesController extends Controller {
 
         $results = $this->flattenArray($service);
 
+	$hostgroups = array();
+	foreach ($hg as $i => $a) {
+            if ($a['host_name'] == $results[0]['host_name']) {
+                $hostgroups[] = $a['hostgroup_name'];
+	    }
+        }
+
         $x = 0;
         foreach ($fields as $key) {
-            $output[$x] = array('name' => $this->columnAlias[$key], 'value' => $this->formatStateInfo($key, $results[0]));
+            if ($key == 'Host Groups') {
+                $name = 'Host Groups';
+                $value = implode(", ", array_unique($hostgroups));
+            } else {
+                $name = $this->columnAlias[$key];
+                $value = $this->formatStateInfo($key, $results[0]);
+            }
+
+            $output[$x] = array('name' => $name, 'value' => $value);
             $x++;
         }
 
@@ -231,10 +253,19 @@ class NpcServicesController extends Controller {
 
         $id = $this->id ? $this->id : $id;
 
-        $q = new Doctrine_Query();
-        $q->select('MAX(n.end_time), n.perfdata')
-        ->from('NpcServicechecks n')
-        ->where('n.service_object_id = ?', $id);
+
+	// Get the last update
+	$q = new Doctrine_Query();
+	$q->select('max(n.servicecheck_id) AS id')
+	->from('NpcServicechecks n')
+	->where('n.service_object_id = ?', $id);
+	$id = $q->execute();
+
+	// Get the perf data
+	$q = new Doctrine_Query();
+	$q->select('n.perfdata')
+	->from('NpcServicechecks n')
+	->where('n.servicecheck_id = ?', $id[0]['id']);
 
         return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
     }

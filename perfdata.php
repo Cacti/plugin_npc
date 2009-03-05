@@ -62,7 +62,11 @@ $output = '';
 
 foreach ($perfParts as $perf) {
     if (preg_match("/=/", $perf)) {
-        $output .= preg_replace("/=/", ':', $perf) . " ";
+	preg_match("/(\S+)=(\S+)/", $perf, $matches);
+	if (preg_match("/^iso./", $matches[1])) {
+		$matches[1] = 'output';
+	}
+        $output .= $matches[1] . ":" . $matches[2] . " ";
     }
 }
 

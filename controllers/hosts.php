@@ -84,6 +84,7 @@ class NpcHostsController extends Controller {
             'perfdata',
             'last_state_change',
             'check_command',
+            'address',
             'current_check_attempt',
             'last_check',
             'next_check',

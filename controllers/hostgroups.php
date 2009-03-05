@@ -1,4 +1,5 @@
 <?php
+// ex: set tabstop=4 expandtab:
 /**
  * Hostgroups controller class
  *
@@ -14,8 +15,12 @@
  * @version             $Id$
  */
 
-require_once("include/auth.php");
-require_once("plugins/npc/controllers/services.php");
+if (isset($config)) {
+    require_once($config["base_path"]."/plugins/npc/controllers/services.php");
+} else {
+    require_once("plugins/npc/controllers/services.php");
+}
+
 
 /**
  * Hostgroups controller class
@@ -264,6 +269,22 @@ class NpcHostgroupsController extends Controller {
     }
 
     /**
+     * listHostgroupsCli
+     * 
+     * Returns all hostgroups and associated object ID's
+     *
+     * @return array   Array of hostgroups/id's
+     */
+    function listHostsCli() {
+    
+        $q = new Doctrine_Query();
+        $q->select('display_name as name, host_object_id as id')->from('NpcHosts')->orderBy('display_name ASC');
+
+        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
+    }
+
+
+    /**
      * getHostgroups
      *
      * Retrieves all hosts with current state by hostgroup
@@ -271,7 +292,6 @@ class NpcHostgroupsController extends Controller {
      * @return array
      */
     function getHostgroups() {
-
         $where = '1 = 1';
 
         // Maps searchable fields passed in from the client
@@ -281,7 +301,7 @@ class NpcHostgroupsController extends Controller {
                           'output' => 's.output');
 
         if ($this->id) {
-            $where .= "hg.hostgroup_object_id = " . $this->id;
+            $where .= " AND hg.hostgroup_object_id = " . $this->id . " ";
         }
 
         if ($this->searchString) {

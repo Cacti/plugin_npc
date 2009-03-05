@@ -90,9 +90,10 @@ npc = function() {
                         grid.store.startAutoRefresh(state.refresh);
                     }
 
-                    if (currentRows) {
+                    if (currentHeight) {
                         state.height = parseInt(form.form.getValues().height);
                         grid.setHeight(state.height);
+                        portlet.setHeight(state.height);
                     }
 
                     Ext.state.Manager.set(portlet.id, state);
