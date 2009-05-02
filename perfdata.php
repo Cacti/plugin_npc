@@ -9,11 +9,16 @@ if (!isset($_SERVER["argv"][0]) || isset($_SERVER['REQUEST_METHOD'])  || isset($
 include(dirname(__FILE__)."/../../include/global.php");
 include(dirname(__FILE__) . "/config.php");
 require_once($config["base_path"]."/plugins/npc/controllers/hosts.php");
+require_once($config["base_path"]."/plugins/npc/controllers/hostgroups.php");
 require_once($config["base_path"]."/plugins/npc/controllers/services.php");
 
 /* process calling arguments */
 $parms = $_SERVER["argv"];
 array_shift($parms);
+
+$objectId = null;
+$serviceName = null;
+$hostname = null;
 
 if (!sizeof($parms)) {
     display_help();
@@ -30,6 +35,14 @@ if (!sizeof($parms)) {
 
             case "--id":
                 $objectId = trim($value);
+                break;
+
+            case "--service":
+                $serviceName = trim($value);
+                break;
+
+            case "--host":
+                $hostname = trim($value);
                 break;
 
             case "--ds":
@@ -53,16 +66,18 @@ if ($type == 'host') {
     $class = 'NpcServicesController';
 }
 
-$obj = new $class;
-$results = $obj->getPerfData($objectId);
+// perfdata.php --type=service --host=<hostname> --service="System: CPU"
 
-$perfParts = explode(";", $results[0]['perfdata']);
+$obj = new $class;
+$results = $obj->getPerfData($objectId, $hostname, $serviceName);
+
+$perfParts = explode(" ", $results[0]['perfdata']);
 
 $output = '';
 
 foreach ($perfParts as $perf) {
     if (preg_match("/=/", $perf)) {
-	preg_match("/(\S+)=(\S+)/", $perf, $matches);
+	preg_match("/(\S+)=([-+]?[0-9]*\.?[0-9]+)/", $perf, $matches);
 	if (preg_match("/^iso./", $matches[1])) {
 		$matches[1] = 'output';
 	}
@@ -71,7 +86,6 @@ foreach ($perfParts as $perf) {
 }
 
 echo $output . "\n";
-
 
 function listHosts() {
 
@@ -89,13 +103,25 @@ function listHosts() {
 
 function listServices() {
 
+    $parms = $_SERVER["argv"];
+    foreach($parms as $parameter) {
+        @list($arg, $value) = @explode("=", $parameter);
+
+        switch ($arg) {
+            case "--host":
+                $hostname = trim($value);
+                break;
+        }
+    }
+
+
     $obj = new NpcServicesController;
-    $results = $obj->listServicesCli();
+    $results = $obj->listServicesCli($hostname);
 
     $x = 1;
-    echo "\n" . sprintf("%-20s %-20s %-20s %-20s\n", 'Instance', 'Host', 'Service', 'Service Object ID') . "\n"; 
+    echo "\n" . sprintf("%-30s %-30s %-30s %-30s\n", 'Instance', 'Host', 'Service', 'Service Object ID') . "\n"; 
     foreach($results as $result) {
-        echo sprintf("%-20s %-20s %-20s %-20s\n", $result['instance'], $result['host'], $result['display_name'], $result['service_object_id']); 
+        echo sprintf("%-30s %-30s %-30s %-30s\n", $result['instance'], $result['host'], $result['display_name'], $result['service_object_id']); 
     }
 
     exit;

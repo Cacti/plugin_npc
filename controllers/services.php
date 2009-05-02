@@ -83,6 +83,7 @@ class NpcServicesController extends Controller {
             'current_state',
             'output',
             'perfdata',
+            'notes',
             'last_state_change',
             'check_command',
             'command_line',
@@ -195,7 +196,8 @@ class NpcServicesController extends Controller {
         // Maps searchable fields passed in from the client
         $fieldMap = array('service_description' => 'o.name2',
                           'host_name' => 'o.name1',
-                          'output' => 'ss.output');
+                          'notes'     => 's.notes',
+                          'output'    => 'ss.output');
 
 
         // Build the where clause
@@ -213,11 +215,11 @@ class NpcServicesController extends Controller {
             $where = $this->searchClause($where, $fieldMap);    
         }
 
-    // ->leftJoin('s.Hosts h ON s.host_object_id = hs.host_object_id')
         $q = new Doctrine_Pager(
             Doctrine_Query::create()
                 ->select('i.instance_name,'
                         .'s.host_object_id,'
+                        .'s.notes,'
                         .'h.alias AS host_alias,'
                         .'h.address AS host_address,'
                         .'o.name1 AS host_name,'
@@ -249,21 +251,31 @@ class NpcServicesController extends Controller {
      *
      * @return array
      */
-    function getPerfData($id=null) {
+    function getPerfData($id=null, $host=null, $service=null) {
 
         $id = $this->id ? $this->id : $id;
 
 
 	// Get the last update
-	$q = new Doctrine_Query();
-	$q->select('max(n.servicecheck_id) AS id')
-	->from('NpcServicechecks n')
-	->where('n.service_object_id = ?', $id);
-	$id = $q->execute();
+	if (!$host) {
+		$q = new Doctrine_Query();
+		$q->select('max(n.servicecheck_id) AS id')
+		->from('NpcServicechecks n')
+		->where('n.service_object_id = ?', $id);
+		$id = $q->execute();
+	} else {
+		$q = new Doctrine_Query();
+		$q->select('max(n.servicecheck_id) AS id')
+		->from('NpcServicechecks n, NpcObjects o')
+		->where('o.is_active = 1 AND o.object_id = n.service_object_id')
+		->andWhere('o.name1 = ?', $host) 
+		->andWhere('o.name2 = ?', $service);
+		$id = $q->execute();
+	}
 
 	// Get the perf data
 	$q = new Doctrine_Query();
-	$q->select('n.perfdata')
+	$q->select('n.*')
 	->from('NpcServicechecks n')
 	->where('n.servicecheck_id = ?', $id[0]['id']);
 
@@ -277,13 +289,14 @@ class NpcServicesController extends Controller {
      *
      * @return array   Array of services/id's
      */
-    function listServicesCli() {
+    function listServicesCli($host) {
 
         $q = new Doctrine_Query();
         $q->select('s.*,'
                   .'h.display_name AS host,'
                   .'i.instance_name AS instance')
-          ->from('NpcServices s, s.Host h, s.Instance i');
+          ->from('NpcServices s, s.Host h, s.Instance i')
+          ->where('h.display_name = ?', $host);
 
         return($this->flattenArray($q->execute(array(), Doctrine::HYDRATE_ARRAY)));
     }

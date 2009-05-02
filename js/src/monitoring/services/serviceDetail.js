@@ -511,16 +511,19 @@ npc.serviceDetail = function(record) {
         header:"Persistent",
         dataIndex:'is_persistent',
         renderer:npc.renderPersistent,
+	hidden:true,
         width:75
     },{
         header:"Type",
         dataIndex:'entry_type',
         renderer:npc.renderCommentType,
+	hidden:true,
         width:100
     },{
         header:"Expires",
         dataIndex:'expiration_time',
         renderer: npc.renderCommentExpires,
+	hidden:true,
         width:120
     },{
         header:"Delete",

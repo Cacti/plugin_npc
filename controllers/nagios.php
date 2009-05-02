@@ -82,8 +82,6 @@ class NpcNagiosController extends Controller {
      */
     function processInfo() {
 
-	return(0);
-
         $q = new Doctrine_Query();
         $q->select('ps.*')->from('NpcProgramstatus ps');
 

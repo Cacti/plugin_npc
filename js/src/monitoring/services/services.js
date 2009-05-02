@@ -18,6 +18,7 @@ npc.servicesGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
             {name: 'service_object_id', type: 'int', sortType: 'int'},
             {name: 'local_graph_id', type: 'int', sortType: 'int'},
             {name: 'service_description', sortType: 'string'},
+            {name: 'notes', sortType: 'string'},
             {name: 'acknowledgement', sortType: 'string'},
             {name: 'comment', sortType: 'string'},
             {name: 'output', sortType: 'string'},
@@ -141,6 +142,10 @@ npc.services = function(title, filter){
         renderer:npc.serviceStatusImage,
         width:30
     },{
+        header:"Notes",
+        dataIndex:'notes',
+        width:100
+    },{
         header:"Graph",
         dataIndex:'local_graph_id',
         renderer:renderGraphIcon,
@@ -197,7 +202,9 @@ npc.services = function(title, filter){
                 'local_graph_id',
                 'last_state_change',
                 'current_check_attempt',
-                'current_state'
+                'current_state',
+                'host_address',
+		'instance_name'
             ]
         })]
     });
@@ -235,7 +242,6 @@ npc.services = function(title, filter){
     // If the graph icon is clicked popup the associated graph
     grid.on('cellclick', function(grid, rowIndex, columnIndex) {
 
-console.log(grid);
         var record = grid.getStore().getAt(rowIndex);
         var fieldName = grid.getColumnModel().getDataIndex(columnIndex);
         var data = record.get(fieldName);

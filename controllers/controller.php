@@ -170,6 +170,7 @@ class Controller {
         'status_update_time'            => 'Status Update Time',
         'output'                        => 'Status Information',
         'perfdata'                      => 'Performance Data',
+        'notes'                         => 'Notes',
         'current_state'                 => 'Current State',
         'has_been_checked'              => 'Has Been Checked',
         'should_be_scheduled'           => 'Should Be Scheduled',

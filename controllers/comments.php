@@ -64,7 +64,12 @@ class NpcCommentsController extends Controller {
      * @return string   json output
      */
     function getComments() {
-        return($this->jsonOutput($this->comments()));
+        //$response['response']['value']['items'] = $this->comments();
+        //$response['response']['value']['total_count'] = $this->numRecords;
+        //$response['response']['value']['version']     = 1;
+
+        //return(json_encode($response));
+	return($this->jsonOutput($this->comments()));
     }
 
     /**
