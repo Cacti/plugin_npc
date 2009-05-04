@@ -1,4 +1,6 @@
-npc.portlet.serviceSummary = function(){
+/* ex: set tabstop=4 expandtab: */
+
+npc.serviceSummary = function(){
 
     // Portlet name
     var name = 'Service Status Summary';
@@ -8,9 +10,6 @@ npc.portlet.serviceSummary = function(){
 
     // Portlet URL
     var url = 'npc.php?module=services&action=summary';
-
-    // Default column
-    var column = 'dashcol1';
 
     // Refresh rate
     var refresh = npc.params.npc_portlet_refresh;
@@ -61,6 +60,7 @@ npc.portlet.serviceSummary = function(){
     }]);
 
     var grid = new Ext.grid.GridPanel({
+        title: name,
         id: id + '-grid',
         autoHeight:true,
         width:400,
@@ -73,14 +73,11 @@ npc.portlet.serviceSummary = function(){
         })
     });
 
-    // Create a portlet to hold the grid
-    npc.addPortlet(id, name, column);
-
-    // Add the grid to the portlet
-    Ext.getCmp(id).items.add(grid);
+    // Add the grid to the north panel
+    Ext.getCmp('serviceStatusCol').add(grid);
 
     // Refresh the dashboard
-    Ext.getCmp('centerTabPanel').doLayout();
+    Ext.getCmp('north-panel').doLayout();
 
     // Render the grid
     grid.render();
@@ -88,21 +85,5 @@ npc.portlet.serviceSummary = function(){
     // Load the data store
     grid.store.load();
 
-    // Start auto refresh of the grid
-    if (Ext.getCmp(id).isVisible()) {
-        store.startAutoRefresh(refresh);
-    }
-
-    // Add listeners to the portlet to stop and start auto refresh
-    // depending on wether or not the portlet is visible.
-    var listeners = {
-        hide: function() {
-            store.stopAutoRefresh();
-        },
-        show: function() {
-            store.startAutoRefresh(refresh);
-        }
-    };
-
-    Ext.getCmp(id).addListener(listeners);
+    store.startAutoRefresh(refresh);
 };

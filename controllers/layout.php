@@ -80,7 +80,9 @@ class NpcLayoutController extends controller {
 
          <body>
 
-          <div id="msg-div"></div>
+          <div id="north">
+              <div id="msg-div"></div>
+          </div>
 
           <div id="west">
 

@@ -1,3 +1,5 @@
+/* ex: set tabstop=4 expandtab: */
+
 // reference local blank image
 Ext.BLANK_IMAGE_URL = 'js/ext/resources/images/default/s.gif';
  
@@ -785,7 +787,22 @@ npc = function() {
     
             var viewport = new Ext.Viewport({
                 layout:'border',
-                items:[{
+                items:[{region:'north',
+                        id:'north-panel',
+                        border:false,
+                        layout:'column',
+                        height:76,
+                        margins:'0 0 0 0',
+                        items: [{
+                            id: 'hostStatusCol',
+                            border:false,
+                            columnWidth: .3
+                        },{
+                            id: 'serviceStatusCol',
+                            border:false,
+                            columnWidth: .3
+                        }]
+                },{
                         region:'west',
                         id:'west-panel',
                         split:true,
@@ -794,7 +811,7 @@ npc = function() {
                         width: 210,
                         minSize: 100,
                         maxSize: 400,
-                        margins:'0 0 0 5',
+                        margins:'0 0 0 0',
                         items: [
                             new Ext.tree.TreePanel({
                                 id:'nav-tree',
@@ -1060,12 +1077,6 @@ npc = function() {
                     var eL = Ext.getCmp('eventLog');
                     var eLC = eL.isVisible();
 
-                    var hS = Ext.getCmp('hostSummary')
-                    var hSC = hS.isVisible();
-
-                    var sS = Ext.getCmp('serviceSummary');
-                    var sSC = sS.isVisible();
-
                     var sP = Ext.getCmp('serviceProblems');
                     var sPC = sP.isVisible();
 
@@ -1121,34 +1132,6 @@ npc = function() {
                                             hP.show();
                                         } else {
                                             hP.hide();
-                                        }
-                                    }
-                                }
-                            },{
-                                boxLabel: 'Host Status Summary',
-                                hideLabel: true,
-                                xtype:'checkbox',
-                                checked: hSC,
-                                listeners: {
-                                    check: function(cb, checked) {
-                                        if (checked) {
-                                            hS.show();
-                                        } else {
-                                            hS.hide();
-                                        }
-                                    }
-                                }
-                            },{
-                                boxLabel: 'Service Status Summary',
-                                hideLabel: true,
-                                xtype:'checkbox',
-                                checked: sSC,
-                                listeners: {
-                                    check: function(cb, checked) {
-                                        if (checked) {
-                                            sS.show();
-                                        } else {
-                                            sS.hide();
                                         }
                                     }
                                 }
@@ -1254,6 +1237,9 @@ npc = function() {
                     window.show();
                 }
             });
+
+	    npc.hostSummary();
+	    npc.serviceSummary();
 
         } // End init
     };

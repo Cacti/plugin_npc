@@ -371,7 +371,8 @@ function npc_setup_tables() {
                     `deletion_time` datetime NOT NULL default '0000-00-00 00:00:00',
                     `deletion_time_usec` int(11) NOT NULL default '0',
                     PRIMARY KEY  (`commenthistory_id`),
-                    UNIQUE KEY `instance_id` (`instance_id`,`comment_time`,`internal_comment_id`)
+                    UNIQUE KEY `instance_id` (`instance_id`,`comment_time`,`internal_comment_id`),
+                    KEY `idx_internal_comment_id` (`internal_comment_id`)
                   ) ENGINE=InnoDB COMMENT='Historical host and service comments';";
     }
 

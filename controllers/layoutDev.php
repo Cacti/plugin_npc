@@ -68,6 +68,7 @@ class NpcLayoutDevController extends controller {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/hosts/hostgroupGrid.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/hosts/hostgroupOverview.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/hosts/hostCommandMenu.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/hosts/hostSummary.js"></script>
 
           <!-- Service screens -->
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/services.js"></script>
@@ -75,6 +76,7 @@ class NpcLayoutDevController extends controller {
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/servicegroupGrid.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/servicegroupOverview.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/serviceCommandMenu.js"></script>
+          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/services/serviceSummary.js"></script>
 
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/n2c.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/monitoring/comments.js"></script>
@@ -108,8 +110,6 @@ class NpcLayoutDevController extends controller {
 
           <!-- Portlets -->
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/host-problems-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/host-summary-portlet.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/service-summary-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/eventlog-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/service-problems-portlet.js"></script>
           <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/src/portlets/monitoring-performance-portlet.js"></script>
@@ -129,7 +129,9 @@ class NpcLayoutDevController extends controller {
 
          <body>
 
-          <div id="msg-div"></div>
+          <div id="north">
+              <div id="msg-div"></div>
+          </div>
 
           <div id="west">
 
