@@ -1506,7 +1506,7 @@ function npc_show_tab() {
 
 function npc_config_settings() {
 
-    global $tabs, $settings, $npc_date_format, $npc_time_format, $npc_log_level, $npc_default_settings;
+    global $tabs, $settings, $npc_date_format, $npc_time_format, $npc_log_level, $npc_default_settings, $npc_portlet_refresh;
     global $npc_config_type;
 
     if (isset($_SESSION["sess_user_id"])) {
@@ -1585,6 +1585,13 @@ function npc_config_settings() {
                     "method" => "drop_array",
                     "default" => "H:i",
                     "array" => $npc_time_format,
+                ),
+                "npc_portlet_refresh" => array(
+                    "friendly_name" => "Portlet Refresh Rate",
+                    "description" => "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds.",
+                    "method" => "textbox",
+                    "default" => "60",
+                    "max_length" => 3
                 ),
                 "npc_config_type" => array(
                     "friendly_name" => "Host/Service Config Type",

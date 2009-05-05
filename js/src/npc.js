@@ -30,7 +30,6 @@ npc = function() {
     function configurePortlet(portlet) {
         var state = Ext.state.Manager.get(portlet.id);
 
-        var currentRefresh = state.refresh; 
         var currentHeight = state.height; 
         var height = 125;
 
@@ -64,33 +63,13 @@ npc = function() {
             width: 200,
             defaults: {width: 50},
             defaultType: 'textfield',
-            items: [
-                {
-                    fieldLabel: 'Refresh Rate',
-                    name: 'refresh',
-                    value: currentRefresh,
-                    labelStyle: 'cursor: help;',
-                    tooltipText: "The refresh rate in seconds.",
-                    allowBlank: false,
-                    listeners: {
-                        render: function(o) {
-                            npc.setFormFieldTooltip(o);
-                        }
-                    }
-                },
-                rowField
-            ],
+            items: [ rowField ],
             buttons: [
             {
                 text: 'Save',
                 handler: function(o){
                     var r = parseInt(form.form.getValues().refresh);
                     var grid = portlet.items.items[0];
-
-                    if (r != currentRefresh) {
-                        state.refresh = (r >= 10) ? r : 10;
-                        grid.store.startAutoRefresh(state.refresh);
-                    }
 
                     if (currentHeight) {
                         state.height = parseInt(form.form.getValues().height);

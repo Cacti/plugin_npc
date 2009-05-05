@@ -13,9 +13,6 @@ npc.portlet.serviceProblems = function(){
     var height = Ext.state.Manager.get(id).height;
     height = (height > 150) ? height : 150;
 
-    // Refresh rate
-    var refresh = Ext.state.Manager.get(id).refresh;
-
     var cm = new Ext.grid.ColumnModel([{
         header:"Host",
         dataIndex:'host_name',
@@ -90,7 +87,7 @@ npc.portlet.serviceProblems = function(){
     Ext.getCmp(id).addListener(listeners);
 
     function doAutoRefresh() {
-        grid.store.startAutoRefresh(refresh);
+        grid.store.startAutoRefresh(npc.params.npc_portlet_refresh);
     }
 
     // Double click action
