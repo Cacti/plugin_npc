@@ -1485,8 +1485,6 @@ class NagiosCmd {
             $this->command = $cmd;
         }
 
-exec("echo '".$this->command."' > /tmp/DEBUG");
-
         // Verify the command is set
         if (!$this->command) {
             $this->message = 'You must supply a command.';

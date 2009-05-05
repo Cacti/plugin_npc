@@ -90,7 +90,6 @@ npc.nagiosStatus = function(){
     }
 
     function renderEnabled(v, m, r) {
-console.log(npc.params.npc_portlet_refresh);
         if (!r.data.is_currently_running) {
             s = 'NA';
             bg = 'C0C0C0';

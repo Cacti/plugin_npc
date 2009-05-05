@@ -1,4 +1,5 @@
 <?php
+/* ex: set tabstop=4 expandtab: */
 /**
  * Nagios controller class
  *
@@ -122,6 +123,29 @@ class NpcNagiosController extends Controller {
      * @return string
      */
     function command($params) {
+
+        $globalCommands = array(
+            'DISABLE_EVENT_HANDLERS',
+            'ENABLE_EVENT_HANDLERS',
+            'DISABLE_NOTIFICATIONS',
+            'ENABLE_NOTIFICATIONS',
+            'DISABLE_FLAP_DETECTION',
+            'ENABLE_FLAP_DETECTION',
+            'STOP_ACCEPTING_PASSIVE_HOST_CHECKS',
+            'START_ACCEPTING_PASSIVE_HOST_CHECKS',
+            'STOP_ACCEPTING_PASSIVE_SVC_CHECKS',
+            'START_ACCEPTING_PASSIVE_SVC_CHECKS',
+            'DISABLE_PERFORMANCE_DATA',
+            'ENABLE_PERFORMANCE_DATA',
+            'STOP_EXECUTING_HOST_CHECKS',
+            'START_EXECUTING_HOST_CHECKS',
+            'STOP_EXECUTING_SVC_CHECKS',
+            'START_EXECUTING_SVC_CHECKS',
+            'STOP_OBSESSING_OVER_HOST_CHECKS',
+            'START_OBSESSING_OVER_HOST_CHECKS',
+            'STOP_OBSESSING_OVER_SVC_CHECKS',
+            'START_OBSESSING_OVER_SVC_CHECKS'
+        );
 
         $nagios = new NagiosCmd;
         $args = array();
