@@ -124,6 +124,9 @@ class NpcNagiosController extends Controller {
      */
     function command($params) {
 
+        // Get the passed command
+        $cmd = $params['command'];
+
         $globalCommands = array(
             'DISABLE_EVENT_HANDLERS',
             'ENABLE_EVENT_HANDLERS',
@@ -167,8 +170,15 @@ class NpcNagiosController extends Controller {
             return(json_encode($response));
         }
 
-        // Get the passed command
-        $cmd = $params['command'];
+        // A quick hack to check that the user has permission to 
+        // execute the command based on realm setting
+        $realm_id = db_fetch_assoc("SELECT id FROM plugin_realms WHERE plugin = 'npc' AND file = 'npc1.php'", false);
+        $realm_id = $realm_id[0]['id'] + 100;
+
+        if (!db_fetch_cell("SELECT realm_id FROM user_auth_realm WHERE realm_id = $realm_id AND user_id = " . $_SESSION["sess_user_id"])) {
+            $response = array('success' => false, 'msg' => 'You do not have permission to execute this command.');
+            return(json_encode($response));
+        }
 
         // Get the command definition
         $commandDef = $nagios->getCommands($cmd);
