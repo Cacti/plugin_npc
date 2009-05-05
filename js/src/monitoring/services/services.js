@@ -142,10 +142,6 @@ npc.services = function(title, filter){
         renderer:npc.serviceStatusImage,
         width:30
     },{
-        header:"Notes",
-        dataIndex:'notes',
-        width:100
-    },{
         header:"Graph",
         dataIndex:'local_graph_id',
         renderer:renderGraphIcon,
@@ -159,11 +155,13 @@ npc.services = function(title, filter){
         header:"Last Check",
         dataIndex:'last_check',
         renderer: npc.formatDate,
+        hidden:true,
         width:100
     },{
         header:"Next Check",
         dataIndex:'next_check',
         renderer: npc.formatDate,
+        hidden:true,
         width:100
     },{
         header:"Duration",
@@ -181,6 +179,10 @@ npc.services = function(title, filter){
         header:"Plugin Output",
         dataIndex:'output',
         width:400
+    },{
+        header:"Notes",
+        dataIndex:'notes',
+        width:100
     }]);
 
     var grid = new npc.servicesGrid({

@@ -32,6 +32,17 @@ require_once("plugins/npc/nagioscmd.php");
 class NpcNagiosController extends Controller {
 
     /**
+     * getProgramStatus
+     * 
+     * Fetches the npc_programstatus
+     *
+     * @return string   json output
+     */
+    function getProgramStatus() {
+        return($this->jsonOutput($this->processInfo()));
+    }
+
+    /**
      * getProcessInfoGrid
      * 
      * Gets and formats Nagios process state information

@@ -791,16 +791,21 @@ npc = function() {
                         id:'north-panel',
                         border:false,
                         layout:'column',
+                        collapseMode: 'mini',
                         height:76,
                         margins:'0 0 0 0',
+                        defaults: {
+                            layout:'fit',
+                            bodyStyle: 'padding: 0px 0px 0px 20px;',
+                            border:false,
+                            columnWidth: .33
+                        },
                         items: [{
-                            id: 'hostStatusCol',
-                            border:false,
-                            columnWidth: .3
+                            id: 'nagiosStatusCol'
                         },{
-                            id: 'serviceStatusCol',
-                            border:false,
-                            columnWidth: .3
+                            id: 'hostStatusCol'
+                        },{
+                            id: 'serviceStatusCol'
                         }]
                 },{
                         region:'west',
@@ -1066,8 +1071,28 @@ npc = function() {
                 ]
             }); // End viewport
 
+            // Add button to show/hide the north region
+            var tb = Ext.getCmp('dashboard').getTopToolbar();
+
+            tb.add('->', {
+                id: 'northButton',
+                text: 'Hide Overview',
+                handler: function() {
+                    var panel = Ext.getCmp('north-panel');
+                    panel.toggleCollapse();
+
+                    panel.on("collapse", function() {
+                            Ext.getCmp('northButton').setText('Show Overview');
+                    });
+
+                    panel.on("expand", function() {
+                            Ext.getCmp('northButton').setText('Hide Overview');
+                    });
+                }
+            });
+
             // Add the portlets button to the dashboard toolbar:
-            Ext.getCmp('dashboard').getTopToolbar().add('->', {
+            Ext.getCmp('dashboard').getTopToolbar().add('->', '-', {
                 text: 'Portlets',
                 handler: function() {
 
@@ -1238,6 +1263,8 @@ npc = function() {
                 }
             });
 
+        // Add some portlets to the north region
+        npc.nagiosStatus();
 	    npc.hostSummary();
 	    npc.serviceSummary();
 
