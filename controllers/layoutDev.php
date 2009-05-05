@@ -1,5 +1,5 @@
-<?php /* ex: set tabstop=4 expandtab: */
-
+<?php 
+/* ex: set tabstop=4 expandtab: */
 
 class NpcLayoutDevController extends controller {
 
@@ -9,7 +9,7 @@ class NpcLayoutDevController extends controller {
 
         $config = $params['config'];
 
-        include_once($config['include_path'] . "/top_graph_header.php");
+        include_once($config["base_path"]."/plugins/npc/top_graph_header.php");
 
     ?>
 

@@ -58,6 +58,7 @@ function plugin_npc_install() {
     npc_setup_tables();
 
     api_plugin_register_realm ('npc', 'npc.php', 'Use NPC', 1);
+    api_plugin_register_realm ('npc', 'npc1.php', 'NPC Global Commands', 1);
 
     // setup all arrays needed for npc
     api_plugin_register_hook ('npc', 'config_arrays', 'npc_config_arrays', 'setup.php');
@@ -74,9 +75,6 @@ function plugin_npc_install() {
 
     // Saves the selection from the host mapping select box
     api_plugin_register_hook ('npc', 'api_device_save', 'npc_api_device_save', 'setup.php');
-
-    // Alter the page refresh rate
-    api_plugin_register_hook ('npc', 'top_graph_refresh', 'npc_top_graph_refresh', 'setup.php');
 
     // Add a npc tab to the settings page
     api_plugin_register_hook ('npc', 'config_settings', 'npc_config_settings', 'setup.php');
@@ -155,13 +153,6 @@ function plugin_npc_uninstall () {
     db_execute("DELETE FROM `settings` WHERE `name` like 'npc\_%'");
   
     api_plugin_remove_realms ('npc');
-}
-
-/**
- * Set the page refresh very high
- */
-function npc_top_graph_refresh() {
-    return('2592000');
 }
 
 function npc_config_arrays () {
