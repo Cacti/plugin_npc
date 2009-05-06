@@ -233,7 +233,7 @@ npc = function() {
                     listeners: {
                         select: function(comboBox) {
                             if (!state) {
-                                state = Ext.state.Manager.get(gridId)
+                                state = Ext.state.Manager.get(gridId);
                                 state = state ? state : {};
                             }
 
@@ -302,10 +302,10 @@ npc = function() {
         // A simple ajax post
         aPost: function(args) {
             Ext.Ajax.request({
-                url : 'npc.php' ,
+                url : 'npc.php',
                 params : args,
                 callback: function (o, s, r) {
-                    var o = Ext.util.JSON.decode(r.responseText)
+                    var o = Ext.util.JSON.decode(r.responseText);
                     if(!o.success) {
                         Ext.Msg.alert('Error', o.msg);
                     }
@@ -1234,8 +1234,6 @@ npc = function() {
                         width:300,
                         height:350,
                         layout:'fit',
-                        //plain:true,
-                        //bodyStyle:'padding:5px;',
                         items:form
                     });
                     window.show();

@@ -190,7 +190,6 @@ npc.servicegroupOverview = function(){
     grid.on('rowcontextmenu', npc.serviceContextMenu);
 
     function sgOverviewClick(grid, rowIndex, e) {
-        //console.log(grid.getStore().getAt(rowIndex).json.servicegroup_object_id);
         var soi = grid.getStore().getAt(rowIndex).json.servicegroup_object_id;
         var name = grid.getStore().getAt(rowIndex).json.alias;
         npc.servicegroupGrid('servicegroupGrid-'+soi, 'Servicegroup: '+name, soi);
