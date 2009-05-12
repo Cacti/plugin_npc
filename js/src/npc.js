@@ -424,7 +424,32 @@ npc = function() {
             return String.format('<p align="center"><img ext:qtip="{0}" src="images/icons/{1}"></p>', state, img);
         },
 
-        renderExtraIcons: function(val, p, record) {
+        renderHostIcons: function(val, p, r) {
+
+            var showIcon = (npc.params.npc_host_icons == 'on') ? true : false;
+            var icon = '';
+
+            if (r.data.host_icon_image == "" || !showIcon) {
+                return(val);
+            } else if (r.data.host_icon_image) {
+                icon = String.format('<img ext:qtip="{0}" src="{1}">', r.data.host_icon_image_alt, r.data.host_icon_image);
+                return String.format('<div style="float: left;">{0} {1}</div>', icon, val);
+            } else if (r.data.icon_image) {
+                icon = String.format('<img ext:qtip="{0}" src="{1}">', r.data.icon_image_alt, r.data.icon_image);
+            }
+            
+            return npc.renderExtraIcons(val, p, r, icon)
+        },
+
+        renderServiceIcons: function(val, p, r) {
+            var icon = '';
+            if (r.data.icon_image != '' && npc.params.npc_service_icons == 'on') {
+                icon = String.format('<img ext:qtip="{0}" src="{1}">', r.data.icon_image_alt, r.data.icon_image);
+            }
+            return npc.renderExtraIcons(val, p, r, icon)
+        },
+
+        renderExtraIcons: function(val, p, record, icon) {
             var img = '';
             if (record.data.problem_has_been_acknowledged == 1) {
                 var ack = record.data.acknowledgement.split("*|*");
@@ -451,7 +476,7 @@ npc = function() {
             } else if (!record.data.active_checks_enabled) {
                 img = String.format('&nbsp;<img qtitle="Active checks disabled" ext:qtip="Passive checks are being accepted" src="images/nagios/passiveonly.gif">') + img;
             }
-            return String.format('<div><div style="float: left;">{0}</div><div style="float: right;">{1}</div></div>', val, img);
+            return String.format('<div><div style="float: left;">{0} {1}</div><div style="float: right;">{2}</div></div>', icon, val, img);
         },
 
         renderCommentType: function(val) {

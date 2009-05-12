@@ -1594,6 +1594,16 @@ function npc_config_settings() {
                     "default" => "1",
                     "array" => $npc_config_type,
                 ),
+                "npc_host_icons" => array(
+                    "friendly_name" => "Host Icons",
+                    "description" => "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons.",
+                    "method" => "checkbox",
+                ),
+                "npc_service_icons" => array(
+                    "friendly_name" => "Service Icons",
+                    "description" => "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons.",
+                    "method" => "checkbox",
+                ),
                 "npc_logging_header" => array(
                     "friendly_name" => "Logging",
                     "method" => "spacer",

@@ -16,6 +16,7 @@ npc.portlet.serviceProblems = function(){
     var cm = new Ext.grid.ColumnModel([{
         header:"Host",
         dataIndex:'host_name',
+        renderer:npc.renderHostIcons,
         hidden:false
     },{
         header:"Host Alias",
@@ -28,7 +29,7 @@ npc.portlet.serviceProblems = function(){
     },{
         header:"Service",
         dataIndex:'service_description',
-        renderer:npc.renderExtraIcons,
+        renderer:npc.renderServiceIcons,
         width:100
     },{
         header:"Status",

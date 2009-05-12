@@ -19,6 +19,12 @@ npc.servicesGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
             {name: 'local_graph_id', type: 'int', sortType: 'int'},
             {name: 'service_description', sortType: 'string'},
             {name: 'notes', sortType: 'string'},
+            {name: 'notes_url', sortType: 'string'},
+            {name: 'action_url', sortType: 'string'},
+            {name: 'icon_image', sortType: 'string'},
+            {name: 'icon_image_alt', sortType: 'string'},
+            {name: 'host_icon_image', sortType: 'string'},
+            {name: 'host_icon_image_alt', sortType: 'string'},
             {name: 'acknowledgement', sortType: 'string'},
             {name: 'comment', sortType: 'string'},
             {name: 'output', sortType: 'string'},
@@ -119,6 +125,7 @@ npc.services = function(title, filter){
     var cm = new Ext.grid.ColumnModel([{
         header:"Host",
         dataIndex:'host_name',
+        renderer:npc.renderHostIcons,
         sortable:true,
         width:50
     },{
@@ -134,7 +141,7 @@ npc.services = function(title, filter){
     },{
         header:"Service",
         dataIndex:'service_description',
-        renderer:npc.renderExtraIcons,
+        renderer:npc.renderServiceIcons,
         sortable:true,
         width:100
     },{

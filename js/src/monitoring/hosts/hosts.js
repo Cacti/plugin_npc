@@ -15,6 +15,11 @@ npc.hostsGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
              {name: 'alias',   sortType : 'string'},
              {name: 'address',   sortType : 'string'},
              {name: 'comment',   sortType : 'string'},
+             {name: 'notes',   sortType : 'string'},
+             {name: 'notes_url',   sortType : 'string'},
+             {name: 'action_url',   sortType : 'string'},
+             {name: 'icon_image',   sortType : 'string'},
+             {name: 'icon_image_alt',   sortType : 'string'},
              {name: 'service_count', type: 'int', sortType : 'int'},
              {name: 'current_state', type: 'int', sortType: 'int'},
              {name: 'current_check_attempt', sortType : 'string'},
@@ -114,7 +119,7 @@ npc.hosts = function(title, filter){
         header:"Host",
         dataIndex:'host_name',
         sortable:true,
-        renderer:npc.renderExtraIcons,
+        renderer:npc.renderHostIcons,
         width:100
     },{
         header:"Alias",

@@ -54,6 +54,8 @@ class NpcLayoutController extends controller {
             npc.params.npc_time_format     = "<?php echo read_config_option('npc_time_format'); ?>";
             npc.params.npc_nagios_url      = "<?php echo read_config_option('npc_nagios_url'); ?>";
             npc.params.userName            = "<?php echo db_fetch_cell('SELECT username FROM user_auth WHERE id = ' . $_SESSION['sess_user_id']); ?>";
+            npc.params.npc_host_icons      = "<?php echo read_config_option('npc_host_icons'); ?>";
+            npc.params.npc_service_icons   = "<?php echo read_config_option('npc_service_icons'); ?>";
 
             <?php $state = unserialize(db_fetch_cell('SELECT settings FROM npc_settings WHERE user_id = ' . $_SESSION['sess_user_id'])); ?>
             var ExtState = Ext.decode('<?php echo json_encode($state); ?>');
