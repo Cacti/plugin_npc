@@ -23,7 +23,9 @@ npc.nagiosStatus = function(){
             {name: 'process_id', type: 'int'},
             {name: 'notifications_enabled', type: 'int'},
             {name: 'active_service_checks_enabled', type: 'int'},
-            {name: 'active_host_checks_enabled', type: 'int'}
+            {name: 'active_host_checks_enabled', type: 'int'},
+            {name: 'status_update_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'server_time', type: 'date', dateFormat: 'U'}
         ],
         autoload:true
     });
@@ -82,8 +84,20 @@ npc.nagiosStatus = function(){
 
     store.startAutoRefresh(refresh);
 
-    function renderRunning(v, m) {
+    function renderRunning(v, m, r) {
+
         s = v ? 'On' : 'Off';
+
+        // Check to see that we are getting status updates.
+        // This check should catch an ndo2db failure.
+        if (s == 'On') {
+            var lastUpdate = r.data.status_update_time;
+            var serverTime = r.data.server_time;
+            var d = new Date();
+            var t = serverTime.dateFormat('U') - lastUpdate.dateFormat('U');
+            s = (t > 60) ? 'Off' : 'On';
+        }
+
         bg = s.match('On') ? '33FF00' : 'F83838';
         m.attr = 'style="background-color: #' + bg + ';"';
         return String.format('<b>{0}</b>', s);

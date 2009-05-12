@@ -57,8 +57,8 @@ $obj->conn = $conn;
 
 if (is_array($_REQUEST)) {
     foreach($_REQUEST as $key => $value) {
-        if (preg_match("/p_/", $key) || $key == "start" || $key == "limit") {
-            $parm = preg_replace("/p_/", '', $key);
+        if (preg_match("/^p_/", $key) || $key == "start" || $key == "limit") {
+            $parm = preg_replace("/^p_/", '', $key);
             $obj->$parm = $value;
             $params[$parm] = get_request_var_request($key);
         } else {

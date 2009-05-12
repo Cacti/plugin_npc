@@ -107,6 +107,7 @@ class NpcNagiosController extends Controller {
 
         $version = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
+        $results[0]['server_time'] = date('U');
         $results[0]['program_version'] = $version[0]['program_version'];
 
         return($results);
@@ -200,6 +201,12 @@ class NpcNagiosController extends Controller {
                 if ($k == 'comment') {
                     // Replace newline characters: 
                     $value = str_replace(array("\r", "\n"), '<br />', $value);
+
+                    // Replace html spaces
+                    $value = str_replace("&nbsp;", ' ', $value);
+
+                    // Strip any semicolons
+                    $value = str_replace(";", ' ', $value);
                 }
                 $args[$k] = $value;
             }
@@ -216,6 +223,14 @@ class NpcNagiosController extends Controller {
             $response = array('success' => false, 'msg' => $nagios->message);
             return(json_encode($response));
         }
+
+        // Some forms require extra business logic like running another command.
+        if ($cmd == "SCHEDULE_HOSTGROUP_SVC_DOWNTIME" && $params['hosts'] == 'true') {
+            $cmd = 'SCHEDULE_HOSTGROUP_HOST_DOWNTIME';
+            $nagios->setCommand($cmd, $args);
+            $nagios->execute();
+        }
+            
 
         // Return success to the form
         return(json_encode(array('success' => true)));

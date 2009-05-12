@@ -23,6 +23,7 @@ npc.portlet.hostgroupServiceStatus = function(){
         totalProperty:'totalCount',
         root:'data',
         fields:[
+            'hostgroup_name',
             'alias',
             {name: 'instance_id', type: 'int'},
             {name: 'hostgroup_object_id', type: 'int'},
@@ -143,6 +144,9 @@ npc.portlet.hostgroupServiceStatus = function(){
     }
 
     grid.on('rowdblclick', hgClick);
+
+    // Right click action
+    grid.on('rowcontextmenu', npc.hostgroupContextMenu);
 
     function hgClick(grid, rowIndex, e) {
         var hoi = grid.getStore().getAt(rowIndex).json.hostgroup_object_id;

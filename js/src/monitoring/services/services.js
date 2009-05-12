@@ -32,7 +32,8 @@ npc.servicesGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
             {name: 'notifications_enabled', type: 'int', sortType: 'int'},
             {name: 'active_checks_enabled', type: 'int', sortType: 'int'},
             {name: 'passive_checks_enabled', type: 'int', sortType: 'int'},
-            {name: 'is_flapping', type: 'int', sortType: 'int'}
+            {name: 'is_flapping', type: 'int', sortType: 'int'},
+            {name: 'in_downtime', type: 'int', sortType: 'int'}
           ]
         );
 

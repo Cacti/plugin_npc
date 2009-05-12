@@ -62,6 +62,28 @@ class NpcDowntimeController extends Controller {
     }
 
     /**
+     * inDowntime()
+     *
+     * Returns true if the requested host/service is currently in
+     * a schedule downtime.
+     *
+     * @return boolean 
+     */
+    function inDowntime($id) {
+        $results = $this->scheduledDowntime($id);
+	$now = date('U');
+
+	$start = isset($results[0]['scheduled_start_time']) ? strtotime($results[0]['scheduled_start_time']) : null;
+	$end = isset($results[0]['scheduled_end_time']) ? strtotime($results[0]['scheduled_end_time']) : null;
+
+	if ($now > $start && $now < $end) {
+        	return(1);
+	}
+
+	return(0);
+    }
+
+    /**
      * getTriggeredByCombo
      *
      * Creates a json encoded name/value list of downtime ID's
@@ -103,12 +125,10 @@ class NpcDowntimeController extends Controller {
      *
      * @return array
      */
-    function scheduledDowntime($id=null, $where='') {
+    function scheduledDowntime($id=null, $where='1=1') {
 
         if ($this->id || $id) {
-            if ($where != '') {
-                $where .= ' AND ';
-            }
+            $where .= ' AND ';
             $where .= sprintf("d.object_id = %d", is_null($id) ? $this->id : $id);
         }
 

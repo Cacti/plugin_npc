@@ -15,6 +15,7 @@
  */
 
 require_once($config["base_path"]."/plugins/npc/controllers/comments.php");
+require_once($config["base_path"]."/plugins/npc/controllers/downtime.php");
 
 /**
  * Services controller class
@@ -39,6 +40,7 @@ class NpcServicesController extends Controller {
         $services = $this->services();
 
         $comments = new NpcCommentsController;
+        $downtime = new NpcDowntimeController;
 
         for ($i = 0; $i < count($services); $i++) {
 
@@ -56,6 +58,12 @@ class NpcServicesController extends Controller {
 
                 // Add the last comment to the array
                 $services[$i]['comment'] = $comments->getLastComment($services[$i]['service_object_id']);
+
+		// Set the in_downtime bit
+		$services[$i]['in_downtime'] = 0;
+		if ($downtime->inDowntime($services[$i]['service_object_id'])) {
+			$services[$i]['in_downtime'] = 1;
+		}
         }
 
         $response['response']['value']['items'] = $services;

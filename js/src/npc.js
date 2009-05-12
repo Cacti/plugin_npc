@@ -183,6 +183,23 @@ npc = function() {
             menu.showAt(e.getXY());
         },
 
+        hostgroupContextMenu: function(grid, rowIndex, e) {
+            e.stopEvent();
+            var cmdMenu = new Ext.menu.Menu();
+            cmdMenu = npc.hostgroupCommandMenu(grid.getStore().getAt(rowIndex).data, cmdMenu);
+
+            var menu = new Ext.menu.Menu({
+                items: [
+                    {
+                        text: 'Commands',
+                        iconCls: 'cogAdd',
+                        menu: cmdMenu
+                    }
+                ] 
+            });
+            menu.showAt(e.getXY());
+        },
+
         serviceContextMenu: function(grid, rowIndex, e) {
             e.stopEvent();
             var cmdMenu = new Ext.menu.Menu();
@@ -417,11 +434,13 @@ npc = function() {
                 }
                 img = String.format('&nbsp;<img ext:qtip="This problem has been acknowledged {0}" src="images/icons/wrench.png">', by);
             }
+            if (record.data.in_downtime == 1) {
+                img = String.format('&nbsp;<img ext:qtip="This service is currently in a period of scheduled downtime." src="images/icons/hourglass.png">') + img;
+            }
             if (record.data.notifications_enabled == 0) {
                 img = String.format('&nbsp;<img ext:qtip="Notifications have been disabled." src="images/icons/sound_mute.png">') + img;
             }
             if (record.data.comment) {
-                //var c = record.data.comment.split("*|*");
                 img = String.format('&nbsp;<img ext:qtip="There are comments for this item" src="images/icons/comment.png">') + img;
             }
             if (record.data.is_flapping) {

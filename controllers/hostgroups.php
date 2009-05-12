@@ -104,6 +104,7 @@ class NpcHostgroupsController extends Controller {
 
         $fields = array('hostgroup_object_id',
                         'alias',
+                        'hostgroup_name',
                         'instance_id');
                  
         // Combine servicegroup/service/host etc. into a single record

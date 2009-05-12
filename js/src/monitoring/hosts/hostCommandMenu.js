@@ -179,3 +179,23 @@ npc.hostCommandMenu = function(host, menu) {
 
     return(menu);
 };
+
+
+npc.hostgroupCommandMenu = function(hostgroup, menu) {
+
+    var text;
+    var a;
+
+    menu.removeAll();
+
+    var font = '<b style="font-size: xx-small">';
+
+    menu.add({
+        text: font + 'Schedule Downtime for all Services in hostgroup '+hostgroup.alias+'</b>',
+        handler: function() {
+            npc.scheduleHostgroupSvcDowntime(hostgroup.hostgroup_name);
+        }
+    });
+
+    return(menu);
+};

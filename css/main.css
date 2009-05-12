@@ -153,7 +153,7 @@ color: #666;
    margin-top: 5px;
 }
 
-.xcheckbox-wrap { 
+.xcheckbox-wrap {
     line-height: 18px;
     padding-top:2px;
 }
@@ -171,7 +171,6 @@ color: #666;
 .xcheckbox-off {
     background:transparent url(../js/ext/resources/images/default/menu/unchecked.gif) no-repeat 0 0;
 }
-
 
 .x-grid3-cell-inner, .x-grid3-hd-inner{
     overflow:hidden;
