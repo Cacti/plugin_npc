@@ -183,19 +183,78 @@ npc.hostCommandMenu = function(host, menu) {
 
 npc.hostgroupCommandMenu = function(hostgroup, menu) {
 
-    var text;
-    var a;
-
     menu.removeAll();
+
+    var post = {
+        module: 'nagios',
+        action: 'command',
+        p_hostgroup_name: hostgroup.hostgroup_name
+    };
 
     var font = '<b style="font-size: xx-small">';
 
     menu.add({
-        text: font + 'Schedule Downtime for all Services in hostgroup '+hostgroup.alias+'</b>',
+        text: font + 'Schedule Downtime for all Services in '+hostgroup.alias+'</b>',
         handler: function() {
-            npc.scheduleHostgroupSvcDowntime(hostgroup.hostgroup_name);
+            npc.scheduleHostgroupDowntime(hostgroup.hostgroup_name, 'SVC');
         }
     });
+
+    menu.add({
+        text: font + 'Schedule Downtime for all Hosts in '+hostgroup.alias+'</b>',
+        handler: function() {
+            npc.scheduleHostgroupDowntime(hostgroup.hostgroup_name, 'HOST');
+        }
+    });
+
+    menu.add({
+        text: font + 'Enable Notifications for all Hosts in '+hostgroup.alias+'</b>',
+        handler: function(o) {
+            post.p_command = 'ENABLE_HOSTGROUP_HOST_NOTIFICATIONS';
+            npc.doCommand(o.text+'?',post);
+        }
+    });
+
+    menu.add({
+        text: font + 'Disable Notifications for all Hosts in '+hostgroup.alias+'</b>',
+        handler: function(o) {
+            post.p_command = 'DISABLE_HOSTGROUP_HOST_NOTIFICATIONS';
+            npc.doCommand(o.text+'?',post);
+        }
+    });
+
+    menu.add({
+        text: font + 'Enable Notifications for all Services in '+hostgroup.alias+'</b>',
+        handler: function(o) {
+            post.p_command = 'ENABLE_HOSTGROUP_SVC_NOTIFICATIONS';
+            npc.doCommand(o.text+'?',post);
+        }
+    });
+
+    menu.add({
+        text: font + 'Disable Notifications for all Services in '+hostgroup.alias+'</b>',
+        handler: function(o) {
+            post.p_command = 'DISABLE_HOSTGROUP_SVC_NOTIFICATIONS';
+            npc.doCommand(o.text+'?',post);
+        }
+    });
+
+    menu.add({
+        text: font + 'Enable Active Checks of all Services in '+hostgroup.alias+'</b>',
+        handler: function(o) {
+            post.p_command = 'ENABLE_HOSTGROUP_SVC_CHECKS';
+            npc.doCommand(o.text+'?',post);
+        }
+    });
+
+    menu.add({
+        text: font + 'Disable Active Checks of all Services in '+hostgroup.alias+'</b>',
+        handler: function(o) {
+            post.p_command = 'DISABLE_HOSTGROUP_SVC_CHECKS';
+            npc.doCommand(o.text+'?',post);
+        }
+    });
+
 
     return(menu);
 };

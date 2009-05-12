@@ -460,7 +460,7 @@ npc = function() {
                 img = String.format('&nbsp;<img ext:qtip="This problem has been acknowledged {0}" src="images/icons/wrench.png">', by);
             }
             if (record.data.in_downtime == 1) {
-                img = String.format('&nbsp;<img ext:qtip="This service is currently in a period of scheduled downtime." src="images/icons/hourglass.png">') + img;
+                img = String.format('&nbsp;<img ext:qtip="This service is currently in a period of scheduled downtime." src="images/icons/cog.png">') + img;
             }
             if (record.data.notifications_enabled == 0) {
                 img = String.format('&nbsp;<img ext:qtip="Notifications have been disabled." src="images/icons/sound_mute.png">') + img;

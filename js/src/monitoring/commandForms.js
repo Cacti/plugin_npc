@@ -551,11 +551,12 @@ npc.submitPassiveCheckResult = function(type, host, service) {
     win.show();
 };
 
-npc.scheduleHostgroupSvcDowntime = function(hostgroup) {
+npc.scheduleHostgroupDowntime = function(hostgroup, type) {
 
-    var cmd = 'SCHEDULE_HOSTGROUP_SVC_DOWNTIME';
+    var cmd = 'SCHEDULE_HOSTGROUP_'+type+'_DOWNTIME';
 
-    var title = 'Schedule Downtime for All Services in Hostgroup - ' + hostgroup;
+    var str = (type == 'HOST') ? 'Hosts' : 'Services';
+    var title = 'Schedule Downtime for All '+str+' in Hostgroup - ' + hostgroup;
 
     var sd = new Date();
     var ed = new Date();
@@ -574,6 +575,32 @@ npc.scheduleHostgroupSvcDowntime = function(hostgroup) {
         value: hostgroup,
         xtype: 'hidden'
     };
+
+    var hostsChkHidden = false;
+    var hostsChkLabel = 'Schedule Hosts';
+    if (type == 'HOST') {
+        hostsChkHidden = true;
+    	hostsChkLabel = '';
+    }
+
+    var hostsChkBox = {
+        name: 'p_hosts',
+        xtype: 'hidden',
+        value: 0
+    };
+
+    if (type == 'SVC') {
+        hostsChkBox.fieldLabel = 'Schedule Hosts';
+        hostsChkBox.xtype = 'xcheckbox';
+        hostsChkBox.labelStyle = 'cursor: help;';
+        hostsChkBox.tooltipText = "Check to schedule Downtime For Hosts Too.";
+        hostsChkBox.listeners = {
+            render: function(o) {
+                npc.setFormFieldTooltip(o);
+            }
+        };
+        hostsChkBox.checked = false;
+    }
 
     var form = new Ext.FormPanel({
         labelWidth: 110,
@@ -730,19 +757,7 @@ npc.scheduleHostgroupSvcDowntime = function(hostgroup) {
                         form.form.setValues({p_duration: sec});
                     }
                 }
-            },{
-                fieldLabel: 'Schedule Hosts',
-                name: 'p_hosts',
-                xtype: 'xcheckbox',
-                labelStyle: 'cursor: help;',
-                tooltipText: "Check to schedule Downtime For Hosts Too.",
-                listeners: {
-                    render: function(o) {
-                        npc.setFormFieldTooltip(o);
-                    }
-                },
-                checked:false
-            }
+            }, hostsChkBox,
         ],
         buttons: npc.cmdFormButtons
     });
