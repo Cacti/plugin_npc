@@ -476,24 +476,6 @@ npc.serviceDetail = function(record) {
         })
     });
 
-    var scStore = new Ext.data.JsonStore({
-        url: 'npc.php?module=comments&action=getComments&p_id=' + service_object_id,
-        totalProperty:'totalCount',
-        root:'data',
-        fields:[
-            'comment_id',
-            'instance_id',
-            {name: 'comment_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            'entry_type',
-            'author_name',
-            'comment_data',
-            'is_persistent',
-            'internal_comment_id',
-            {name: 'expiration_time', type: 'date', dateFormat: 'Y-m-d H:i:s'}
-        ],
-        autoload:true
-    });
-
     var scCm = new Ext.grid.ColumnModel([{
         header:"Entry Time",
         dataIndex:'comment_time',
@@ -539,30 +521,14 @@ npc.serviceDetail = function(record) {
     var scGridRows = (scGridState && scGridState.rows) ? scGridState.rows : 15;
     var scGridRefresh = (scGridState && scGridState.refresh) ? scGridState.refresh : 60;
 
-    var scGrid = new Ext.grid.GridPanel({
+    var scGrid = new npc.serviceCommentsGrid({
         id: scGridId,
         title: 'Comments',
         height:800,
-        layout: 'fit',
         deferredRender:false,
-        store:scStore,
         cm:scCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
-        listeners: {
-            // Intercept the state save to add our custom state attributes
-            beforestatesave: function(o, s) {
-                s.rows = scGridRows;
-                s.refresh = scGridRefresh;
-                Ext.state.Manager.set(scGridId, s);
-                return false;
-            }
-        },
-        view: new Ext.grid.GridView({
-            forceFit:true,
-            autoFill:true,
-            emptyText:'No comments.'
-        }),
         tbar:[{
             text:'New Comment',
             iconCls:'commentAdd',
@@ -594,13 +560,17 @@ npc.serviceDetail = function(record) {
                 });
             }
         }],
-        bbar: new Ext.PagingToolbar({
-            pageSize: scGridRows,
-            store: scStore,
-            displayInfo: true,
-            items: npc.setRefreshCombo(scGridId, scStore, scGridState),
-            plugins: new Ext.ux.Andrie.pPageSize({ gridId: scGridId })
-        })
+        plugins:[new Ext.ux.grid.Search({
+            mode:'remote',
+            iconCls:false,
+            disableIndexes:[
+                'comment_time'
+                ,'expiration_time'
+                ,'is_persistent'
+                ,'entry_type'
+                ,'internal_comment_id'
+            ]
+        })]
     });
 
     // Add the grids to the tabs
@@ -629,7 +599,6 @@ npc.serviceDetail = function(record) {
     snStore.load({params:{start:0, limit:snGridRows}});
     shStore.load({params:{start:0, limit:shGridRows}});
     sdStore.load({params:{start:0, limit:sdGridRows}});
-    scStore.load({params:{start:0, limit:scGridRows}});
 
     // Start auto refresh
     serviceStore.startAutoRefresh(60);
@@ -637,7 +606,6 @@ npc.serviceDetail = function(record) {
     snStore.startAutoRefresh(snGridRefresh);
     shStore.startAutoRefresh(shGridRefresh);
     sdStore.startAutoRefresh(sdGridRefresh);
-    scStore.startAutoRefresh(scGridRefresh);
 
     // Add listeners to stop auto refresh on the store if the tab is closed
     var listeners = {
@@ -647,7 +615,6 @@ npc.serviceDetail = function(record) {
             snStore.stopAutoRefresh();
             shStore.stopAutoRefresh();
             sdStore.stopAutoRefresh();
-            scStore.stopAutoRefresh();
             if (!innerTabPanel.items.length) {
                 centerTabPanel.remove(outerTabId, true);
             }

@@ -442,8 +442,15 @@ npc = function() {
         },
 
         renderServiceIcons: function(val, p, r) {
+            var showIcon = (npc.params.npc_service_icons == 'on') ? true : false;
             var icon = '';
-            if (r.data.icon_image != '' && npc.params.npc_service_icons == 'on') {
+
+            if (r.data.svc_icon_image == "" || !showIcon) {
+                return(val);
+            } else if (r.data.svc_icon_image) {
+                icon = String.format('<img ext:qtip="{0}" src="{1}">', r.data.svc_icon_image_alt, r.data.svc_icon_image);
+                return String.format('<div style="float: left;">{0} {1}</div>', icon, val);
+            } else if (r.data.icon_image) {
                 icon = String.format('<img ext:qtip="{0}" src="{1}">', r.data.icon_image_alt, r.data.icon_image);
             }
             return npc.renderExtraIcons(val, p, r, icon)
@@ -471,9 +478,9 @@ npc = function() {
             if (record.data.is_flapping) {
                 img = String.format('&nbsp;<img ext:qtip="Flapping between states" src="images/icons/text_align_justify.png">') + img;
             }
-            if (!record.data.active_checks_enabled && !record.data.passive_checks_enabled) {
+            if (record.data.active_checks_enabled == 0 && record.data.passive_checks_enabled == 0) {
                 img = String.format('&nbsp;<img ext:qtip="Active and passive checks have been disabled" src="images/icons/cross.png">') + img;
-            } else if (!record.data.active_checks_enabled) {
+            } else if (record.data.active_checks_enabled == 0) {
                 img = String.format('&nbsp;<img qtitle="Active checks disabled" ext:qtip="Passive checks are being accepted" src="images/nagios/passiveonly.gif">') + img;
             }
             return String.format('<div><div style="float: left;">{0} {1}</div><div style="float: right;">{2}</div></div>', icon, val, img);

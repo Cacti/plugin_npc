@@ -1,3 +1,123 @@
+npc.hostCommentsGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
+
+    filter: 'any',
+
+    initComponent : function()
+    {
+        var bufferedReader = new Ext.ux.grid.livegrid.JsonReader({
+            root            : 'response.value.items',
+            versionProperty : 'response.value.version',
+            totalProperty   : 'response.value.total_count',
+            id              : 'comment_id'
+        },[
+            {name: 'comment_id', type: 'int', sortType: 'int'},
+            {name: 'instance_id', type: 'int', sortType: 'int'},
+            {name: 'host_name', sortType: 'string'},
+            {name: 'host_icon_image', sortType: 'string'},
+            {name: 'host_icon_image_alt', sortType: 'string'},
+            {name: 'comment_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'object_id', type: 'int', sortType: 'int'},
+            {name: 'entry_type', type: 'int', sortType: 'int'},
+            {name: 'author_name', sortType: 'string'},
+            {name: 'comment_data', sortType: 'string'},
+            {name: 'is_persistent', sortType: 'int', sortType: 'int'},
+            {name: 'internal_comment_id', sortType: 'int', sortType: 'int'},
+            {name: 'expiration_time', type: 'date', dateFormat: 'Y-m-d H:i:s'}
+          ]
+        );
+
+        this.store = new Ext.ux.grid.livegrid.Store({
+            autoLoad   : true,
+            bufferSize : 100,
+            reader     : bufferedReader,
+            sortInfo   : {field: 'host_name', direction: 'ASC'},
+            url        : 'npc.php?module=comments&action=getHostComments'
+        });
+
+        this.selModel = new Ext.ux.grid.livegrid.RowSelectionModel();
+
+        this.view = new Ext.ux.grid.livegrid.GridView({
+            nearLimit : 30
+            ,forceFit:true
+            ,autoFill:true
+            ,emptyText:'No Host comments.'
+            ,loadMask: {
+                msg: 'Please wait...'
+            }
+        });
+
+        this.bbar = new Ext.ux.grid.livegrid.Toolbar({
+            view        : this.view,
+            displayInfo : true
+        });
+
+        npc.hostCommentsGrid.superclass.initComponent.call(this);
+    }
+
+});
+
+npc.serviceCommentsGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
+
+    filter: 'any',
+
+    initComponent : function()
+    {
+        var bufferedReader = new Ext.ux.grid.livegrid.JsonReader({
+            root            : 'response.value.items',
+            versionProperty : 'response.value.version',
+            totalProperty   : 'response.value.total_count',
+            id              : 'comment_id'
+        },[
+            {name: 'comment_id', type: 'int', sortType: 'int'},
+            {name: 'instance_id', type: 'int', sortType: 'int'},
+            {name: 'host_name', sortType: 'string'},
+            {name: 'svc_icon_image', sortType: 'string'},
+            {name: 'svc_icon_image_alt', sortType: 'string'},
+            {name: 'host_icon_image', sortType: 'string'},
+            {name: 'host_icon_image_alt', sortType: 'string'},
+            {name: 'service_description', sortType: 'string'},
+            {name: 'comment_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
+            {name: 'object_id', type: 'int', sortType: 'int'},
+            {name: 'entry_type', type: 'int', sortType: 'int'},
+            {name: 'author_name', sortType: 'string'},
+            {name: 'comment_data', sortType: 'string'},
+            {name: 'is_persistent', sortType: 'int', sortType: 'int'},
+            {name: 'internal_comment_id', sortType: 'int', sortType: 'int'},
+            {name: 'expiration_time', type: 'date', dateFormat: 'Y-m-d H:i:s'}
+          ]
+        );
+
+        this.store = new Ext.ux.grid.livegrid.Store({
+            autoLoad   : true,
+            bufferSize : 100,
+            reader     : bufferedReader,
+            sortInfo   : {field: 'service_description', direction: 'ASC'},
+            url        : 'npc.php?module=comments&action=getServiceComments'
+        });
+
+        this.selModel = new Ext.ux.grid.livegrid.RowSelectionModel();
+
+        this.view = new Ext.ux.grid.livegrid.GridView({
+            nearLimit : 30
+            ,forceFit:true
+            ,autoFill:true
+            ,emptyText:'No service comments.'
+            ,loadMask: {
+                msg: 'Please wait...'
+            }
+        });
+
+        this.bbar = new Ext.ux.grid.livegrid.Toolbar({
+            view        : this.view,
+            displayInfo : true
+        });
+
+        npc.serviceCommentsGrid.superclass.initComponent.call(this);
+    }
+
+});
+
+
 npc.comments = function(){
 
     var title = 'Comments';
@@ -23,7 +143,6 @@ npc.comments = function(){
             title: 'Host Comments', 
             height:600,
             layout: 'fit',
-            deferredRender:false,
             closable: false
         });
         innerTabPanel.add({ 
@@ -31,7 +150,6 @@ npc.comments = function(){
             title: 'Service Comments', 
             height:600,
             layout: 'fit',
-            deferredRender:false,
             closable: false
         });
         innerTabPanel.show(); 
@@ -42,37 +160,10 @@ npc.comments = function(){
         return String.format('<img src="images/icons/comment_delete.png">');
     }
 
-    function renderServicegroupHeading(v, p, r) {
-        return String.format('[{0}] - {1}', r.data.host_name, r.data.service_description);
-    }
-
-    var hcStore = new Ext.data.GroupingStore({
-        url: 'npc.php?module=comments&action=getHostComments',
-        autoload:true,
-        sortInfo:{field: 'host_name', direction: "ASC"},
-        reader: new Ext.data.JsonReader({
-            totalProperty:'totalCount',
-            root:'data'
-        }, [
-            'comment_id',
-            'instance_id',
-            'host_name',
-            {name: 'comment_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'object_id', type: 'int'},
-            'entry_type',
-            'author_name',
-            'comment_data',
-            'is_persistent',
-            'internal_comment_id',
-            {name: 'expiration_time', type: 'date', dateFormat: 'Y-m-d H:i:s'}
-        ]),
-        groupField:'host_name'
-    });
-
     var hcCm = new Ext.grid.ColumnModel([{
         header:"Host Name",
         dataIndex:'host_name',
-        hidden:true,
+        renderer: npc.renderHostIcons,
         width:120
     },{
         header:"Entry Time",
@@ -113,40 +204,11 @@ npc.comments = function(){
         width:50
     }]);
 
-    /* Host Comments Grid */
-    var hcGridId = title + '-hcGrid';
-    var hcGridState = Ext.state.Manager.get(hcGridId);
-    var hcGridRows = (hcGridState && hcGridState.rows) ? hcGridState.rows : 15;
-    var hcGridRefresh = (hcGridState && hcGridState.refresh) ? hcGridState.refresh : 60;
-
-    var hcGrid = new Ext.grid.GridPanel({
-        id:hcGridId,
+    var hcGrid = new npc.hostCommentsGrid({
         height:800,
-        layout: 'fit',
-        autoScroll:true,
-        store:hcStore,
         cm:hcCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
-        listeners: {
-            // Intercept the state save to add our custom attributes
-            beforestatesave: function(o, s) {
-                s.rows = hcGridRows;
-                s.refresh = hcGridRefresh;
-                Ext.state.Manager.set(hcGridId, s);
-                return false;
-            }
-        },
-        view: new Ext.grid.GroupingView({
-            forceFit:true,
-            autoFill:true,
-            hideGroupedColumn: true,
-            enableGroupingMenu: false,
-            showGroupName:false,
-            enableNoGroups: true,
-            emptyText:'No comments.',
-            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Comments" : "Comment"]})'
-        }),
         tbar:[{
             text:'New Comment',
             msg: 'Add a new host comment.',
@@ -176,49 +238,28 @@ npc.comments = function(){
                 });
             }
         }],
-        bbar: new Ext.PagingToolbar({
-            pageSize: hcGridRows,
-            store: hcStore,
-            displayInfo: true,
-            items: npc.setRefreshCombo(hcGridId, hcStore, hcGridState),
-            plugins: new Ext.ux.Andrie.pPageSize({ gridId: hcGridId })
-        })
-    });
-
-    var scStore = new Ext.data.GroupingStore({
-        url: 'npc.php?module=comments&action=getServiceComments',
-        autoload:true,
-        sortInfo:{field: 'service_description', direction: "ASC"},
-        reader: new Ext.data.JsonReader({
-            totalProperty:'totalCount',
-            root:'data'
-        }, [
-            'comment_id',
-            'instance_id',
-            'host_name',
-            'service_description',
-            {name: 'comment_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'object_id', type: 'int'},
-            'entry_type',
-            'author_name',
-            'comment_data',
-            'is_persistent',
-            'internal_comment_id',
-            {name: 'expiration_time', type: 'date', dateFormat: 'Y-m-d H:i:s'}
-        ]),
-        groupField:'object_id'
+        plugins:[new Ext.ux.grid.Search({
+            mode:'remote',
+            iconCls:false,
+            disableIndexes:[
+                'comment_time'
+		,'expiration_time'
+		,'is_persistent'
+                ,'entry_type'
+                ,'internal_comment_id'
+            ]
+        })]
     });
 
     var scCm = new Ext.grid.ColumnModel([{
         header:"Host Name",
         dataIndex:'host_name',
-        hidden:true,
+        renderer: npc.renderHostIcons,
         width:120
     },{
         header:"Service",
-        dataIndex:'object_id',
-        groupRenderer:renderServicegroupHeading,
-        hidden:true,
+        dataIndex:'service_description',
+        renderer: npc.renderServiceIcons,
         width:120
     },{
         header:"Entry Time",
@@ -259,40 +300,11 @@ npc.comments = function(){
         width:50
     }]);
 
-    /* Service Comments Grid */
-    var scGridId = title + '-scGrid';
-    var scGridState = Ext.state.Manager.get(scGridId);
-    var scGridRows = (scGridState && scGridState.rows) ? scGridState.rows : 15;
-    var scGridRefresh = (scGridState && scGridState.refresh) ? scGridState.refresh : 60;
-
-    var scGrid = new Ext.grid.GridPanel({
-        id:scGridId,
+    var scGrid = new npc.serviceCommentsGrid({
         height:800,
-        layout: 'fit',
-        autoScroll:true,
-        store:scStore,
         cm:scCm,
         autoExpandColumn:'comment_data',
         stripeRows: true,
-        listeners: {
-            // Intercept the state save to add our custom attributes
-            beforestatesave: function(o, s) {
-                s.rows = scGridRows;
-                s.refresh = scGridRefresh;
-                Ext.state.Manager.set(scGridId, s);
-                return false;
-            }
-        },
-        view: new Ext.grid.GroupingView({
-            forceFit:true,
-            autoFill:true,
-            hideGroupedColumn: true,
-            enableGroupingMenu: false,
-            showGroupName: false,
-            enableNoGroups: true,
-            emptyText:'No comments.',
-            groupTextTpl: '{text} ({[values.rs.length]} {[values.rs.length > 1 ? "Comments" : "Comment"]})'
-        }),
         tbar:[{
             text:'New Comment',
             iconCls:'commentAdd',
@@ -321,13 +333,17 @@ npc.comments = function(){
                 });
             }
         }],
-        bbar: new Ext.PagingToolbar({
-            pageSize: scGridRows,
-            store: scStore,
-            displayInfo: true,
-            items: npc.setRefreshCombo(scGridId, scStore, scGridState),
-            plugins: new Ext.ux.Andrie.pPageSize({ gridId: scGridId })
-        })
+        plugins:[new Ext.ux.grid.Search({
+            mode:'remote',
+            iconCls:false,
+            disableIndexes:[
+                'comment_time'
+		,'expiration_time'
+		,'is_persistent'
+                ,'entry_type'
+                ,'internal_comment_id'
+            ]
+        })]
     });
 
     // Add the grid to the panel
@@ -341,25 +357,30 @@ npc.comments = function(){
     hcGrid.render();
     scGrid.render();
 
-    // Load the data store
-    hcGrid.store.load({params:{start:0, limit:hcGridRows}});
-    scGrid.store.load({params:{start:0, limit:scGridState}});
-
-    // Start auto refresh of the grid
-    hcStore.startAutoRefresh(hcGridRefresh);
-    scStore.startAutoRefresh(scGridRefresh);
-
-    // Stop auto refresh if the tab is closed
-    var listeners = {
-        destroy: function() {
-            hcStore.stopAutoRefresh();
-            scStore.stopAutoRefresh();
+    // Handle deleting individual comments
+    scGrid.addListener("cellclick", function(grid, row, column, e) {
+        var rec = grid.getStore().getAt(row);
+        var fieldName = grid.getColumnModel().getDataIndex(column);
+        if (fieldName == 'internal_comment_id') {
+            Ext.Msg.show({
+                title:'Confirm Delete',
+                msg: 'Are you sure you want to delete this comment?',
+                buttons: Ext.Msg.YESNO,
+                fn: function(btn) {
+                    if (btn == 'yes') {
+                        var args = {
+                            module : 'nagios',
+                            action : 'command',
+                            p_command : 'DEL_SVC_COMMENT',
+                            p_comment_id : rec.get(fieldName)
+                        };
+                        npc.aPost(args);
+                    }
+                },
+                animEl: 'elId',
+                icon: Ext.MessageBox.QUESTION
+            });
         }
-    };
+    });
 
-    // Add the listener to the tab
-    Ext.getCmp('host-comments-tab').addListener(listeners);
-    Ext.getCmp('service-comments-tab').addListener(listeners);
-
-    //hcGrid.on('rowclick', npc.serviceGridClick);
 };

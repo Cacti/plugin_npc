@@ -64,11 +64,6 @@ class NpcCommentsController extends Controller {
      * @return string   json output
      */
     function getComments() {
-        //$response['response']['value']['items'] = $this->comments();
-        //$response['response']['value']['total_count'] = $this->numRecords;
-        //$response['response']['value']['version']     = 1;
-
-        //return(json_encode($response));
 	return($this->jsonOutput($this->comments()));
     }
 
@@ -81,7 +76,11 @@ class NpcCommentsController extends Controller {
      */
     function getHostComments() {
         $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 1'));
-        return($this->jsonOutput($results));
+        $response['response']['value']['items'] = $results;
+        $response['response']['value']['total_count'] = $this->numRecords;
+        $response['response']['value']['version']     = 1;
+
+        return(json_encode($response));
     }
 
     /**
@@ -93,7 +92,18 @@ class NpcCommentsController extends Controller {
      */
     function getServiceComments() {
         $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 2'));
-        return($this->jsonOutput($results));
+
+        for ($i = 0; $i < count($results); $i++) {
+            $icon = $this->getHostIcon($results[$i]['object_id']);
+            $results[$i]['host_icon_image'] = $icon['icon_image'];
+            $results[$i]['host_icon_image_alt'] = $icon['icon_image_alt'];
+        }
+
+        $response['response']['value']['items'] = $results;
+        $response['response']['value']['total_count'] = $this->numRecords;
+        $response['response']['value']['version']     = 1;
+
+        return(json_encode($response));
     }
 
     /**
@@ -155,6 +165,32 @@ class NpcCommentsController extends Controller {
     }
 
     /**
+     * getHostIcon
+     * 
+     * Returns host icon image and alt data
+     *
+     * @return array  icon and alt
+     */
+    function getHostIcon($id) {
+
+        $q = new Doctrine_Pager(
+            Doctrine_Query::create()
+                ->select('s.service_id,'
+                        .'h.icon_image,'
+                        .'h.icon_image_alt')
+                ->from('NpcServices s')
+                ->leftJoin('s.Host h')
+                ->where("s.service_object_id = ?", $id),
+            $this->currentPage,
+            $this->limit
+        );
+
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+
+        return($results[0]['Host']);
+    }
+
+    /**
      * comments
      * 
      * Returns a an array of comments
@@ -175,10 +211,16 @@ class NpcCommentsController extends Controller {
                 ->select('i.instance_name,'
                         .'o.name1 AS host_name,'
                         .'o.name2 AS service_description,'
+                        .'s.icon_image AS svc_icon_image,'
+                        .'s.icon_image_alt AS svc_icon_image_alt,'
+                        .'h.icon_image AS host_icon_image,'
+                        .'h.icon_image_alt AS host_icon_image_alt,'
                         .'c.*')
                 ->from('NpcComments c')
                 ->leftJoin('c.Object o')
                 ->leftJoin('c.Instance i')
+                ->leftJoin('c.Service s')
+                ->leftJoin('c.Host h')
                 ->where("$where")
                 ->orderby( 'c.entry_time DESC, c.entry_time_usec DESC' ),
             $this->currentPage,
