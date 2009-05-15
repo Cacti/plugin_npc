@@ -199,11 +199,22 @@ class NpcCommentsController extends Controller {
      */
     function comments($id=null, $where='') {
 
+        // Maps searchable fields passed in from the client
+        $fieldMap = array('service_description' => 'o.name2',
+                          'host_name'    => 'o.name1',
+                          'author_name'  => 'c.author_name',
+                          'comment_data' => 'c.comment_data');
+
+
         if ($this->id || $id) {
             if ($where != '') {
                 $where .= ' AND ';
             }
             $where .= sprintf("c.object_id = %d", is_null($id) ? $this->id : $id);
+        }
+
+        if ($this->searchString) {
+            $where = $this->searchClause($where, $fieldMap);
         }
 
         $q = new Doctrine_Pager(
@@ -226,6 +237,7 @@ class NpcCommentsController extends Controller {
             $this->currentPage,
             $this->limit
         );
+
 
         $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 

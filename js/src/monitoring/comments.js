@@ -142,6 +142,8 @@ npc.comments = function(){
             id: 'host-comments-tab', 
             title: 'Host Comments', 
             height:600,
+            deferredRender:false,
+            hideMode: 'offsets',
             layout: 'fit',
             closable: false
         });
@@ -149,6 +151,8 @@ npc.comments = function(){
             id: 'service-comments-tab', 
             title: 'Service Comments', 
             height:600,
+            deferredRender:false,
+            hideMode: 'offsets',
             layout: 'fit',
             closable: false
         });
@@ -309,7 +313,7 @@ npc.comments = function(){
             text:'New Comment',
             iconCls:'commentAdd',
             handler : function(){
-                npc.addServiceComment();
+                npc.addComment('svc');
             }
         }, '-', {
             text:'Delete comments',
@@ -356,6 +360,32 @@ npc.comments = function(){
     // Render the grid
     hcGrid.render();
     scGrid.render();
+
+    // Handle deleting individual comments
+    hcGrid.addListener("cellclick", function(grid, row, column, e) {
+        var rec = grid.getStore().getAt(row);
+        var fieldName = grid.getColumnModel().getDataIndex(column);
+        if (fieldName == 'internal_comment_id') {
+            Ext.Msg.show({
+                title:'Confirm Delete',
+                msg: 'Are you sure you want to delete this comment?',
+                buttons: Ext.Msg.YESNO,
+                fn: function(btn) {
+                    if (btn == 'yes') {
+                        var args = {
+                            module : 'nagios',
+                            action : 'command',
+                            p_command : 'DEL_HOST_COMMENT',
+                            p_comment_id : rec.get(fieldName)
+                        };
+                        npc.aPost(args);
+                    }
+                },
+                animEl: 'elId',
+                icon: Ext.MessageBox.QUESTION
+            });
+        }
+    });
 
     // Handle deleting individual comments
     scGrid.addListener("cellclick", function(grid, row, column, e) {
