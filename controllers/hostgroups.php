@@ -87,7 +87,11 @@ class NpcHostgroupsController extends Controller {
         // Implement paging by slicing the ouput array
         $output = array_slice($output, $this->start, $this->limit);
 
-        return($this->jsonOutput($output));
+        $response['response']['value']['items'] = $output;
+        $response['response']['value']['total_count'] = $this->numRecords;
+        $response['response']['value']['version']     = 1;
+
+        return(json_encode($response));
     }
 
     /**
@@ -133,7 +137,11 @@ class NpcHostgroupsController extends Controller {
         // Implement paging by slicing the ouput array
         $output = array_slice($output, $this->start, $this->limit);
 
-        return($this->jsonOutput($output));
+        $response['response']['value']['items'] = $output;
+        $response['response']['value']['total_count'] = $this->numRecords;
+        $response['response']['value']['version']     = 1;
+
+        return(json_encode($response));
     }
 
 

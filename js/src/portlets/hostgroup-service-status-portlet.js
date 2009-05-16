@@ -1,3 +1,57 @@
+npc.hostgroupServiceStatusGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
+
+    filter: 'any',
+
+    initComponent : function()
+    {
+        var bufferedReader = new Ext.ux.grid.livegrid.JsonReader({
+            root            : 'response.value.items',
+            versionProperty : 'response.value.version',
+            totalProperty   : 'response.value.total_count',
+            id              : 'service_object_id'
+        },[
+            {name: 'hostgroup_name', sortType: 'string'},
+            {name: 'alias', sortType: 'string'},
+            {name: 'instance_id', type: 'int', sortType: 'int'},
+            {name: 'hostgroup_object_id', type: 'int', sortType: 'int'},
+            {name: 'critical', type: 'int', sortType: 'int'},
+            {name: 'warning', type: 'int', sortType: 'int'},
+            {name: 'unknown', type: 'int', sortType: 'int'},
+            {name: 'ok', type: 'int', sortType: 'int'},
+            {name: 'pending', type: 'int', sortType: 'int'}
+          ]
+        );
+
+        this.store = new Ext.ux.grid.livegrid.Store({
+            autoLoad   : true,
+            bufferSize : 100,
+            reader     : bufferedReader,
+            sortInfo   : {field: 'alias', direction: "ASC"},
+            url        : 'npc.php?module=hostgroups&action=getHostgroupServiceStatus'
+        });
+
+        this.selModel = new Ext.ux.grid.livegrid.RowSelectionModel();
+
+        this.view = new Ext.ux.grid.livegrid.GridView({
+            nearLimit : 30
+            ,forceFit:true
+            ,autoFill:true
+            ,emptyText:'No hostgroups.'
+            ,loadMask: {
+                msg: 'Please wait...'
+            }
+        });
+
+        this.bbar = new Ext.ux.grid.livegrid.Toolbar({
+            view        : this.view,
+            displayInfo : true
+        });
+
+        npc.hostgroupServiceStatusGrid.superclass.initComponent.call(this);
+    }
+
+});
+
 npc.portlet.hostgroupServiceStatus = function(){
 
     // Portlet name
@@ -6,34 +60,12 @@ npc.portlet.hostgroupServiceStatus = function(){
     // Portlet ID
     var id = 'hostgroupServiceStatus';
 
-    // Portlet URL
-    var url = 'npc.php?module=hostgroups&action=getHostgroupServiceStatus';
-
     // Default column
     var column = 'dashcol2';
 
-    // Default # of events to display
-    var pageSize = 10;
-
-    // Setup the data store
-    var store = new Ext.data.JsonStore({
-        url:url,
-        autoload:true,
-        sortInfo:{field: 'alias', direction: "ASC"},
-        totalProperty:'totalCount',
-        root:'data',
-        fields:[
-            'hostgroup_name',
-            'alias',
-            {name: 'instance_id', type: 'int'},
-            {name: 'hostgroup_object_id', type: 'int'},
-            {name: 'critical', type: 'int'},
-            {name: 'warning', type: 'int'},
-            {name: 'unknown', type: 'int'},
-            {name: 'ok', type: 'int'},
-            {name: 'pending', type: 'int'}
-        ]
-    });
+    // Get the portlet height
+    var height = Ext.state.Manager.get(id).height;
+    height = (height > 150) ? height : 150;
 
     // Setup the column model
     var cm = new Ext.grid.ColumnModel([{
@@ -78,26 +110,16 @@ npc.portlet.hostgroupServiceStatus = function(){
     }]);
 
     // Setup the grid
-    var grid = new Ext.grid.GridPanel({
+    var grid = new npc.hostgroupServiceStatusGrid({
         id: 'hostgroup-service-status-grid',
-        autoHeight:true,
+        height:height,
         autoExpandColumn: 'alias',
-        store:store,
         cm:cm,
         sm: new Ext.grid.RowSelectionModel({singleSelect:true}),
         stripeRows: true,
-        view: new Ext.grid.GridView({
-            forceFit:true,
-            autoFill:true,
-            emptyText:'No hostgroups.',
-            scrollOffset:0
-        }),
-        bbar: new Ext.PagingToolbar({
-            pageSize: pageSize,
-            store: store,
-            displayInfo: true,
-            displayMsg: ''
-        })
+        loadMask: {
+            msg: 'Loading...'
+        }
     });
 
     // Create a portlet to hold the grid
@@ -111,9 +133,6 @@ npc.portlet.hostgroupServiceStatus = function(){
 
     // Render the grid
     grid.render();
-
-    // Load the data store
-    store.load({params:{start:0, limit:pageSize}});
 
     // Start auto refresh of the grid
     if (Ext.getCmp(id).isVisible()) {
@@ -140,7 +159,7 @@ npc.portlet.hostgroupServiceStatus = function(){
     Ext.getCmp(id).addListener(listeners);
 
     function doAutoRefresh() {
-        store.startAutoRefresh(npc.params.npc_portlet_refresh);
+        grid.store.startAutoRefresh(npc.params.npc_portlet_refresh);
     }
 
     grid.on('rowdblclick', hgClick);

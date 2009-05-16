@@ -39,10 +39,6 @@ npc.portlet.eventLog = function(){
         ,loadMask       : {
             msg : 'Loading...'
         }
-        ,plugins:[new Ext.ux.grid.Search({
-            mode:'remote',
-            iconCls:false
-        })]
     });
 
     // Create a portlet to hold the grid

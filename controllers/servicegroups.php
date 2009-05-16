@@ -91,9 +91,13 @@ class NpcServicegroupsController extends Controller {
         // Implement paging by slicing the ouput array
         $output = array_slice($output, $this->start, $this->limit);
 
+        $response['response']['value']['items'] = $output;
+        $response['response']['value']['total_count'] = $this->numRecords;
+        $response['response']['value']['version']     = 1;
+
         $this->logger('debug', get_class($this), 'getHostStatusPortlet', "Method execution time: ".sprintf("%01.2f", ($this->getTime() - $startTime)). " seconds");
 
-        return($this->jsonOutput($output));
+        return(json_encode($response));
     }
 
     /**
@@ -141,9 +145,13 @@ class NpcServicegroupsController extends Controller {
         // Implement paging by slicing the ouput array
         $output = array_slice($output, $this->start, $this->limit);
 
+        $response['response']['value']['items'] = $output;
+        $response['response']['value']['total_count'] = $this->numRecords;
+        $response['response']['value']['version']     = 1;
+
         $this->logger('debug', get_class($this), 'getServicegroupServiceStatus', "Method execution time: ".sprintf("%01.2f", ($this->getTime() - $startTime)). " seconds");
 
-        return($this->jsonOutput($output));
+        return(json_encode($response));
     }
 
     /**
