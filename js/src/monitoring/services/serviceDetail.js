@@ -134,11 +134,13 @@ npc.serviceDetail = function(record) {
 
     var serviceStore = new Ext.data.JsonStore({
         url:'npc.php?module=services&action=getServices&p_id=' + service_object_id,
-        autoload:true,
-        totalProperty:'totalCount',
-        root:'data',
+        root            : 'response.value.items',
+        versionProperty : 'response.value.version',
+        totalProperty   : 'response.value.total_count',
+        id              : 'service_object_id',
         fields: [
             'host_name',
+            'notes_url',
             'service_description',
             'perfdata',
             {name: 'local_graph_id', type: 'int'},
@@ -153,7 +155,7 @@ npc.serviceDetail = function(record) {
             {name: 'flap_detection_enabled', type: 'int'}
         ]
     });
-
+    serviceStore.load();
 
     var siStore = new Ext.data.JsonStore({
         url: 'npc.php?module=services&action=getStateInfo&p_id=' + service_object_id,
@@ -165,6 +167,7 @@ npc.serviceDetail = function(record) {
         ],
         autoload:true
     });
+    siStore.load();
 
     var siCm = new Ext.grid.ColumnModel([{
         header:"Parameter",
@@ -581,6 +584,13 @@ npc.serviceDetail = function(record) {
     detailsPanel.add(sdGrid);
     detailsPanel.add(scGrid);
 
+    detailsPanel.add({
+    	id: 'sdNotes'+service_object_id,
+        title: 'Additional Information',
+        disabled: true,
+        tabTip: 'Enabled by setting the notes_url parameter in your Nagios service definition.'
+    });
+
     // Refresh the dashboard
     centerTabPanel.doLayout();
 
@@ -594,8 +604,6 @@ npc.serviceDetail = function(record) {
     detailsPanel.setActiveTab(siGrid);
 
     // Load the data stores
-    siStore.load();
-    serviceStore.load();
     snStore.load({params:{start:0, limit:snGridRows}});
     shStore.load({params:{start:0, limit:shGridRows}});
     sdStore.load({params:{start:0, limit:sdGridRows}});
@@ -652,6 +660,25 @@ npc.serviceDetail = function(record) {
 
     serviceStore.on('load', function() {
         npc.serviceCommandMenu(serviceStore.data.items[0].data, menu);
+
+        var notesUrl = serviceStore.data.items[0].data.notes_url;
+        var tab = Ext.getCmp('sdNotes'+service_object_id);
+	if (notesUrl && tab.disabled) {
+            detailsPanel.remove(tab);
+            detailsPanel.add({
+                id: 'sdNotes'+service_object_id,
+                title: 'Additional Information',
+                disabled: false,
+                layout:'fit',
+                deferredRender:false,
+                layoutOnTabChange:true,
+                scripts: true,
+                items: [ new Ext.ux.IFrameComponent({
+                    url: notesUrl
+                })]
+            });
+            detailsPanel.doLayout();
+        }
         
         if (!Ext.getCmp('dimb'+service_object_id)) {
             var perfdata = serviceStore.data.items[0].data.perfdata;

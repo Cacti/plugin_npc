@@ -1101,6 +1101,7 @@ npc = function() {
                 ]
             }); // End viewport
 
+            /*
             // Add button to show/hide the north region
             var tb = Ext.getCmp('dashboard').getTopToolbar();
 
@@ -1120,10 +1121,12 @@ npc = function() {
                     });
                 }
             });
+            */
 
             // Add the portlets button to the dashboard toolbar:
             Ext.getCmp('dashboard').getTopToolbar().add('->', '-', {
                 text: 'Portlets',
+                iconCls: 'layoutEdit',
                 handler: function() {
 
                     var hP = Ext.getCmp('hostProblems');

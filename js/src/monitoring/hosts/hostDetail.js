@@ -139,11 +139,13 @@ npc.hostDetail = function(record) {
 
     var hostStore = new Ext.data.JsonStore({
         url:'npc.php?module=hosts&action=getHosts&p_id=' + host_object_id,
-        autoload:true,
-        totalProperty:'totalCount',
-        root:'data',
+        root            : 'response.value.items',
+        versionProperty : 'response.value.version',
+        totalProperty   : 'response.value.total_count',
+        id              : 'host_object_id',
         fields: [
             'host_name',
+            'notes_url',
             'perfdata',
             {name: 'host_object_id', type: 'int'},
             {name: 'local_graph_id', type: 'int'},
@@ -607,6 +609,13 @@ npc.hostDetail = function(record) {
     detailsPanel.add(hdGrid);
     detailsPanel.add(hcGrid);
 
+    detailsPanel.add({
+        id: 'hdNotes'+host_object_id,
+        title: 'Additional Information',
+        disabled: true,
+        tabTip: 'Enabled by setting the notes_url parameter in your Nagios host definition.'
+    });
+
     // Refresh the dashboard
     centerTabPanel.doLayout();
 
@@ -681,6 +690,25 @@ npc.hostDetail = function(record) {
 
     hostStore.on('load', function() {
         npc.hostCommandMenu(hostStore.data.items[0].data, menu);
+
+        var notesUrl = hostStore.data.items[0].data.notes_url;
+        var tab = Ext.getCmp('hdNotes'+host_object_id);
+        if (notesUrl && tab.disabled) {
+            detailsPanel.remove(tab);
+            detailsPanel.add({
+                id: 'hdNotes'+host_object_id,
+                title: 'Additional Information',
+                disabled: false,
+                layout:'fit',
+                deferredRender:false,
+                layoutOnTabChange:true,
+                scripts: true,
+                items: [ new Ext.ux.IFrameComponent({
+                    url: notesUrl
+                })]
+            });
+            detailsPanel.doLayout();
+        }
 
         if (!Ext.getCmp('dimb'+host_object_id)) {
             var perfdata = hostStore.data.items[0].data.perfdata;

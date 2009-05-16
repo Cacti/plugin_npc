@@ -83,8 +83,9 @@ background-image:url(../images/icons/layout.png);
 }
 
 .layoutEdit {
-background-image:url(../images/icons/layout_edit.png);
+background-image:url(../images/icons/layout_edit.png) !important;
 }
+
 
 #navcontainer ul
 {
