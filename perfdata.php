@@ -45,12 +45,20 @@ if (!sizeof($parms)) {
                 $hostname = trim($value);
                 break;
 
+            case "--hostgroup":
+                $hostgroup = trim($value);
+                break;
+
             case "--ds":
                 $ds = trim($value);
                 break;
 
             case "--list-hosts":
                 listHosts();
+                break;
+
+            case "--list-hostgroups":
+                listHostgroups();
                 break;
 
             case "--list-services":
@@ -77,10 +85,10 @@ $output = '';
 
 foreach ($perfParts as $perf) {
     if (preg_match("/=/", $perf)) {
-	preg_match("/(\S+)=([-+]?[0-9]*\.?[0-9]+)/", $perf, $matches);
-	if (preg_match("/^iso./", $matches[1])) {
-		$matches[1] = 'output';
-	}
+        preg_match("/(\S+)=([-+]?[0-9]*\.?[0-9]+)/", $perf, $matches);
+        if (preg_match("/^iso./", $matches[1])) {
+                $matches[1] = 'output';
+        }
         $output .= $matches[1] . ":" . $matches[2] . " ";
     }
 }
@@ -89,13 +97,40 @@ echo $output . "\n";
 
 function listHosts() {
 
-    $obj = new NpcHostsController;
-    $results = $obj->listHostsCli();
+    $parms = $_SERVER["argv"];
+    foreach($parms as $parameter) {
+        @list($arg, $value) = @explode("=", $parameter);
+        switch ($arg) {
+            case "--hostgroup":
+                $hostgroup = trim($value);
+                break;
+        }
+    }
 
-    $x = 1;
-    echo "ID   Name\n";
+    if ($hostgroup) { 
+        $obj = new NpcHostgroupsController;
+        $results = $obj->listHostsCli($hostgroup);
+    } else {
+        $obj = new NpcHostsController;
+        $results = $obj->listHostsCli();
+    }
+
+    echo "ID      Name         Address\n";
     foreach($results as $result) {
-        echo $result['id'] . "   " . $result['name'] . "\n";
+        echo $result['id'] . "      " . $result['name'] .  "      " . $result['address'] . "\n";
+    }
+
+    exit;
+}
+
+function listHostgroups() {
+
+    $obj = new NpcHostgroupsController;
+    $results = $obj->listHostgroupsCli();
+
+    echo "ID     Name\n";
+    foreach($results as $result) {
+        echo $result['id'] . "      " . $result['name'] .  "\n";
     }
 
     exit;
@@ -136,8 +171,10 @@ function display_help() {
     echo "Optional:\n";
     echo "    --ds            Return only the specified datasource. All returned by default.\n";
     echo "List Options:\n";
-    echo "    --list-hosts\n";
+    echo "    --list-hosts [--hostgroup=<name>]\n";
+    echo "    --list-hostgroups\n";
     echo "    --list-services\n\n";
 }
 
 ?>
+

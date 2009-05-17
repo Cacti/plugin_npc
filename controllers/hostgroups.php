@@ -278,16 +278,36 @@ class NpcHostgroupsController extends Controller {
     }
 
     /**
+     * listHostsCli
+     *
+     * Retrieves all hosts in the specified hostgroup for the cli
+     *
+     * @return array
+     */
+    function listHostsCli($hg) {
+
+        $q = new Doctrine_Query();
+        $q->select('h.host_id, h.host_object_id AS id, h.display_name AS name, h.address')
+          ->from('NpcHosts h, NpcHostgroups hg, NpcHostgroupMembers hgm')
+          ->where('hg.hostgroup_id = hgm.hostgroup_id AND hgm.host_object_id = h.host_object_id AND hg.alias = ?', $hg);
+
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+
+        return($results);
+    }
+
+
+    /**
      * listHostgroupsCli
      * 
      * Returns all hostgroups and associated object ID's
      *
      * @return array   Array of hostgroups/id's
      */
-    function listHostsCli() {
-    
+    function listHostgroupsCli() {
+
         $q = new Doctrine_Query();
-        $q->select('display_name as name, host_object_id as id')->from('NpcHosts')->orderBy('display_name ASC');
+        $q->select('alias as name, hostgroup_object_id as id')->from('NpcHostgroups')->orderBy('alias ASC');
 
         return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
     }

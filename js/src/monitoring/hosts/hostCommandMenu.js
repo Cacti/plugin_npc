@@ -139,14 +139,14 @@ npc.hostCommandMenu = function(host, menu) {
     });
 
     menu.add({
-        text: font + 'Schedule Check of all Services on ' + host.host_name + '</b>',
+        text: font + 'Schedule Check of all Services</b>',
         handler: function() {
             npc.scheduleNextCheck('host_svc', host.host_name);
         }
     });
 
     menu.add({
-        text: font + 'Disable notifications for all services on ' + host.host_name + '</b>',
+        text: font + 'Disable notifications for all services</b>',
         handler: function(o) {
             post.p_command = 'DISABLE_HOST_SVC_NOTIFICATIONS';
             npc.doCommand(o.text+'?',post);
@@ -154,7 +154,7 @@ npc.hostCommandMenu = function(host, menu) {
     });
 
     menu.add({
-        text: font + 'Enable notifications for all services on ' + host.host_name + '</b>',
+        text: font + 'Enable notifications for all services</b>',
         handler: function(o) {
             post.p_command = 'ENABLE_HOST_SVC_NOTIFICATIONS';
             npc.doCommand(o.text+'?',post);
@@ -162,7 +162,7 @@ npc.hostCommandMenu = function(host, menu) {
     });
 
     menu.add({
-        text: font + 'Disable checks of all services on ' + host.host_name + '</b>',
+        text: font + 'Disable checks of all services</b>',
         handler: function(o) {
             post.p_command = 'DISABLE_HOST_SVC_CHECKS';
             npc.doCommand(o.text+'?',post);
@@ -170,7 +170,7 @@ npc.hostCommandMenu = function(host, menu) {
     });
 
     menu.add({
-        text: font + 'Enable checks of all services on ' + host.host_name + '</b>',
+        text: font + 'Enable checks of all services</b>',
         handler: function(o) {
             post.p_command = 'ENABLE_HOST_SVC_CHECKS';
             npc.doCommand(o.text+'?',post);
@@ -194,21 +194,21 @@ npc.hostgroupCommandMenu = function(hostgroup, menu) {
     var font = '<b style="font-size: xx-small">';
 
     menu.add({
-        text: font + 'Schedule Downtime for all Services in '+hostgroup.alias+'</b>',
+        text: font + 'Schedule Downtime for all Services</b>',
         handler: function() {
             npc.scheduleHostgroupDowntime(hostgroup.hostgroup_name, 'SVC');
         }
     });
 
     menu.add({
-        text: font + 'Schedule Downtime for all Hosts in '+hostgroup.alias+'</b>',
+        text: font + 'Schedule Downtime for all Hosts</b>',
         handler: function() {
             npc.scheduleHostgroupDowntime(hostgroup.hostgroup_name, 'HOST');
         }
     });
 
     menu.add({
-        text: font + 'Enable Notifications for all Hosts in '+hostgroup.alias+'</b>',
+        text: font + 'Enable Notifications for all Hosts</b>',
         handler: function(o) {
             post.p_command = 'ENABLE_HOSTGROUP_HOST_NOTIFICATIONS';
             npc.doCommand(o.text+'?',post);
@@ -216,7 +216,7 @@ npc.hostgroupCommandMenu = function(hostgroup, menu) {
     });
 
     menu.add({
-        text: font + 'Disable Notifications for all Hosts in '+hostgroup.alias+'</b>',
+        text: font + 'Disable Notifications for all Hosts</b>',
         handler: function(o) {
             post.p_command = 'DISABLE_HOSTGROUP_HOST_NOTIFICATIONS';
             npc.doCommand(o.text+'?',post);
@@ -224,7 +224,7 @@ npc.hostgroupCommandMenu = function(hostgroup, menu) {
     });
 
     menu.add({
-        text: font + 'Enable Notifications for all Services in '+hostgroup.alias+'</b>',
+        text: font + 'Enable Notifications for all Services</b>',
         handler: function(o) {
             post.p_command = 'ENABLE_HOSTGROUP_SVC_NOTIFICATIONS';
             npc.doCommand(o.text+'?',post);
@@ -232,7 +232,7 @@ npc.hostgroupCommandMenu = function(hostgroup, menu) {
     });
 
     menu.add({
-        text: font + 'Disable Notifications for all Services in '+hostgroup.alias+'</b>',
+        text: font + 'Disable Notifications for all Services</b>',
         handler: function(o) {
             post.p_command = 'DISABLE_HOSTGROUP_SVC_NOTIFICATIONS';
             npc.doCommand(o.text+'?',post);
@@ -240,7 +240,7 @@ npc.hostgroupCommandMenu = function(hostgroup, menu) {
     });
 
     menu.add({
-        text: font + 'Enable Active Checks of all Services in '+hostgroup.alias+'</b>',
+        text: font + 'Enable Active Checks of all Services</b>',
         handler: function(o) {
             post.p_command = 'ENABLE_HOSTGROUP_SVC_CHECKS';
             npc.doCommand(o.text+'?',post);
@@ -248,7 +248,7 @@ npc.hostgroupCommandMenu = function(hostgroup, menu) {
     });
 
     menu.add({
-        text: font + 'Disable Active Checks of all Services in '+hostgroup.alias+'</b>',
+        text: font + 'Disable Active Checks of all Services</b>',
         handler: function(o) {
             post.p_command = 'DISABLE_HOSTGROUP_SVC_CHECKS';
             npc.doCommand(o.text+'?',post);
