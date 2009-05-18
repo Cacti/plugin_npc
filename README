@@ -92,11 +92,3 @@
 
     Unlike the 0.1 branch I intend to continue to fully develop and add features to NPC 2.x.
     Please keep the feature requests coming.
-
-----[ Changelog
-
-    --- 2.0.0a 2008-03-27 ---
-    Complete re-write with full Nagios feature support
-
-    --- 1.0 2005-11-12  ---
-    Initial release

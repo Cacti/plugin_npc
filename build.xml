@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 <project name="npc" description="NPC build file" default="main" >
 
+  <property name="version"  value="2.0.2" />
   <property name="base.dir"  value="/home/bgunn/workspace/npc" />
   <property name="build.dir"  value="/home/bgunn/workspace/npc/build/npc" />
-  <property name="src.dir"  value="/home/bgunn/workspace/npc/trunk" />
+  <property name="src.dir"  value="." />
   <property name="js.src.dir"  value="/home/bgunn/workspace/npc/build/npc/js/src" />
   <property name="tmp.dir"  value="/tmp" />
   <property name="svnpath" value="/usr/bin/svn" />
@@ -71,12 +72,12 @@
   </target>
 
   <target name="readme" depends="js.minify">
-    <exec command="perl -i -p -e 's/VERSION/npc-2.0.0b.${svn.lastrevision}/g' ${build.dir}/README" />
+    <exec command="perl -i -p -e 's/VERSION/${version}/g' ${build.dir}/README" />
   </target>
 
   <target name="package" depends="readme">
-    <zip destfile="${base.dir}/npc-2.0.0b.${svn.lastrevision}.zip" basedir="${base.dir}/build"/>
-    <tar destfile="${base.dir}/npc-2.0.0b.${svn.lastrevision}.tar.gz" basedir="${base.dir}/build" compression="gzip"/>
+    <zip destfile="${base.dir}/npc-${version}.zip" basedir="${base.dir}/build"/>
+    <tar destfile="${base.dir}/npc-${version}.tar.gz" basedir="${base.dir}/build" compression="gzip"/>
     <delete dir="${build.dir}" />
   </target>
 
