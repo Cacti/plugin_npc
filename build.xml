@@ -71,7 +71,7 @@
     <exec command="perl -i -p -e 's/layoutDev/layout/ig' ${build.dir}/npc.php" />
   </target>
 
-  <target name="readme" depends="js.minify">
+  <target name="readme" depends="prod">
     <exec command="perl -i -p -e 's/VERSION/${version}/g' ${build.dir}/README" />
   </target>
 
