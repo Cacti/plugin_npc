@@ -9,7 +9,7 @@
   <property name="tmp.dir"  value="/tmp" />
   <property name="svnpath" value="/usr/bin/svn" />
   <property name="repo" value="http://svn2.assembla.com/svn/npc/trunk" />
-  <property name="yuicompressor"  value="/home/bgunn/workspace/yuicompressor-2.3.4.jar" />
+  <property name="yuicompressor"  value="/home/bgunn/workspace/yuicompressor.jar" />
 
   <target name="main" depends="package"/>
 

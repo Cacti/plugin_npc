@@ -107,7 +107,7 @@ class NpcNagiosController extends Controller {
 
         $version = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
-        $results[0]['server_time'] = date('U');
+        $results[0]['server_time'] = date('Y-m-d H:i:s');
         $results[0]['program_version'] = $version[0]['program_version'];
 
         return($results);

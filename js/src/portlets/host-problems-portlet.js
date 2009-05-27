@@ -20,7 +20,7 @@ npc.portlet.hostProblems = function(){
         header:"Host",
         dataIndex:'host_name',
         sortable:true,
-        renderer:npc.renderExtraIcons,
+        renderer:npc.renderHostIcons,
         width:100
     },{
         header:"Alias",

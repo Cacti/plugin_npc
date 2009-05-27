@@ -7,6 +7,9 @@ require_once(dirname(__FILE__) . '/controllers/controller.php');
 //register the autoloader
 spl_autoload_register(array('Doctrine', 'autoload'));
 
+$database_username = urlencode($database_username);
+$database_password = urlencode($database_password);
+
 // Setup the DSN
 $dsn = "$database_type://$database_username:$database_password@$database_hostname:$database_port/$database_default";
 

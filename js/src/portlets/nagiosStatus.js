@@ -25,7 +25,7 @@ npc.nagiosStatus = function(){
             {name: 'active_service_checks_enabled', type: 'int'},
             {name: 'active_host_checks_enabled', type: 'int'},
             {name: 'status_update_time', type: 'date', dateFormat: 'Y-m-d H:i:s'},
-            {name: 'server_time', type: 'date', dateFormat: 'U'}
+            {name: 'server_time', type: 'date', dateFormat: 'Y-m-d H:i:s'}
         ],
         autoload:true
     });
