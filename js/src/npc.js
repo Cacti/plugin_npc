@@ -438,7 +438,7 @@ npc = function() {
                 icon = String.format('<img ext:qtip="{0}" src="{1}">', r.data.icon_image_alt, r.data.icon_image);
             }
             
-            return npc.renderExtraIcons(val, p, r, icon)
+            return npc.renderExtraIcons(val, p, r, icon);
         },
 
         renderServiceIcons: function(val, p, r) {
@@ -446,14 +446,14 @@ npc = function() {
             var icon = '';
 
             if (r.data.svc_icon_image == "" || !showIcon) {
-                return(val);
+                return npc.renderExtraIcons(val, p, r, icon);
             } else if (r.data.svc_icon_image) {
                 icon = String.format('<img ext:qtip="{0}" src="{1}">', r.data.svc_icon_image_alt, r.data.svc_icon_image);
                 return String.format('<div style="float: left;">{0} {1}</div>', icon, val);
             } else if (r.data.icon_image) {
                 icon = String.format('<img ext:qtip="{0}" src="{1}">', r.data.icon_image_alt, r.data.icon_image);
             }
-            return npc.renderExtraIcons(val, p, r, icon)
+            return npc.renderExtraIcons(val, p, r, icon);
         },
 
         renderExtraIcons: function(val, p, record, icon) {
