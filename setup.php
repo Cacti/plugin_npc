@@ -409,7 +409,7 @@ function npc_setup_tables() {
                     `varname` varchar(64) NOT NULL default '',
                     `varvalue` varchar(255) NOT NULL default '',
                     PRIMARY KEY  (`configfilevariable_id`),
-                    UNIQUE KEY `instance_id` (`instance_id`,`configfile_id`,`varname`)
+                    KEY `instance_id` (`instance_id`,`configfile_id`)
                   ) ENGINE=InnoDB COMMENT='Configuration file variables';";
     }
 
