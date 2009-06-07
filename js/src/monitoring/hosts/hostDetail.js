@@ -540,6 +540,7 @@ npc.hostDetail = function(record) {
 
     var hcGrid = new Ext.grid.GridPanel({
         id: hcGridId,
+        host_object_id: host_object_id,
         title: 'Comments',
         height:800,
         layout: 'fit',

@@ -526,6 +526,7 @@ npc.serviceDetail = function(record) {
 
     var scGrid = new npc.serviceCommentsGrid({
         id: scGridId,
+        service_object_id: service_object_id,
         title: 'Comments',
         height:800,
         deferredRender:false,

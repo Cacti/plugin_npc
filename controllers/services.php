@@ -59,11 +59,11 @@ class NpcServicesController extends Controller {
                 // Add the last comment to the array
                 $services[$i]['comment'] = $comments->getLastComment($services[$i]['service_object_id']);
 
-		// Set the in_downtime bit
-		$services[$i]['in_downtime'] = 0;
-		if ($downtime->inDowntime($services[$i]['service_object_id'])) {
-			$services[$i]['in_downtime'] = 1;
-		}
+        // Set the in_downtime bit
+        $services[$i]['in_downtime'] = 0;
+        if ($downtime->inDowntime($services[$i]['service_object_id'])) {
+            $services[$i]['in_downtime'] = 1;
+        }
         }
 
         $response['response']['value']['items'] = $services;
@@ -82,10 +82,10 @@ class NpcServicesController extends Controller {
      */
     function getStateInfo() {
 
-	require_once("plugins/npc/controllers/hostgroups.php");
-	$obj = new NpcHostgroupsController;
-	$hg = $obj->setupResultsArray();
-	// $results[$i]['hostgroup_object_id']
+    require_once("plugins/npc/controllers/hostgroups.php");
+    $obj = new NpcHostgroupsController;
+    $hg = $obj->setupResultsArray();
+    // $results[$i]['hostgroup_object_id']
 
         $fields = array(
             'current_state',
@@ -118,11 +118,11 @@ class NpcServicesController extends Controller {
 
         $results = $this->flattenArray($service);
 
-	$hostgroups = array();
-	foreach ($hg as $i => $a) {
+    $hostgroups = array();
+    foreach ($hg as $i => $a) {
             if ($a['host_name'] == $results[0]['host_name']) {
                 $hostgroups[] = $a['hostgroup_name'];
-	    }
+        }
         }
 
         $x = 0;
@@ -270,31 +270,54 @@ class NpcServicesController extends Controller {
         $id = $this->id ? $this->id : $id;
 
 
-	// Get the last update
-	if (!$host) {
-		$q = new Doctrine_Query();
-		$q->select('max(n.servicecheck_id) AS id')
-		->from('NpcServicechecks n')
-		->where('n.service_object_id = ?', $id);
-		$id = $q->execute();
-	} else {
-		$q = new Doctrine_Query();
-		$q->select('max(n.servicecheck_id) AS id')
-		->from('NpcServicechecks n, NpcObjects o')
-		->where('o.is_active = 1 AND o.object_id = n.service_object_id')
-		->andWhere('o.name1 = ?', $host) 
-		->andWhere('o.name2 = ?', $service);
-		$id = $q->execute();
-	}
+        // Get the last update
+        if (!$host) {
+            $q = new Doctrine_Query();
+            $q->select('max(n.servicecheck_id) AS id')
+            ->from('NpcServicechecks n')
+            ->where('n.service_object_id = ?', $id);
+            $id = $q->execute();
+        } else {
+            $q = new Doctrine_Query();
+            $q->select('max(n.servicecheck_id) AS id')
+            ->from('NpcServicechecks n, NpcObjects o')
+            ->where('o.is_active = 1 AND o.object_id = n.service_object_id')
+            ->andWhere('o.name1 = ?', $host) 
+            ->andWhere('o.name2 = ?', $service);
+            $id = $q->execute();
+        }
 
-	// Get the perf data
-	$q = new Doctrine_Query();
-	$q->select('n.*')
-	->from('NpcServicechecks n')
-	->where('n.servicecheck_id = ?', $id[0]['id']);
+        // Get the perf data
+        $q = new Doctrine_Query();
+        $q->select('n.*')
+        ->from('NpcServicechecks n')
+        ->where('n.servicecheck_id = ?', $id[0]['id']);
 
         return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
     }
+
+    /**
+     * Returns the performance history for the specified service and period
+     *
+     * @return array
+     */
+    function getPerfHistory($host, $service, $begin, $end=null) {
+
+        $q = new Doctrine_Query();
+        $q->select('end_time, perfdata')
+        ->from('NpcServicechecks n, NpcObjects o')
+        ->where('o.is_active = 1 AND o.object_id = n.service_object_id')
+        ->andWhere('o.name1 = ?', $host)
+        ->andWhere('o.name2 = ?', $service)
+        ->andWhere('n.end_time >= ?', $begin);
+
+        if ($end) {
+            $q->andWhere('n.end_time <= ?', $end);
+        }
+
+        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
+    }
+
 
     /**
      * listServivcesCli

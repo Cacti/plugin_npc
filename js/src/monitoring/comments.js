@@ -1,6 +1,6 @@
 npc.hostCommentsGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
 
-    host_object_id: null,
+    host_object_id: 0,
 
     initComponent : function()
     {
@@ -31,7 +31,7 @@ npc.hostCommentsGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
             bufferSize : 100,
             reader     : bufferedReader,
             sortInfo   : {field: 'host_name', direction: 'ASC'},
-            url        : 'npc.php?module=comments&action=getHostComments&p_id=' + host_object_id
+            url        : 'npc.php?module=comments&action=getHostComments&p_id=' + this.host_object_id
         });
 
         this.selModel = new Ext.ux.grid.livegrid.RowSelectionModel();
@@ -58,7 +58,7 @@ npc.hostCommentsGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
 
 npc.serviceCommentsGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
 
-    service_object_id: null,
+    service_object_id: 0,
 
     initComponent : function()
     {
@@ -92,7 +92,7 @@ npc.serviceCommentsGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
             bufferSize : 100,
             reader     : bufferedReader,
             sortInfo   : {field: 'service_description', direction: 'ASC'},
-            url        : 'npc.php?module=comments&action=getServiceComments&p_id=' + service_object_id
+            url        : 'npc.php?module=comments&action=getServiceComments&p_id=' + this.service_object_id
         });
 
         this.selModel = new Ext.ux.grid.livegrid.RowSelectionModel();
