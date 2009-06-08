@@ -999,7 +999,7 @@ function npc_setup_tables() {
                     `name2` varchar(128) default NULL,
                     `is_active` smallint(6) NOT NULL default '0',
                     PRIMARY KEY  (`object_id`),
-                    KEY `objecttype_id` (`objecttype_id`,`name1`,`name2`)
+                    KEY `objecttype_id` (`objecttype_id`,`name1`,`name2`),
                     KEY `name_idx` (`name1`,`name2`)
                   ) ENGINE=InnoDB COMMENT='Current and historical objects of all kinds';";
     }
