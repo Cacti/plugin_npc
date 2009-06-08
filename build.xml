@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <project name="npc" description="NPC build file" default="main" >
 
-  <property name="version"  value="2.0.2" />
+  <property name="version"  value="2.0.3" />
   <property name="base.dir"  value="/home/bgunn/workspace/npc" />
   <property name="build.dir"  value="/home/bgunn/workspace/npc/build/npc" />
   <property name="src.dir"  value="." />

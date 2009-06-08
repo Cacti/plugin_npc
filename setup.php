@@ -44,7 +44,7 @@ function npc_version() {
  */
 function plugin_npc_version() {
     return array(   'name'          => 'npc',
-                    'version'       => '2.0.2',
+                    'version'       => '2.0.3',
                     'longname'      => 'Nagios plugin for Cacti',
                     'author'        => 'Billy Gunn',
                     'homepage'      => 'http://trac2.assembla.com/npc',
@@ -1516,7 +1516,9 @@ function npc_config_settings() {
             //npc_upgrade_tables ();
 
             // Add a new realm
-            api_plugin_register_realm ('npc', 'npc1.php', 'NPC Global Commands', 1);
+            if ($old_npc_version != '2.0.2') { 
+                api_plugin_register_realm ('npc', 'npc1.php', 'NPC Global Commands', 1);
+            }
         
             // Reset stored cookie values.
             db_execute("DELETE FROM npc_settings");
