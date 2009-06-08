@@ -214,7 +214,7 @@ npc.services = function(title, filter){
                 'current_check_attempt',
                 'current_state',
                 'host_address',
-		'instance_name'
+                'instance_name'
             ]
         })]
     });

@@ -182,7 +182,7 @@ npc.serviceDetail = function(record) {
 
     var siGrid = new Ext.grid.GridPanel({
         title: 'Service State Information',
-        autoHeight:true,
+        height:800,
         autoWidth:true,
         deferredRender:false,
         store:siStore,
@@ -228,8 +228,8 @@ npc.serviceDetail = function(record) {
         }],
         view: new Ext.grid.GridView({
              forceFit:true,
-             autoFill:true,
-             scrollOffset:0
+             autoFill:true
+             //scrollOffset:0
         })
     });
 

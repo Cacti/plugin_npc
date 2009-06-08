@@ -429,12 +429,12 @@ npc = function() {
             var showIcon = (npc.params.npc_host_icons == 'on') ? true : false;
             var icon = '';
 
-            if (r.data.host_icon_image == "" || !showIcon) {
-                return(val);
-            } else if (r.data.host_icon_image) {
+            if (r.data.host_icon_image && showIcon) {
                 icon = String.format('<img ext:qtip="{0}" src="{1}">', r.data.host_icon_image_alt, r.data.host_icon_image);
                 return String.format('<div style="float: left;">{0} {1}</div>', icon, val);
-            } else if (r.data.icon_image) {
+            } else if (r.data.service_object_id) {
+                return(val);
+            } else if (r.data.icon_image && showIcon) {
                 icon = String.format('<img ext:qtip="{0}" src="{1}">', r.data.icon_image_alt, r.data.icon_image);
             }
             

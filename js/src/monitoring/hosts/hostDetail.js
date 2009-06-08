@@ -184,7 +184,7 @@ npc.hostDetail = function(record) {
 
     var hiGrid = new Ext.grid.GridPanel({
         title: 'Host State Information',
-        autoHeight:true,
+        height:800,
         autoWidth:true,
         store:hiStore,
         cm:hiCm,
