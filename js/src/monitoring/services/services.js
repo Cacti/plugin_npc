@@ -225,6 +225,15 @@ npc.services = function(title, filter){
     // Refresh the dashboard
     centerTabPanel.doLayout();
 
+    if (filter != 'any') {
+        grid.getBottomToolbar().add('', '', '', '-', '', '', {
+            text: 'Unhandled', 
+            enableToggle: true, 
+            iconCls: 'pageWhiteWrench',
+            handler: toggleUnhandled
+        });
+    }
+
     // Start auto refresh of the grid
     if (filter != 'any') {
         grid.store.startAutoRefresh(npc.params.npc_portlet_refresh);
@@ -268,4 +277,17 @@ npc.services = function(title, filter){
             }).show();
         }
     });
+
+    function toggleUnhandled(button){
+        var url = 'npc.php?module=services&action=getServices&p_state=not_ok';
+        if (button.pressed) {
+            url = url + '&p_unhandled=1';
+            button.setText('All Problems');
+        } else {
+            button.setText('Unhandled');
+        }
+            
+        grid.store.proxy.conn.url = url;
+        grid.store.reload();    
+    }
 };

@@ -14,7 +14,7 @@ npc.serviceCommandMenu = function(service, menu) {
 
     var font = '<b style="font-size: xx-small">';
 
-    if (service.current_state == 2) {
+    if (service.current_state > 0) {
         if (!service.problem_has_been_acknowledged) {
             menu.add({
                 text: font + 'Acknowledge Problem</b>',

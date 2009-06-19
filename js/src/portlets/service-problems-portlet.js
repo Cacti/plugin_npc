@@ -63,6 +63,13 @@ npc.portlet.serviceProblems = function(){
     // Refresh the dashboard
     Ext.getCmp('centerTabPanel').doLayout();
 
+    grid.getBottomToolbar().add('', '', '', '-', '', '', {
+        text: 'Unhandled',
+        enableToggle: true,
+        iconCls: 'pageWhiteWrench',
+        handler: toggleUnhandled
+    });
+
     // Start auto refresh of the grid
     if (Ext.getCmp(id).isVisible()) {
         doAutoRefresh();
@@ -97,4 +104,16 @@ npc.portlet.serviceProblems = function(){
     // Right click action
     grid.on('rowcontextmenu', npc.serviceContextMenu);
 
+    function toggleUnhandled(button){
+        var url = 'npc.php?module=services&action=getServices&p_state=not_ok';
+        if (button.pressed) {
+            url = url + '&p_unhandled=1';
+            button.setText('All Problems');
+        } else {
+            button.setText('Unhandled');
+        }
+
+        grid.store.proxy.conn.url = url;
+        grid.store.reload();
+    }
 };

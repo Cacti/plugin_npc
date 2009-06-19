@@ -203,9 +203,10 @@ class NpcServicesController extends Controller {
 
         // Maps searchable fields passed in from the client
         $fieldMap = array('service_description' => 'o.name2',
-                          'host_name' => 'o.name1',
-                          'notes'     => 's.notes',
-                          'output'    => 'ss.output');
+                          'host_name'  => 'o.name1',
+                          'host_alias' => 'h.alias',
+                          'notes'      => 's.notes',
+                          'output'     => 'ss.output');
 
 
         // Build the where clause
@@ -214,6 +215,10 @@ class NpcServicesController extends Controller {
         }
 
         $where .= " ss.current_state in (" . $this->stringToState[$this->state] . ") AND s.config_type = " . $this->config_type;
+
+        if (isset($this->unhandled)) {
+            $where .= " AND ss.problem_has_been_acknowledged = 0 ";
+        }
 
         if ($this->id || $id) {
             $where .= sprintf(" AND s.service_object_id = %d", is_null($id) ? $this->id : $id);;
@@ -251,7 +256,7 @@ class NpcServicesController extends Controller {
             $this->currentPage,
             $this->limit
         );
-                
+
         $services = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         // Set the total number of records

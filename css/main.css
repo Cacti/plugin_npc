@@ -86,6 +86,9 @@ background-image:url(../images/icons/layout.png);
 background-image:url(../images/icons/layout_edit.png) !important;
 }
 
+.pageWhiteWrench {
+background-image:url(../images/icons/page_white_wrench.png) !important;
+}
 
 #navcontainer ul
 {

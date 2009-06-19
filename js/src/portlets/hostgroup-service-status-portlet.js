@@ -1,7 +1,5 @@
 npc.hostgroupServiceStatusGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
 
-    filter: 'any',
-
     initComponent : function()
     {
         var bufferedReader = new Ext.ux.grid.livegrid.JsonReader({
