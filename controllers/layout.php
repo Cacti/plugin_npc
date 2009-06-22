@@ -49,7 +49,6 @@ class NpcLayoutController extends controller {
           <script type="text/javascript">
 
             // Add some properties to the params array
-            npc.params.cacti_path          = "<?php echo URL_PATH; ?>";
             npc.params.npc_portlet_refresh = <?php echo read_config_option('npc_portlet_refresh'); ?>;
             npc.params.npc_date_format     = "<?php echo read_config_option('npc_date_format'); ?>";
             npc.params.npc_time_format     = "<?php echo read_config_option('npc_time_format'); ?>";
@@ -57,6 +56,12 @@ class NpcLayoutController extends controller {
             npc.params.userName            = "<?php echo db_fetch_cell('SELECT username FROM user_auth WHERE id = ' . $_SESSION['sess_user_id']); ?>";
             npc.params.npc_host_icons      = "<?php echo read_config_option('npc_host_icons'); ?>";
             npc.params.npc_service_icons   = "<?php echo read_config_option('npc_service_icons'); ?>";
+
+            npc.params.cacti_path          = "<?php echo URL_PATH; ?>";
+            var strLen = npc.params.cacti_path;
+            if (npc.params.cacti_path.charAt(strLen-1) == '/') {
+                npc.params.cacti_path = npc.params.cacti_path.slice(0,strLen-1);
+            }
 
             <?php $state = unserialize(db_fetch_cell('SELECT settings FROM npc_settings WHERE user_id = ' . $_SESSION['sess_user_id'])); ?>
             var ExtState = Ext.decode('<?php echo json_encode($state); ?>');
