@@ -244,7 +244,7 @@ npc.hosts = function(title, filter){
                 layout:'fit',
                 modal:false,
                 closable: true,
-                html: '<img src="/graph_image.php?action=view&local_graph_id='+data+'&rra_id=1">',
+                html: '<img src="'+npc.params.cacti_path+'/graph_image.php?action=view&local_graph_id='+data+'&rra_id=1">',
                 width:600
             }).show();
         }

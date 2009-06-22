@@ -49,6 +49,7 @@ class NpcLayoutController extends controller {
           <script type="text/javascript">
 
             // Add some properties to the params array
+            npc.params.cacti_path          = "<?php echo URL_PATH; ?>";
             npc.params.npc_portlet_refresh = <?php echo read_config_option('npc_portlet_refresh'); ?>;
             npc.params.npc_date_format     = "<?php echo read_config_option('npc_date_format'); ?>";
             npc.params.npc_time_format     = "<?php echo read_config_option('npc_time_format'); ?>";

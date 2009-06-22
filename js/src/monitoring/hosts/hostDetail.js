@@ -209,7 +209,7 @@ npc.hostDetail = function(record) {
                             layout:'fit',
                             modal:false,
                             closable: true,
-                            html: '<img src="/graph_image.php?action=view&local_graph_id='+gid+'&rra_id=1">',
+                            html: '<img src="'+npc.params.cacti_path+'/graph_image.php?action=view&local_graph_id='+gid+'&rra_id=1">',
                             width:640
                         }).show();
                     }

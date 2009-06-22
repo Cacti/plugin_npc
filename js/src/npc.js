@@ -533,7 +533,7 @@ npc = function() {
         },
 
         renderGraph: function(val, p, r) {
-            return String.format('<img src="/graph_image.php?action=view&local_graph_id={0}&rra_id=1&graph_height=120&graph_width=500">', r.data.local_graph_id);
+            return String.format('<img src="'+npc.params.cacti_path+'/graph_image.php?action=view&local_graph_id={0}&rra_id=1&graph_height=120&graph_width=500">', r.data.local_graph_id);
         },
 
         mapGraph: function(module, object_id) {
