@@ -79,4 +79,14 @@ npc.hostSummary = function(){
     grid.store.load();
 
     store.startAutoRefresh(refresh);
+
+    // click action
+    grid.on('cellclick', cellClick);
+
+    // Open a services grid filtered by the cell click selection
+    function cellClick(grid, rowIndex, colIndex, e) {
+        var record = grid.getStore().getAt(rowIndex);
+        var fieldName = grid.getColumnModel().getDataIndex(colIndex);
+        npc.hosts('Hosts: '+ fieldName.substr(0, 1).toUpperCase() + fieldName.substr(1), fieldName);
+    }
 };
