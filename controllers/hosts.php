@@ -226,7 +226,7 @@ class NpcHostsController extends Controller {
     function listHostsCli() {
 
         $q = new Doctrine_Query();
-        $q->select('display_name as name, host_object_id as id')->from('NpcHosts')->orderBy('display_name ASC');
+        $q->select('display_name as name, host_object_id as id, address')->from('NpcHosts')->orderBy('display_name ASC');
 
         return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
     }

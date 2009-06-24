@@ -331,14 +331,17 @@ class NpcServicesController extends Controller {
      *
      * @return array   Array of services/id's
      */
-    function listServicesCli($host) {
+    function listServicesCli($host = null) {
 
         $q = new Doctrine_Query();
         $q->select('s.*,'
                   .'h.display_name AS host,'
                   .'i.instance_name AS instance')
-          ->from('NpcServices s, s.Host h, s.Instance i')
-          ->where('h.display_name = ?', $host);
+          ->from('NpcServices s, s.Host h, s.Instance i');
+
+        if ($host) {
+          $q->where('h.display_name = ?', $host);
+        }
 
         return($this->flattenArray($q->execute(array(), Doctrine::HYDRATE_ARRAY)));
     }

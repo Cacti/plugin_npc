@@ -184,7 +184,7 @@ function listHosts() {
         $results = $obj->listHostsCli();
     }
 
-    echo "\n" . sprintf("%-10s %-30s %-30s\n", 'Id', 'Name', 'Address') . "\n";
+    echo "\n" . sprintf("%-10s %-30s %-30s\n", 'Id', 'Name', 'Address');
     foreach($results as $result) {
         echo sprintf("%-10s %-30s %-30s\n", $result['id'], $result['name'], $result['address']);
     }
@@ -197,7 +197,7 @@ function listHostgroups() {
     $obj = new NpcHostgroupsController;
     $results = $obj->listHostgroupsCli();
 
-    echo "\n" . sprintf("%-10s %-30s\n", 'Id', 'Name') . "\n";
+    echo "\n" . sprintf("%-10s %-30s\n", 'Id', 'Name');
     foreach($results as $result) {
         echo sprintf("%-10s %-30s\n", $result['id'], $result['name']);
     }
@@ -207,6 +207,8 @@ function listHostgroups() {
 }
 
 function listServices() {
+
+    $hostname = null;
 
     $parms = $_SERVER["argv"];
     foreach($parms as $parameter) {
@@ -224,7 +226,7 @@ function listServices() {
     $results = $obj->listServicesCli($hostname);
 
     $x = 1;
-    echo "\n" . sprintf("%-10s %-20s %-30s\n", 'ID', 'Host', 'Service') . "\n"; 
+    echo "\n" . sprintf("%-10s %-20s %-30s\n", 'ID', 'Host', 'Service'); 
     foreach($results as $result) {
         echo sprintf("%-10s %-20s %-30s\n", $result['service_object_id'], $result['host'], $result['display_name']); 
     }
