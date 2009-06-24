@@ -26,35 +26,35 @@ npc.serviceSummary = function(){
         id: 'serviceTotalsCRITICAL',
         header:"Critical",
         dataIndex:'critical',
-        renderer: npc.renderStatusBg,
+        renderer: npc.renderLinkedStatusBg,
         width:80,
         align:'center'
     },{
         id: 'serviceTotalsWARNING',
         header:"Warning",
         dataIndex:'warning',
-        renderer: npc.renderStatusBg,
+        renderer: npc.renderLinkedStatusBg,
         width:80,
         align:'center'
     }, {
         id: 'serviceTotalsUNKNOWN',
         header:"Unknown",
         dataIndex:'unknown',
-        renderer: npc.renderStatusBg,
+        renderer: npc.renderLinkedStatusBg,
         width:80,
         align:'center'
     }, {
         id: 'serviceTotalsOK',
         header:"Ok",
         dataIndex:'ok',
-        renderer: npc.renderStatusBg,
+        renderer: npc.renderLinkedStatusBg,
         width:80,
         align:'center'
     }, {
         id: 'serviceTotalsPENDING',
         header:"Pending",
         dataIndex:'pending',
-        renderer: npc.renderStatusBg,
+        renderer: npc.renderLinkedStatusBg,
         width:80,
         align:'center'
     }]);
@@ -92,7 +92,6 @@ npc.serviceSummary = function(){
 
     // Open a services grid filtered by the cell click selection
     function cellClick(grid, rowIndex, colIndex, e) {
-        var record = grid.getStore().getAt(rowIndex);
         var fieldName = grid.getColumnModel().getDataIndex(colIndex);
         npc.services('Services: '+ fieldName.substr(0, 1).toUpperCase() + fieldName.substr(1), fieldName);
     }

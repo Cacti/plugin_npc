@@ -9,5 +9,6 @@ class NpcHosts extends BaseNpcHosts
         $this->hasOne('NpcHoststatus as Status', array('local' => 'host_object_id', 'foreign' => 'host_object_id'));
         $this->hasMany('NpcServices as Service', array('local' => 'host_object_id', 'foreign' => 'host_object_id'));
         $this->hasMany('NpcHostchecks as Check', array('local' => 'host_object_id', 'foreign' => 'host_object_id'));
+        $this->hasMany('NpcHostgroups as Hostgroup', array('local' => 'host_object_id', 'foreign' => 'hostgroup_id', 'refClass' => 'NpcHostgroupMembers'));
     }
 }

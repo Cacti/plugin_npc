@@ -82,10 +82,11 @@ class NpcServicesController extends Controller {
      */
     function getStateInfo() {
 
-    require_once("plugins/npc/controllers/hostgroups.php");
-    $obj = new NpcHostgroupsController;
-    $hg = $obj->setupResultsArray();
-    // $results[$i]['hostgroup_object_id']
+        require_once("plugins/npc/controllers/hostgroups.php");
+
+        $obj = new NpcHostgroupsController;
+        $hg = $obj->setupResultsArray();
+        // $results[$i]['hostgroup_object_id']
 
         $fields = array(
             'current_state',
@@ -118,11 +119,11 @@ class NpcServicesController extends Controller {
 
         $results = $this->flattenArray($service);
 
-    $hostgroups = array();
-    foreach ($hg as $i => $a) {
+        $hostgroups = array();
+        foreach ($hg as $i => $a) {
             if ($a['host_name'] == $results[0]['host_name']) {
                 $hostgroups[] = $a['hostgroup_name'];
-        }
+            }
         }
 
         $x = 0;
@@ -224,6 +225,10 @@ class NpcServicesController extends Controller {
             $where .= sprintf(" AND s.service_object_id = %d", is_null($id) ? $this->id : $id);;
         }
 
+        if (isset($this->hostgroup)) {
+            $where .= sprintf(" AND hg.alias = '%s'", $this->hostgroup);
+        }
+
         if ($this->searchString) {
             $where = $this->searchClause($where, $fieldMap);    
         }
@@ -241,6 +246,8 @@ class NpcServicesController extends Controller {
                         .'h.address AS host_address,'
                         .'h.icon_image AS host_icon_image,'
                         .'h.icon_image_alt AS host_icon_image_alt,'
+                        .'h.host_object_id,'
+                        .'hg.hostgroup_id,'
                         .'o.name1 AS host_name,'
                         .'o.name2 AS service_description,'
                         .'g.local_graph_id,'
@@ -249,6 +256,7 @@ class NpcServicesController extends Controller {
                 ->leftJoin('ss.Object o')
                 ->leftJoin('ss.Service s')
                 ->leftJoin('s.Host h')
+                ->leftJoin('h.Hostgroup hg')
                 ->leftJoin('ss.Instance i')
                 ->leftJoin('ss.Graph g')
                 ->where("$where")

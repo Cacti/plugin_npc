@@ -69,42 +69,43 @@ npc.portlet.hostgroupServiceStatus = function(){
     var cm = new Ext.grid.ColumnModel([{
         header:"Hostgroup",
         dataIndex:'alias',
-        sortable:true
+        sortable:true,
+        renderer: renderAlias
     },{
         id: 'hgSSCRITICAL',
         header:"Critical",
         dataIndex:'critical',
         align:'center',
         width:40,
-        renderer: npc.renderStatusBg
+        renderer: npc.renderLinkedStatusBg
     },{
         id: 'hgSSWARNING',
         header:"Warning",
         dataIndex:'warning',
         align:'center',
         width:40,
-        renderer: npc.renderStatusBg
+        renderer: npc.renderLinkedStatusBg
     },{
         id: 'hgSSUNKNOWN',
         header:"Unknown",
         dataIndex:'unknown',
         align:'center',
         width:40,
-        renderer: npc.renderStatusBg
+        renderer: npc.renderLinkedStatusBg
     },{
         id: 'hgSSOK',
         header:"Ok",
         dataIndex:'ok',
         align:'center',
         width:20,
-        renderer: npc.renderStatusBg
+        renderer: npc.renderLinkedStatusBg
     },{
         id: 'hgSSPENDING',
         header:"Pending",
         dataIndex:'pending',
         align:'center',
         width:40,
-        renderer: npc.renderStatusBg
+        renderer: npc.renderLinkedStatusBg
     }]);
 
     // Setup the grid
@@ -160,14 +161,26 @@ npc.portlet.hostgroupServiceStatus = function(){
         grid.store.startAutoRefresh(npc.params.npc_portlet_refresh);
     }
 
-    grid.on('rowdblclick', hgClick);
+    grid.on('cellclick', hgClick);
 
     // Right click action
     grid.on('rowcontextmenu', npc.hostgroupContextMenu);
 
-    function hgClick(grid, rowIndex, e) {
-        var hoi = grid.getStore().getAt(rowIndex).json.hostgroup_object_id;
-        var name = grid.getStore().getAt(rowIndex).json.alias;
-        npc.hostgroupGrid('hostgroupGrid-'+hoi, 'Hostgroup: '+name, hoi);
+    function hgClick(grid, rowIndex, colIndex, e) {
+        var record = grid.getStore().getAt(rowIndex);
+        var group = record.data.alias;
+        var fieldName = grid.getColumnModel().getDataIndex(colIndex);
+        if (fieldName == 'alias') {
+            var hoi = record.data.hostgroup_object_id;
+            npc.hostgroupGrid('hostgroupGrid-'+hoi, 'Hostgroup: ' + group, hoi);
+        } else {
+            npc.services(group + ': ' + fieldName.substr(0, 1).toUpperCase() + fieldName.substr(1), fieldName, group);
+        }
     }
+
+    function renderAlias(val, meta){
+        meta.attr = 'style="cursor:pointer;"';
+        return String.format('{0}', val);
+    }
+
 };

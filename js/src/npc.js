@@ -355,6 +355,31 @@ npc = function() {
             return('0');
         },
 
+        renderLinkedStatusBg: function(val, meta){
+            if(val > 0){
+                if (meta.id.match('UP')) {
+                        bg = '33FF00';
+                } else if  (meta.id.match('DOWN')) {
+                        bg = 'F83838';
+                } else if  (meta.id.match('UNREACHABLE')) {
+                        bg = 'F83838';
+                } else if  (meta.id.match('PENDING')) {
+                        bg = '0099FF';
+                } else if  (meta.id.match('OK')) {
+                        bg = '33FF00';
+                } else if  (meta.id.match('CRITICAL')) {
+                        bg = 'F83838';
+                } else if  (meta.id.match('WARNING')) {
+                        bg = 'FFFF00';
+                } else if  (meta.id.match('UNKNOWN')) {
+                        bg = 'FF9900';
+                }
+                meta.attr = 'style="background-color: #' + bg + '; cursor:pointer;"';
+                return String.format('<b>{0}</b>', val);
+            }
+            return('0');
+        },
+
         renderEventIcon: function(val){
             if (val.match(/SERVICE ALERT:/) && val.match(/WARNING/)) {
                 return String.format('<img src="images/icons/error.png">');

@@ -105,7 +105,7 @@ npc.portlet.serviceProblems = function(){
     grid.on('rowcontextmenu', npc.serviceContextMenu);
 
     function toggleUnhandled(button){
-        var url = 'npc.php?module=services&action=getServices&p_state='+filter;
+        var url = 'npc.php?module=services&action=getServices&p_state=not_ok';
         if (button.pressed) {
             url = url + '&p_unhandled=1';
             button.setText('All Problems');

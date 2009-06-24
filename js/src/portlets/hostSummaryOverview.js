@@ -26,28 +26,28 @@ npc.hostSummary = function(){
         id: 'hostTotalsDOWN',
         header:"Down",
         dataIndex:'down',
-        renderer: npc.renderStatusBg,
+        renderer: npc.renderLinkedStatusBg,
         width:100,
         align:'center'
     },{
         id: 'hostTotalsUNREACHABLE',
         header:"Unreachable",
         dataIndex:'unreachable',
-        renderer: npc.renderStatusBg,
+        renderer: npc.renderLinkedStatusBg,
         width:100,
         align:'center'
     }, {
         id: 'hostTotalsUP',
         header:"Up",
         dataIndex:'up',
-        renderer: npc.renderStatusBg,
+        renderer: npc.renderLinkedStatusBg,
         width:100,
         align:'center'
     }, {
         id: 'hostTotalsPENDING',
         header:"Pending",
         dataIndex:'pending',
-        renderer: npc.renderStatusBg,
+        renderer: npc.renderLinkedStatusBg,
         width:100,
         align:'center'
     }]);

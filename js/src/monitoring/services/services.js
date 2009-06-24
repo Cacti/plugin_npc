@@ -1,6 +1,7 @@
 npc.servicesGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
 
     filter: 'any',
+    hostgroup: null,
 
     initComponent : function()
     {
@@ -43,12 +44,18 @@ npc.servicesGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
           ]
         );
 
+        var url = 'npc.php?module=services&action=getServices&p_state=' + this.filter;
+
+        if (this.hostgroup) {
+            url = url + '&p_hostgroup=' + this.hostgroup;
+        }
+
         this.store = new Ext.ux.grid.livegrid.Store({
             autoLoad   : true,
             bufferSize : 100,
             reader     : bufferedReader,
             sortInfo   : {field: 'host_name', direction: 'ASC'},
-            url        : 'npc.php?module=services&action=getServices&p_state=' + this.filter
+            url        : url
         });
 
         this.selModel = new Ext.ux.grid.livegrid.RowSelectionModel();
@@ -73,7 +80,7 @@ npc.servicesGrid = Ext.extend(Ext.ux.grid.livegrid.GridPanel, {
 
 });
 
-npc.services = function(title, filter){
+npc.services = function(title, filter, hostgroup, servicegroup){
 
     // Panel ID
     var id = title.replace(/[-' ']/g,'') + '-tab';
@@ -197,6 +204,7 @@ npc.services = function(title, filter){
         id: gridId
         ,height:800
         ,filter: filter
+        ,hostgroup: hostgroup
         ,enableDragDrop : false
         ,cm: cm
         ,stripeRows: true
@@ -210,8 +218,8 @@ npc.services = function(title, filter){
                 'last_check',
                 'next_check',
                 'local_graph_id',
-                'last_state_change',
                 'current_check_attempt',
+                'last_state_change',
                 'current_state',
                 'host_address',
                 'instance_name'
@@ -225,7 +233,7 @@ npc.services = function(title, filter){
     // Refresh the dashboard
     centerTabPanel.doLayout();
 
-    if (filter != 'any') {
+    if (filter != 'any' && filter != 'ok') {
         grid.getBottomToolbar().add('', '', '', '-', '', '', {
             text: 'Unhandled', 
             enableToggle: true, 

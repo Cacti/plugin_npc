@@ -19,7 +19,7 @@ abstract class BaseNpcHosts extends Doctrine_Record
   'values' => 
   array (
   ),
-  'primary' => true,
+  'primary' => false,
   'notnull' => true,
   'autoincrement' => true,
 ));
@@ -63,7 +63,7 @@ abstract class BaseNpcHosts extends Doctrine_Record
   'values' => 
   array (
   ),
-  'primary' => false,
+  'primary' => true,
   'default' => '0',
   'notnull' => true,
   'autoincrement' => false,
