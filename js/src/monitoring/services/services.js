@@ -139,11 +139,13 @@ npc.services = function(title, filter, hostgroup, servicegroup){
         header:"Host Alias",
         dataIndex:'host_alias',
         hidden:true,
+        sortable:true,
         width:50
     },{
         header:"Host Address",
         dataIndex:'host_address',
         hidden:true,
+        sortable:true,
         width:50
     },{
         header:"Service",
@@ -165,38 +167,46 @@ npc.services = function(title, filter, hostgroup, servicegroup){
         header:"Instance",
         dataIndex:'instance_name',
         hidden:true,
+        sortable:true,
         width:45
     },{
         header:"Last Check",
         dataIndex:'last_check',
         renderer: npc.formatDate,
         hidden:true,
+        sortable:true,
         width:100
     },{
         header:"Next Check",
         dataIndex:'next_check',
         renderer: npc.formatDate,
         hidden:true,
+        sortable:true,
         width:100
     },{
         header:"Duration",
         dataIndex:'last_state_change',
         renderer: npc.getDuration,
         hidden:true,
+        sortable:true,
         width:110
     },{
         header:"Attempt",
         dataIndex:'current_check_attempt',
         renderer: renderAttempt,
         hidden:true,
+        sortable:true,
         width:50
     },{
         header:"Plugin Output",
         dataIndex:'output',
+        sortable:true,
+        sortable:true,
         width:400
     },{
         header:"Notes",
         dataIndex:'notes',
+        sortable:true,
         width:100
     }]);
 
@@ -217,6 +227,7 @@ npc.services = function(title, filter, hostgroup, servicegroup){
             disableIndexes:[
                 'last_check',
                 'next_check',
+                'duration',
                 'local_graph_id',
                 'current_check_attempt',
                 'last_state_change',

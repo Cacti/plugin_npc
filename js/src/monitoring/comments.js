@@ -168,37 +168,44 @@ npc.comments = function(){
         header:"Host Name",
         dataIndex:'host_name',
         renderer: npc.renderHostIcons,
+        sortable:true,
         width:120
     },{
         header:"Entry Time",
         dataIndex:'comment_time',
         renderer: npc.formatDate,
+        sortable:true,
         width:120
     },{
         header:"Author",
         dataIndex:'author_name',
+        sortable:true,
         width:100
     },{
         header:"Comment",
         dataIndex:'comment_data',
+        sortable:true,
         width:400
     },{
         header:"Persistent",
         dataIndex:'is_persistent',
         renderer:npc.renderPersistent,
-	hidden:true,
+    	hidden:true,
+        sortable:true,
         width:80
     },{
         header:"Type",
         dataIndex:'entry_type',
         renderer:npc.renderCommentType,
-	hidden:true,
+    	hidden:true,
+        sortable:true,
         width:100
     },{
         header:"Expires",
         dataIndex:'expiration_time',
         renderer: npc.renderCommentExpires,
-	hidden:true,
+    	hidden:true,
+        sortable:true,
         width:120
     },{
         header:"Delete",
@@ -259,42 +266,50 @@ npc.comments = function(){
         header:"Host Name",
         dataIndex:'host_name',
         renderer: npc.renderHostIcons,
+        sortable:true,
         width:120
     },{
         header:"Service",
         dataIndex:'service_description',
         renderer: npc.renderServiceIcons,
+        sortable:true,
         width:120
     },{
         header:"Entry Time",
         dataIndex:'comment_time',
         renderer: npc.formatDate,
+        sortable:true,
         width:120
     },{
         header:"Author",
         dataIndex:'author_name',
+        sortable:true,
         width:100
     },{
         header:"Comment",
         dataIndex:'comment_data',
+        sortable:true,
         width:400
     },{
         header:"Persistent",
         dataIndex:'is_persistent',
         renderer:npc.renderPersistent,
-	hidden:true,
+    	hidden:true,
+        sortable:true,
         width:80
     },{
         header:"Type",
         dataIndex:'entry_type',
         renderer:npc.renderCommentType,
-	hidden:true,
+    	hidden:true,
+        sortable:true,
         width:100
     },{
         header:"Expires",
         dataIndex:'expiration_time',
         renderer: npc.renderCommentExpires,
-	hidden:true,
+    	hidden:true,
+        sortable:true,
         width:120
     },{
         header:"Delete",

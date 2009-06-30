@@ -66,6 +66,22 @@ class Controller {
     var $limit = 25;
 
     /**
+     * The field to sort on
+     *
+     * @var string
+     * @access public
+     */
+    var $sort = null;
+
+    /**
+     * The sort direction
+     *
+     * @var string
+     * @access public
+     */
+    var $dir = null;
+
+    /**
      * The current page to fetch results for
      *
      * @var integer

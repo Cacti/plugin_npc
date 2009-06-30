@@ -181,6 +181,12 @@ class NpcHostsController extends Controller {
             $where = $this->searchClause($where, $fieldMap);
         }
 
+        if ($this->sort) {
+            $orderBy = $this->sort . ' ' . $this->dir;
+        } else {
+            $orderBy = 'i.instance_name ASC, host_name ASC';
+        }
+
         $q = new Doctrine_Pager(
             Doctrine_Query::create()
                 ->select('i.instance_name,'
@@ -202,8 +208,8 @@ class NpcHostsController extends Controller {
                 ->leftJoin('hs.Instance i')
                 ->leftJoin('hs.Services s')
                 ->leftJoin('hs.Graph g')
-                ->where("$where")
-                ->orderby( 'i.instance_name ASC, host_name ASC' ),
+                ->where($where)
+                ->orderby($orderBy),
             $this->currentPage,
             $this->limit
         );

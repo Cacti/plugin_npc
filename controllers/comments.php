@@ -217,6 +217,12 @@ class NpcCommentsController extends Controller {
             $where = $this->searchClause($where, $fieldMap);
         }
 
+        if ($this->sort) {
+            $orderBy = $this->sort . ' ' . $this->dir;
+        } else {
+            $orderBy = 'c.entry_time DESC, c.entry_time_usec DESC';
+        }
+
         $q = new Doctrine_Pager(
             Doctrine_Query::create()
                 ->select('i.instance_name,'
@@ -232,8 +238,8 @@ class NpcCommentsController extends Controller {
                 ->leftJoin('c.Instance i')
                 ->leftJoin('c.Service s')
                 ->leftJoin('c.Host h')
-                ->where("$where")
-                ->orderby( 'c.entry_time DESC, c.entry_time_usec DESC' ),
+                ->where($where)
+                ->orderby($orderBy),
             $this->currentPage,
             $this->limit
         );

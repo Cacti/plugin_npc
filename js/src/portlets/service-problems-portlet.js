@@ -17,28 +17,34 @@ npc.portlet.serviceProblems = function(){
         header:"Host",
         dataIndex:'host_name',
         renderer:npc.renderHostIcons,
+        sortable:true,
         hidden:false
     },{
         header:"Host Alias",
         dataIndex:'host_alias',
+        sortable:true,
         hidden:true
     },{
         header:"Host Address",
         dataIndex:'host_address',
+        sortable:true,
         hidden:true
     },{
         header:"Service",
         dataIndex:'service_description',
         renderer:npc.renderServiceIcons,
+        sortable:true,
         width:100
     },{
         header:"Status",
         dataIndex:'current_state',
         renderer:npc.serviceStatusImage,
+        sortable:true,
         width:45
     },{
         header:"Plugin Output",
         dataIndex:'output',
+        sortable:true,
         width:500
     }]);
 

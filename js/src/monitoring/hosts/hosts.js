@@ -125,17 +125,20 @@ npc.hosts = function(title, filter){
         header:"Alias",
         dataIndex:'alias',
         hidden:true,
+        sortable:true,
         width:100
     },{
         header:"Address",
         dataIndex:'address',
         hidden:true,
+        sortable:true,
         width:100
     },{
         header:"Status",
         dataIndex:'current_state',
         renderer:npc.hostStatusImage,
         align:'center',
+        sortable:true,
         width:30
     },{
         header:"Graph",
@@ -146,17 +149,20 @@ npc.hosts = function(title, filter){
         header:"Last Check",
         dataIndex:'last_check',
         renderer: npc.formatDate,
+        sortable:true,
         width:100
     },{
         header:"Next Check",
         dataIndex:'next_check',
         renderer: npc.formatDate,
+        sortable:true,
         width:100
     },{
         header:"Duration",
         dataIndex:'last_state_change',
         hidden:true,
         renderer: npc.getDuration,
+        sortable:true,
         width:110
     },{
         header:"Attempt",
@@ -164,6 +170,7 @@ npc.hosts = function(title, filter){
         renderer: renderAttempt,
         hidden:true,
         align:'center',
+        sortable:true,
         width:50
     },{
         header:"Services",
@@ -174,6 +181,7 @@ npc.hosts = function(title, filter){
     },{
         header:"Plugin Output",
         dataIndex:'output',
+        sortable:true,
         width:400
     }]);
 

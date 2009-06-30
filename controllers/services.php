@@ -207,7 +207,8 @@ class NpcServicesController extends Controller {
                           'host_name'  => 'o.name1',
                           'host_alias' => 'h.alias',
                           'notes'      => 's.notes',
-                          'output'     => 'ss.output');
+                          'output'     => 'ss.output'
+        );
 
 
         // Build the where clause
@@ -231,6 +232,12 @@ class NpcServicesController extends Controller {
 
         if ($this->searchString) {
             $where = $this->searchClause($where, $fieldMap);    
+        }
+
+        if ($this->sort) {
+            $orderBy = $this->sort . ' ' . $this->dir;
+        } else {
+            $orderBy = 'host_name ASC, service_description ASC';
         }
 
         $q = new Doctrine_Pager(
@@ -259,8 +266,8 @@ class NpcServicesController extends Controller {
                 ->leftJoin('h.Hostgroup hg')
                 ->leftJoin('ss.Instance i')
                 ->leftJoin('ss.Graph g')
-                ->where("$where")
-                ->orderby( 'i.instance_name ASC, host_name ASC, service_description ASC' ),
+                ->where($where)
+                ->orderby($orderBy),
             $this->currentPage,
             $this->limit
         );
