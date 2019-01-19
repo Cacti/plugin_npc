@@ -446,8 +446,8 @@ class Controller {
 				var csrfTimeout = null;
 
 				function npcSize() {
-					var myHeight = $('.cactiContent').height();
-					$('#npc').height(myHeight);
+					var myHeight = $('#navigation_right').height();
+					$('#npc, #npc1').height(myHeight);
 				}
 
 				function getMagicToken() {
@@ -467,9 +467,9 @@ class Controller {
 
 				$(function() {
 					npcSize();
-					$(document).resize(function() {
+					$(window).resize(function() {
 						npcSize();
-					});
+					}).resize();
 
 					csrfTimeout = setTimeout(updateCsrf, 60000);
 				});
