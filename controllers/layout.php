@@ -56,14 +56,19 @@ class NpcLayoutController extends controller {
 			Ext.state.Manager.setProvider(new Ext.state.HttpProvider({url: 'npc.php?module=settings&action=save'}));
 			Ext.QuickTips.init();
 			npc.initPortlets();
+			window.parent.npcSize();
 		});
 
 		Ext.Ajax.on('beforerequest', function(conn, options) {
 			options.params.__csrf_magic = window.parent.getMagicToken();
 		});
 
-		$(function() {
+		function readySize() {
 			window.parent.npcSize();
+		}
+
+		$(function() {
+			setTimeout(readySize, 350);
 		});
 
 		</script>
