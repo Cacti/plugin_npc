@@ -1,19 +1,14 @@
 #!/usr/bin/php -q
 <?php
 
-/* do NOT run this script through a web browser */
-if (!isset($_SERVER["argv"][0]) || isset($_SERVER['REQUEST_METHOD'])  || isset($_SERVER['REMOTE_ADDR'])) {
-        die("<br><strong>This script is only meant to run at the command line.</strong>");
-}
-
-include(dirname(__FILE__)."/../../include/global.php");
-include(dirname(__FILE__) . "/config.php");
-require_once($config["base_path"]."/plugins/npc/controllers/hosts.php");
-require_once($config["base_path"]."/plugins/npc/controllers/hostgroups.php");
-require_once($config["base_path"]."/plugins/npc/controllers/services.php");
+include(dirname(__FILE__) . '/../../include/cli_check.php');
+include(dirname(__FILE__) . '/config.php');
+require_once($config['base_path'] . '/plugins/npc/controllers/hosts.php');
+require_once($config['base_path'] . '/plugins/npc/controllers/hostgroups.php');
+require_once($config['base_path'] . '/plugins/npc/controllers/services.php');
 
 /* process calling arguments */
-$parms = $_SERVER["argv"];
+$parms = $_SERVER['argv'];
 array_shift($parms);
 
 $listHosts      = null;
@@ -22,71 +17,69 @@ $listServices   = null;
 $getPerfHistory = null;
 $getPerfData    = null;
 $begin          = null;
-$end             = null;
+$end            = null;
 $objectId       = null;
 $serviceName    = null;
 $hostname       = null;
 $type           = null;
 
-
 if (!sizeof($parms)) {
-    display_help();
-    exit(0);
+	display_help();
+	exit(0);
 } else {
-
-    foreach($parms as $parameter) {
-        @list($arg, $value) = @explode("=", $parameter);
+    foreach ($parms as $parameter) {
+		@list($arg, $value) = @explode('=', $parameter);
 
         switch ($arg) {
-            case "--type":
+            case '--type':
                 $type = trim($value);
                 break;
 
-            case "--id":
+            case '--id':
                 $objectId = trim($value);
                 break;
 
-            case "--service":
+            case '--service':
                 $serviceName = trim($value);
                 break;
 
-            case "--host":
+            case '--host':
                 $hostname = trim($value);
                 break;
 
-            case "--hostgroup":
+            case '--hostgroup':
                 $hostgroup = trim($value);
                 break;
 
-            case "--ds":
+            case '--ds':
                 $ds = trim($value);
                 break;
 
-            case "--list-hosts":
+            case '--list-hosts':
                 $listHosts = 1;
                 break;
 
-            case "--list-hostgroups":
+            case '--list-hostgroups':
                 $listHostgroups = 1;
                 break;
 
-            case "--list-services":
+            case '--list-services':
                 $listServices = 1;
                 break;
 
-            case "--perfdata":
+            case '--perfdata':
                 $getPerfData = 1;
                 break;
 
-            case "--begin":
+            case '--begin':
                 $begin = trim($value);
                 break;
 
-            case "--end":
+            case '--end':
                 $end = trim($value);
                 break;
 
-            case "--perf-history":
+            case '--perf-history':
                 $getPerfHistory = 1;
                 break;
 
@@ -104,148 +97,137 @@ if ($listHostgroups) { listHostgroups(); }
 if ($listServices)   { listServices();   }
 
 function getPerfHistory() {
+	global $hostname, $serviceName, $begin, $end;
 
-    global $hostname, $serviceName, $begin, $end;
+	if ($serviceName) {
+		$class = 'NpcServicesController';
+	} else {
+		$class = 'NpcHostsController';
+	}
 
-    if ($serviceName) {
-        $class = 'NpcServicesController';
-    } else {
-        $class = 'NpcHostsController';
-    }
+	$obj = new $class;
+	$results = $obj->getPerfHistory($hostname, $serviceName, $begin, $end);
 
-    $obj = new $class;
-    $results = $obj->getPerfHistory($hostname, $serviceName, $begin, $end);
+	$count = count($results);
 
-    $count = count($results);
+	for ($i = 0; $i < $count; $i++) {
+		//$output = '';
+		//$perfParts = explode(" ", $results[$i]['perfdata']);
 
-    for ($i = 0; $i < $count; $i++) {
-        //$output = '';
-        //$perfParts = explode(" ", $results[$i]['perfdata']);
-
-        //foreach ($perfParts as $perf) {
-        //    if (preg_match("/=/", $perf)) {
-        //        preg_match("/(\S+)=([-+]?[0-9]*\.?[0-9]+)/", $perf, $matches);
-        //        $output .= $matches[1] . ":" . $matches[2] . " ";
-        //    }
-        //}
-        //echo $results[$i]['end_time'] . " " . $output . "\n";
-        echo $results[$i]['end_time'] . " " . $results[$i]['perfdata'] . "\n";
-    }
-
+		//foreach ($perfParts as $perf) {
+		//    if (preg_match("/=/", $perf)) {
+		//        preg_match("/(\S+)=([-+]?[0-9]*\.?[0-9]+)/", $perf, $matches);
+		//        $output .= $matches[1] . ":" . $matches[2] . " ";
+		//    }
+		//}
+		//print $results[$i]['end_time'] . " " . $output . "\n";
+		print $results[$i]['end_time'] . ' ' . $results[$i]['perfdata'] . "\n";
+	}
 }
 
 function getPerfData() {
+	global $objectId, $hostname, $serviceName, $type;
 
-    global $objectId, $hostname, $serviceName, $type;
+	if ($type == 'host') {
+		$class = 'NpcHostsController';
+	} else {
+		$class = 'NpcServicesController';
+	}
 
-    if ($type == 'host') {
-        $class = 'NpcHostsController';
-    } else {
-        $class = 'NpcServicesController';
-    }
+	$obj = new $class;
+	$results = $obj->getPerfData($objectId, $hostname, $serviceName);
 
-    $obj = new $class;
-    $results = $obj->getPerfData($objectId, $hostname, $serviceName);
+	$perfParts = explode(' ', $results[0]['perfdata']);
 
-    $perfParts = explode(" ", $results[0]['perfdata']);
+	$output = '';
 
-    $output = '';
+	foreach ($perfParts as $perf) {
+		if (preg_match('/=/', $perf)) {
+			preg_match('/(\S+)=([-+]?[0-9]*\.?[0-9]+)/', $perf, $matches);
+			if (preg_match('/^iso./', $matches[1])) {
+				$matches[1] = 'output';
+			}
+			$output .= $matches[1] . ':' . $matches[2] . ' ';
+		}
+	}
 
-    foreach ($perfParts as $perf) {
-        if (preg_match("/=/", $perf)) {
-            preg_match("/(\S+)=([-+]?[0-9]*\.?[0-9]+)/", $perf, $matches);
-            if (preg_match("/^iso./", $matches[1])) {
-                $matches[1] = 'output';
-            }
-            $output .= $matches[1] . ":" . $matches[2] . " ";
-        }
-    }
-
-    echo $output . "\n";
+	print $output . "\n";
 }
 
 function listHosts() {
+    $parms = $_SERVER['argv'];
 
-    $parms = $_SERVER["argv"];
-    foreach($parms as $parameter) {
-        @list($arg, $value) = @explode("=", $parameter);
-        switch ($arg) {
-            case "--hostgroup":
-                $hostgroup = trim($value);
-                break;
-        }
-    }
+	foreach ($parms as $parameter) {
+		@list($arg, $value) = @explode('=', $parameter);
+		switch ($arg) {
+			case '--hostgroup':
+			$hostgroup = trim($value);
+			break;
+		}
+	}
 
-    if (isset($hostgroup)) { 
-        $obj = new NpcHostgroupsController;
-        $results = $obj->listHostsCli($hostgroup);
-    } else {
-        $obj = new NpcHostsController;
-        $results = $obj->listHostsCli();
-    }
+	if (isset($hostgroup)) {
+		$obj = new NpcHostgroupsController;
+		$results = $obj->listHostsCli($hostgroup);
+	} else {
+		$obj = new NpcHostsController;
+		$results = $obj->listHostsCli();
+	}
 
-    echo "\n" . sprintf("%-10s %-30s %-30s\n", 'Id', 'Name', 'Address');
-    foreach($results as $result) {
-        echo sprintf("%-10s %-30s %-30s\n", $result['id'], $result['name'], $result['address']);
-    }
+	print "\n" . sprintf("%-10s %-30s %-30s\n", 'Id', 'Name', 'Address') . "\n";
+	foreach ($results as $result) {
+		print sprintf("%-10s %-30s %-30s\n", $result['id'], $result['name'], $result['address']);
+	}
 
-    exit;
+	exit;
 }
 
 function listHostgroups() {
+	$obj = new NpcHostgroupsController;
+	$results = $obj->listHostgroupsCli();
 
-    $obj = new NpcHostgroupsController;
-    $results = $obj->listHostgroupsCli();
+	print "\n" . sprintf("%-10s %-30s\n", 'Id', 'Name') . "\n";
+	foreach ($results as $result) {
+		print sprintf("%-10s %-30s\n", $result['id'], $result['name']);
+	}
 
-    echo "\n" . sprintf("%-10s %-30s\n", 'Id', 'Name');
-    foreach($results as $result) {
-        echo sprintf("%-10s %-30s\n", $result['id'], $result['name']);
-    }
-
-
-    exit;
+	exit;
 }
 
 function listServices() {
+	$parms = $_SERVER['argv'];
+	foreach ($parms as $parameter) {
+		@list($arg, $value) = @explode('=', $parameter);
 
-    $hostname = null;
+		switch ($arg) {
+			case '--host':
+				$hostname = trim($value);
+				break;
+		}
+	}
 
-    $parms = $_SERVER["argv"];
-    foreach($parms as $parameter) {
-        @list($arg, $value) = @explode("=", $parameter);
+	$obj = new NpcServicesController;
+	$results = $obj->listServicesCli($hostname);
 
-        switch ($arg) {
-            case "--host":
-                $hostname = trim($value);
-                break;
-        }
-    }
+	$x = 1;
+	print "\n" . sprintf("%-10s %-20s %-30s\n", 'ID', 'Host', 'Service') . "\n";
+	foreach ($results as $result) {
+		print sprintf("%-10s %-20s %-30s\n", $result['service_object_id'], $result['host'], $result['display_name']);
+	}
 
-
-    $obj = new NpcServicesController;
-    $results = $obj->listServicesCli($hostname);
-
-    $x = 1;
-    echo "\n" . sprintf("%-10s %-20s %-30s\n", 'ID', 'Host', 'Service'); 
-    foreach($results as $result) {
-        echo sprintf("%-10s %-20s %-30s\n", $result['service_object_id'], $result['host'], $result['display_name']); 
-    }
-
-    exit;
+	exit;
 }
 
 function display_help() {
-    echo "A simple command line utility to fetch host or service performance data from NPC\n\n";
-    echo "usage: perfdata.php --type=[host|service] --id=[ID] --datasource=[DS]\n\n";
-    echo "Required:\n";
-    echo "    --type          Type specifies that we are querting perfdata for a host or service\n";
-    echo "    --id            The host or service object ID\n";
-    echo "Optional:\n";
-    echo "    --ds            Return only the specified datasource. All returned by default.\n";
-    echo "List Options:\n";
-    echo "    --list-hosts\n";
-    echo "    --list-services\n\n";
+	print "A simple command line utility to fetch host or service performance data from NPC\n\n";
+	print "usage: perfdata.php --type=[host|service] --id=[ID] --datasource=[DS]\n\n";
+	print "Required:\n";
+	print "    --type          Type specifies that we are querting perfdata for a host or service\n";
+	print "    --id            The host or service object ID\n";
+	print "Optional:\n";
+	print "    --ds            Return only the specified datasource. All returned by default.\n";
+	print "List Options:\n";
+	print "    --list-hosts\n";
+	print "    --list-services\n\n";
 }
-
-?>
 

@@ -17,9 +17,9 @@
 /**
  * Downtime controller class
  *
- * Downtime controller provides functionality, such as building the 
+ * Downtime controller provides functionality, such as building the
  * Doctrine querys and formatting output.
- * 
+ *
  * @package     npc
  * @subpackage  npc.controllers
  */
@@ -67,7 +67,7 @@ class NpcDowntimeController extends Controller {
      * Returns true if the requested host/service is currently in
      * a schedule downtime.
      *
-     * @return boolean 
+     * @return boolean
      */
     function inDowntime($id) {
         $results = $this->scheduledDowntime($id);
@@ -110,7 +110,7 @@ class NpcDowntimeController extends Controller {
             $name .= "Starting @ " . $start;
 
             $output[$i] = array(
-                'name' => $name, 
+                'name' => $name,
                 'value' => $entry['internal_downtime_id']
             );
         }
@@ -120,7 +120,7 @@ class NpcDowntimeController extends Controller {
 
     /**
      * scheduledDowntime
-     * 
+     *
      * Returns scheduled downtime
      *
      * @return array
@@ -151,7 +151,7 @@ class NpcDowntimeController extends Controller {
 
     /**
      * downtimeHistory
-     * 
+     *
      * Returns downtime history
      *
      * @return array
@@ -182,7 +182,7 @@ class NpcDowntimeController extends Controller {
 
         $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
-        // Set the total number of records 
+        // Set the total number of records
         $this->numRecords = $q->getNumResults();
 
         return($results);

@@ -17,9 +17,9 @@
 /**
  * Logentries controller class
  *
- * Logentries controller provides basic functionality, such as building the 
+ * Logentries controller provides basic functionality, such as building the
  * Doctrine querys and formatting output.
- * 
+ *
  * @package     npc
  * @subpackage  npc.controllers
  */
@@ -27,7 +27,7 @@ class NpcLogentriesController extends Controller {
 
     /**
      * getLogs
-     * 
+     *
      * Returns log entries
      *
      * @return string   json output

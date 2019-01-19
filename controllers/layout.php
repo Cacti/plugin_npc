@@ -1,109 +1,82 @@
-<?php /* ex: set tabstop=4 expandtab: */
-
+<?php
 
 class NpcLayoutController extends controller {
-
     var $params = array();
 
     function drawFrame($params) {
-
         $config = $params['config'];
 
-        include_once($config["base_path"]."/plugins/npc/top_graph_header.php");
-
-    ?>
-
-        <style type="text/css">
-            iframe {border: 0px;}
-        </style>
-
-        <iframe src="<?php echo $config["url_path"]; ?>plugins/npc/npc.php?module=layout&action=drawLayout" frameborder="0" 
-                border="0" width="100%" height="100%" marginwidth="0" marginheight="0"></iframe>
-
-    <?php
-
-        include_once($config["include_path"] . "/bottom_footer.php");
-
-    } // end drawFrame
+		$this->drawCommonFrame($config['url_path'] . 'plugins/npc/npc.php?module=layout&action=drawLayout', $params);
+    }
 
     function drawLayout($params) {
+		$config = $params['config'];
+		$npc_base         = $config['url_path'] . 'plugins/npc/js/';
+		$npc_ext_base     = $config['url_path'] . 'plugins/npc/js/ext/';
+		$npc_css_base     = $config['url_path'] . 'plugins/npc/css/';
+		?>
 
-        $config = $params['config'];
-    ?>
+		<script type='text/javascript' src='<?php echo $config['url_path']; ?>include/js/jquery.js'></script>
 
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-        <html>
-        <head>
-          <link rel="stylesheet" type="text/css" href="<?php echo $config["url_path"]; ?>plugins/npc/js/ext/resources/css/ext-all.css" />
-          <link rel="stylesheet" type="text/css" href="<?php echo $config["url_path"]; ?>plugins/npc/js/ext/resources/css/xtheme-slate.css" />
-          <link rel="stylesheet" type="text/css" href="<?php echo $config["url_path"]; ?>plugins/npc/css/main.css" />
-          <!-- <link rel="stylesheet" type="text/css" href="<?php echo $config["url_path"]; ?>plugins/npc/js/ext/resources/css/xtheme-darkgray.css" /> -->
-          <!-- <link rel="stylesheet" type="text/css" href="<?php echo $config["url_path"]; ?>plugins/npc/js/ext/resources/css/xtheme-gray.css" /> -->
-          <link rel="stylesheet" type="text/css" href="<?php echo $config["url_path"]; ?>plugins/npc/css/ext-ux-livegrid.css" />
+		<link rel='stylesheet' type='text/css' href='<?php echo $npc_ext_base; ?>resources/css/ext-all.css' />
+		<link rel='stylesheet' type='text/css' href='<?php echo $npc_ext_base; ?>resources/css/xtheme-slate.css' />
+		<link rel='stylesheet' type='text/css' href='<?php echo $npc_css_base; ?>main.css' />
+		<!-- <link rel="stylesheet" type="text/css" href="<?php echo $npc_ext_base; ?>resources/css/xtheme-darkgray.css" /> -->
+		<!-- <link rel="stylesheet" type="text/css" href="<?php echo $npc_ext_base; ?>resources/css/xtheme-gray.css" /> -->
+		<link rel='stylesheet' type='text/css' href='<?php echo $npc_css_base; ?>ext-ux-livegrid.css' />
 
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/ext/adapter/ext/ext-base.js"></script>
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/ext/ext-all.js"></script>
+		<script type='text/javascript' src='<?php echo $npc_ext_base; ?>adapter/ext/ext-base.js'></script>
+		<script type='text/javascript' src='<?php echo $npc_ext_base; ?>ext-all.js'></script>
+		<script type='text/javascript' src='<?php echo $npc_base; ?>npc-all-min.js'></script>
+		<script type='text/javascript' src='<?php echo $npc_base; ?>portlets-all-min.js'></script>
+		<script type='text/javascript'>
 
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/npc-all-min.js"></script>
-          
-          <script type="text/javascript">
+		// Add some properties to the params array
+		npc.params.npc_portlet_refresh = <?php echo read_config_option('npc_portlet_refresh'); ?>;
+		npc.params.npc_date_format     = '<?php echo read_config_option('npc_date_format'); ?>';
+		npc.params.npc_time_format     = '<?php echo read_config_option('npc_time_format'); ?>';
+		npc.params.npc_nagios_url      = '<?php echo read_config_option('npc_nagios_url'); ?>';
+		npc.params.userName            = '<?php echo db_fetch_cell_prepared('SELECT username FROM user_auth WHERE id = ?', array($_SESSION['sess_user_id'])); ?>';
+		npc.params.npc_host_icons      = '<?php echo read_config_option('npc_host_icons'); ?>';
+		npc.params.npc_service_icons   = '<?php echo read_config_option('npc_service_icons'); ?>';
 
-            // Add some properties to the params array
-            npc.params.npc_portlet_refresh = <?php echo read_config_option('npc_portlet_refresh'); ?>;
-            npc.params.npc_date_format     = "<?php echo read_config_option('npc_date_format'); ?>";
-            npc.params.npc_time_format     = "<?php echo read_config_option('npc_time_format'); ?>";
-            npc.params.npc_nagios_url      = "<?php echo read_config_option('npc_nagios_url'); ?>";
-            npc.params.userName            = "<?php echo db_fetch_cell('SELECT username FROM user_auth WHERE id = ' . $_SESSION['sess_user_id']); ?>";
-            npc.params.npc_host_icons      = "<?php echo read_config_option('npc_host_icons'); ?>";
-            npc.params.npc_service_icons   = "<?php echo read_config_option('npc_service_icons'); ?>";
+		npc.params.cacti_path          = '<?php echo URL_PATH; ?>';
+		var strLen = npc.params.cacti_path;
+		if (npc.params.cacti_path.charAt(strLen-1) == '/') {
+			npc.params.cacti_path = npc.params.cacti_path.slice(0,strLen-1);
+		}
 
-            npc.params.cacti_path          = "<?php echo URL_PATH; ?>";
+		<?php $state = unserialize(db_fetch_cell_prepared('SELECT settings FROM npc_settings WHERE user_id = ?', array($_SESSION['sess_user_id']))); ?>
+		var ExtState = Ext.decode('<?php echo json_encode($state); ?>');
 
-            <?php $state = unserialize(db_fetch_cell('SELECT settings FROM npc_settings WHERE user_id = ' . $_SESSION['sess_user_id'])); ?>
-            var ExtState = Ext.decode('<?php echo json_encode($state); ?>');
+		// Launch the app
+		Ext.onReady(npc.init, npc);
 
-            // Launch the app
-            Ext.onReady(npc.init, npc);
+		Ext.onReady(function() {
+			Ext.state.Manager.setProvider(new Ext.state.HttpProvider({url: 'npc.php?module=settings&action=save'}));
+			Ext.QuickTips.init();
+			npc.initPortlets();
+		});
 
-            Ext.onReady(function() {
-                Ext.state.Manager.setProvider(new Ext.state.HttpProvider({url: 'npc.php?module=settings&action=save'}));
-                Ext.QuickTips.init();
-            });
-          </script>
+		Ext.Ajax.on('beforerequest', function(conn, options) {
+			options.params.__csrf_magic = window.parent.getMagicToken();
+		});
 
-          <!-- Portlets -->
-          <script type="text/javascript" src="<?php echo $config["url_path"]; ?>plugins/npc/js/portlets-all-min.js"></script>
+		$(function() {
+			window.parent.npcSize();
+		});
 
-          <script type="text/javascript">
-            Ext.onReady(function() {
-              npc.initPortlets();
-            });
-          </script>
-
-        </head>
-
-         <body>
-
-          <div id="north">
-              <div id="msg-div"></div>
-          </div>
-
-          <div id="west">
-
-            <div id="west-monitoring"></div>
-
-            <div id="west-config"></div>
-
-          </div>
-
-          <div id="props-panel" style="width:200px;height:200px;overflow:hidden;"></div>
-
-          <div id="south"></div>
-
-         </body>
-        </html>
-
-    <?php
-
+		</script>
+		<div id='north'>
+			<div id='msg-div'></div>
+		</div>
+		<div id='west'>
+			<div id='west-monitoring'></div>
+			<div id='west-config'></div>
+		</div>
+		<div id='props-panel' style='width:200px;height:200px;overflow:hidden;'></div>
+		<div id='south'></div>
+		<?php
     } // end drawLayout
 }
+

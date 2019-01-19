@@ -3,7 +3,7 @@
  * State controller class
  *
  * Handles saving and retrieving NPC application state/
- * 
+ *
  *
  * @filesource
  * @author              Billy Gunn <billy@gunn.org>
@@ -20,7 +20,7 @@
  *
  * Handles reading/writing state events to the
  * npc_settings table.
- * 
+ *
  * @package     npc
  * @subpackage  npc.controllers
  */
@@ -30,13 +30,13 @@ class NpcSettingsController extends Controller {
 
         $q = new Doctrine_Query();
         $settings = $this->conn->getTable('NpcSettings')->find($id);
-        
+
         return($settings);
 
     }
 
     function save($params) {
-    
+
         $user_id = $_SESSION['sess_user_id'];
         $obj = $this->getSettings($user_id);
 
@@ -46,7 +46,7 @@ class NpcSettingsController extends Controller {
         $obj->settings = serialize($settings);
         $obj->save();
 
-        return(true); 
+        return(true);
     }
 
 }

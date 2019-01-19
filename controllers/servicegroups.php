@@ -20,9 +20,9 @@ require_once("plugins/npc/controllers/comments.php");
 /**
  * Servicegroups controller class
  *
- * Servicegroups controller provides functionality, such as building the 
+ * Servicegroups controller provides functionality, such as building the
  * Doctrine querys and formatting output.
- * 
+ *
  * @package     npc
  * @subpackage  npc.controllers
  */
@@ -39,7 +39,7 @@ class NpcServicegroupsController extends Controller {
 
     /**
      * getHostStatusPortlet
-     * 
+     *
      * Returns host status counts by servicegroup.
      *
      * @return string   json output
@@ -57,13 +57,13 @@ class NpcServicegroupsController extends Controller {
         $fields = array('servicegroup_object_id',
                         'alias',
                         'instance_id');
-                 
+
         // Combine servicegroup/service/host etc. into a single record
         $results = $this->setupResultsArray();
 
         // Loop through the results array and build an ouput array
         // that includes a single record per servicegroup
-        // and the number of crit, warn , ok services within 
+        // and the number of crit, warn , ok services within
         // that servicegroup.
         for ($i = 0; $i < count($results); $i++) {
             $sg = $results[$i]['servicegroup_object_id'];
@@ -85,7 +85,7 @@ class NpcServicegroupsController extends Controller {
             }
         }
 
-        // Set the total number of records 
+        // Set the total number of records
         $this->numRecords = count($output);
 
         // Implement paging by slicing the ouput array
@@ -102,7 +102,7 @@ class NpcServicegroupsController extends Controller {
 
     /**
      * getServicegroupServiceStatus
-     * 
+     *
      * Returns service status counts by servicegroup.
      *
      * @return string   json output
@@ -117,7 +117,7 @@ class NpcServicegroupsController extends Controller {
         $fields = array('servicegroup_object_id',
                         'alias',
                         'instance_id');
-                 
+
         // Combine servicegroup/service/host etc. into a single record
         $results = $this->setupResultsArray();
 
@@ -131,7 +131,7 @@ class NpcServicegroupsController extends Controller {
                                    'pending'  => 0);
             }
             foreach ($results[$i] as $key => $val) {
-                if ($key == 'current_state') { 
+                if ($key == 'current_state') {
                     $output[$sg][$this->serviceState[$val]]++;
                 } else if(in_array($key, $fields)) {
                     $output[$sg][$key] = $val;
@@ -139,7 +139,7 @@ class NpcServicegroupsController extends Controller {
             }
         }
 
-        // Set the total number of records 
+        // Set the total number of records
         $this->numRecords = count($output);
 
         // Implement paging by slicing the ouput array
@@ -156,8 +156,8 @@ class NpcServicegroupsController extends Controller {
 
     /**
      * getOverview
-     * 
-     * Returns all hosts by servicegroup. Used to populate 
+     *
+     * Returns all hosts by servicegroup. Used to populate
      * the Servicegroup Grid screen.
      *
      * @return string   json output
@@ -170,7 +170,7 @@ class NpcServicegroupsController extends Controller {
                         'alias',
                         'instance_id',
                         'host_name');
-                 
+
         // Initialize the output array
         $output = array();
 
@@ -179,7 +179,7 @@ class NpcServicegroupsController extends Controller {
 
         // Loop through the results array and build an ouput array
         // that includes a single record per host with the servicegroup
-        // and the number of crit, warn , ok services within 
+        // and the number of crit, warn , ok services within
         // that servicegroup.
         for ($i = 0; $i < count($results); $i++) {
             $sg = $results[$i]['servicegroup_object_id'];
@@ -194,7 +194,7 @@ class NpcServicegroupsController extends Controller {
                                           'pending'  => 0);
             }
             foreach ($results[$i] as $key => $val) {
-                if ($key == 'current_state') { 
+                if ($key == 'current_state') {
                     $temp[$sg][$host][$this->serviceState[$val]]++;
                 } else if(in_array($key, $fields)) {
                     $temp[$sg][$host][$key] = $val;
@@ -212,7 +212,7 @@ class NpcServicegroupsController extends Controller {
             }
         }
 
-        // Set the total number of records 
+        // Set the total number of records
         $this->numRecords = count($output);
 
         // Implement paging by slicing the ouput array
@@ -225,7 +225,7 @@ class NpcServicegroupsController extends Controller {
 
     /**
      * getHostSummary
-     * 
+     *
      * Returns host status by servicegroup
      *
      * @return string   json output
@@ -239,8 +239,8 @@ class NpcServicegroupsController extends Controller {
 
     /**
      * getServices
-     * 
-     * Returns all services by servicegroup. Used to populate 
+     *
+     * Returns all services by servicegroup. Used to populate
      * the Servicegroup Grid screen.
      *
      * @return string   json output
@@ -263,7 +263,7 @@ class NpcServicegroupsController extends Controller {
             $services[$i]['comment'] = $comments->getLastComment($services[$i]['service_object_id']);
         }
 
-        // Set the total number of records 
+        // Set the total number of records
         $this->numRecords = count($services);
 
         // Implement paging by slicing the ouput array
@@ -321,7 +321,7 @@ class NpcServicegroupsController extends Controller {
                     .'o1.name1 AS servicegroup_name,'
                     .'o2.name1 AS host_name,'
                     .'o2.name2 AS service_description,'
-                    .'ss.*,' 
+                    .'ss.*,'
                     .'sg.*')
             ->from('NpcServicegroups sg')
             ->innerJoin('sg.ServicegroupMembers sgm')
@@ -341,7 +341,7 @@ class NpcServicegroupsController extends Controller {
 
     /**
      * setupResultsArray
-     * 
+     *
      * A utility method to handle some common formatting tasks.
      *
      * @return array

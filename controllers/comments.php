@@ -17,9 +17,9 @@
 /**
  * Comments controller class
  *
- * Comments controller provides functionality, such as building the 
+ * Comments controller provides functionality, such as building the
  * Doctrine querys and formatting output.
- * 
+ *
  * @package     npc
  * @subpackage  npc.controllers
  */
@@ -27,7 +27,7 @@ class NpcCommentsController extends Controller {
 
     /**
      * getAck
-     * 
+     *
      * An accessor method to retrieve an acknowlegement
      *
      * @return string   The acknowledgement
@@ -40,7 +40,7 @@ class NpcCommentsController extends Controller {
 
     /**
      * getLastComment
-     * 
+     *
      * An accessor method to retrieve the latest comment
      * that is not an aknowledgement.
      *
@@ -58,7 +58,7 @@ class NpcCommentsController extends Controller {
 
     /**
      * getComments
-     * 
+     *
      * An accessor method to return comments
      *
      * @return string   json output
@@ -69,7 +69,7 @@ class NpcCommentsController extends Controller {
 
     /**
      * getHostComments
-     * 
+     *
      * An accessor method to return all host comments
      *
      * @return string   json output
@@ -85,7 +85,7 @@ class NpcCommentsController extends Controller {
 
     /**
      * getServiceComments
-     * 
+     *
      * An accessor method to return all service comments
      *
      * @return string   json output
@@ -108,7 +108,7 @@ class NpcCommentsController extends Controller {
 
     /**
      * deleteAllHostComments
-     * 
+     *
      * Delete all host comments.
      *
      * @return string   json output
@@ -120,7 +120,7 @@ class NpcCommentsController extends Controller {
         $seen = array();
 
         $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 1'));
-        
+
         for ($i = 0; $i < count($results); $i++) {
             $host = $results[$i]['host_name'];
             if (!isset($seen[$host])) {
@@ -130,13 +130,13 @@ class NpcCommentsController extends Controller {
                 );
                 NpcNagiosController::command($params);
                 $seen[$host] = 1;
-            }   
+            }
         }
     }
 
     /**
      * deleteAllServiceComments
-     * 
+     *
      * Delete all service comments.
      *
      * @return string   json output
@@ -148,7 +148,7 @@ class NpcCommentsController extends Controller {
         $seen = array();
 
         $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 2'));
-        
+
         for ($i = 0; $i < count($results); $i++) {
             $host = $results[$i]['host_name'];
             $service = $results[$i]['service_description'];
@@ -160,13 +160,13 @@ class NpcCommentsController extends Controller {
                 );
                 NpcNagiosController::command($params);
                 $seen[$host][$service] = 1;
-            }   
+            }
         }
     }
 
     /**
      * getHostIcon
-     * 
+     *
      * Returns host icon image and alt data
      *
      * @return array  icon and alt
@@ -192,7 +192,7 @@ class NpcCommentsController extends Controller {
 
     /**
      * comments
-     * 
+     *
      * Returns a an array of comments
      *
      * @return array  The comments
@@ -217,11 +217,11 @@ class NpcCommentsController extends Controller {
             $where = $this->searchClause($where, $fieldMap);
         }
 
-        if ($this->sort) {
-            $orderBy = $this->sort . ' ' . $this->dir;
-        } else {
-            $orderBy = 'c.entry_time DESC, c.entry_time_usec DESC';
-        }
+		if ($this->sort) {
+			$orderBy = $this->sort . ' ' . $this->dir;
+		} else {
+			$orderBy = 'c.entry_time DESC, c.entry_time_usec DESC';
+		}
 
         $q = new Doctrine_Pager(
             Doctrine_Query::create()
@@ -244,10 +244,9 @@ class NpcCommentsController extends Controller {
             $this->limit
         );
 
-
         $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
-        // Set the total number of records 
+        // Set the total number of records
         $this->numRecords = $q->getNumResults();
 
         return($results);

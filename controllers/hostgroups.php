@@ -25,16 +25,16 @@ if (isset($config)) {
 /**
  * Hostgroups controller class
  *
- * Hostgroups controller provides functionality, such as building the 
+ * Hostgroups controller provides functionality, such as building the
  * Doctrine querys and formatting output.
- * 
+ *
  * @package     npc
  * @subpackage  npc.controllers
  */
 class NpcHostgroupsController extends Controller {
 
     /**
-     * A service status cache 
+     * A service status cache
      *
      * @var array
      * @access private
@@ -43,7 +43,7 @@ class NpcHostgroupsController extends Controller {
 
     /**
      * getHostgroupHostStatus
-     * 
+     *
      * Returns host status counts by hostgroup.
      *
      * @return string   json output
@@ -81,7 +81,7 @@ class NpcHostgroupsController extends Controller {
             }
         }
 
-        // Set the total number of records 
+        // Set the total number of records
         $this->numRecords = count($output);
 
         // Implement paging by slicing the ouput array
@@ -96,7 +96,7 @@ class NpcHostgroupsController extends Controller {
 
     /**
      * getHostgroupServiceStatus
-     * 
+     *
      * Returns service status counts by hostgroup.
      *
      * @return string   json output
@@ -110,7 +110,7 @@ class NpcHostgroupsController extends Controller {
                         'alias',
                         'hostgroup_name',
                         'instance_id');
-                 
+
         // Combine servicegroup/service/host etc. into a single record
         $results = $this->setupResultsArray();
 
@@ -131,7 +131,7 @@ class NpcHostgroupsController extends Controller {
             }
         }
 
-        // Set the total number of records 
+        // Set the total number of records
         $this->numRecords = count($output);
 
         // Implement paging by slicing the ouput array
@@ -147,8 +147,8 @@ class NpcHostgroupsController extends Controller {
 
     /**
      * getOverview
-     * 
-     * Returns all hosts by hostgroup. Used to populate 
+     *
+     * Returns all hosts by hostgroup. Used to populate
      * the Servicegroup Grid screen.
      *
      * @return string   json output
@@ -159,7 +159,7 @@ class NpcHostgroupsController extends Controller {
                         'alias',
                         'instance_id',
                         'host_name');
-                 
+
         // Initialize the output array
         $output = array();
 
@@ -168,7 +168,7 @@ class NpcHostgroupsController extends Controller {
 
         /*  Loop through the results array and build an ouput array
          *  that includes a single record per host within the hostgroup
-         *  and the number of crit, warn , ok services within 
+         *  and the number of crit, warn , ok services within
          *  that hostgroup.
          */
         for ($i = 0; $i < count($results); $i++) {
@@ -194,7 +194,7 @@ class NpcHostgroupsController extends Controller {
             }
         }
 
-        // Set the total number of records 
+        // Set the total number of records
         $this->numRecords = count($output);
 
         // Implement paging by slicing the ouput array
@@ -206,8 +206,8 @@ class NpcHostgroupsController extends Controller {
 
     /**
      * getHosts
-     * 
-     * Returns all hosts by hostgroup. Used to populate 
+     *
+     * Returns all hosts by hostgroup. Used to populate
      * the Hostgroup Grid screen.
      *
      * @return string   json output
@@ -216,7 +216,7 @@ class NpcHostgroupsController extends Controller {
 
         $output = $this->setupResultsArray();
 
-        // Set the total number of records 
+        // Set the total number of records
         $this->numRecords = count($output);
 
         // Implement paging by slicing the ouput array
@@ -299,7 +299,7 @@ class NpcHostgroupsController extends Controller {
 
     /**
      * listHostgroupsCli
-     * 
+     *
      * Returns all hostgroups and associated object ID's
      *
      * @return array   Array of hostgroups/id's
@@ -362,7 +362,7 @@ class NpcHostgroupsController extends Controller {
 
     /**
      * setupResultsArray
-     * 
+     *
      * A utility method to handle some common formatting tasks.
      *
      * @return array

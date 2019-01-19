@@ -19,7 +19,6 @@
  * @subpackage  npc.controllers
  */
 class Controller {
-
     var $conn = null;
 
     /**
@@ -65,21 +64,21 @@ class Controller {
      */
     var $limit = 25;
 
-    /**
-     * The field to sort on
-     *
-     * @var string
-     * @access public
-     */
-    var $sort = null;
+	/**
+	 * The field to sort on
+	 *
+	 * @var string
+	 * @access public
+	 */
+	var $sort = null;
 
-    /**
-     * The sort direction
-     *
-     * @var string
-     * @access public
-     */
-    var $dir = null;
+	/**
+	 * The sort direction
+	 *
+	 * @var string
+	 * @access public
+	 */
+	var $dir = null;
 
     /**
      * The current page to fetch results for
@@ -225,40 +224,37 @@ class Controller {
         'latency'                       => 'Latency',
         'execution_time'                => 'Execution Time',
         'scheduled_downtime_depth'      => 'In Scheduled Downtime',
-        'failure_prediction_enabled'    => 'Failure Prediction Enabled', 
-        'process_performance_data'      => 'Processing Performance Data', 
-        'obsess_over_service'           => 'Obsess Over Service', 
-        'obsess_over_host'              => 'Obsess Over Host', 
-        'obsess_over_services'          => 'Obsess Over Services', 
-        'obsess_over_hosts'             => 'Obsess Over Hosts', 
-        'is_currently_running'          => 'Currently Running', 
-        'last_log_rotation'             => 'Last Log Rotation', 
-        'last_command_check'            => 'Last External Command Check', 
-        'program_start_time'            => 'Program Start Time', 
-        'program_end_time'              => 'Program Stop Time', 
-        'modified_service_attributes'   => 'Modified Service Attributes', 
-        'event_handler'                 => 'Event Handler', 
-        'check_command'                 => 'Check Command', 
-        'command_line'                  => 'Command Line', 
-        'normal_check_interval'         => 'Normal Check Interval', 
-        'retry_check_interval'          => 'Retry Check Interval', 
-        'process_id'                    => 'Process ID', 
-        'check_timeperiod_object_id'    => 'Check Timeperiod Object Id'); 
-
+        'failure_prediction_enabled'    => 'Failure Prediction Enabled',
+        'process_performance_data'      => 'Processing Performance Data',
+        'obsess_over_service'           => 'Obsess Over Service',
+        'obsess_over_host'              => 'Obsess Over Host',
+        'obsess_over_services'          => 'Obsess Over Services',
+        'obsess_over_hosts'             => 'Obsess Over Hosts',
+        'is_currently_running'          => 'Currently Running',
+        'last_log_rotation'             => 'Last Log Rotation',
+        'last_command_check'            => 'Last External Command Check',
+        'program_start_time'            => 'Program Start Time',
+        'program_end_time'              => 'Program Stop Time',
+        'modified_service_attributes'   => 'Modified Service Attributes',
+        'event_handler'                 => 'Event Handler',
+        'check_command'                 => 'Check Command',
+        'command_line'                  => 'Command Line',
+        'normal_check_interval'         => 'Normal Check Interval',
+        'retry_check_interval'          => 'Retry Check Interval',
+        'process_id'                    => 'Process ID',
+        'check_timeperiod_object_id'    => 'Check Timeperiod Object Id');
 
     /**
      * Constructor.
      *
      */
     function __construct() {
-        
         // Get the config type. Default to 1 if not found.
         $config_type = read_config_option('npc_config_type');
         $this->config_type = isset($config_type) ? $config_type : 1;
     }
 
     function jsonOutput($results=array()) {
-
         if (!$this->numRecords) {
             $this->numRecords = count($results);
         }
@@ -274,24 +270,23 @@ class Controller {
     }
 
     function csvOutput($results=array()) {
-
-        header("Content-type: text/csv");
-        header("Cache-Control: no-store, no-cache");
+        header('Content-type: text/csv');
+        header('Cache-Control: no-store, no-cache');
         header('Content-Disposition: attachment; filename="filename.csv"');
 
-        $outstream = fopen("php://output",'w');
+        $outstream = fopen('php://output','w');
 
         foreach( $test_data as $row ) {
             fputcsv($outstream, $row, ',', '"');
         }
- 
+
         fclose($outstream);
         exit;
     }
 
     /**
      * flattenArray
-     * 
+     *
      * Flattens the 1st level of nesting
      *
      * @return array  list of all services with status
@@ -307,7 +302,7 @@ class Controller {
                         $newArray[$i][$k] = $v;
                     }
                 } else {
-                    $newArray[$i][$key] = $val; 
+                    $newArray[$i][$key] = $val;
                 }
             }
         }
@@ -317,7 +312,7 @@ class Controller {
 
     /**
      * searchClause
-     * 
+     *
      * Appends search parameters to the passed in where clause
      * @param string $where  An existing where clause
      * @param array $fieldMap  Maps passed in field names
@@ -326,9 +321,9 @@ class Controller {
     function searchClause($where, $fieldMap) {
 
         if (!$where) {
-            $where = " ( ";
+            $where = ' ( ';
         } else {
-            $where .= " AND ( ";
+            $where .= ' AND ( ';
         }
 
         $fields = json_decode(stripslashes($this->searchFields));
@@ -339,7 +334,7 @@ class Controller {
             if (isset($fieldMap[$field])) {
                 $where .= $fieldMap[$field] . " LIKE '%" . $this->searchString . "%' ";
                 if ($x < $count) {
-                    $where .= " OR ";
+                    $where .= ' OR ';
                 }
                 $x++;
             } else {
@@ -347,7 +342,7 @@ class Controller {
             }
         }
 
-        $where .= " ) ";
+        $where .= ' ) ';
 
         return($where);
     }
@@ -361,14 +356,14 @@ class Controller {
             foreach ($array[$i] as $key => $val) {
                 if (is_array($val)) {
                     $t[0] = $val;
-                    $v = $this->flattenArray($t); 
+                    $v = $this->flattenArray($t);
                     unset($array[$i][$key]);
                     foreach ($array[$i] as $key => $val) {
                         if (!is_array($val)) {
                             $a[$key] = $val;
                         }
                     }
-                    $results[$x] = array_merge($a, $v[0]);    
+                    $results[$x] = array_merge($a, $v[0]);
                     $x++;
                 }
             }
@@ -379,10 +374,10 @@ class Controller {
 
     /**
      * getTimer
-     * 
+     *
      * Returns time in seconds used for debug timing
      *
-     * @return string  - 
+     * @return string  -
      */
     function getTime() {
         $mtime = microtime();
@@ -393,7 +388,7 @@ class Controller {
 
     /**
      * logger
-     * 
+     *
      * A utility method to wrap the Cacti logging mechanism
      *
      * @param  string $level     The log level of the message (error, warn, etc.)
@@ -403,14 +398,13 @@ class Controller {
      * @return string  - On error a json encoded error message is returned to the client.
      */
     function logger($level, $class, $method, $message) {
-
-        $logLevelConf = read_config_option('npc_log_level'); 
+        $logLevelConf = read_config_option('npc_log_level');
 
         $logLevels = array(
-            "error" => 1,
-            "warn"  => 2,
-            "info"  => 3,
-            "debug" => 4
+            'error' => 1,
+            'warn'  => 2,
+            'info'  => 3,
+            'debug' => 4
         );
 
         if ($logLevels[$level] <= $logLevelConf) {
@@ -420,9 +414,58 @@ class Controller {
 
         // If this was an error send a genric response to the client
         if ($level == 'error') {
-            return(json_encode(array('success' => false, 'msg' => "An error occurred in $class -> $method. See error logs for detail.")));
+            return(json_encode(array('success' => false, 'msg' => __('An error occurred in %s. See error logs for detail.', $class -> $method, 'npc'))));
         }
     }
 
+    /**
+     * drawCommonFrame
+     *
+     * Draw a nice iFrame for NPC Content
+     *
+     * @param  string $file      The file to draw for content
+     * @param  array $params     Custom Parameters for the form
+     */
+    function drawCommonFrame($file, $params) {
+        $config = $params['config'];
+
+		general_header();
+
+		html_start_box('', '100%', '', '100%', '', '');
+
+    	?>
+		<tr>
+			<td>
+		        <style type='text/css'>
+					iframe {
+						border: 0px;
+					}
+				</style>
+				<iframe class='cactiTable' id='npc' src='<?php print $file;?>'></iframe>
+				<script>
+					function npcSize() {
+						var myHeight = $('.cactiContent').height();
+						$('#npc').height(myHeight);
+					}
+
+					function getMagicToken() {
+						return csrfMagicToken;
+					}
+
+					$(function() {
+						npcSize();
+						$(document).resize(function() {
+							npcSize();
+						});
+					});
+				</script>
+			</td>
+		</tr>
+		<?php
+
+		html_end_box();
+
+		bottom_footer();
+    } // end drawFrame
 }
 

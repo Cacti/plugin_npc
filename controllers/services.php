@@ -20,9 +20,9 @@ require_once($config["base_path"]."/plugins/npc/controllers/downtime.php");
 /**
  * Services controller class
  *
- * Services controller provides functionality, such as building the 
+ * Services controller provides functionality, such as building the
  * Doctrine querys and formatting output.
- * 
+ *
  * @package     npc
  * @subpackage  npc.controllers
  */
@@ -30,8 +30,8 @@ class NpcServicesController extends Controller {
 
     /**
      * getServices
-     * 
-     * Gets and formats services for output. 
+     *
+     * Gets and formats services for output.
      *
      * @return string   json output
      */
@@ -75,18 +75,17 @@ class NpcServicesController extends Controller {
 
     /**
      * getStateInfo
-     * 
+     *
      * Gets and formats service state information
      *
      * @return string   json output
      */
     function getStateInfo() {
 
-        require_once("plugins/npc/controllers/hostgroups.php");
-
-        $obj = new NpcHostgroupsController;
-        $hg = $obj->setupResultsArray();
-        // $results[$i]['hostgroup_object_id']
+    require_once("plugins/npc/controllers/hostgroups.php");
+    $obj = new NpcHostgroupsController;
+    $hg = $obj->setupResultsArray();
+    // $results[$i]['hostgroup_object_id']
 
         $fields = array(
             'current_state',
@@ -119,11 +118,11 @@ class NpcServicesController extends Controller {
 
         $results = $this->flattenArray($service);
 
-        $hostgroups = array();
-        foreach ($hg as $i => $a) {
+    $hostgroups = array();
+    foreach ($hg as $i => $a) {
             if ($a['host_name'] == $results[0]['host_name']) {
                 $hostgroups[] = $a['hostgroup_name'];
-            }
+        }
         }
 
         $x = 0;
@@ -145,7 +144,7 @@ class NpcServicesController extends Controller {
 
     /**
      * summary
-     * 
+     *
      * Returns a summary of the state of all services.
      *
      * @return string   json output
@@ -175,7 +174,7 @@ class NpcServicesController extends Controller {
 
     /**
      * getServiceStatesByHost
-     * 
+     *
      * A utility method to simply return the state of every service belonging
      * to the specified host.
      *
@@ -195,7 +194,7 @@ class NpcServicesController extends Controller {
 
     /**
      * services
-     * 
+     *
      * Retrieves all services along with status information
      *
      * @return array  list of all services with status
@@ -207,8 +206,7 @@ class NpcServicesController extends Controller {
                           'host_name'  => 'o.name1',
                           'host_alias' => 'h.alias',
                           'notes'      => 's.notes',
-                          'output'     => 'ss.output'
-        );
+                          'output'     => 'ss.output');
 
 
         // Build the where clause
@@ -226,19 +224,19 @@ class NpcServicesController extends Controller {
             $where .= sprintf(" AND s.service_object_id = %d", is_null($id) ? $this->id : $id);;
         }
 
-        if (isset($this->hostgroup)) {
-            $where .= sprintf(" AND hg.alias = '%s'", $this->hostgroup);
-        }
+		if (isset($this->hostgroup)) {
+			$where .= sprintf(" AND hg.alias = '%s'", $this->hostgroup);
+		}
 
         if ($this->searchString) {
-            $where = $this->searchClause($where, $fieldMap);    
+            $where = $this->searchClause($where, $fieldMap);
         }
 
-        if ($this->sort) {
-            $orderBy = $this->sort . ' ' . $this->dir;
-        } else {
-            $orderBy = 'host_name ASC, service_description ASC';
-        }
+		if ($this->sort) {
+			$orderBy = $this->sort . ' ' . $this->dir;
+		} else {
+			$orderBy = 'host_name ASC, service_description ASC';
+		}
 
         $q = new Doctrine_Pager(
             Doctrine_Query::create()
@@ -302,7 +300,7 @@ class NpcServicesController extends Controller {
             $q->select('max(n.servicecheck_id) AS id')
             ->from('NpcServicechecks n, NpcObjects o')
             ->where('o.is_active = 1 AND o.object_id = n.service_object_id')
-            ->andWhere('o.name1 = ?', $host) 
+            ->andWhere('o.name1 = ?', $host)
             ->andWhere('o.name2 = ?', $service);
             $id = $q->execute();
         }
@@ -354,9 +352,9 @@ class NpcServicesController extends Controller {
                   .'i.instance_name AS instance')
           ->from('NpcServices s, s.Host h, s.Instance i');
 
-        if ($host) {
-          $q->where('h.display_name = ?', $host);
-        }
+		if ($host) {
+			$q->where('h.display_name = ?', $host);
+		}
 
         return($this->flattenArray($q->execute(array(), Doctrine::HYDRATE_ARRAY)));
     }
@@ -369,7 +367,6 @@ class NpcServicesController extends Controller {
      * @return string   json encoded results
      */
     function getMappedGraph() {
-
         $q = new Doctrine_Query();
         $q->select('sg.*')
           ->from('NpcServiceGraphs sg')
@@ -388,7 +385,6 @@ class NpcServicesController extends Controller {
      * @return string   json encoded results
      */
     function setMappedGraph($params) {
-
         $table = $this->conn->getTable('NpcServiceGraphs');
 
         $results = $table->findByDql("service_object_id = ?", array($params['object_id']));
@@ -407,7 +403,7 @@ class NpcServicesController extends Controller {
 
     /**
      * formatStateInfo
-     * 
+     *
      * Formats the service state info results for display.
      * This is a workaround for some of the limitations of
      * EXT property grid.

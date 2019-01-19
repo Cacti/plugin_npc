@@ -22,7 +22,7 @@ require_once("plugins/npc/controllers/cacti.php");
  * Sync controller class
  *
  * This class handles importing Nagios hosts to Cacti
- * 
+ *
  * @package     npc
  * @subpackage  npc.controllers
  */
@@ -30,11 +30,11 @@ class NpcSyncController extends Controller {
 
     /**
      * import
-     * 
-     * Handle importing Nagios hosts to cacti returning the import
-     * results back to the client. 
      *
-     * The import results are a pipe delimited string parsed into 
+     * Handle importing Nagios hosts to cacti returning the import
+     * results back to the client.
+     *
+     * The import results are a pipe delimited string parsed into
      * an array on the client side.
      *
      * Columns: "description|imported|mapped|message|cacti_host_ID"
@@ -45,7 +45,7 @@ class NpcSyncController extends Controller {
     function import($params) {
 
         $this->logger('info', get_class($this), __FUNCTION__ , "Starting import of " . $params['description']);
-   
+
         $config = $params['config'];
         $path = $config["base_path"] . "/cli/add_device.php";
 
@@ -66,12 +66,12 @@ class NpcSyncController extends Controller {
             return($return);
         }
 
-        $importCmd = 'php ' . $path 
-                   . ' --description=' . $params['description'] 
+        $importCmd = 'php ' . $path
+                   . ' --description=' . $params['description']
                    . ' --ip=' . $params['ip']
                    . ' --template=' . $params['template_id']
                    . ' 2> /dev/null';
-        
+
         $this->logger('debug', get_class($this), __FUNCTION__ , "Import command: $importCmd");
 
         exec($importCmd, $status);
@@ -101,7 +101,7 @@ class NpcSyncController extends Controller {
 
     /**
      * getHosts
-     * 
+     *
      * Returns hosts with template id's that will be imported
      *
      * @return string   The json encoded results
@@ -121,7 +121,7 @@ class NpcSyncController extends Controller {
             foreach ($hosts as $host) {
                 if (!NpcCactiController::isMapped($host['host_object_id'])) {
                     $results[] = array(
-                        'host_object_id' => $host['host_object_id'], 
+                        'host_object_id' => $host['host_object_id'],
                         'display_name' => $host['display_name'],
                         'address' => $host['address'],
                         'create_graphs' => $hostgroup->create_graphs,
@@ -136,9 +136,9 @@ class NpcSyncController extends Controller {
 
     /**
      * listHostgroups
-     * 
+     *
      * Returns a simple list of hostgroups with the number of hosts
-     * that would be imported. Hosts that are currently mapped are 
+     * that would be imported. Hosts that are currently mapped are
      * not included in the count.
      *
      * @return string   json output
@@ -166,12 +166,12 @@ class NpcSyncController extends Controller {
 
     /**
      * checkHostExists
-     * 
-     * This method checks to see if a host exists in 
-     * Cacti by comparing IP addresses. If a match is 
+     *
+     * This method checks to see if a host exists in
+     * Cacti by comparing IP addresses. If a match is
      * found the Cacti host ID is returned.
      *
-     * The first time this method is called a cache of 
+     * The first time this method is called a cache of
      * id to ip address mappings will be built.
      *
      * @return int   The Cacti host ID

@@ -17,9 +17,9 @@
 /**
  * Notifications controller class
  *
- * Notifications controller provides functionality, such as building the 
+ * Notifications controller provides functionality, such as building the
  * Doctrine querys and formatting output.
- * 
+ *
  * @package     npc
  * @subpackage  npc.controllers
  */
@@ -27,7 +27,7 @@ class NpcNotificationsController extends Controller {
 
     /**
      * getNotifications
-     * 
+     *
      * Returns notifications
      *
      * @return string   json output
@@ -57,7 +57,7 @@ class NpcNotificationsController extends Controller {
 
         $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
-        // Set the total number of records 
+        // Set the total number of records
         $this->numRecords = $q->getNumResults();
 
         return($this->jsonOutput($results));
