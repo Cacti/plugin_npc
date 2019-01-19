@@ -443,21 +443,36 @@ class Controller {
 				</style>
 				<iframe class='cactiTable' id='npc' src='<?php print $file;?>'></iframe>
 				<script>
-					function npcSize() {
-						var myHeight = $('.cactiContent').height();
-						$('#npc').height(myHeight);
-					}
+				var csrfTimeout = null;
 
-					function getMagicToken() {
-						return csrfMagicToken;
-					}
+				function npcSize() {
+					var myHeight = $('.cactiContent').height();
+					$('#npc').height(myHeight);
+				}
 
-					$(function() {
-						npcSize();
-						$(document).resize(function() {
-							npcSize();
-						});
+				function getMagicToken() {
+					return csrfMagicToken;
+				}
+
+				function setMagicToken(token) {
+					csrfMagicToken = token;
+				}
+
+				function updateCsrf() {
+					$.post('npc.php', { action : 'csrf', __csrf_magic : csrfMagicToken }).done(function(data) {
+						setMagicToken(data);
+						csrfTimeout = setTimeout(updateCsrf, 60000);
 					});
+				}
+
+				$(function() {
+					npcSize();
+					$(document).resize(function() {
+						npcSize();
+					});
+
+					csrfTimeout = setTimeout(updateCsrf, 60000);
+				});
 				</script>
 			</td>
 		</tr>

@@ -44,6 +44,11 @@ if (isset_request_var('format')) {
 	$format = get_request_var_request('format');
 }
 
+if ($action == 'csrf') {
+	print csrf_get_tokens();
+	exit;
+}
+
 // Include the requested controller
 require_once('plugins/npc/controllers/' . $module . '.php');
 
@@ -79,5 +84,4 @@ $endtime = $mtime;
 $totaltime = sprintf('%01.2f', ($endtime - $starttime));
 
 $obj->logger('debug', get_class($obj), get_request_var_request('action'), "Script execution time: $totaltime seconds");
-
 
