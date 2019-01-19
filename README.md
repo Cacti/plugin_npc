@@ -1,8 +1,8 @@
-#NPC Quick Start Guide
+# NPC Quick Start Guide
 
 NPC is designed to be a complete web based UI replacement to Nagios while fully integrating into Cacti using the Cacti Plugin Architecture. This integration will provide a single point of access for trending and alert monitoring. 
 
-##Features
+## Features
 
 1) A complete Nagios UI replacement integrated into Cacti.
 2) A feature rich user interface developed on ExtJS. 
@@ -11,7 +11,7 @@ NPC is designed to be a complete web based UI replacement to Nagios while fully 
 5) Automated importing/syncing of hosts from Nagios to Cacti (N2C).
 6) The UI can be customized on a per user basis.
 
-##Usage
+## Usage
 
 With the exception of some installation notes documentation is very slim. Watch the forums and the NPC GitHub for additional info. Here are a few tips to get you started: 
 
@@ -35,11 +35,11 @@ With the exception of some installation notes documentation is very slim. Watch 
 
 **IMPORTANT NOTE:** Since this is a fresh port of a 10 year old Cacti plugin, you should be using it in a non-production setup until further migration testing has been performed by the Cacti community.
 
-##Installation
+## Installation
 
 The remainder of the document provides the steps that are required to install and configure the NPC Plugin for Cacti.
 
-##Requirements
+## Requirements
 
 Below are the minimum requirements:
 
@@ -53,7 +53,7 @@ It is anticipated that there will be many changes forthcoming as we review the a
 
 The default memory limit for PHP probably will not be enough to run NPC. Edit /etc/php.ini and update the memory_limit option if you find times when NPC is causing Cacti to run out of memory.
 
-##Installing NPC
+## Installing NPC
 
 Grab the latest version of NPC from GitHub using the following steps:
 
@@ -78,7 +78,7 @@ Next, there are a few NPC settings to add/update. Goto Console > Configuration >
 
 * Set the date and time format to your liking. 
 
-##Configuring Nagios
+## Configuring Nagios
 
 Refer to the Nagios documentation for installation. Some parts of NPC like reporting and the status map use the Nagios interface by wrapping the Nagios CGI's in an Iframe. Be sure to have the Nagios web UI working if you want to use the reporting and status map features.
 
@@ -106,7 +106,7 @@ If you want to use performance data from Nagios plugins to create graphs in Cact
 
 Setting `host_perfdata_command` and `service_perfdata_command` is not necessary. The performance data will be written to the NPC database where it can be polled by cacti using the `perfdata.php` script included with NPC.
 
-##Installing/Configuring NDO2DB
+## Installing/Configuring NDO2DB
 
 NOD2DB is part of the NDOUTILS package. Nagios hands events off to NDO2DB via the event broker. NDO2DB handles the actual inserts of Nagios data into the NPC tables.
 
@@ -137,7 +137,7 @@ ndo2db can communicates with the Nagios ndo2db.o module via unix socket or TCP. 
 
 Here are working ndo2db.cfg and ndomod.cfg configs. As noted above the database parameters need to be changed for your database.
 
-###ndo2db.cfg
+### ndo2db.cfg
 
 ```
 ndo2db_user=nagios
@@ -163,7 +163,7 @@ debug_file=/usr/local/nagios/var/ndo2db.debug
 max_debug_file_size=1000000
 ```
 
-###ndomod.cfg
+### ndomod.cfg
 
 ```
 instance_name=default
