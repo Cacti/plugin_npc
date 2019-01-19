@@ -44,8 +44,8 @@ The remainder of the document provides the steps that are required to install an
 Below are the minimum requirements:
 
 * Cacti 1.2.1
-* ​NDOUtils 1.4b7
-* ​Nagios 3.x
+* NDOUtils 1.4b7
+* Nagios 3.x
 
 The NPC Plugin, first written for Cacti 0.8.7, has been updated to work with Cacti 1.2.x.  However, testing has been very light.  We will need feedback from users as to its usability with this Cacti version.
 
@@ -86,23 +86,23 @@ The following parameters are found in the Nagios configuration file nagios.cfg
 
 The power of NPC is greatly enhanced by the ability to issue commands to the Nagios process. To enable external commands in Nagios set:
 
-	`check_external_commands=1`
+`check_external_commands=1`
 
 Check external commands as often as possible.
 
-	`command_check_interval=-1`
+`command_check_interval=-1`
 
 Broker all events.
 
-	`event_broker_options=-1`
+`event_broker_options=-1`
 
 The path to the event broker module and config file which you will install next. This example assumes Nagios is installed in /usr/local/nagios. Adjust the path to suit your installation.
 
-	`broker_module=/usr/local/nagios/bin/ndomod.o config_file=/usr/local/nagios/etc/ndomod.cfg`
+`broker_module=/usr/local/nagios/bin/ndomod.o config_file=/usr/local/nagios/etc/ndomod.cfg`
 
 If you want to use performance data from Nagios plugins to create graphs in Cacti then set the following parameter.
 
-	`process_performance_data=1`
+`process_performance_data=1`
 
 Setting `host_perfdata_command` and `service_perfdata_command` is not necessary. The performance data will be written to the NPC database where it can be polled by cacti using the `perfdata.php` script included with NPC.
 
