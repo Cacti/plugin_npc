@@ -54,7 +54,14 @@ require_once('plugins/npc/controllers/' . $module . '.php');
 
 $class = 'Npc' . ucfirst($module) . 'Controller';
 $obj = new $class;
-$obj->conn = $conn;
+
+if (is_object($conn)) {
+	$obj->conn = $conn;
+} else {
+	cacti_log('ERROR: Unable to make NPC Connection', false, 'NPC');
+	raise_message('npc_error', __('FATAL: Unable to make NPC Connection', 'npc'), MESSAGE_LEVEL_ERROR);
+	exit;
+}
 
 if (is_array($_REQUEST)) {
 	foreach($_REQUEST as $key => $value) {
