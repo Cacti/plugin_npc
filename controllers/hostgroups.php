@@ -268,7 +268,8 @@ class NpcHostgroupsController extends Controller {
                                                      'pending'  => 0);
 
 
-        $results = NpcServicesController::getServiceStatesByHost($host_object_id);
+        $obj = new NpcServicesController;
+        $results = $obj->getServiceStatesByHost($host_object_id);
 
         for ($i = 0; $i < count($results); $i++) {
             $this->statusCache[$host_object_id][$this->serviceState[$results[$i]['current_state']]]++;
