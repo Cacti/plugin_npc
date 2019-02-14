@@ -152,11 +152,12 @@ class NpcSyncController extends Controller {
         $results = $hgc->getHostgroups();
 
         $i = 0;
+	$cc = new NpcCactiController();
         foreach($results as $hostgroup) {
             $output[$i]['alias'] = $results[$i]['alias'];
             $output[$i]['members'] = 0;
             foreach ($results[$i]['Hoststatus'] as $host) {
-                if (!NpcCactiController::isMapped($host['host_object_id'])) {
+                if (!$cc->isMapped($host['host_object_id'])) {
                     $output[$i]['members']++;
                 }
             }
