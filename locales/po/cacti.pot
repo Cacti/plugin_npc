@@ -1,0 +1,204 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-03-19 13:50+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: controllers/cacti.php:150 setup.php:169 setup.php:237
+msgid "None"
+msgstr ""
+
+#: controllers/controller.php:417
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr ""
+
+#: controllers/nagios.php:157
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr ""
+
+#: controllers/nagios.php:162
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr ""
+
+#: controllers/nagios.php:174
+msgid "You do not have permission to execute this command."
+msgstr ""
+
+#: controllers/nagios.php:278
+msgid "Service Check Execution Time"
+msgstr ""
+
+#: controllers/nagios.php:279
+msgid "Service Check Latency"
+msgstr ""
+
+#: controllers/nagios.php:280
+msgid "Host Check Execution Time"
+msgstr ""
+
+#: controllers/nagios.php:281
+msgid "Host Check Latency"
+msgstr ""
+
+#: npc.php:62
+msgid "FATAL: Unable to make NPC Connection"
+msgstr ""
+
+#: setup.php:170
+msgid "ERROR - Log errors only"
+msgstr ""
+
+#: setup.php:171
+msgid "WARN  - Log errors and warnings"
+msgstr ""
+
+#: setup.php:172
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr ""
+
+#: setup.php:173
+msgid "DEBUG - Log everything"
+msgstr ""
+
+#: setup.php:234
+msgid "Nagios Host Mapping"
+msgstr ""
+
+#: setup.php:235
+msgid "Select the Nagios host that maps to this host."
+msgstr ""
+
+#: setup.php:265 setup.php:1549
+msgid "NPC"
+msgstr ""
+
+#: setup.php:272
+msgid "Status Detail"
+msgstr ""
+
+#: setup.php:279
+msgid "Service / Host Information"
+msgstr ""
+
+#: setup.php:286
+msgid "Command Execution"
+msgstr ""
+
+#: setup.php:1607
+msgid "General Settings"
+msgstr ""
+
+#: setup.php:1611
+msgid "Remote Commands"
+msgstr ""
+
+#: setup.php:1612
+msgid "Allow commands to be written to the Nagios command file."
+msgstr ""
+
+#: setup.php:1616
+msgid "Nagios Command File Path"
+msgstr ""
+
+#: setup.php:1617
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr ""
+
+#: setup.php:1622
+msgid "Nagios URL"
+msgstr ""
+
+#: setup.php:1623
+msgid ""
+"The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr ""
+
+#: setup.php:1628
+msgid "Date Format"
+msgstr ""
+
+#: setup.php:1629
+msgid "Select the format you want for displaying dates."
+msgstr ""
+
+#: setup.php:1635
+msgid "Time Format"
+msgstr ""
+
+#: setup.php:1636
+msgid "Select the format you want for displaying times."
+msgstr ""
+
+#: setup.php:1642
+msgid "Portlet Refresh Rate"
+msgstr ""
+
+#: setup.php:1643
+msgid ""
+"The amount of time in seconds to wait before the portlets refresh. The "
+"minimum is 30 seconds."
+msgstr ""
+
+#: setup.php:1649
+msgid "Host/Service Config Type"
+msgstr ""
+
+#: setup.php:1650
+msgid ""
+"The config type is based on whether or not you are restoring retained "
+"information when Nagios starts. If you are unsure just leave the default "
+"value. If you can see host and service groups but not hosts or services try "
+"changing this setting."
+msgstr ""
+
+#: setup.php:1656
+msgid "Host Icons"
+msgstr ""
+
+#: setup.php:1657
+msgid ""
+"Enable displaying host icons in the hosts grid. The icon_image and "
+"icon_image_alt parameters of the Nagios host definition are used to set the "
+"image. Icons should be 16x16 to get the best look. this setting does not "
+"affect the host status icons."
+msgstr ""
+
+#: setup.php:1661
+msgid "Service Icons"
+msgstr ""
+
+#: setup.php:1662
+msgid ""
+"Enable displaying service icons in the services grid. The icon_image and "
+"icon_image_alt parameters of the Nagios service definition are used to set "
+"the image. Icons should be 16x16 to get the best look. This setting does not "
+"affect the service status icons."
+msgstr ""
+
+#: setup.php:1666
+msgid "Logging"
+msgstr ""
+
+#: setup.php:1670
+msgid "Logging Level"
+msgstr ""
+
+#: setup.php:1671
+msgid ""
+"The level of detail you want sent to the Cacti log file. WARNING: Leaving in "
+"DEBUG will quickly fill the cacti log."
+msgstr ""
