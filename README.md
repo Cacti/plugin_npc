@@ -295,3 +295,15 @@ Apr 19 11:11:55 acid init: Id "ndo" respawning too fast: disabled for 5 minutes
 
 Besides muddying the logs there is no harm and so far this is the only way I
 have been able to keep ndo2db running.
+
+## Bugs and Feature Enhancements
+
+Bug and feature enhancements for the npc plugin are handled in GitHub. If
+you find a first search the Cacti forums for a solution before creating an issue
+in GitHub.
+
+## Changelog
+
+--- 3.0 ---
+
+* feature: compatibility improvements for cacti 1.2.x
