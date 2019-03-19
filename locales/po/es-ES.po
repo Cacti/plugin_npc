@@ -1,6 +1,22 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2019-03-19 15:22+0000\n"
+"PO-Revision-Date: 2019-03-19 15:22+0000\n"
+"Last-Translator: Mark Brugnoli-Vinten <netniv@cacti.net>\n"
+"Language-Team: Spanish <http://translate.cacti.net/projects/cacti/npc/es-ES/>"
+"\n"
+"Language: es-ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.4-dev\n"
+
 #: controllers/cacti.php:150 setup.php:169 setup.php:237
 msgid "None"
-msgstr ""
+msgstr "Ninguno"
 
 #: controllers/controller.php:417
 #, php-format
@@ -81,7 +97,7 @@ msgstr ""
 
 #: setup.php:1607
 msgid "General Settings"
-msgstr ""
+msgstr "Opciones generales"
 
 #: setup.php:1611
 msgid "Remote Commands"
@@ -172,7 +188,7 @@ msgstr ""
 
 #: setup.php:1666
 msgid "Logging"
-msgstr ""
+msgstr "Logging"
 
 #: setup.php:1670
 msgid "Logging Level"
