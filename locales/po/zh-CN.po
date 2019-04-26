@@ -6,24 +6,28 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2019-03-19 13:50+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2019-04-26 10:12+0000\n"
+"Last-Translator: whsir <wh@whsir.com>\n"
+"Language-Team: Chinese (Simplified) <http://translate.cacti.net/projects/"
+"cacti/npc/zh-CN/>\n"
 "Language: zh-CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 3.4-dev\n"
 
 #: controllers/cacti.php:150 setup.php:169 setup.php:237
+#, fuzzy
 msgid "None"
-msgstr ""
+msgstr "无"
 
 #: controllers/controller.php:417
-#, php-format
+#, fuzzy, php-format
 msgid "An error occurred in %s. See error logs for detail."
-msgstr ""
+msgstr "％s发生错误，详细信息查看错误日志"
 
 #: controllers/nagios.php:157
 msgid "Remote Commands must be enabled under console->Settings->NPC"
@@ -34,20 +38,23 @@ msgid "The Nagios Command File Path must be set under console->Settings->NPC"
 msgstr ""
 
 #: controllers/nagios.php:174
+#, fuzzy
 msgid "You do not have permission to execute this command."
-msgstr ""
+msgstr "您没有权限执行此命令."
 
 #: controllers/nagios.php:278
+#, fuzzy
 msgid "Service Check Execution Time"
-msgstr ""
+msgstr "检查服务执行时间"
 
 #: controllers/nagios.php:279
 msgid "Service Check Latency"
-msgstr ""
+msgstr "延迟检查服务"
 
 #: controllers/nagios.php:280
+#, fuzzy
 msgid "Host Check Execution Time"
-msgstr ""
+msgstr "主机检查执行时间"
 
 #: controllers/nagios.php:281
 msgid "Host Check Latency"
@@ -189,12 +196,14 @@ msgid ""
 msgstr ""
 
 #: setup.php:1666
+#, fuzzy
 msgid "Logging"
-msgstr ""
+msgstr "日志"
 
 #: setup.php:1670
+#, fuzzy
 msgid "Logging Level"
-msgstr ""
+msgstr "日志记录级别"
 
 #: setup.php:1671
 msgid ""
