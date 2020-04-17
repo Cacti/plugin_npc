@@ -45,30 +45,30 @@ function plugin_npc_version() {
 function plugin_npc_install() {
 	npc_setup_tables();
 
-	api_plugin_register_realm ('npc', 'npc.php', 'NPC', 1);
-	api_plugin_register_realm ('npc', 'npc1.php', 'NPC Global Commands', 1);
+	api_plugin_register_realm('npc', 'npc.php', 'NPC', 1);
+	api_plugin_register_realm('npc', 'npc1.php', 'NPC Global Commands', 1);
 
 	// setup all arrays needed for npc
-	api_plugin_register_hook ('npc', 'config_arrays', 'npc_config_arrays', 'setup.php');
+	api_plugin_register_hook('npc', 'config_arrays', 'npc_config_arrays', 'setup.php');
 
 	// Add the npc tab
-	api_plugin_register_hook ('npc', 'top_header_tabs', 'npc_show_tab', 'setup.php');
-	api_plugin_register_hook ('npc', 'top_graph_header_tabs', 'npc_show_tab', 'setup.php');
+	api_plugin_register_hook('npc', 'top_header_tabs', 'npc_show_tab', 'setup.php');
+	api_plugin_register_hook('npc', 'top_graph_header_tabs', 'npc_show_tab', 'setup.php');
 
 	// Provide navigation texts
-	api_plugin_register_hook ('npc', 'draw_navigation_text', 'npc_draw_navigation_text', 'setup.php');
+	api_plugin_register_hook('npc', 'draw_navigation_text', 'npc_draw_navigation_text', 'setup.php');
 
 	// Add Nagios host mapping select box
-	api_plugin_register_hook ('npc', 'config_form', 'npc_config_form', 'setup.php');
+	api_plugin_register_hook('npc', 'config_form', 'npc_config_form', 'setup.php');
 
 	// Saves the selection from the host mapping select box
-	api_plugin_register_hook ('npc', 'api_device_save', 'npc_api_device_save', 'setup.php');
+	api_plugin_register_hook('npc', 'api_device_save', 'npc_api_device_save', 'setup.php');
 
 	// Add a npc tab to the settings page
-	api_plugin_register_hook ('npc', 'config_settings', 'npc_config_settings', 'setup.php');
+	api_plugin_register_hook('npc', 'config_settings', 'npc_config_settings', 'setup.php');
 
 	// Add header items
-	api_plugin_register_hook ('npc', 'page_head', 'npc_page_head', 'setup.php');
+	api_plugin_register_hook('npc', 'page_head', 'npc_page_head', 'setup.php');
 }
 
 function npc_page_head() {
@@ -81,7 +81,7 @@ function npc_page_head() {
 /**
  * Remove all NPC database changes
  */
-function plugin_npc_uninstall () {
+function plugin_npc_uninstall() {
 	// Drop all npc tables
 	db_execute('DROP TABLE `npc_acknowledgements`');
 	db_execute('DROP TABLE `npc_commands`');
@@ -149,10 +149,10 @@ function plugin_npc_uninstall () {
 	db_execute('ALTER TABLE `host` DROP `npc_host_object_id`');
 	db_execute('DELETE FROM `settings` WHERE `name` like "npc\_%"');
 
-	api_plugin_remove_realms ('npc');
+	api_plugin_remove_realms('npc');
 }
 
-function npc_config_arrays () {
+function npc_config_arrays() {
 	global $user_auth_realms, $user_auth_realm_filenames, $npc_date_format, $npc_time_format;
 	global $npc_default_settings, $npc_log_level, $npc_config_type;
 
@@ -220,7 +220,7 @@ function npc_config_arrays () {
 	}
 }
 
-function npc_config_form () {
+function npc_config_form() {
 	global $fields_host_edit;
 
 	$fields_host_edit2 = $fields_host_edit;
@@ -250,7 +250,7 @@ function npc_config_form () {
 	$fields_host_edit = $fields_host_edit3;
 }
 
-function npc_api_device_save ($save) {
+function npc_api_device_save($save) {
 	if (isset($_POST['npc_host_object_id'])) {
 		$save['npc_host_object_id'] = form_input_validate($_POST['npc_host_object_id'], 'npc_host_object_id', '', true, 3);
 	} else {
@@ -260,7 +260,7 @@ function npc_api_device_save ($save) {
 	return $save;
 }
 
-function npc_draw_navigation_text ($nav) {
+function npc_draw_navigation_text($nav) {
    $nav['npc.php:'] = array(
 		'title' => __('NPC', 'npc'),
 		'mapping' => 'index.php:',
@@ -327,6 +327,7 @@ function npc_setup_tables() {
 			`notify_contacts` smallint(6) NOT NULL default '0',
 			PRIMARY KEY (`acknowledgement_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Current and historical host and service acknowledgements';";
 
 		// Add some default values
@@ -345,6 +346,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`command_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`object_id`,`config_type`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Command definitions';";
 	}
 
@@ -371,6 +373,7 @@ function npc_setup_tables() {
 			UNIQUE KEY `instance_id` (`instance_id`,`comment_time`,`internal_comment_id`),
 			KEY `idx_internal_comment_id` (`internal_comment_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical host and service comments';";
 	}
 
@@ -394,7 +397,8 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`comment_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`comment_time`,`internal_comment_id`),
 			KEY `idx1` (`object_id`))
-			ENGINE=InnoDB;";
+			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic;";
 	}
 
 	if (!db_table_exists('npc_configfiles')) {
@@ -406,6 +410,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`configfile_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`configfile_type`,`configfile_path`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Configuration files';";
 	}
 
@@ -419,6 +424,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`configfilevariable_id`),
 			KEY `instance_id` (`instance_id`,`configfile_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Configuration file variables';";
 	}
 
@@ -441,6 +447,7 @@ function npc_setup_tables() {
 			`entries_processed` int(11) NOT NULL default '0',
 			PRIMARY KEY  (`conninfo_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='NDO2DB daemon connection information';";
 	}
 
@@ -454,6 +461,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`contact_address_id`),
 			UNIQUE KEY `contact_id` (`contact_id`,`address_number`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Contact addresses';";
     }
 
@@ -468,6 +476,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`contact_notificationcommand_id`),
 			UNIQUE KEY `contact_id` (`contact_id`,`notification_type`,`command_object_id`,`command_args`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Contact host and service notification commands';";
 	}
 
@@ -480,6 +489,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`contactgroup_member_id`),
 			UNIQUE KEY `instance_id` (`contactgroup_id`,`contact_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Contactgroup members';";
 	}
 
@@ -493,6 +503,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`contactgroup_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`contactgroup_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Contactgroup definitions';";
 	}
 
@@ -510,6 +521,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`contactnotificationmethod_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`contactnotification_id`,`start_time`,`start_time_usec`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical record of contact notification methods';";
 	}
 
@@ -526,6 +538,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`contactnotification_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`contact_object_id`,`start_time`,`start_time_usec`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical record of contact notifications';";
 	}
 
@@ -557,6 +570,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`contact_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`contact_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Contact definitions';";
 	}
 
@@ -576,6 +590,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`contactstatus_id`),
 			UNIQUE KEY `contact_object_id` (`contact_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Contact status';";
 	}
 
@@ -592,6 +607,7 @@ function npc_setup_tables() {
 			UNIQUE KEY `object_id_2` (`object_id`,`config_type`,`varname`),
 			KEY `varname` (`varname`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Custom variables';";
 	}
 
@@ -608,6 +624,7 @@ function npc_setup_tables() {
 			UNIQUE KEY `object_id_2` (`object_id`,`varname`),
 			KEY `varname` (`varname`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Custom variable status information';";
 	}
 
@@ -615,7 +632,8 @@ function npc_setup_tables() {
 		$sql[] = "CREATE TABLE `npc_dbversion` (
 			`name` varchar(10) NOT NULL default '',
 			`version` varchar(10) NOT NULL default '')
-			ENGINE=InnoDB;";
+			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic;";
 	}
 
 	if (!db_table_exists('npc_downtimehistory')) {
@@ -642,6 +660,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`downtimehistory_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`object_id`,`entry_time`,`internal_downtime_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical scheduled host and service downtime';";
 	}
 
@@ -665,9 +684,11 @@ function npc_setup_tables() {
 			`execution_time` double NOT NULL default '0',
 			`return_code` smallint(6) NOT NULL default '0',
 			`output` varchar(255) NOT NULL default '',
+			`long_output` varchar(8192) NOT NULL default '',
 			PRIMARY KEY  (`eventhandler_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`object_id`,`start_time`,`start_time_usec`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical host and service event handlers';";
 	}
 
@@ -681,6 +702,7 @@ function npc_setup_tables() {
 			`command_args` varchar(255) NOT NULL default '',
 			PRIMARY KEY  (`externalcommand_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical record of processed external commands';";
 	}
 
@@ -701,6 +723,7 @@ function npc_setup_tables() {
 			`internal_comment_id` int(11) NOT NULL default '0',
 			PRIMARY KEY  (`flappinghistory_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Current and historical record of host and service flapping';";
     }
 
@@ -713,6 +736,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`host_contactgroup_id`),
 			UNIQUE KEY `instance_id` (`host_id`,`contactgroup_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Host contact groups';";
     }
 
@@ -724,7 +748,8 @@ function npc_setup_tables() {
 			`contact_object_id` int(11) NOT NULL default '0',
 			PRIMARY KEY  (`host_contact_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`host_id`,`contact_object_id`))
-			ENGINE=InnoDB;";
+			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic;";
     }
 
 	if (!db_table_exists('npc_host_parenthosts')) {
@@ -736,6 +761,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`host_parenthost_id`),
 			UNIQUE KEY `instance_id` (`host_id`,`parent_host_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Parent hosts';";
     }
 
@@ -763,10 +789,12 @@ function npc_setup_tables() {
 			`latency` double NOT NULL default '0',
 			`return_code` smallint(6) NOT NULL default '0',
 			`output` varchar(255) NOT NULL default '',
+			`long_output` varchar(8192) NOT NULL default '',
 			`perfdata` varchar(255) NOT NULL default '',
 			PRIMARY KEY  (`hostcheck_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`host_object_id`,`start_time`,`start_time_usec`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical host checks';";
     }
 
@@ -786,6 +814,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`hostdependency_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`host_object_id`,`dependent_host_object_id`,`dependency_type`,`inherits_parent`,`fail_on_up`,`fail_on_down`,`fail_on_unreachable`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Host dependency definitions';";
     }
 
@@ -798,6 +827,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`hostescalation_contactgroup_id`),
 			UNIQUE KEY `instance_id` (`hostescalation_id`,`contactgroup_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Host escalation contact groups';";
     }
 
@@ -809,7 +839,8 @@ function npc_setup_tables() {
 			`contact_object_id` int(11) NOT NULL default '0',
 			PRIMARY KEY  (`hostescalation_contact_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`hostescalation_id`,`contact_object_id`))
-			ENGINE=InnoDB;";
+			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic;";
     }
 
 	if (!db_table_exists('npc_hostescalations')) {
@@ -828,6 +859,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`hostescalation_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`host_object_id`,`timeperiod_object_id`,`first_notification`,`last_notification`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Host escalation definitions';";
     }
 
@@ -840,6 +872,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`hostgroup_member_id`),
 			UNIQUE KEY `instance_id` (`hostgroup_id`,`host_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Hostgroup members';";
     }
 
@@ -853,6 +886,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`hostgroup_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`hostgroup_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Hostgroup definitions';";
     }
 
@@ -920,7 +954,9 @@ function npc_setup_tables() {
 			UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`host_object_id`),
 			KEY `idx1` (`host_object_id`),
 			KEY `idx2` (`config_type`))
-			ENGINE=InnoDB COMMENT='Host definitions';";
+			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
+			COMMENT='Host definitions';";
     }
 
 	if (!db_table_exists('npc_hoststatus')) {
@@ -930,6 +966,7 @@ function npc_setup_tables() {
 			`host_object_id` int(11) NOT NULL default '0',
 			`status_update_time` datetime NOT NULL default '0000-00-00 00:00:00',
 			`output` varchar(255) NOT NULL default '',
+			`long_output` varchar(8192) NOT NULL default '',
 			`perfdata` varchar(255) NOT NULL default '',
 			`current_state` smallint(6) NOT NULL default '0',
 			`has_been_checked` smallint(6) NOT NULL default '0',
@@ -975,6 +1012,7 @@ function npc_setup_tables() {
 			UNIQUE KEY `object_id` (`host_object_id`),
 			KEY `idx1` (`current_state`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Current host status information';";
     }
 
@@ -985,6 +1023,7 @@ function npc_setup_tables() {
 			`instance_description` varchar(128) NOT NULL default '',
 			PRIMARY KEY  (`instance_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Location names of various Nagios installations';";
     }
 
@@ -1002,6 +1041,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`logentry_id`),
 			KEY `idx1` (`entry_time`,`entry_time_usec`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical record of log entries';";
     }
 
@@ -1018,11 +1058,13 @@ function npc_setup_tables() {
 			`end_time_usec` int(11) NOT NULL default '0',
 			`state` smallint(6) NOT NULL default '0',
 			`output` varchar(255) NOT NULL default '',
+			`long_output` varchar(8192) NOT NULL default '',
 			`escalated` smallint(6) NOT NULL default '0',
 			`contacts_notified` smallint(6) NOT NULL default '0',
 			PRIMARY KEY  (`notification_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`object_id`,`start_time`,`start_time_usec`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical record of host and service notifications';";
     }
 
@@ -1038,6 +1080,7 @@ function npc_setup_tables() {
 			KEY `objecttype_id` (`objecttype_id`,`name1`,`name2`),
 			KEY `name_idx` (`name1`,`name2`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Current and historical objects of all kinds';";
     }
 
@@ -1054,6 +1097,7 @@ function npc_setup_tables() {
 			`program_date` varchar(10) NOT NULL default '',
 			PRIMARY KEY  (`processevent_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical Nagios process events';";
     }
 
@@ -1087,6 +1131,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`programstatus_id`),
 			UNIQUE KEY `instance_id` (`instance_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Current program status information';";
     }
 
@@ -1099,6 +1144,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`runtimevariable_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`varname`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Runtime variables from the Nagios daemon';";
     }
 
@@ -1123,6 +1169,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`scheduleddowntime_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`object_id`,`entry_time`,`internal_downtime_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Current scheduled host and service downtime';";
     }
 
@@ -1135,6 +1182,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`service_contactgroup_id`),
 			UNIQUE KEY `instance_id` (`service_id`,`contactgroup_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Service contact groups';";
     }
 
@@ -1146,7 +1194,8 @@ function npc_setup_tables() {
 			`contact_object_id` int(11) NOT NULL default '0',
 			PRIMARY KEY  (`service_contact_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`service_id`,`contact_object_id`))
-			ENGINE=InnoDB;";
+			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic;";
     }
 
 	if (!db_table_exists('npc_servicechecks')) {
@@ -1172,12 +1221,14 @@ function npc_setup_tables() {
 			`latency` double NOT NULL default '0',
 			`return_code` smallint(6) NOT NULL default '0',
 			`output` varchar(255) NOT NULL default '',
+			`long_output` varchar(8192) NOT NULL default '',
 			`perfdata` varchar(255) NOT NULL default '',
 			PRIMARY KEY  (`servicecheck_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`service_object_id`,`start_time`,`start_time_usec`),
 			KEY `idx1` (`service_object_id`,`start_time`),
 			KEY `idx2` (`instance_id`,`start_time`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical service checks';";
     }
 
@@ -1198,6 +1249,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`servicedependency_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`service_object_id`,`dependent_service_object_id`,`dependency_type`,`inherits_parent`,`fail_on_ok`,`fail_on_warning`,`fail_on_unknown`,`fail_on_critical`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Service dependency definitions';";
     }
 
@@ -1210,6 +1262,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`serviceescalation_contactgroup_id`),
 			UNIQUE KEY `instance_id` (`serviceescalation_id`,`contactgroup_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Service escalation contact groups';";
     }
 
@@ -1221,7 +1274,8 @@ function npc_setup_tables() {
 			`contact_object_id` int(11) NOT NULL default '0',
 			PRIMARY KEY  (`serviceescalation_contact_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`serviceescalation_id`,`contact_object_id`))
-			ENGINE=InnoDB;";
+			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic;";
     }
 
 	if (!db_table_exists('npc_serviceescalations')) {
@@ -1241,6 +1295,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`serviceescalation_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`service_object_id`,`timeperiod_object_id`,`first_notification`,`last_notification`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Service escalation definitions';";
     }
 
@@ -1253,6 +1308,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`servicegroup_member_id`),
 			UNIQUE KEY `instance_id` (`servicegroup_id`,`service_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Servicegroup members';";
     }
 
@@ -1266,6 +1322,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`servicegroup_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`servicegroup_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Servicegroup definitions';";
     }
 
@@ -1329,6 +1386,7 @@ function npc_setup_tables() {
 			KEY `idx2` (`host_object_id`),
 			KEY `idx3` (`service_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Service definitions';";
     }
 
@@ -1339,6 +1397,7 @@ function npc_setup_tables() {
 			`service_object_id` int(11) NOT NULL default '0',
 			`status_update_time` datetime NOT NULL default '0000-00-00 00:00:00',
 			`output` varchar(255) NOT NULL default '',
+			`long_output` varchar(8192) NOT NULL default '',
 			`perfdata` varchar(255) NOT NULL default '',
 			`current_state` smallint(6) NOT NULL default '0',
 			`has_been_checked` smallint(6) NOT NULL default '0',
@@ -1385,6 +1444,7 @@ function npc_setup_tables() {
 			UNIQUE KEY `object_id` (`service_object_id`),
 			KEY `idx1` (`current_state`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Current service status information';";
     }
 
@@ -1403,8 +1463,10 @@ function npc_setup_tables() {
 			`last_state` smallint(6) NOT NULL default '-1',
 			`last_hard_state` smallint(6) NOT NULL default '-1',
 			`output` varchar(255) NOT NULL default '',
+			`long_output` varchar(8192) NOT NULL default '',
 			PRIMARY KEY  (`statehistory_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical host and service state changes';";
     }
 
@@ -1422,9 +1484,11 @@ function npc_setup_tables() {
 			`execution_time` double NOT NULL default '0',
 			`return_code` smallint(6) NOT NULL default '0',
 			`output` varchar(255) NOT NULL default '',
+			`long_output` varchar(8192) NOT NULL default '',
 			PRIMARY KEY  (`systemcommand_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`start_time`,`start_time_usec`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical system commands that are executed';";
     }
 
@@ -1440,6 +1504,7 @@ function npc_setup_tables() {
 			`object_id` int(11) NOT NULL default '0',
 			PRIMARY KEY  (`timedeventqueue_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Current Nagios event queue';";
     }
 
@@ -1460,6 +1525,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`timedevent_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`event_type`,`scheduled_time`,`object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Historical events from the Nagios event queue';";
     }
 
@@ -1474,6 +1540,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`timeperiod_timerange_id`),
 			UNIQUE KEY `instance_id` (`timeperiod_id`,`day`,`start_sec`,`end_sec`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Timeperiod definitions';";
     }
 
@@ -1487,6 +1554,7 @@ function npc_setup_tables() {
 			PRIMARY KEY  (`timeperiod_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`timeperiod_object_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='Timeperiod definitions';";
     }
 
@@ -1498,7 +1566,8 @@ function npc_setup_tables() {
 			`pri` tinyint(1) default 1,
 			PRIMARY KEY  (`service_graph_id`),
 			KEY `idx1` (`service_object_id`))
-			ENGINE=InnoDB;";
+			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic;";
     }
 
 	if (!db_table_exists('npc_host_graphs')) {
@@ -1509,7 +1578,9 @@ function npc_setup_tables() {
 			`pri` tinyint(1) default 1,
 			PRIMARY KEY  (`host_graph_id`),
 			KEY `idx1` (`host_object_id`))
-			ENGINE=InnoDB;";
+			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
+			ROW_FORMAT=Dynamic;";
     }
 
 	if (!db_table_exists('npc_settings')) {
@@ -1518,6 +1589,7 @@ function npc_setup_tables() {
 			`settings` text default null,
 			PRIMARY KEY  (`user_id`))
 			ENGINE=InnoDB
+			ROW_FORMAT=Dynamic
 			COMMENT='NPC user settings';";
 	}
 
@@ -1563,13 +1635,13 @@ function npc_config_settings() {
 		$npc_enabled = db_fetch_cell("SELECT status FROM plugin_config WHERE directory = 'npc'");
 
 		# Check for upgraded NPC
-		$current = plugin_npc_version ();
+		$current = plugin_npc_version();
 		$current_npc_version = $current['version'];
 
 		$old_npc_version = db_fetch_cell("SELECT version FROM plugin_config WHERE directory='npc'");
 
 		if (($current_npc_version != $old_npc_version) && ($old_npc_version != '')) {
-			//npc_upgrade_tables ();
+			npc_upgrade_tables();
 
 			// Add a new realm
 			if ($old_npc_version != '2.0.2' || $old_npc_version != '2.0.3') {
@@ -1675,6 +1747,40 @@ function npc_config_settings() {
 				)
 			);
 		}
+	}
+}
+
+function npc_upgrade_tables() {
+	if (!db_column_exists('npc_hostchecks', 'long_output')) {
+		db_execute("ALTER TABLE `npc_hostchecks` ADD COLUMN `long_output` varchar(8192) NOT NULL default '' AFTER `output`");
+	}
+
+	if (!db_column_exists('npc_hoststatus', 'long_output')) {
+		db_execute("ALTER TABLE `npc_hoststatus` ADD COLUMN `long_output` varchar(8192) NOT NULL default '' AFTER `output`");
+	}
+
+	if (!db_column_exists('npc_servicechecks', 'long_output')) {
+		db_execute("ALTER TABLE `npc_servicechecks` ADD COLUMN `long_output` varchar(8192) NOT NULL default '' AFTER `output`");
+	}
+
+	if (!db_column_exists('npc_servicestatus', 'long_output')) {
+		db_execute("ALTER TABLE `npc_servicestatus` ADD COLUMN `long_output` varchar(8192) NOT NULL default '' AFTER `output`");
+	}
+
+	if (!db_column_exists('npc_statehistory', 'long_output')) {
+		db_execute("ALTER TABLE `npc_statehistory` ADD COLUMN `long_output` varchar(8192) NOT NULL default '' AFTER `output`");
+	}
+
+	if (!db_column_exists('npc_eventhandlers', 'long_output')) {
+		db_execute("ALTER TABLE `npc_eventhandlers` ADD COLUMN `long_output` varchar(8192) NOT NULL default '' AFTER `output`");
+	}
+
+	if (!db_column_exists('npc_systemcommands', 'long_output')) {
+		db_execute("ALTER TABLE `npc_systemcommands` ADD COLUMN `long_output` varchar(8192) NOT NULL default '' AFTER `output`");
+	}
+
+	if (!db_column_exists('npc_notifications', 'long_output')) {
+		db_execute("ALTER TABLE `npc_notifications` ADD COLUMN `long_output` varchar(8192) NOT NULL default '' AFTER `output`");
 	}
 }
 

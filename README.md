@@ -304,6 +304,11 @@ in GitHub.
 
 ## Changelog
 
+--- 3.1 ---
+* issue: Adding some missing columns to a few tables
+
+* issue: Undefined variables in constrollers settings.php
+
 --- 3.0 ---
 
 * feature: compatibility improvements for cacti 1.2.x

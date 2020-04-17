@@ -41,7 +41,9 @@ class NpcSettingsController extends Controller {
         $obj = $this->getSettings($user_id);
 
         $settings = unserialize($obj->settings);
-        $settings[$params['name']] = $params['value'];
+		if (isset($params['name'])) {
+	        $settings[$params['name']] = $params['value'];
+		}
 
         $obj->settings = serialize($settings);
         $obj->save();
@@ -50,3 +52,4 @@ class NpcSettingsController extends Controller {
     }
 
 }
+
