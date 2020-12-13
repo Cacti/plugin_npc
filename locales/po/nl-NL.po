@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-19 13:50+0000\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2020-12-12 22:16-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -81,7 +81,7 @@ msgstr ""
 msgid "Select the Nagios host that maps to this host."
 msgstr ""
 
-#: setup.php:265 setup.php:1549
+#: setup.php:265 setup.php:1621
 msgid "NPC"
 msgstr ""
 
@@ -97,107 +97,90 @@ msgstr ""
 msgid "Command Execution"
 msgstr ""
 
-#: setup.php:1607
+#: setup.php:1679
 msgid "General Settings"
 msgstr ""
 
-#: setup.php:1611
+#: setup.php:1683
 msgid "Remote Commands"
 msgstr ""
 
-#: setup.php:1612
+#: setup.php:1684
 msgid "Allow commands to be written to the Nagios command file."
 msgstr ""
 
-#: setup.php:1616
+#: setup.php:1688
 msgid "Nagios Command File Path"
 msgstr ""
 
-#: setup.php:1617
+#: setup.php:1689
 msgid "The path to the Nagios command file (nagios.cmd)."
 msgstr ""
 
-#: setup.php:1622
+#: setup.php:1694
 msgid "Nagios URL"
 msgstr ""
 
-#: setup.php:1623
-msgid ""
-"The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+#: setup.php:1695
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
 msgstr ""
 
-#: setup.php:1628
+#: setup.php:1700
 msgid "Date Format"
 msgstr ""
 
-#: setup.php:1629
+#: setup.php:1701
 msgid "Select the format you want for displaying dates."
 msgstr ""
 
-#: setup.php:1635
+#: setup.php:1707
 msgid "Time Format"
 msgstr ""
 
-#: setup.php:1636
+#: setup.php:1708
 msgid "Select the format you want for displaying times."
 msgstr ""
 
-#: setup.php:1642
+#: setup.php:1714
 msgid "Portlet Refresh Rate"
 msgstr ""
 
-#: setup.php:1643
-msgid ""
-"The amount of time in seconds to wait before the portlets refresh. The "
-"minimum is 30 seconds."
+#: setup.php:1715
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
 msgstr ""
 
-#: setup.php:1649
+#: setup.php:1721
 msgid "Host/Service Config Type"
 msgstr ""
 
-#: setup.php:1650
-msgid ""
-"The config type is based on whether or not you are restoring retained "
-"information when Nagios starts. If you are unsure just leave the default "
-"value. If you can see host and service groups but not hosts or services try "
-"changing this setting."
+#: setup.php:1722
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
 msgstr ""
 
-#: setup.php:1656
+#: setup.php:1728
 msgid "Host Icons"
 msgstr ""
 
-#: setup.php:1657
-msgid ""
-"Enable displaying host icons in the hosts grid. The icon_image and "
-"icon_image_alt parameters of the Nagios host definition are used to set the "
-"image. Icons should be 16x16 to get the best look. this setting does not "
-"affect the host status icons."
+#: setup.php:1729
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
 msgstr ""
 
-#: setup.php:1661
+#: setup.php:1733
 msgid "Service Icons"
 msgstr ""
 
-#: setup.php:1662
-msgid ""
-"Enable displaying service icons in the services grid. The icon_image and "
-"icon_image_alt parameters of the Nagios service definition are used to set "
-"the image. Icons should be 16x16 to get the best look. This setting does not "
-"affect the service status icons."
+#: setup.php:1734
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
 msgstr ""
 
-#: setup.php:1666
+#: setup.php:1738
 msgid "Logging"
 msgstr ""
 
-#: setup.php:1670
+#: setup.php:1742
 msgid "Logging Level"
 msgstr ""
 
-#: setup.php:1671
-msgid ""
-"The level of detail you want sent to the Cacti log file. WARNING: Leaving in "
-"DEBUG will quickly fill the cacti log."
+#: setup.php:1743
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
 msgstr ""
