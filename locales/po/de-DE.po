@@ -9,12 +9,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2020-12-12 22:16-0500\n"
 "PO-Revision-Date: 2020-12-13 10:42-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: \n"
-"Language-Team: \n"
 "X-Generator: Poedit 2.4.2\n"
 
 #: controllers/cacti.php:150 setup.php:169 setup.php:237
@@ -24,17 +24,22 @@ msgstr "Nichts"
 #: controllers/controller.php:417
 #, fuzzy, php-format
 msgid "An error occurred in %s. See error logs for detail."
-msgstr "In %s ist ein Fehler aufgetreten. Einzelheiten finden Sie in den Fehlerprotokollen."
+msgstr ""
+"In %s ist ein Fehler aufgetreten. Einzelheiten finden Sie in den "
+"Fehlerprotokollen."
 
 #: controllers/nagios.php:157
 #, fuzzy
 msgid "Remote Commands must be enabled under console->Settings->NPC"
-msgstr "Remote-Befehle müssen unter Konsole-> Einstellungen-> NPC aktiviert sein"
+msgstr ""
+"Remote-Befehle müssen unter Konsole-> Einstellungen-> NPC aktiviert sein"
 
 #: controllers/nagios.php:162
 #, fuzzy
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr "Der Nagios-Befehlsdateipfad muss unter Konsole-> Einstellungen-> NPC festgelegt werden"
+msgstr ""
+"Der Nagios-Befehlsdateipfad muss unter Konsole-> Einstellungen-> NPC "
+"festgelegt werden"
 
 #: controllers/nagios.php:174
 #, fuzzy
@@ -146,8 +151,11 @@ msgstr "Nagios URL"
 
 #: setup.php:1695
 #, fuzzy
-msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
-msgstr "Die vollständige URL zu Ihrer Nagios-Installation (http://nagios.company.com/nagios/)"
+msgid ""
+"The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr ""
+"Die vollständige URL zu Ihrer Nagios-Installation (http://nagios.company.com/"
+"nagios/)"
 
 #: setup.php:1700
 msgid "Date Format"
@@ -174,8 +182,12 @@ msgstr "Portlet-Aktualisierungsrate"
 
 #: setup.php:1715
 #, fuzzy
-msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
-msgstr "Die Wartezeit in Sekunden, bevor die Portlets aktualisiert werden. Das Minimum beträgt 30 Sekunden."
+msgid ""
+"The amount of time in seconds to wait before the portlets refresh. The "
+"minimum is 30 seconds."
+msgstr ""
+"Die Wartezeit in Sekunden, bevor die Portlets aktualisiert werden. Das "
+"Minimum beträgt 30 Sekunden."
 
 #: setup.php:1721
 #, fuzzy
@@ -184,8 +196,17 @@ msgstr "Host / Service-Konfigurationstyp"
 
 #: setup.php:1722
 #, fuzzy
-msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
-msgstr "Der Konfigurationstyp hängt davon ab, ob Sie beim Start von Nagios die gespeicherten Informationen wiederherstellen. Wenn Sie sich nicht sicher sind, belassen Sie einfach den Standardwert. Wenn Sie Host- und Dienstgruppen, jedoch keine Hosts oder Dienste sehen können, ändern Sie diese Einstellung."
+msgid ""
+"The config type is based on whether or not you are restoring retained "
+"information when Nagios starts. If you are unsure just leave the default "
+"value. If you can see host and service groups but not hosts or services try "
+"changing this setting."
+msgstr ""
+"Der Konfigurationstyp hängt davon ab, ob Sie beim Start von Nagios die "
+"gespeicherten Informationen wiederherstellen. Wenn Sie sich nicht sicher "
+"sind, belassen Sie einfach den Standardwert. Wenn Sie Host- und "
+"Dienstgruppen, jedoch keine Hosts oder Dienste sehen können, ändern Sie "
+"diese Einstellung."
 
 #: setup.php:1728
 #, fuzzy
@@ -194,8 +215,16 @@ msgstr "Host-Symbole"
 
 #: setup.php:1729
 #, fuzzy
-msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
-msgstr "Aktivieren Sie die Anzeige von Host-Symbolen im Host-Raster. Die Parameter icon_image und icon_image_alt der Nagios-Hostdefinition werden zum Festlegen des Bildes verwendet. Symbole sollten 16x16 sein, um das beste Aussehen zu erhalten. Diese Einstellung wirkt sich nicht auf die Hoststatussymbole aus."
+msgid ""
+"Enable displaying host icons in the hosts grid. The icon_image and "
+"icon_image_alt parameters of the Nagios host definition are used to set the "
+"image. Icons should be 16x16 to get the best look. this setting does not "
+"affect the host status icons."
+msgstr ""
+"Aktivieren Sie die Anzeige von Host-Symbolen im Host-Raster. Die Parameter "
+"icon_image und icon_image_alt der Nagios-Hostdefinition werden zum Festlegen "
+"des Bildes verwendet. Symbole sollten 16x16 sein, um das beste Aussehen zu "
+"erhalten. Diese Einstellung wirkt sich nicht auf die Hoststatussymbole aus."
 
 #: setup.php:1733
 #, fuzzy
@@ -204,8 +233,17 @@ msgstr "Service-Symbole"
 
 #: setup.php:1734
 #, fuzzy
-msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
-msgstr "Aktivieren Sie die Anzeige von Service-Symbolen im Service-Raster. Die Parameter icon_image und icon_image_alt der Nagios-Dienstdefinition werden zum Festlegen des Bildes verwendet. Symbole sollten 16x16 sein, um das beste Aussehen zu erhalten. Diese Einstellung wirkt sich nicht auf die Dienststatussymbole aus."
+msgid ""
+"Enable displaying service icons in the services grid. The icon_image and "
+"icon_image_alt parameters of the Nagios service definition are used to set "
+"the image. Icons should be 16x16 to get the best look. This setting does not "
+"affect the service status icons."
+msgstr ""
+"Aktivieren Sie die Anzeige von Service-Symbolen im Service-Raster. Die "
+"Parameter icon_image und icon_image_alt der Nagios-Dienstdefinition werden "
+"zum Festlegen des Bildes verwendet. Symbole sollten 16x16 sein, um das beste "
+"Aussehen zu erhalten. Diese Einstellung wirkt sich nicht auf die "
+"Dienststatussymbole aus."
 
 #: setup.php:1738
 msgid "Logging"
@@ -217,5 +255,9 @@ msgstr "Protokollierungsstufe"
 
 #: setup.php:1743
 #, fuzzy
-msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr "Der Detaillierungsgrad, den Sie an die Cacti-Protokolldatei senden möchten. WARNUNG: Wenn Sie DEBUG verlassen, wird das Kakteenprotokoll schnell gefüllt."
+msgid ""
+"The level of detail you want sent to the Cacti log file. WARNING: Leaving in "
+"DEBUG will quickly fill the cacti log."
+msgstr ""
+"Der Detaillierungsgrad, den Sie an die Cacti-Protokolldatei senden möchten. "
+"WARNUNG: Wenn Sie DEBUG verlassen, wird das Kakteenprotokoll schnell gefüllt."
