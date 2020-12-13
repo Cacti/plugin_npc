@@ -5,182 +5,219 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2020-12-12 22:16-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: tr-TR\n"
+"PO-Revision-Date: 2020-12-13 10:48-0500\n"
+"Language: tr_TR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: controllers/cacti.php:150 setup.php:169 setup.php:237
 msgid "None"
-msgstr ""
+msgstr "Yok"
 
 #: controllers/controller.php:417
-#, php-format
+#, fuzzy, php-format
 msgid "An error occurred in %s. See error logs for detail."
-msgstr ""
+msgstr "%s içinde bir hata oluştu. Ayrıntılar için hata günlüklerine bakın."
 
 #: controllers/nagios.php:157
+#, fuzzy
 msgid "Remote Commands must be enabled under console->Settings->NPC"
-msgstr ""
+msgstr "Uzaktan Komutlar konsol-> Ayarlar-> NPC altında etkinleştirilmelidir"
 
 #: controllers/nagios.php:162
+#, fuzzy
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr ""
+msgstr "Nagios Komut Dosyası Yolu konsol-> Ayarlar-> NPC altında ayarlanmalıdır."
 
 #: controllers/nagios.php:174
+#, fuzzy
 msgid "You do not have permission to execute this command."
-msgstr ""
+msgstr "Bu komutu yürütme izniniz yok."
 
 #: controllers/nagios.php:278
+#, fuzzy
 msgid "Service Check Execution Time"
-msgstr ""
+msgstr "Servis Kontrolü Yürütme Süresi"
 
 #: controllers/nagios.php:279
+#, fuzzy
 msgid "Service Check Latency"
-msgstr ""
+msgstr "Servis Kontrol Gecikmesi"
 
 #: controllers/nagios.php:280
+#, fuzzy
 msgid "Host Check Execution Time"
-msgstr ""
+msgstr "Ana Bilgisayar Kontrolü Yürütme Süresi"
 
 #: controllers/nagios.php:281
+#, fuzzy
 msgid "Host Check Latency"
-msgstr ""
+msgstr "Ana Bilgisayar Kontrol Gecikmesi"
 
 #: npc.php:62
+#, fuzzy
 msgid "FATAL: Unable to make NPC Connection"
-msgstr ""
+msgstr "FATAL: NPC Bağlantısı yapılamıyor"
 
 #: setup.php:170
+#, fuzzy
 msgid "ERROR - Log errors only"
-msgstr ""
+msgstr "HATA - Yalnızca hataları günlüğe kaydet"
 
 #: setup.php:171
+#, fuzzy
 msgid "WARN  - Log errors and warnings"
-msgstr ""
+msgstr "UYARI - Hataları ve uyarıları günlüğe kaydet"
 
 #: setup.php:172
+#, fuzzy
 msgid "INFO  - Log errors, warnings, and info messages"
-msgstr ""
+msgstr "BİLGİ - Hataları, uyarıları ve bilgi mesajlarını günlüğe kaydedin"
 
 #: setup.php:173
+#, fuzzy
 msgid "DEBUG - Log everything"
-msgstr ""
+msgstr "DEBUG - Her şeyi günlüğe kaydet"
 
 #: setup.php:234
+#, fuzzy
 msgid "Nagios Host Mapping"
-msgstr ""
+msgstr "Nagios Ana Bilgisayar Eşleme"
 
 #: setup.php:235
+#, fuzzy
 msgid "Select the Nagios host that maps to this host."
-msgstr ""
+msgstr "Bu ana bilgisayarla eşleşen Nagios ana bilgisayarını seçin."
 
 #: setup.php:265 setup.php:1621
+#, fuzzy
 msgid "NPC"
-msgstr ""
+msgstr "NPC"
 
 #: setup.php:272
+#, fuzzy
 msgid "Status Detail"
-msgstr ""
+msgstr "Durum Ayrıntısı"
 
 #: setup.php:279
+#, fuzzy
 msgid "Service / Host Information"
-msgstr ""
+msgstr "Servis / Ev Sahibi Bilgileri"
 
 #: setup.php:286
+#, fuzzy
 msgid "Command Execution"
-msgstr ""
+msgstr "Komut Yürütme"
 
 #: setup.php:1679
 msgid "General Settings"
-msgstr ""
+msgstr "Genel Ayarlar"
 
 #: setup.php:1683
+#, fuzzy
 msgid "Remote Commands"
-msgstr ""
+msgstr "Uzaktan Komutlar"
 
 #: setup.php:1684
+#, fuzzy
 msgid "Allow commands to be written to the Nagios command file."
-msgstr ""
+msgstr "Komutların Nagios komut dosyasına yazılmasına izin verin."
 
 #: setup.php:1688
+#, fuzzy
 msgid "Nagios Command File Path"
-msgstr ""
+msgstr "Nagios Komut Dosyası Yolu"
 
 #: setup.php:1689
+#, fuzzy
 msgid "The path to the Nagios command file (nagios.cmd)."
-msgstr ""
+msgstr "Nagios komut dosyasının yolu (nagios.cmd)."
 
 #: setup.php:1694
+#, fuzzy
 msgid "Nagios URL"
-msgstr ""
+msgstr "Nagios URL'si"
 
 #: setup.php:1695
+#, fuzzy
 msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
-msgstr ""
+msgstr "Nagios kurulumunuzun tam URL'si (http://nagios.company.com/nagios/)"
 
 #: setup.php:1700
 msgid "Date Format"
-msgstr ""
+msgstr "Tarih Formatı"
 
 #: setup.php:1701
+#, fuzzy
 msgid "Select the format you want for displaying dates."
-msgstr ""
+msgstr "Tarihleri görüntülemek için istediğiniz biçimi seçin."
 
 #: setup.php:1707
 msgid "Time Format"
-msgstr ""
+msgstr "Zaman formatı"
 
 #: setup.php:1708
+#, fuzzy
 msgid "Select the format you want for displaying times."
-msgstr ""
+msgstr "Zamanları görüntülemek için istediğiniz formatı seçin."
 
 #: setup.php:1714
+#, fuzzy
 msgid "Portlet Refresh Rate"
-msgstr ""
+msgstr "Portlet Yenileme Hızı"
 
 #: setup.php:1715
+#, fuzzy
 msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
-msgstr ""
+msgstr "Portletler yenilenmeden önce beklenecek saniye cinsinden süre. Minimum 30 saniyedir."
 
 #: setup.php:1721
+#, fuzzy
 msgid "Host/Service Config Type"
-msgstr ""
+msgstr "Ana Bilgisayar / Hizmet Yapılandırması Türü"
 
 #: setup.php:1722
+#, fuzzy
 msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
-msgstr ""
+msgstr "Yapılandırma türü, Nagios başladığında tutulan bilgileri geri yükleyip yüklemediğinize bağlıdır. Emin değilseniz, varsayılan değeri bırakın. Ev sahibi ve hizmet gruplarını görebiliyorsanız ancak ana bilgisayarları veya hizmetleri göremiyorsanız, bu ayarı değiştirmeyi deneyin."
 
 #: setup.php:1728
+#, fuzzy
 msgid "Host Icons"
-msgstr ""
+msgstr "Ana Bilgisayar Simgeleri"
 
 #: setup.php:1729
+#, fuzzy
 msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
-msgstr ""
+msgstr "Ana bilgisayar kılavuzunda ana bilgisayar simgelerinin görüntülenmesini etkinleştirin. Nagios ana bilgisayar tanımının icon_image ve icon_image_alt parametreleri, görüntüyü ayarlamak için kullanılır. En iyi görünümü elde etmek için simgeler 16x16 boyutunda olmalıdır. bu ayar, ana bilgisayar durumu simgelerini etkilemez."
 
 #: setup.php:1733
+#, fuzzy
 msgid "Service Icons"
-msgstr ""
+msgstr "Hizmet Simgeleri"
 
 #: setup.php:1734
+#, fuzzy
 msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
-msgstr ""
+msgstr "Hizmetler ızgarasında hizmet simgelerinin görüntülenmesini etkinleştirin. Nagios hizmet tanımının icon_image ve icon_image_alt parametreleri, görüntüyü ayarlamak için kullanılır. En iyi görünümü elde etmek için simgeler 16x16 boyutunda olmalıdır. Bu ayar, servis durumu simgelerini etkilemez."
 
 #: setup.php:1738
 msgid "Logging"
-msgstr ""
+msgstr "Günlükleme"
 
 #: setup.php:1742
+#, fuzzy
 msgid "Logging Level"
-msgstr ""
+msgstr "Günlük Seviyesi"
 
 #: setup.php:1743
+#, fuzzy
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr ""
+msgstr "Cacti günlük dosyasına gönderilmesini istediğiniz ayrıntı düzeyi. UYARI: DEBUG'tan çıkmak, kaktüs günlüğünü hızla dolduracaktır."

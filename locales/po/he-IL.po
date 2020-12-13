@@ -5,182 +5,219 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2020-12-12 22:16-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: he-IL\n"
+"PO-Revision-Date: 2020-12-13 10:43-0500\n"
+"Language: he_IL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: controllers/cacti.php:150 setup.php:169 setup.php:237
 msgid "None"
-msgstr ""
+msgstr "ללא"
 
 #: controllers/controller.php:417
-#, php-format
+#, fuzzy, php-format
 msgid "An error occurred in %s. See error logs for detail."
-msgstr ""
+msgstr "אירעה שגיאה ב- %s. ראה יומני שגיאות לקבלת פרטים."
 
 #: controllers/nagios.php:157
+#, fuzzy
 msgid "Remote Commands must be enabled under console->Settings->NPC"
-msgstr ""
+msgstr "יש להפעיל פקודות מרחוק תחת קונסולת-> הגדרות-> NPC"
 
 #: controllers/nagios.php:162
+#, fuzzy
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr ""
+msgstr "יש להגדיר את נתיב קובץ הפקודה של Nagios תחת קונסולת-> הגדרות-> NPC"
 
 #: controllers/nagios.php:174
+#, fuzzy
 msgid "You do not have permission to execute this command."
-msgstr ""
+msgstr "אין לך הרשאה לבצע פקודה זו."
 
 #: controllers/nagios.php:278
+#, fuzzy
 msgid "Service Check Execution Time"
-msgstr ""
+msgstr "זמן ביצוע בדיקת שירות"
 
 #: controllers/nagios.php:279
+#, fuzzy
 msgid "Service Check Latency"
-msgstr ""
+msgstr "חביון בדיקת שירות"
 
 #: controllers/nagios.php:280
+#, fuzzy
 msgid "Host Check Execution Time"
-msgstr ""
+msgstr "זמן ביצוע צ'ק המארח"
 
 #: controllers/nagios.php:281
+#, fuzzy
 msgid "Host Check Latency"
-msgstr ""
+msgstr "חביון בדיקת מארח"
 
 #: npc.php:62
+#, fuzzy
 msgid "FATAL: Unable to make NPC Connection"
-msgstr ""
+msgstr "FATAL: לא ניתן ליצור חיבור NPC"
 
 #: setup.php:170
+#, fuzzy
 msgid "ERROR - Log errors only"
-msgstr ""
+msgstr "שגיאה - שגיאות יומן בלבד"
 
 #: setup.php:171
+#, fuzzy
 msgid "WARN  - Log errors and warnings"
-msgstr ""
+msgstr "אזהרה - שגיאות ואזהרות ביומן"
 
 #: setup.php:172
+#, fuzzy
 msgid "INFO  - Log errors, warnings, and info messages"
-msgstr ""
+msgstr "INFO - שגיאות יומן, אזהרות והודעות מידע"
 
 #: setup.php:173
+#, fuzzy
 msgid "DEBUG - Log everything"
-msgstr ""
+msgstr "DEBUG - התחבר הכל"
 
 #: setup.php:234
+#, fuzzy
 msgid "Nagios Host Mapping"
-msgstr ""
+msgstr "מיפוי מארח של נגיוס"
 
 #: setup.php:235
+#, fuzzy
 msgid "Select the Nagios host that maps to this host."
-msgstr ""
+msgstr "בחר את מארח Nagios הממפה למארח זה."
 
 #: setup.php:265 setup.php:1621
+#, fuzzy
 msgid "NPC"
-msgstr ""
+msgstr "NPC"
 
 #: setup.php:272
+#, fuzzy
 msgid "Status Detail"
-msgstr ""
+msgstr "פרטי סטטוס"
 
 #: setup.php:279
+#, fuzzy
 msgid "Service / Host Information"
-msgstr ""
+msgstr "מידע על שירות / מארח"
 
 #: setup.php:286
+#, fuzzy
 msgid "Command Execution"
-msgstr ""
+msgstr "ביצוע פיקוד"
 
 #: setup.php:1679
 msgid "General Settings"
-msgstr ""
+msgstr "הגדרות כלליות"
 
 #: setup.php:1683
+#, fuzzy
 msgid "Remote Commands"
-msgstr ""
+msgstr "פקודות מרחוק"
 
 #: setup.php:1684
+#, fuzzy
 msgid "Allow commands to be written to the Nagios command file."
-msgstr ""
+msgstr "אפשר לכתוב פקודות לקובץ הפקודה של Nagios."
 
 #: setup.php:1688
+#, fuzzy
 msgid "Nagios Command File Path"
-msgstr ""
+msgstr "נתיב קובץ הפיקוד של נגיוס"
 
 #: setup.php:1689
+#, fuzzy
 msgid "The path to the Nagios command file (nagios.cmd)."
-msgstr ""
+msgstr "הנתיב לקובץ הפקודה של Nagios (nagios.cmd)."
 
 #: setup.php:1694
+#, fuzzy
 msgid "Nagios URL"
-msgstr ""
+msgstr "כתובת URL של Nagios"
 
 #: setup.php:1695
+#, fuzzy
 msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
-msgstr ""
+msgstr "כתובת האתר המלאה להתקנת Nagios שלך (http://nagios.company.com/nagios/)"
 
 #: setup.php:1700
 msgid "Date Format"
-msgstr ""
+msgstr "פורמט תאריך"
 
 #: setup.php:1701
+#, fuzzy
 msgid "Select the format you want for displaying dates."
-msgstr ""
+msgstr "בחר את הפורמט הרצוי להצגת תאריכים."
 
 #: setup.php:1707
 msgid "Time Format"
-msgstr ""
+msgstr "פורמט שעה"
 
 #: setup.php:1708
+#, fuzzy
 msgid "Select the format you want for displaying times."
-msgstr ""
+msgstr "בחר את הפורמט הרצוי להצגת זמנים."
 
 #: setup.php:1714
+#, fuzzy
 msgid "Portlet Refresh Rate"
-msgstr ""
+msgstr "שיעור רענון פורטלט"
 
 #: setup.php:1715
+#, fuzzy
 msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
-msgstr ""
+msgstr "משך הזמן שנייה להמתין לפני שהפורטלטים יתרעננו. המינימום הוא 30 שניות."
 
 #: setup.php:1721
+#, fuzzy
 msgid "Host/Service Config Type"
-msgstr ""
+msgstr "סוג תצורת מארח / שירות"
 
 #: setup.php:1722
+#, fuzzy
 msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
-msgstr ""
+msgstr "סוג התצורה מבוסס על אם אתה משחזר מידע שמור או לא כאשר Nagios מתחיל. אם אינך בטוח פשוט השאר את ערך ברירת המחדל. אם אתה יכול לראות קבוצות מארח ושירות אך לא מארחים או שירותים נסה לשנות הגדרה זו."
 
 #: setup.php:1728
+#, fuzzy
 msgid "Host Icons"
-msgstr ""
+msgstr "אייקונים מארחים"
 
 #: setup.php:1729
+#, fuzzy
 msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
-msgstr ""
+msgstr "אפשר הצגת סמלי מארח ברשת המארחים. הפרמטרים icon_image ו- icon_image_alt בהגדרת המארח של Nagios משמשים להגדרת התמונה. הסמלים צריכים להיות 16x16 כדי לקבל את המראה הטוב ביותר. הגדרה זו אינה משפיעה על סמלי הסטטוס המארח."
 
 #: setup.php:1733
+#, fuzzy
 msgid "Service Icons"
-msgstr ""
+msgstr "סמלי שירות"
 
 #: setup.php:1734
+#, fuzzy
 msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
-msgstr ""
+msgstr "אפשר הצגת סמלי שירות ברשת השירותים. הפרמטרים icon_image ו- icon_image_alt של הגדרת השירות Nagios משמשים להגדרת התמונה. הסמלים צריכים להיות 16x16 כדי לקבל את המראה הטוב ביותר. הגדרה זו אינה משפיעה על סמלי סטטוס השירות."
 
 #: setup.php:1738
 msgid "Logging"
-msgstr ""
+msgstr "רישום"
 
 #: setup.php:1742
+#, fuzzy
 msgid "Logging Level"
-msgstr ""
+msgstr "רמת כניסה"
 
 #: setup.php:1743
+#, fuzzy
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr ""
+msgstr "רמת הפירוט שברצונך לשלוח לקובץ יומן הקקטוסים. אזהרה: השארת DEBUG תמלא במהירות את יומן הקקטוסים."

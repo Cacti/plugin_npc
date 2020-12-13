@@ -5,182 +5,219 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2020-12-12 22:16-0500\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: el-GR\n"
+"PO-Revision-Date: 2020-12-13 10:42-0500\n"
+"Language: el_GR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: controllers/cacti.php:150 setup.php:169 setup.php:237
 msgid "None"
-msgstr ""
+msgstr "Κανένα"
 
 #: controllers/controller.php:417
-#, php-format
+#, fuzzy, php-format
 msgid "An error occurred in %s. See error logs for detail."
-msgstr ""
+msgstr "Παρουσιάστηκε σφάλμα στο %s. Δείτε τα αρχεία καταγραφής σφαλμάτων για λεπτομέρειες."
 
 #: controllers/nagios.php:157
+#, fuzzy
 msgid "Remote Commands must be enabled under console->Settings->NPC"
-msgstr ""
+msgstr "Οι απομακρυσμένες εντολές πρέπει να είναι ενεργοποιημένες στην κονσόλα-> Ρυθμίσεις-> NPC"
 
 #: controllers/nagios.php:162
+#, fuzzy
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr ""
+msgstr "Η διαδρομή αρχείου εντολών Nagios πρέπει να οριστεί στην κονσόλα-> Ρυθμίσεις-> NPC"
 
 #: controllers/nagios.php:174
+#, fuzzy
 msgid "You do not have permission to execute this command."
-msgstr ""
+msgstr "Δεν έχετε άδεια εκτέλεσης αυτής της εντολής."
 
 #: controllers/nagios.php:278
+#, fuzzy
 msgid "Service Check Execution Time"
-msgstr ""
+msgstr "Χρόνος εκτέλεσης ελέγχου υπηρεσίας"
 
 #: controllers/nagios.php:279
+#, fuzzy
 msgid "Service Check Latency"
-msgstr ""
+msgstr "Καθυστέρηση ελέγχου υπηρεσίας"
 
 #: controllers/nagios.php:280
+#, fuzzy
 msgid "Host Check Execution Time"
-msgstr ""
+msgstr "Χρόνος εκτέλεσης ελέγχου κεντρικού υπολογιστή"
 
 #: controllers/nagios.php:281
+#, fuzzy
 msgid "Host Check Latency"
-msgstr ""
+msgstr "Κεντρικός έλεγχος καθυστέρησης"
 
 #: npc.php:62
+#, fuzzy
 msgid "FATAL: Unable to make NPC Connection"
-msgstr ""
+msgstr "FATAL: Δεν είναι δυνατή η σύνδεση NPC"
 
 #: setup.php:170
+#, fuzzy
 msgid "ERROR - Log errors only"
-msgstr ""
+msgstr "ΣΦΑΛΜΑ - Μόνο σφάλματα καταγραφής"
 
 #: setup.php:171
+#, fuzzy
 msgid "WARN  - Log errors and warnings"
-msgstr ""
+msgstr "ΠΡΟΕΙΔΟΠΟΙΗΣΗ - Σφάλματα και προειδοποιήσεις καταγραφής"
 
 #: setup.php:172
+#, fuzzy
 msgid "INFO  - Log errors, warnings, and info messages"
-msgstr ""
+msgstr "ΠΛΗΡΟΦΟΡΙΕΣ - Σφάλματα καταγραφής, προειδοποιήσεις και μηνύματα πληροφοριών"
 
 #: setup.php:173
+#, fuzzy
 msgid "DEBUG - Log everything"
-msgstr ""
+msgstr "DEBUG - Καταγράψτε τα πάντα"
 
 #: setup.php:234
+#, fuzzy
 msgid "Nagios Host Mapping"
-msgstr ""
+msgstr "Χαρτογράφηση Host Nagios"
 
 #: setup.php:235
+#, fuzzy
 msgid "Select the Nagios host that maps to this host."
-msgstr ""
+msgstr "Επιλέξτε τον κεντρικό υπολογιστή Nagios που αντιστοιχεί σε αυτόν τον κεντρικό υπολογιστή."
 
 #: setup.php:265 setup.php:1621
+#, fuzzy
 msgid "NPC"
-msgstr ""
+msgstr "NPC"
 
 #: setup.php:272
+#, fuzzy
 msgid "Status Detail"
-msgstr ""
+msgstr "Λεπτομέρεια κατάστασης"
 
 #: setup.php:279
+#, fuzzy
 msgid "Service / Host Information"
-msgstr ""
+msgstr "Πληροφορίες υπηρεσίας / κεντρικού υπολογιστή"
 
 #: setup.php:286
+#, fuzzy
 msgid "Command Execution"
-msgstr ""
+msgstr "Εκτέλεση εντολών"
 
 #: setup.php:1679
 msgid "General Settings"
-msgstr ""
+msgstr "Γενικές Ρυθμίσεις"
 
 #: setup.php:1683
+#, fuzzy
 msgid "Remote Commands"
-msgstr ""
+msgstr "Απομακρυσμένες εντολές"
 
 #: setup.php:1684
+#, fuzzy
 msgid "Allow commands to be written to the Nagios command file."
-msgstr ""
+msgstr "Να επιτρέπεται η εγγραφή εντολών στο αρχείο εντολών Nagios."
 
 #: setup.php:1688
+#, fuzzy
 msgid "Nagios Command File Path"
-msgstr ""
+msgstr "Διαδρομή αρχείου εντολών Nagios"
 
 #: setup.php:1689
+#, fuzzy
 msgid "The path to the Nagios command file (nagios.cmd)."
-msgstr ""
+msgstr "Η διαδρομή προς το αρχείο εντολών Nagios (nagios.cmd)."
 
 #: setup.php:1694
+#, fuzzy
 msgid "Nagios URL"
-msgstr ""
+msgstr "Διεύθυνση URL Nagios"
 
 #: setup.php:1695
+#, fuzzy
 msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
-msgstr ""
+msgstr "Το πλήρες URL για την εγκατάσταση του Nagios (http://nagios.company.com/nagios/)"
 
 #: setup.php:1700
 msgid "Date Format"
-msgstr ""
+msgstr "Μορφή ημερομηνίας"
 
 #: setup.php:1701
+#, fuzzy
 msgid "Select the format you want for displaying dates."
-msgstr ""
+msgstr "Επιλέξτε τη μορφή που θέλετε για εμφάνιση ημερομηνιών."
 
 #: setup.php:1707
 msgid "Time Format"
-msgstr ""
+msgstr "Μορφή ώρας"
 
 #: setup.php:1708
+#, fuzzy
 msgid "Select the format you want for displaying times."
-msgstr ""
+msgstr "Επιλέξτε τη μορφή που θέλετε για την εμφάνιση των χρόνων."
 
 #: setup.php:1714
+#, fuzzy
 msgid "Portlet Refresh Rate"
-msgstr ""
+msgstr "Ποσοστό ανανέωσης πύλης"
 
 #: setup.php:1715
+#, fuzzy
 msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
-msgstr ""
+msgstr "Ο χρόνος σε δευτερόλεπτα για να περιμένετε πριν από την ανανέωση των συστατικών στοιχείων πύλης. Το ελάχιστο είναι 30 δευτερόλεπτα."
 
 #: setup.php:1721
+#, fuzzy
 msgid "Host/Service Config Type"
-msgstr ""
+msgstr "Τύπος διαμόρφωσης κεντρικού υπολογιστή / υπηρεσίας"
 
 #: setup.php:1722
+#, fuzzy
 msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
-msgstr ""
+msgstr "Ο τύπος διαμόρφωσης βασίζεται στο κατά πόσον επαναφέρετε τις διατηρούμενες πληροφορίες κατά την εκκίνηση του Nagios. Εάν δεν είστε βέβαιοι απλώς αφήστε την προεπιλεγμένη τιμή. Εάν μπορείτε να δείτε ομάδες κεντρικών υπολογιστών και υπηρεσιών, αλλά όχι κεντρικούς υπολογιστές ή υπηρεσίες, δοκιμάστε να αλλάξετε αυτήν τη ρύθμιση."
 
 #: setup.php:1728
+#, fuzzy
 msgid "Host Icons"
-msgstr ""
+msgstr "Εικονίδια κεντρικού υπολογιστή"
 
 #: setup.php:1729
+#, fuzzy
 msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
-msgstr ""
+msgstr "Ενεργοποίηση εμφάνισης εικονιδίων κεντρικού υπολογιστή στο πλέγμα κεντρικών υπολογιστών. Οι παράμετροι icon_image και icon_image_alt του ορισμού κεντρικού υπολογιστή Nagios χρησιμοποιούνται για τη ρύθμιση της εικόνας. Τα εικονίδια πρέπει να είναι 16x16 για να έχετε την καλύτερη εμφάνιση. Αυτή η ρύθμιση δεν επηρεάζει τα εικονίδια κατάστασης κεντρικού υπολογιστή."
 
 #: setup.php:1733
+#, fuzzy
 msgid "Service Icons"
-msgstr ""
+msgstr "Εικονίδια υπηρεσίας"
 
 #: setup.php:1734
+#, fuzzy
 msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
-msgstr ""
+msgstr "Ενεργοποίηση εμφάνισης εικονιδίων υπηρεσίας στο πλέγμα υπηρεσιών. Οι παράμετροι icon_image και icon_image_alt του ορισμού υπηρεσίας Nagios χρησιμοποιούνται για τη ρύθμιση της εικόνας. Τα εικονίδια πρέπει να είναι 16x16 για να έχετε την καλύτερη εμφάνιση. Αυτή η ρύθμιση δεν επηρεάζει τα εικονίδια κατάστασης υπηρεσίας."
 
 #: setup.php:1738
 msgid "Logging"
-msgstr ""
+msgstr "Υλοτομία"
 
 #: setup.php:1742
+#, fuzzy
 msgid "Logging Level"
-msgstr ""
+msgstr "Επίπεδο καταγραφής"
 
 #: setup.php:1743
+#, fuzzy
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr ""
+msgstr "Το επίπεδο λεπτομέρειας που θέλετε να σταλεί στο αρχείο καταγραφής Cacti. ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Η έξοδος στο DEBUG θα γεμίσει γρήγορα το αρχείο καταγραφής κάκτων."
