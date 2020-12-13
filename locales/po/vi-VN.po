@@ -9,12 +9,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
 "POT-Creation-Date: 2020-12-12 22:16-0500\n"
 "PO-Revision-Date: 2020-12-13 10:48-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "Language: vi_VN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: \n"
-"Language-Team: \n"
 "X-Generator: Poedit 2.4.2\n"
 
 #: controllers/cacti.php:150 setup.php:169 setup.php:237
@@ -34,7 +34,8 @@ msgstr "Lệnh Từ xa phải được bật trong bảng điều khiển-> Cài
 #: controllers/nagios.php:162
 #, fuzzy
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr "Đường dẫn tệp lệnh Nagios phải được đặt trong bảng điều khiển-> Cài đặt-> NPC"
+msgstr ""
+"Đường dẫn tệp lệnh Nagios phải được đặt trong bảng điều khiển-> Cài đặt-> NPC"
 
 #: controllers/nagios.php:174
 #, fuzzy
@@ -147,8 +148,10 @@ msgstr "URL Nagios"
 
 #: setup.php:1695
 #, fuzzy
-msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
-msgstr "URL đầy đủ đến cài đặt Nagios của bạn (http://nagios.company.com/nagios/)"
+msgid ""
+"The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr ""
+"URL đầy đủ đến cài đặt Nagios của bạn (http://nagios.company.com/nagios/)"
 
 #: setup.php:1700
 msgid "Date Format"
@@ -175,8 +178,12 @@ msgstr "Tốc độ làm mới Portlet"
 
 #: setup.php:1715
 #, fuzzy
-msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
-msgstr "Khoảng thời gian tính bằng giây để đợi trước khi các portlet làm mới. Tối thiểu là 30 giây."
+msgid ""
+"The amount of time in seconds to wait before the portlets refresh. The "
+"minimum is 30 seconds."
+msgstr ""
+"Khoảng thời gian tính bằng giây để đợi trước khi các portlet làm mới. Tối "
+"thiểu là 30 giây."
 
 #: setup.php:1721
 #, fuzzy
@@ -185,8 +192,16 @@ msgstr "Loại cấu hình máy chủ / dịch vụ"
 
 #: setup.php:1722
 #, fuzzy
-msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
-msgstr "Loại cấu hình dựa trên việc bạn có đang khôi phục thông tin được giữ lại khi Nagios khởi động hay không. Nếu bạn không chắc chắn chỉ cần để lại giá trị mặc định. Nếu bạn có thể thấy máy chủ và nhóm dịch vụ nhưng không thấy máy chủ hoặc dịch vụ, hãy thử thay đổi cài đặt này."
+msgid ""
+"The config type is based on whether or not you are restoring retained "
+"information when Nagios starts. If you are unsure just leave the default "
+"value. If you can see host and service groups but not hosts or services try "
+"changing this setting."
+msgstr ""
+"Loại cấu hình dựa trên việc bạn có đang khôi phục thông tin được giữ lại khi "
+"Nagios khởi động hay không. Nếu bạn không chắc chắn chỉ cần để lại giá trị "
+"mặc định. Nếu bạn có thể thấy máy chủ và nhóm dịch vụ nhưng không thấy máy "
+"chủ hoặc dịch vụ, hãy thử thay đổi cài đặt này."
 
 #: setup.php:1728
 #, fuzzy
@@ -195,8 +210,16 @@ msgstr "Biểu tượng máy chủ"
 
 #: setup.php:1729
 #, fuzzy
-msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
-msgstr "Cho phép hiển thị biểu tượng máy chủ trong lưới máy chủ. Các thông số icon_image và icon_image_alt của định nghĩa máy chủ Nagios được sử dụng để thiết lập hình ảnh. Biểu tượng phải là 16x16 để có giao diện đẹp nhất. cài đặt này không ảnh hưởng đến các biểu tượng trạng thái máy chủ."
+msgid ""
+"Enable displaying host icons in the hosts grid. The icon_image and "
+"icon_image_alt parameters of the Nagios host definition are used to set the "
+"image. Icons should be 16x16 to get the best look. this setting does not "
+"affect the host status icons."
+msgstr ""
+"Cho phép hiển thị biểu tượng máy chủ trong lưới máy chủ. Các thông số "
+"icon_image và icon_image_alt của định nghĩa máy chủ Nagios được sử dụng để "
+"thiết lập hình ảnh. Biểu tượng phải là 16x16 để có giao diện đẹp nhất. cài "
+"đặt này không ảnh hưởng đến các biểu tượng trạng thái máy chủ."
 
 #: setup.php:1733
 #, fuzzy
@@ -205,8 +228,16 @@ msgstr "Biểu tượng dịch vụ"
 
 #: setup.php:1734
 #, fuzzy
-msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
-msgstr "Cho phép hiển thị các biểu tượng dịch vụ trong lưới dịch vụ. Các tham số icon_image và icon_image_alt của định nghĩa dịch vụ Nagios được sử dụng để thiết lập hình ảnh. Biểu tượng phải là 16x16 để có giao diện đẹp nhất. Cài đặt này không ảnh hưởng đến các biểu tượng trạng thái dịch vụ."
+msgid ""
+"Enable displaying service icons in the services grid. The icon_image and "
+"icon_image_alt parameters of the Nagios service definition are used to set "
+"the image. Icons should be 16x16 to get the best look. This setting does not "
+"affect the service status icons."
+msgstr ""
+"Cho phép hiển thị các biểu tượng dịch vụ trong lưới dịch vụ. Các tham số "
+"icon_image và icon_image_alt của định nghĩa dịch vụ Nagios được sử dụng để "
+"thiết lập hình ảnh. Biểu tượng phải là 16x16 để có giao diện đẹp nhất. Cài "
+"đặt này không ảnh hưởng đến các biểu tượng trạng thái dịch vụ."
 
 #: setup.php:1738
 msgid "Logging"
@@ -219,5 +250,9 @@ msgstr "Mức độ ghi nhật ký"
 
 #: setup.php:1743
 #, fuzzy
-msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr "Mức độ chi tiết bạn muốn được gửi đến tệp nhật ký Cacti. CẢNH BÁO: Để lại trong DEBUG sẽ nhanh chóng lấp đầy nhật ký xương rồng."
+msgid ""
+"The level of detail you want sent to the Cacti log file. WARNING: Leaving in "
+"DEBUG will quickly fill the cacti log."
+msgstr ""
+"Mức độ chi tiết bạn muốn được gửi đến tệp nhật ký Cacti. CẢNH BÁO: Để lại "
+"trong DEBUG sẽ nhanh chóng lấp đầy nhật ký xương rồng."
