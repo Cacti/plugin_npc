@@ -4,102 +4,74 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2020-12-12 22:16-0500\n"
-"PO-Revision-Date: 2020-12-13 10:47-0500\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: ru_RU\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2020-12-12 22:16-0500\nPO-Revision-Date: 2022-03-31 16:49+0000\nLast-Translator: Anatoliy <hamrad99h2@gmail.com>\nLanguage-Team: Russian <http://translate.cacti.net/projects/cacti/npc/ru/>\nLanguage: ru-RU\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\nX-Generator: Weblate 4.8.1\n"
 
 #: controllers/cacti.php:150 setup.php:169 setup.php:237
 msgid "None"
 msgstr "Нет"
 
 #: controllers/controller.php:417
-#, fuzzy, php-format
+#, php-format
 msgid "An error occurred in %s. See error logs for detail."
 msgstr "Произошла ошибка в %s. См. Подробности в журналах ошибок."
 
 #: controllers/nagios.php:157
-#, fuzzy
 msgid "Remote Commands must be enabled under console->Settings->NPC"
-msgstr "Удаленные команды должны быть включены в консоли-> Настройки-> NPC."
+msgstr "Удаленные Команды должны быть включены в консоли -> Настройки -> NPC"
 
 #: controllers/nagios.php:162
-#, fuzzy
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr ""
-"Путь к командному файлу Nagios должен быть установлен в консоли-> Настройки-"
-"> NPC."
+msgstr "Путь к командному файлу Nagios должен быть установлен в консоли -> Настройки -> NPC"
 
 #: controllers/nagios.php:174
-#, fuzzy
 msgid "You do not have permission to execute this command."
 msgstr "У вас нет разрешения на выполнение этой команды."
 
 #: controllers/nagios.php:278
-#, fuzzy
 msgid "Service Check Execution Time"
 msgstr "Время выполнения сервисной проверки"
 
 #: controllers/nagios.php:279
-#, fuzzy
 msgid "Service Check Latency"
-msgstr "Задержка проверки службы"
+msgstr "Задержка сервисной проверки"
 
 #: controllers/nagios.php:280
-#, fuzzy
 msgid "Host Check Execution Time"
 msgstr "Время выполнения проверки хоста"
 
 #: controllers/nagios.php:281
-#, fuzzy
 msgid "Host Check Latency"
 msgstr "Задержка проверки хоста"
 
 #: npc.php:62
-#, fuzzy
 msgid "FATAL: Unable to make NPC Connection"
 msgstr "FATAL: невозможно установить соединение с NPC"
 
 #: setup.php:170
-#, fuzzy
 msgid "ERROR - Log errors only"
 msgstr "ОШИБКА - записывать только ошибки"
 
 #: setup.php:171
-#, fuzzy
 msgid "WARN  - Log errors and warnings"
-msgstr "ПРЕДУПРЕЖДЕНИЕ - регистрировать ошибки и предупреждения"
+msgstr "ПРЕДУПРЕЖДЕНИЕ - записывать ошибки и предупреждения"
 
 #: setup.php:172
-#, fuzzy
 msgid "INFO  - Log errors, warnings, and info messages"
-msgstr "ИНФОРМАЦИЯ - журнал ошибок, предупреждений и информационных сообщений."
+msgstr "ИНФОРМАЦИЯ - записывать ошибки, предупреждения и информационные сообщения"
 
 #: setup.php:173
-#, fuzzy
 msgid "DEBUG - Log everything"
 msgstr "DEBUG - записывать все"
 
 #: setup.php:234
-#, fuzzy
 msgid "Nagios Host Mapping"
 msgstr "Сопоставление хостов Nagios"
 
 #: setup.php:235
-#, fuzzy
 msgid "Select the Nagios host that maps to this host."
 msgstr "Выберите хост Nagios, который соответствует этому хосту."
 
 #: setup.php:265 setup.php:1621
-#, fuzzy
 msgid "NPC"
 msgstr "NPC"
 
@@ -108,68 +80,57 @@ msgid "Status Detail"
 msgstr "Сведения о статусе"
 
 #: setup.php:279
-#, fuzzy
 msgid "Service / Host Information"
-msgstr "Информация об услуге / хосте"
+msgstr "Информация об сервисе/хосте"
 
 #: setup.php:286
-#, fuzzy
 msgid "Command Execution"
 msgstr "Выполнение команды"
 
 #: setup.php:1679
 msgid "General Settings"
-msgstr "Основые Настройки"
+msgstr "Основные Настройки"
 
 #: setup.php:1683
-#, fuzzy
 msgid "Remote Commands"
-msgstr "Удаленные команды"
+msgstr "Удаленные Команды"
 
 #: setup.php:1684
-#, fuzzy
 msgid "Allow commands to be written to the Nagios command file."
 msgstr "Разрешить запись команд в командный файл Nagios."
 
 #: setup.php:1688
-#, fuzzy
 msgid "Nagios Command File Path"
 msgstr "Путь к командному файлу Nagios"
 
 #: setup.php:1689
-#, fuzzy
 msgid "The path to the Nagios command file (nagios.cmd)."
 msgstr "Путь к командному файлу Nagios (nagios.cmd)."
 
 #: setup.php:1694
-#, fuzzy
 msgid "Nagios URL"
 msgstr "URL-адрес Nagios"
 
 #: setup.php:1695
-#, fuzzy
 msgid ""
 "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
-msgstr ""
-"Полный URL-адрес вашей установки Nagios (http://nagios.company.com/nagios/)"
+msgstr "Полный URL-адрес вашей установки Nagios (http://nagios.company.com/nagios/)"
 
 #: setup.php:1700
 msgid "Date Format"
 msgstr "Формат даты"
 
 #: setup.php:1701
-#, fuzzy
 msgid "Select the format you want for displaying dates."
-msgstr "Выберите желаемый формат для отображения дат."
+msgstr "Выберите желаемый формат отображения дат."
 
 #: setup.php:1707
 msgid "Time Format"
 msgstr "Формат времени"
 
 #: setup.php:1708
-#, fuzzy
 msgid "Select the format you want for displaying times."
-msgstr "Выберите желаемый формат для отображения времени."
+msgstr "Выберите желаемый формат отображения времени."
 
 #: setup.php:1714
 #, fuzzy
@@ -185,57 +146,40 @@ msgstr ""
 "Время ожидания перед обновлением портлетов в секундах. Минимум 30 секунд."
 
 #: setup.php:1721
-#, fuzzy
 msgid "Host/Service Config Type"
 msgstr "Тип конфигурации хоста / службы"
 
 #: setup.php:1722
-#, fuzzy
 msgid ""
 "The config type is based on whether or not you are restoring retained "
 "information when Nagios starts. If you are unsure just leave the default "
 "value. If you can see host and service groups but not hosts or services try "
 "changing this setting."
-msgstr ""
-"Тип конфигурации зависит от того, восстанавливаете ли вы сохраненную "
-"информацию при запуске Nagios. Если вы не уверены, просто оставьте значение "
-"по умолчанию. Если вы видите хосты и группы услуг, но не видите хосты или "
-"сервисы, попробуйте изменить этот параметр."
+msgstr "Тип конфигурации зависит от того, восстанавливаете ли вы сохраненную информацию при запуске Nagios. Если вы не уверены, просто оставьте значение по умолчанию. Если вы видите группы хостов и сервисов, но не видите хосты или сервисы, попробуйте изменить этот параметр."
 
 #: setup.php:1728
-#, fuzzy
 msgid "Host Icons"
 msgstr "Иконки хоста"
 
 #: setup.php:1729
-#, fuzzy
 msgid ""
 "Enable displaying host icons in the hosts grid. The icon_image and "
 "icon_image_alt parameters of the Nagios host definition are used to set the "
 "image. Icons should be 16x16 to get the best look. this setting does not "
 "affect the host status icons."
-msgstr ""
-"Включить отображение значков хостов в сетке хостов. Параметры icon_image и "
-"icon_image_alt в определении хоста Nagios используются для установки "
-"изображения. Иконки должны иметь размер 16x16, чтобы лучше выглядеть. этот "
-"параметр не влияет на значки состояния хоста."
+msgstr "Включить отображение значков хостов в сетке хостов. Параметры icon_image и icon_image_alt в описании хоста Nagios используются для установки изображения. Иконки должны иметь размер 16x16, чтобы лучше выглядеть. Этот параметр не влияет на значки состояния хоста."
 
 #: setup.php:1733
 msgid "Service Icons"
-msgstr "Иконки услуг"
+msgstr "Иконки сервисов"
 
 #: setup.php:1734
-#, fuzzy
 msgid ""
 "Enable displaying service icons in the services grid. The icon_image and "
 "icon_image_alt parameters of the Nagios service definition are used to set "
 "the image. Icons should be 16x16 to get the best look. This setting does not "
 "affect the service status icons."
-msgstr ""
-"Включить отображение значков служб в сетке служб. Параметры icon_image и "
-"icon_image_alt в определении службы Nagios используются для установки "
-"изображения. Иконки должны иметь размер 16x16, чтобы лучше выглядеть. Этот "
-"параметр не влияет на значки состояния службы."
+msgstr "Включить отображение значков сервисов в сетке сервисов. Параметры icon_image и icon_image_alt в описании сервисов Nagios используются для установки изображения. Иконки должны иметь размер 16x16, чтобы лучше выглядеть. Этот параметр не влияет на значки состояния службы."
 
 #: setup.php:1738
 msgid "Logging"
@@ -246,10 +190,7 @@ msgid "Logging Level"
 msgstr "Уровень Журнала"
 
 #: setup.php:1743
-#, fuzzy
 msgid ""
 "The level of detail you want sent to the Cacti log file. WARNING: Leaving in "
 "DEBUG will quickly fill the cacti log."
-msgstr ""
-"Уровень детализации, который вы хотите отправить в файл журнала Cacti. "
-"ВНИМАНИЕ: выход из DEBUG быстро заполнит журнал cacti."
+msgstr "Уровень детализации, который вы хотите отправить в файл журнала Cacti. ВНИМАНИЕ: установка в DEBUG быстро заполнит журнал cacti."
