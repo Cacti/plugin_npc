@@ -4,173 +4,184 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: Cacti\nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2020-12-12 22:16-0500\nPO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\nLast-Translator: Automatically generated\nLanguage-Team: none\nLanguage: lv\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n"
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2020-12-12 22:16-0500\n"
+"PO-Revision-Date: 2022-06-16 20:18-0400\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: lv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.1\n"
 
 #: controllers/cacti.php:150 setup.php:169 setup.php:237
 msgid "None"
-msgstr ""
+msgstr "Nekāds"
 
 #: controllers/controller.php:417
 #, php-format
 msgid "An error occurred in %s. See error logs for detail."
-msgstr ""
+msgstr "%s radās kļūda. Sīkāku informāciju skatiet kļūdu žurnālos."
 
 #: controllers/nagios.php:157
 msgid "Remote Commands must be enabled under console->Settings->NPC"
-msgstr ""
+msgstr "Attālās komandas ir jāiespējo sadaļā konsole->Iestatījumi->NPC"
 
 #: controllers/nagios.php:162
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr ""
+msgstr "Nagios komandas faila ceļš ir jāiestata sadaļā konsole->Iestatījumi->NPC"
 
 #: controllers/nagios.php:174
 msgid "You do not have permission to execute this command."
-msgstr ""
+msgstr "Jums nav atļaujas izpildīt šo komandu."
 
 #: controllers/nagios.php:278
 msgid "Service Check Execution Time"
-msgstr ""
+msgstr "Pakalpojuma pārbaudes izpildes laiks"
 
 #: controllers/nagios.php:279
 msgid "Service Check Latency"
-msgstr ""
+msgstr "Servisa pārbaudes latentums"
 
 #: controllers/nagios.php:280
 msgid "Host Check Execution Time"
-msgstr ""
+msgstr "Resursdatora pārbaudes izpildes laiks"
 
 #: controllers/nagios.php:281
 msgid "Host Check Latency"
-msgstr ""
+msgstr "Saimniekdatora pārbaudes latentums"
 
 #: npc.php:62
 msgid "FATAL: Unable to make NPC Connection"
-msgstr ""
+msgstr "FATAL: Nevar izveidot NPC savienojumu"
 
 #: setup.php:170
 msgid "ERROR - Log errors only"
-msgstr ""
+msgstr "KĻŪDA — tikai žurnāla kļūdas"
 
 #: setup.php:171
 msgid "WARN  - Log errors and warnings"
-msgstr ""
+msgstr "BRĪDINĀJUMS — reģistrē kļūdas un brīdinājumus"
 
 #: setup.php:172
 msgid "INFO  - Log errors, warnings, and info messages"
-msgstr ""
+msgstr "INFO — reģistrē kļūdas, brīdinājumus un informācijas ziņojumus"
 
 #: setup.php:173
 msgid "DEBUG - Log everything"
-msgstr ""
+msgstr "ATKLĀŠANA — visu reģistrējiet"
 
 #: setup.php:234
 msgid "Nagios Host Mapping"
-msgstr ""
+msgstr "Nagios saimniekdatora kartēšana"
 
 #: setup.php:235
 msgid "Select the Nagios host that maps to this host."
-msgstr ""
+msgstr "Atlasiet Nagios saimniekdatoru, kas tiek kartēts ar šo resursdatoru."
 
 #: setup.php:265 setup.php:1621
 msgid "NPC"
-msgstr ""
+msgstr "NPC"
 
 #: setup.php:272
 msgid "Status Detail"
-msgstr ""
+msgstr "Statusa informācija"
 
 #: setup.php:279
 msgid "Service / Host Information"
-msgstr ""
+msgstr "Pakalpojumu/uzņēmēja informācija"
 
 #: setup.php:286
 msgid "Command Execution"
-msgstr ""
+msgstr "Komandas izpilde"
 
 #: setup.php:1679
 msgid "General Settings"
-msgstr ""
+msgstr "Vispārīgie iestatījumi"
 
 #: setup.php:1683
 msgid "Remote Commands"
-msgstr ""
+msgstr "Tālvadības komandas"
 
 #: setup.php:1684
 msgid "Allow commands to be written to the Nagios command file."
-msgstr ""
+msgstr "Atļaut komandas rakstīt Nagios komandu failā."
 
 #: setup.php:1688
 msgid "Nagios Command File Path"
-msgstr ""
+msgstr "Nagios komandas faila ceļš"
 
 #: setup.php:1689
 msgid "The path to the Nagios command file (nagios.cmd)."
-msgstr ""
+msgstr "Ceļš uz Nagios komandas failu (nagios.cmd)."
 
 #: setup.php:1694
 msgid "Nagios URL"
-msgstr ""
+msgstr "Nagios URL"
 
 #: setup.php:1695
 msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
-msgstr ""
+msgstr "Pilns URL uz jūsu Nagios instalāciju (http://nagios.company.com/nagios/)"
 
 #: setup.php:1700
 msgid "Date Format"
-msgstr ""
+msgstr "Datuma Formāts"
 
 #: setup.php:1701
 msgid "Select the format you want for displaying dates."
-msgstr ""
+msgstr "Izvēlieties datumu rādīšanas formātu."
 
 #: setup.php:1707
 msgid "Time Format"
-msgstr ""
+msgstr "Laika formāts"
 
 #: setup.php:1708
 msgid "Select the format you want for displaying times."
-msgstr ""
+msgstr "Atlasiet formātu, kuru vēlaties rādīt laiku."
 
 #: setup.php:1714
 msgid "Portlet Refresh Rate"
-msgstr ""
+msgstr "Portleta atsvaidzināšanas biežums"
 
 #: setup.php:1715
 msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
-msgstr ""
+msgstr "Laiks sekundēs, kas jāgaida, pirms portlets tiek atsvaidzināts. Minimālais laiks ir 30 sekundes."
 
 #: setup.php:1721
 msgid "Host/Service Config Type"
-msgstr ""
+msgstr "Saimniekdatora/pakalpojuma konfigurācijas veids"
 
 #: setup.php:1722
 msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
-msgstr ""
+msgstr "Konfigurācijas veids ir balstīts uz to, vai, startējot Nagios, atjaunojat saglabāto informāciju. Ja neesat pārliecināts, vienkārši atstājiet noklusējuma vērtību. Ja redzat saimniekdatoru un pakalpojumu grupas, bet ne resursdatorus vai pakalpojumus, mēģiniet mainīt šo iestatījumu."
 
 #: setup.php:1728
 msgid "Host Icons"
-msgstr ""
+msgstr "Resursdatora ikonas"
 
 #: setup.php:1729
 msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
-msgstr ""
+msgstr "Iespējot saimniekdatoru ikonu rādīšanu saimniekdatoru režģī. Attēla iestatīšanai tiek izmantoti Nagios saimniekdatora definīcijas parametri icon_image un icon_image_alt. Ikonām ir jābūt 16 x 16, lai iegūtu vislabāko izskatu. šis iestatījums neietekmē resursdatora statusa ikonas."
 
 #: setup.php:1733
 msgid "Service Icons"
-msgstr ""
+msgstr "Pakalpojumu ikonas"
 
 #: setup.php:1734
 msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
-msgstr ""
+msgstr "Iespējot pakalpojumu ikonu rādīšanu pakalpojumu režģī. Attēla iestatīšanai tiek izmantoti Nagios pakalpojuma definīcijas parametri icon_image un icon_image_alt. Ikonām ir jābūt 16 x 16, lai iegūtu vislabāko izskatu. Šis iestatījums neietekmē pakalpojuma statusa ikonas."
 
 #: setup.php:1738
 msgid "Logging"
-msgstr ""
+msgstr "Mežizstrāde"
 
 #: setup.php:1742
 msgid "Logging Level"
-msgstr ""
+msgstr "Mežizstrādes līmenis"
 
 #: setup.php:1743
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr ""
+msgstr "Detalizētības līmenis, kuru vēlaties nosūtīt Cacti žurnālfailam. BRĪDINĀJUMS: atstājot DEBUG, kaktusu žurnāls tiks ātri aizpildīts."
