@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: Cacti\nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2020-12-12 22:16-0500\nPO-Revision-Date: 2022-06-18 06:37+0000\nLast-Translator: Coool <coool@mail.lv>\nLanguage-Team: Latvian <http://translate.cacti.net/projects/cacti/npc/lv/>\nLanguage: lv-LV\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= 19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\nX-Generator: Weblate 4.8.1\n"
+msgstr "Project-Id-Version: Cacti\nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2020-12-12 22:16-0500\nPO-Revision-Date: 2022-06-18 16:55+0000\nLast-Translator: Coool <coool@mail.lv>\nLanguage-Team: Latvian <http://translate.cacti.net/projects/cacti/npc/lv/>\nLanguage: lv-LV\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= 19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\nX-Generator: Weblate 4.8.1\n"
 
 #: controllers/cacti.php:150 setup.php:169 setup.php:237
 msgid "None"
@@ -13,7 +13,7 @@ msgstr "Nevienu"
 #: controllers/controller.php:417
 #, php-format
 msgid "An error occurred in %s. See error logs for detail."
-msgstr "%s radās kļūda. Sīkāku informāciju skatiet kļūdu žurnālos."
+msgstr "Radās kļūda %s. Sīkāku informāciju skatiet kļūdu žurnālos."
 
 #: controllers/nagios.php:157
 msgid "Remote Commands must be enabled under console->Settings->NPC"
@@ -101,7 +101,7 @@ msgstr "Atļaut komandas rakstīt Nagios komandu failā."
 
 #: setup.php:1688
 msgid "Nagios Command File Path"
-msgstr "Ceļs uz Nagios komandas failu"
+msgstr "Ceļš uz Nagios komandas failu"
 
 #: setup.php:1689
 msgid "The path to the Nagios command file (nagios.cmd)."
