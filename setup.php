@@ -567,6 +567,7 @@ function npc_setup_tables() {
 			`notify_host_unreachable` smallint(6) NOT NULL default '0',
 			`notify_host_flapping` smallint(6) NOT NULL default '0',
 			`notify_host_downtime` smallint(6) NOT NULL default '0',
+			`minimum_importance` smallint(6) NOT NULL default '0',
 			PRIMARY KEY  (`contact_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`contact_object_id`))
 			ENGINE=InnoDB
@@ -950,6 +951,7 @@ function npc_setup_tables() {
 			`x_3d` double NOT NULL default '0',
 			`y_3d` double NOT NULL default '0',
 			`z_3d` double NOT NULL default '0',
+			`importance` smallint(6) NOT NULL default '0',
 			PRIMARY KEY  (`host_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`host_object_id`),
 			KEY `idx1` (`host_object_id`),
@@ -1380,6 +1382,7 @@ function npc_setup_tables() {
 			`action_url` varchar(255) NOT NULL default '',
 			`icon_image` varchar(255) NOT NULL default '',
 			`icon_image_alt` varchar(255) NOT NULL default '',
+			`importance` smallint(6) NOT NULL default '0',
 			PRIMARY KEY  (`service_id`),
 			UNIQUE KEY `instance_id` (`instance_id`,`config_type`,`service_object_id`),
 			KEY `idx1` (`config_type`),
@@ -1781,6 +1784,18 @@ function npc_upgrade_tables() {
 
 	if (!db_column_exists('npc_notifications', 'long_output')) {
 		db_execute("ALTER TABLE `npc_notifications` ADD COLUMN `long_output` varchar(8192) NOT NULL default '' AFTER `output`");
+	}
+
+	if (!db_column_exists('npc_services', 'importance')) {
+		db_execute("ALTER TABLE `npc_services` ADD COLUMN `importance` smallint(6) NOT NULL default '0' AFTER `icon_image_alt`");
+	}
+
+	if (!db_column_exists('npc_hosts', 'importance')) {
+		db_execute("ALTER TABLE `npc_hosts` ADD COLUMN `importance` smallint(6) NOT NULL default '0' AFTER `z_3d`");
+	}
+
+	if (!db_column_exists('npc_contracts', 'minimum_importance')) {
+		db_execute("ALTER TABLE `npc_contracts` ADD COLUMN `minimum_importance` smallint(6) NOT NULL default '0' AFTER `notify_host_downtime`");
 	}
 }
 

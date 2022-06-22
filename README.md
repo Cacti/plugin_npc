@@ -304,6 +304,9 @@ in GitHub.
 
 ## Changelog
 
+--- develop ---
+* issue#13: Nagios sync partially to NPC plugin - only can see update of hostgroup
+
 --- 3.1 ---
 * issue: Adding some missing columns to a few tables
 
