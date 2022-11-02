@@ -109,7 +109,7 @@ class Doctrine_Parser_Spyc {
       } elseif ($this->_inBlock == true && empty($ifchk)) {
         $last =& $this->_allNodes[$this->_lastNode];
         $last->data[key($last->data)] .= "\n";
-      } elseif ($ifchk{0} != '#' && substr($ifchk,0,3) != '---') {
+      } elseif ($ifchk[0] != '#' && substr($ifchk,0,3) != '---') {
         // Create a new node and get its indent
         $node         = new Doctrine_Parser_Spyc_YamlNode ($this->_nodeId);
 	  $this->_nodeId++;
@@ -456,8 +456,8 @@ class Doctrine_Parser_Spyc {
   function _parseLine($line) {
     $line = trim($line);
 
-    if(!preg_match("/\\\#/", $line)) { 
-      $line = trim(preg_replace('/#.*$/', '', $line)); 
+    if(!preg_match("/\\\#/", $line)) {
+      $line = trim(preg_replace('/#.*$/', '', $line));
     }
 
     $array = array();
