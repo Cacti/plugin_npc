@@ -74,9 +74,9 @@ and configure the NPC Plugin for Cacti.
 
 Below are the minimum requirements:
 
-* Cacti 1.2.1
-* NDOUtils 1.4b7
-* Nagios 3.x
+- Cacti 1.2.1
+- NDOUtils 1.4b7
+- Nagios 3.x
 
 The NPC Plugin, first written for Cacti 0.8.7, has been updated to work with
 Cacti 1.2.x.  However, testing has been very light.  We will need feedback from
@@ -298,20 +298,28 @@ have been able to keep ndo2db running.
 
 ## Bugs and Feature Enhancements
 
-Bug and feature enhancements for the npc plugin are handled in GitHub. If
-you find a first search the Cacti forums for a solution before creating an issue
-in GitHub.
+Bug and feature enhancements for the npc plugin are handled in GitHub. If you
+find a first search the Cacti forums for a solution before creating an issue in
+GitHub.
 
 ## Changelog
 
 --- develop ---
-* issue#13: Nagios sync partially to NPC plugin - only can see update of hostgroup
+
+* issue#13: Nagios sync partially to NPC plugin - only can see update of
+  hostgroup
+
 
 --- 3.1 ---
+
 * issue: Adding some missing columns to a few tables
 
 * issue: Undefined variables in constrollers settings.php
 
+
 --- 3.0 ---
 
 * feature: compatibility improvements for cacti 1.2.x
+
+-----------------------------------------------
+Copyright (c) 2004-2023 - The Cacti Group, Inc.
