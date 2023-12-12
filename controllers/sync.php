@@ -88,7 +88,7 @@ class NpcSyncController extends Controller {
                     $return .= '1|1|' . $output;
                 } elseif (isset($matches[0])) {
                     $this->logger('error', get_class($this), __FUNCTION__ , "Import failed: " . print_r($status, true));
-                    $return .= '1|0|A failure occured during import.';
+                    $return .= '1|0|A failure occurred during import.';
                 }
             }
         } else {

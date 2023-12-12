@@ -18,7 +18,7 @@
  * Comments controller class
  *
  * Comments controller provides functionality, such as building the
- * Doctrine querys and formatting output.
+ * Doctrine queries and formatting output.
  *
  * @package     npc
  * @subpackage  npc.controllers
@@ -28,7 +28,7 @@ class NpcCommentsController extends Controller {
     /**
      * getAck
      *
-     * An accessor method to retrieve an acknowlegement
+     * An accessor method to retrieve an acknowledgement
      *
      * @return string   The acknowledgement
      */

@@ -18,7 +18,7 @@
  * Statehistory controller class
  *
  * Statehistory controller provides functionality, such as building the
- * Doctrine querys and formatting output.
+ * Doctrine queries and formatting output.
  *
  * @package     npc
  * @subpackage  npc.controllers

@@ -21,7 +21,7 @@ require_once($config["base_path"]."/plugins/npc/controllers/downtime.php");
  * Services controller class
  *
  * Services controller provides functionality, such as building the
- * Doctrine querys and formatting output.
+ * Doctrine queries and formatting output.
  *
  * @package     npc
  * @subpackage  npc.controllers

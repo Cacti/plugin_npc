@@ -13,7 +13,7 @@ $database_password = urlencode($database_password);
 // Setup the DSN
 $dsn = "$database_type://$database_username:$database_password@$database_hostname:$database_port/$database_default";
 
-// initalize a new Doctrine_Connection
+// initialize a new Doctrine_Connection
 $conn = Doctrine_Manager::connection($dsn);
 
 // Setup conservative (on demand) model loading

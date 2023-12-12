@@ -21,7 +21,7 @@ require_once("plugins/npc/controllers/comments.php");
  * Servicegroups controller class
  *
  * Servicegroups controller provides functionality, such as building the
- * Doctrine querys and formatting output.
+ * Doctrine queries and formatting output.
  *
  * @package     npc
  * @subpackage  npc.controllers
@@ -61,7 +61,7 @@ class NpcServicegroupsController extends Controller {
         // Combine servicegroup/service/host etc. into a single record
         $results = $this->setupResultsArray();
 
-        // Loop through the results array and build an ouput array
+        // Loop through the results array and build an output array
         // that includes a single record per servicegroup
         // and the number of crit, warn , ok services within
         // that servicegroup.
@@ -88,7 +88,7 @@ class NpcServicegroupsController extends Controller {
         // Set the total number of records
         $this->numRecords = count($output);
 
-        // Implement paging by slicing the ouput array
+        // Implement paging by slicing the output array
         $output = array_slice($output, $this->start, $this->limit);
 
         $response['response']['value']['items'] = $output;
@@ -142,7 +142,7 @@ class NpcServicegroupsController extends Controller {
         // Set the total number of records
         $this->numRecords = count($output);
 
-        // Implement paging by slicing the ouput array
+        // Implement paging by slicing the output array
         $output = array_slice($output, $this->start, $this->limit);
 
         $response['response']['value']['items'] = $output;
@@ -177,7 +177,7 @@ class NpcServicegroupsController extends Controller {
         // Combine servicegroup/service/host etc. into a single record
         $results = $this->setupResultsArray();
 
-        // Loop through the results array and build an ouput array
+        // Loop through the results array and build an output array
         // that includes a single record per host with the servicegroup
         // and the number of crit, warn , ok services within
         // that servicegroup.
@@ -215,7 +215,7 @@ class NpcServicegroupsController extends Controller {
         // Set the total number of records
         $this->numRecords = count($output);
 
-        // Implement paging by slicing the ouput array
+        // Implement paging by slicing the output array
         $output = array_slice($output, $this->start, $this->limit);
 
         $this->logger('debug', get_class($this), 'getOverview', "Method execution time: ".sprintf("%01.2f", ($this->getTime() - $startTime)). " seconds");
@@ -266,7 +266,7 @@ class NpcServicegroupsController extends Controller {
         // Set the total number of records
         $this->numRecords = count($services);
 
-        // Implement paging by slicing the ouput array
+        // Implement paging by slicing the output array
         $services = array_slice($services, $this->start, $this->limit);
 
         $this->logger('debug', get_class($this), 'getServices', "Method execution time: ".sprintf("%01.2f", ($this->getTime() - $startTime)). " seconds");

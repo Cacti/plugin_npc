@@ -238,7 +238,7 @@ tcp_port=5668
 db_servertype=mysql
 db_host=localhost
 db_port=3306
-db_name=DATABSE_NAME
+db_name=DATABASE_NAME
 db_user=DATABASE_USER
 db_pass=DATABASE_PASSWORD
 db_prefix=npc_
@@ -314,7 +314,7 @@ GitHub.
 
 * issue: Adding some missing columns to a few tables
 
-* issue: Undefined variables in constrollers settings.php
+* issue: Undefined variables in controllers settings.php
 
 
 --- 3.0 ---

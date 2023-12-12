@@ -42,7 +42,7 @@ class Controller {
         'down'        => '1',
         'critical'    => '2',
         'unreachable' => '2',
-        'unkown'      => '3',
+        'unknown'      => '3',
         'pending'     => '-1',
         'any'         => '0,1,2,3,-1',
         'not_ok'      => '1,2,3'
@@ -412,7 +412,7 @@ class Controller {
             cacti_log($message, false, 'NPC');
         }
 
-        // If this was an error send a genric response to the client
+        // If this was an error send a generic response to the client
         if ($level == 'error') {
             return(json_encode(array('success' => false, 'msg' => __('An error occurred in %s. See error logs for detail.', $class -> $method, 'npc'))));
         }

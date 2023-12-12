@@ -208,7 +208,7 @@ class NpcNagiosController extends Controller {
 			}
 		}
 
-		// Buld the command string
+		// Build the command string
         if (!$nagios->setCommand($cmd, $args)) {
 			$response = array('success' => false, 'msg' => $nagios->message);
 			return(json_encode($response));

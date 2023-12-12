@@ -62,7 +62,7 @@ class NagiosCmd {
     private $commandFile = null;
 
     /**
-     * A list of the commands and thier required attributes
+     * A list of the commands and their required attributes
      *
      * @var array
      * @access private
