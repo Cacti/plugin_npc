@@ -4,93 +4,66 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2020-12-12 22:16-0500\n"
-"PO-Revision-Date: 2020-12-13 10:45-0500\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: nl_NL\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2020-12-12 22:16-0500\nPO-Revision-Date: 2024-01-31 14:27+0000\nLast-Translator: Edwin Lankamp <edwin.lankamp@gmail.com>\nLanguage-Team: Dutch <http://translate.cacti.net/projects/cacti/npc/nl/>\nLanguage: nl-NL\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 4.8.1\n"
 
 #: controllers/cacti.php:150 setup.php:169 setup.php:237
 msgid "None"
 msgstr "Geen"
 
 #: controllers/controller.php:417
-#, fuzzy, php-format
+#, php-format
 msgid "An error occurred in %s. See error logs for detail."
 msgstr "Er is een fout opgetreden in %s. Zie foutenlogboeken voor details."
 
 #: controllers/nagios.php:157
-#, fuzzy
 msgid "Remote Commands must be enabled under console->Settings->NPC"
-msgstr ""
-"Remote Commands moeten zijn ingeschakeld onder console-> Instellingen-> NPC"
+msgstr "Remote Commands moeten zijn ingeschakeld onder console-> Instellingen-> NPC"
 
 #: controllers/nagios.php:162
-#, fuzzy
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr ""
-"Het Nagios Command File Path moet worden ingesteld onder console-> "
-"Instellingen-> NPC"
+msgstr "Het Nagios Command File Path moet worden ingesteld onder console-> Instellingen-> NPC"
 
 #: controllers/nagios.php:174
-#, fuzzy
 msgid "You do not have permission to execute this command."
 msgstr "U heeft geen toestemming om deze opdracht uit te voeren."
 
 #: controllers/nagios.php:278
-#, fuzzy
 msgid "Service Check Execution Time"
 msgstr "Uitvoeringstijd voor servicecontrole"
 
 #: controllers/nagios.php:279
-#, fuzzy
 msgid "Service Check Latency"
 msgstr "Wachttijd servicecontrole"
 
 #: controllers/nagios.php:280
-#, fuzzy
 msgid "Host Check Execution Time"
 msgstr "Uitvoeringsduur hostcontrole"
 
 #: controllers/nagios.php:281
-#, fuzzy
 msgid "Host Check Latency"
 msgstr "Wachttijd hostcontrole"
 
 #: npc.php:62
-#, fuzzy
 msgid "FATAL: Unable to make NPC Connection"
-msgstr "FATAL: kan geen NPC-verbinding maken"
+msgstr "FATAAL: kan geen NPC-verbinding maken"
 
 #: setup.php:170
-#, fuzzy
 msgid "ERROR - Log errors only"
-msgstr "ERROR - Alleen fouten registreren"
+msgstr "FOUT - Alleen fouten registreren"
 
 #: setup.php:171
-#, fuzzy
 msgid "WARN  - Log errors and warnings"
-msgstr "WARN - Log fouten en waarschuwingen"
+msgstr "WAARSCHUWING - Log fouten en waarschuwingen"
 
 #: setup.php:172
-#, fuzzy
 msgid "INFO  - Log errors, warnings, and info messages"
 msgstr "INFO - Log fouten, waarschuwingen en informatieberichten"
 
 #: setup.php:173
-#, fuzzy
 msgid "DEBUG - Log everything"
 msgstr "DEBUG - Log alles in"
 
 #: setup.php:234
-#, fuzzy
 msgid "Nagios Host Mapping"
 msgstr "Hosttoewijzing van Nagios"
 
@@ -100,31 +73,26 @@ msgid "Select the Nagios host that maps to this host."
 msgstr "Selecteer de Nagios-host die is toegewezen aan deze host."
 
 #: setup.php:265 setup.php:1621
-#, fuzzy
 msgid "NPC"
 msgstr "NPC"
 
 #: setup.php:272
-#, fuzzy
 msgid "Status Detail"
 msgstr "Statusdetails"
 
 #: setup.php:279
-#, fuzzy
 msgid "Service / Host Information"
 msgstr "Service / host-informatie"
 
 #: setup.php:286
-#, fuzzy
 msgid "Command Execution"
 msgstr "Opdrachtuitvoering"
 
 #: setup.php:1679
 msgid "General Settings"
-msgstr "Algemene instellingen"
+msgstr "Algemene Instellingen"
 
 #: setup.php:1683
-#, fuzzy
 msgid "Remote Commands"
 msgstr "Externe opdrachten"
 
