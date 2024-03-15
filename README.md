@@ -322,4 +322,4 @@ GitHub.
 * feature: compatibility improvements for cacti 1.2.x
 
 -----------------------------------------------
-Copyright (c) 2004-2023 - The Cacti Group, Inc.
+Copyright (c) 2004-2024 - The Cacti Group, Inc.
