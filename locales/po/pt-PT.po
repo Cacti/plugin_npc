@@ -7,255 +7,181 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2020-12-12 22:16-0500\n"
-"PO-Revision-Date: 2020-12-13 10:46-0500\n"
+"POT-Creation-Date: 2024-06-08 08:54-0400\n"
+"PO-Revision-Date: 2024-06-08 09:00-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: controllers/cacti.php:150 setup.php:169 setup.php:237
 msgid "None"
 msgstr "Nenhum"
 
 #: controllers/controller.php:417
-#, fuzzy, php-format
+#, php-format
 msgid "An error occurred in %s. See error logs for detail."
 msgstr "Ocorreu um erro em %s. Consulte os logs de erros para obter detalhes."
 
-#: controllers/nagios.php:157
-#, fuzzy
+#: controllers/nagios.php:161
 msgid "Remote Commands must be enabled under console->Settings->NPC"
-msgstr ""
-"Os comandos remotos devem ser ativados em console-> Configurações-> NPC"
+msgstr "Os comandos remotos devem ser ativados em console-> Configurações-> NPC"
 
-#: controllers/nagios.php:162
-#, fuzzy
+#: controllers/nagios.php:166
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr ""
-"O caminho do arquivo de comando do Nagios deve ser definido em console-> "
-"Configurações-> NPC"
+msgstr "O caminho do arquivo de comando do Nagios deve ser definido em console-> Configurações-> NPC"
 
-#: controllers/nagios.php:174
-#, fuzzy
+#: controllers/nagios.php:178
 msgid "You do not have permission to execute this command."
 msgstr "Você não tem permissão para executar este comando."
 
-#: controllers/nagios.php:278
-#, fuzzy
+#: controllers/nagios.php:282
 msgid "Service Check Execution Time"
 msgstr "Tempo de execução da verificação de serviço"
 
-#: controllers/nagios.php:279
-#, fuzzy
+#: controllers/nagios.php:283
 msgid "Service Check Latency"
 msgstr "Latência de verificação de serviço"
 
-#: controllers/nagios.php:280
-#, fuzzy
+#: controllers/nagios.php:284
 msgid "Host Check Execution Time"
 msgstr "Tempo de execução da verificação do host"
 
-#: controllers/nagios.php:281
-#, fuzzy
+#: controllers/nagios.php:285
 msgid "Host Check Latency"
 msgstr "Latência de verificação de host"
 
 #: npc.php:62
-#, fuzzy
 msgid "FATAL: Unable to make NPC Connection"
 msgstr "FATAL: Impossível fazer conexão NPC"
 
 #: setup.php:170
-#, fuzzy
 msgid "ERROR - Log errors only"
 msgstr "ERROR - Registrar erros apenas"
 
 #: setup.php:171
-#, fuzzy
 msgid "WARN  - Log errors and warnings"
 msgstr "WARN - Registrar erros e avisos"
 
 #: setup.php:172
-#, fuzzy
 msgid "INFO  - Log errors, warnings, and info messages"
 msgstr "INFO - Registrar erros, avisos e mensagens informativas"
 
 #: setup.php:173
-#, fuzzy
 msgid "DEBUG - Log everything"
 msgstr "DEBUG - Registrar tudo"
 
 #: setup.php:234
-#, fuzzy
 msgid "Nagios Host Mapping"
 msgstr "Mapeamento de host Nagios"
 
 #: setup.php:235
-#, fuzzy
 msgid "Select the Nagios host that maps to this host."
 msgstr "Selecione o host Nagios que mapeia para este host."
 
-#: setup.php:265 setup.php:1621
-#, fuzzy
+#: setup.php:265 setup.php:1624
 msgid "NPC"
 msgstr "NPC"
 
 #: setup.php:272
-#, fuzzy
 msgid "Status Detail"
 msgstr "Detalhe de status"
 
 #: setup.php:279
-#, fuzzy
 msgid "Service / Host Information"
 msgstr "Informações de serviço / host"
 
 #: setup.php:286
-#, fuzzy
 msgid "Command Execution"
 msgstr "Execução de Comando"
 
-#: setup.php:1679
+#: setup.php:1682
 msgid "General Settings"
 msgstr "Configurações Gerais"
 
-#: setup.php:1683
-#, fuzzy
+#: setup.php:1686
 msgid "Remote Commands"
 msgstr "Comandos Remotos"
 
-#: setup.php:1684
-#, fuzzy
+#: setup.php:1687
 msgid "Allow commands to be written to the Nagios command file."
 msgstr "Permite que comandos sejam gravados no arquivo de comando do Nagios."
 
-#: setup.php:1688
-#, fuzzy
+#: setup.php:1691
 msgid "Nagios Command File Path"
 msgstr "Caminho do arquivo de comando Nagios"
 
-#: setup.php:1689
-#, fuzzy
+#: setup.php:1692
 msgid "The path to the Nagios command file (nagios.cmd)."
 msgstr "O caminho para o arquivo de comando Nagios (nagios.cmd)."
 
-#: setup.php:1694
-#, fuzzy
+#: setup.php:1697
 msgid "Nagios URL"
 msgstr "URL do Nagios"
 
-#: setup.php:1695
-#, fuzzy
-msgid ""
-"The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
-msgstr ""
-"O URL completo para a instalação do Nagios (http://nagios.company.com/"
-"nagios/)"
+#: setup.php:1698
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "O URL completo para a instalação do Nagios (http://nagios.company.com/nagios/)"
 
-#: setup.php:1700
+#: setup.php:1703
 msgid "Date Format"
 msgstr "Formato da data"
 
-#: setup.php:1701
-#, fuzzy
+#: setup.php:1704
 msgid "Select the format you want for displaying dates."
 msgstr "Selecione o formato que deseja para a exibição de datas."
 
-#: setup.php:1707
+#: setup.php:1710
 msgid "Time Format"
 msgstr "Formato da hora"
 
-#: setup.php:1708
-#, fuzzy
+#: setup.php:1711
 msgid "Select the format you want for displaying times."
 msgstr "Selecione o formato que deseja para a exibição de horas."
 
-#: setup.php:1714
-#, fuzzy
+#: setup.php:1717
 msgid "Portlet Refresh Rate"
 msgstr "Taxa de atualização do portlet"
 
-#: setup.php:1715
-#, fuzzy
-msgid ""
-"The amount of time in seconds to wait before the portlets refresh. The "
-"minimum is 30 seconds."
-msgstr ""
-"A quantidade de tempo em segundos de espera antes da atualização dos "
-"portlets. O mínimo é 30 segundos."
+#: setup.php:1718
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "A quantidade de tempo em segundos de espera antes da atualização dos portlets. O mínimo é 30 segundos."
 
-#: setup.php:1721
-#, fuzzy
+#: setup.php:1724
 msgid "Host/Service Config Type"
 msgstr "Tipo de configuração de host / serviço"
 
-#: setup.php:1722
-#, fuzzy
-msgid ""
-"The config type is based on whether or not you are restoring retained "
-"information when Nagios starts. If you are unsure just leave the default "
-"value. If you can see host and service groups but not hosts or services try "
-"changing this setting."
-msgstr ""
-"O tipo de configuração é baseado em se você está ou não restaurando as "
-"informações retidas quando o Nagios é iniciado. Se você não tiver certeza, "
-"deixe o valor padrão. Se você pode ver os grupos de host e serviço, mas não "
-"os hosts ou serviços, tente alterar esta configuração."
+#: setup.php:1725
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "O tipo de configuração é baseado em se você está ou não restaurando as informações retidas quando o Nagios é iniciado. Se você não tiver certeza, deixe o valor padrão. Se você pode ver os grupos de host e serviço, mas não os hosts ou serviços, tente alterar esta configuração."
 
-#: setup.php:1728
-#, fuzzy
+#: setup.php:1731
 msgid "Host Icons"
 msgstr "Ícones de host"
 
-#: setup.php:1729
-#, fuzzy
-msgid ""
-"Enable displaying host icons in the hosts grid. The icon_image and "
-"icon_image_alt parameters of the Nagios host definition are used to set the "
-"image. Icons should be 16x16 to get the best look. this setting does not "
-"affect the host status icons."
-msgstr ""
-"Ative a exibição de ícones de host na grade de hosts. Os parâmetros "
-"icon_image e icon_image_alt da definição do host Nagios são usados para "
-"definir a imagem. Os ícones devem ter 16 x 16 para obter a melhor aparência. "
-"esta configuração não afeta os ícones de status do host."
+#: setup.php:1732
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "Ative a exibição de ícones de host na grade de hosts. Os parâmetros icon_image e icon_image_alt da definição do host Nagios são usados para definir a imagem. Os ícones devem ter 16 x 16 para obter a melhor aparência. esta configuração não afeta os ícones de status do host."
 
-#: setup.php:1733
-#, fuzzy
+#: setup.php:1736
 msgid "Service Icons"
 msgstr "Ícones de serviço"
 
-#: setup.php:1734
-#, fuzzy
-msgid ""
-"Enable displaying service icons in the services grid. The icon_image and "
-"icon_image_alt parameters of the Nagios service definition are used to set "
-"the image. Icons should be 16x16 to get the best look. This setting does not "
-"affect the service status icons."
-msgstr ""
-"Habilite a exibição de ícones de serviço na grade de serviços. Os parâmetros "
-"icon_image e icon_image_alt da definição de serviço Nagios são usados para "
-"definir a imagem. Os ícones devem ter 16 x 16 para obter a melhor aparência. "
-"Esta configuração não afeta os ícones de status do serviço."
+#: setup.php:1737
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "Habilite a exibição de ícones de serviço na grade de serviços. Os parâmetros icon_image e icon_image_alt da definição de serviço Nagios são usados para definir a imagem. Os ícones devem ter 16 x 16 para obter a melhor aparência. Esta configuração não afeta os ícones de status do serviço."
 
-#: setup.php:1738
+#: setup.php:1741
 msgid "Logging"
 msgstr "Registo de depuração"
 
-#: setup.php:1742
-#, fuzzy
+#: setup.php:1745
 msgid "Logging Level"
 msgstr "Nível de registro"
 
-#: setup.php:1743
-#, fuzzy
-msgid ""
-"The level of detail you want sent to the Cacti log file. WARNING: Leaving in "
-"DEBUG will quickly fill the cacti log."
-msgstr ""
-"O nível de detalhe que você deseja enviar para o arquivo de log do Cacti. "
-"AVISO: Sair em DEBUG preencherá rapidamente o registro de cactos."
+#: setup.php:1746
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "O nível de detalhe que você deseja enviar para o arquivo de log do Cacti. AVISO: Sair em DEBUG preencherá rapidamente o registro de cactos."
