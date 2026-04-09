@@ -13,28 +13,22 @@ abstract class BaseNpcServiceGraphs extends Doctrine_Record
     $this->setTableName('npc_service_graphs');
     $this->hasColumn('service_graph_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => true,
   'notnull' => true,
   'autoincrement' => true,
 ));
     $this->hasColumn('service_object_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,
@@ -42,14 +36,11 @@ abstract class BaseNpcServiceGraphs extends Doctrine_Record
 ));
     $this->hasColumn('local_graph_id', 'integer', 3, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'mediumint(8) unsigned',
   'unsigned' => 1,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,
@@ -57,15 +48,11 @@ abstract class BaseNpcServiceGraphs extends Doctrine_Record
 ));
     $this->hasColumn('pri', 'integer', 1, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-    1 => 'boolean',
-  ),
+  [],
   'ntype' => 'tinyint(1)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '1',
   'notnull' => false,

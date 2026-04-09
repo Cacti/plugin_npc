@@ -13,28 +13,22 @@ abstract class BaseNpcInstances extends Doctrine_Record
     $this->setTableName('npc_instances');
     $this->hasColumn('instance_id', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => true,
   'notnull' => true,
   'autoincrement' => true,
 ));
     $this->hasColumn('instance_name', 'string', 64, array (
   'alltypes' => 
-  array (
-    0 => 'string',
-  ),
+  [],
   'ntype' => 'varchar(64)',
   'fixed' => false,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,
@@ -42,14 +36,11 @@ abstract class BaseNpcInstances extends Doctrine_Record
 ));
     $this->hasColumn('instance_description', 'string', 128, array (
   'alltypes' => 
-  array (
-    0 => 'string',
-  ),
+  [],
   'ntype' => 'varchar(128)',
   'fixed' => false,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,

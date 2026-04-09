@@ -13,28 +13,22 @@ abstract class BaseNpcConfigfiles extends Doctrine_Record
     $this->setTableName('npc_configfiles');
     $this->hasColumn('configfile_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => true,
   'notnull' => true,
   'autoincrement' => true,
 ));
     $this->hasColumn('instance_id', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -42,14 +36,11 @@ abstract class BaseNpcConfigfiles extends Doctrine_Record
 ));
     $this->hasColumn('configfile_type', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -57,14 +48,11 @@ abstract class BaseNpcConfigfiles extends Doctrine_Record
 ));
     $this->hasColumn('configfile_path', 'string', 255, array (
   'alltypes' => 
-  array (
-    0 => 'string',
-  ),
+  [],
   'ntype' => 'varchar(255)',
   'fixed' => false,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,

@@ -13,28 +13,22 @@ abstract class BaseNpcHostescalations extends Doctrine_Record
     $this->setTableName('npc_hostescalations');
     $this->hasColumn('hostescalation_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => true,
   'notnull' => true,
   'autoincrement' => true,
 ));
     $this->hasColumn('instance_id', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -42,14 +36,11 @@ abstract class BaseNpcHostescalations extends Doctrine_Record
 ));
     $this->hasColumn('config_type', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -57,14 +48,11 @@ abstract class BaseNpcHostescalations extends Doctrine_Record
 ));
     $this->hasColumn('host_object_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -72,14 +60,11 @@ abstract class BaseNpcHostescalations extends Doctrine_Record
 ));
     $this->hasColumn('timeperiod_object_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -87,14 +72,11 @@ abstract class BaseNpcHostescalations extends Doctrine_Record
 ));
     $this->hasColumn('first_notification', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -102,14 +84,11 @@ abstract class BaseNpcHostescalations extends Doctrine_Record
 ));
     $this->hasColumn('last_notification', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -117,14 +96,11 @@ abstract class BaseNpcHostescalations extends Doctrine_Record
 ));
     $this->hasColumn('notification_interval', 'float', null, array (
   'alltypes' => 
-  array (
-    0 => 'float',
-  ),
+  [],
   'ntype' => 'double',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -132,14 +108,11 @@ abstract class BaseNpcHostescalations extends Doctrine_Record
 ));
     $this->hasColumn('escalate_on_recovery', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -147,14 +120,11 @@ abstract class BaseNpcHostescalations extends Doctrine_Record
 ));
     $this->hasColumn('escalate_on_down', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -162,14 +132,11 @@ abstract class BaseNpcHostescalations extends Doctrine_Record
 ));
     $this->hasColumn('escalate_on_unreachable', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,

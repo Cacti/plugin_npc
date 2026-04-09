@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 class NpcLayoutController extends controller {
-    var $params = array();
+    var $params = [];
 
     function drawFrame($params) {
         $config = $params['config'];
@@ -38,7 +38,7 @@ class NpcLayoutController extends controller {
 		npc.params.npc_date_format     = '<?php echo read_config_option('npc_date_format'); ?>';
 		npc.params.npc_time_format     = '<?php echo read_config_option('npc_time_format'); ?>';
 		npc.params.npc_nagios_url      = '<?php echo read_config_option('npc_nagios_url'); ?>';
-		npc.params.userName            = '<?php echo db_fetch_cell_prepared('SELECT username FROM user_auth WHERE id = ?', array($_SESSION['sess_user_id'])); ?>';
+		npc.params.userName            = '<?php echo db_fetch_cell_prepared('SELECT username FROM user_auth WHERE id = ?', []); ?>';
 		npc.params.npc_host_icons      = '<?php echo read_config_option('npc_host_icons'); ?>';
 		npc.params.npc_service_icons   = '<?php echo read_config_option('npc_service_icons'); ?>';
 
@@ -48,7 +48,7 @@ class NpcLayoutController extends controller {
 			npc.params.cacti_path = npc.params.cacti_path.slice(0,strLen-1);
 		}
 
-		<?php $state = unserialize(db_fetch_cell_prepared('SELECT settings FROM npc_settings WHERE user_id = ?', array($_SESSION['sess_user_id']))); ?>
+		<?php $state = unserialize(db_fetch_cell_prepared('SELECT settings FROM npc_settings WHERE user_id = ?', [])); ?>
 		var ExtState = Ext.decode('<?php echo json_encode($state); ?>');
 
 		// Launch the app

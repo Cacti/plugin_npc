@@ -55,7 +55,7 @@ class NpcHostsController extends Controller {
             // Count the services and delete the entries
             $services = 0;
             foreach ($hosts[$i] as $k => $v) {
-                if (is_array($v)) {
+                if (is_[]) {
                     $services++;
                     unset($hosts[$i][$k]);
                 }
@@ -80,29 +80,7 @@ class NpcHostsController extends Controller {
      */
     function getStateInfo() {
 
-        $fields = array(
-            'current_state',
-            'output',
-            'perfdata',
-            'last_state_change',
-            'check_command',
-            'address',
-            'current_check_attempt',
-            'last_check',
-            'next_check',
-            'event_handler',
-            'latency',
-            'execution_time',
-            'is_flapping',
-            'scheduled_downtime_depth',
-            'process_performance_data',
-            'active_checks_enabled',
-            'passive_checks_enabled',
-            'event_handler_enabled',
-            'flap_detection_enabled',
-            'notifications_enabled',
-            'obsess_over_host'
-        );
+        $fields = [];
 
         $hosts = $this->hosts();
 
@@ -126,12 +104,7 @@ class NpcHostsController extends Controller {
      */
     function summary() {
 
-        $status = array(
-            'down'        => 0, 
-            'unreachable' => 0,
-            'up'          => 0,
-            'pending'     => 0
-        );
+        $status = [];
 
         $q = new Doctrine_Query();
         $q->select('hs.current_state')
@@ -139,7 +112,7 @@ class NpcHostsController extends Controller {
           ->leftJoin('hs.Host h')
           ->where('h.config_type = ?', $this->config_type);
 
-        $hosts = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        $hosts = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
         for ($i = 0; $i < count($hosts); $i++) {
             $status[$this->hostState[$hosts[$i]['current_state']]]++;
@@ -153,7 +126,7 @@ class NpcHostsController extends Controller {
         $q = new Doctrine_Query();
         $q->select('perfdata')->from('NpcHostchecks')->where('host_object_id = ?', $id);
         
-        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
+        return($q->execute([], Doctrine::HYDRATE_ARRAY));
     }
 
     /**
@@ -166,9 +139,7 @@ class NpcHostsController extends Controller {
     function hosts() {
 
         // Maps searchable fields passed in from the client
-        $fieldMap = array('host_name' => 'o.name1',
-                          'alias' => 'h.alias',
-                          'output' => 'hs.output');
+        $fieldMap = [];
 
 
         // Build the where clause
@@ -216,7 +187,7 @@ class NpcHostsController extends Controller {
             $this->limit
         );
 
-        $hosts = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        $hosts = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
         // Set the total number of records
         $this->numRecords = $q->getNumResults();
@@ -236,7 +207,7 @@ class NpcHostsController extends Controller {
         $q = new Doctrine_Query();
         $q->select('display_name as name, host_object_id as id, address')->from('NpcHosts')->orderBy('display_name ASC');
 
-        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
+        return($q->execute([], Doctrine::HYDRATE_ARRAY));
     }
 
     /**
@@ -253,7 +224,7 @@ class NpcHostsController extends Controller {
           ->from('NpcHostGraphs hg')
           ->where('hg.host_object_id = ?', $this->id);
 
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        $results = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
         return($this->jsonOutput($results));
     }
@@ -269,7 +240,7 @@ class NpcHostsController extends Controller {
 
         $table = $this->conn->getTable('NpcHostGraphs');
 
-        $results = $table->findByDql("host_object_id = ?", array($params['object_id']));
+        $results = $table->findByDql("host_object_id = ?", []);
         $graph = $results[0];
 
         if (!isset($graph->local_graph_id)) {
@@ -280,7 +251,7 @@ class NpcHostsController extends Controller {
         $graph->local_graph_id = $params['local_graph_id'];
         $graph->save();
 
-        return(json_encode(array('success' => true)));
+        return(json_encode([]));
     }
 
 
@@ -297,12 +268,7 @@ class NpcHostsController extends Controller {
         // Set the default return value
         $return = $results[$key];
 
-        $cs = array(
-            '0'  => '<img ext:qtip="UP" src="images/icons/greendot.gif">',
-            '1'  => '<img ext:qtip="DOWN" src="images/icons/reddot.gif">',
-            '2'  => '<img ext:qtip="UNREACHABLE" src="images/icons/reddot.gif">',
-            '-1' => '<img ext:qtip="PENDING" src="images/icons/bluedot.gif">'
-        );
+        $cs = [];
 
         if ($key == 'current_state') {
             $return = $cs[$results[$key]];

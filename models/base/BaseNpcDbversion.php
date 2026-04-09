@@ -13,14 +13,11 @@ abstract class BaseNpcDbversion extends Doctrine_Record
     $this->setTableName('npc_dbversion');
     $this->hasColumn('name', 'string', 10, array (
   'alltypes' => 
-  array (
-    0 => 'string',
-  ),
+  [],
   'ntype' => 'varchar(10)',
   'fixed' => false,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,
@@ -28,14 +25,11 @@ abstract class BaseNpcDbversion extends Doctrine_Record
 ));
     $this->hasColumn('version', 'string', 10, array (
   'alltypes' => 
-  array (
-    0 => 'string',
-  ),
+  [],
   'ntype' => 'varchar(10)',
   'fixed' => false,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,

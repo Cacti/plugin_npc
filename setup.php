@@ -175,47 +175,14 @@ function npc_config_arrays() {
 				'4' => __('DEBUG - Log everything', 'npc')
 			);
 
-			$npc_config_type = array(
-				'0' => '0',
-				'1' => '1'
-			);
+			$npc_config_type = [];
 
-			$npc_date_format = array(
-				'Y-m-d' => '2007-12-27',
-				'm-d-Y' => '12-27-2007',
-				'd-m-Y' => '27-12-2007',
-				'Y/m/d' => '2007/12/27',
-				'm/d/Y' => '12/27/2007',
-				'd/m/Y' => '27/12/2007',
-				'Y.m.d' => '2007.12.27',
-				'd.m.Y' => '27.12.2007',
-				'm.d.Y' => '12.27.2007'
-			);
+			$npc_date_format = [];
 
-			$npc_time_format = array(
-				'H:i:s'  => '23:07',
-				'h:i:sa' => '11:07pm',
-				'h:i:sA' => '11:07PM',
-				'H.i.s'  => '23.07',
-				'h.i.sa' => '11.07pm',
-				'h.i.sA' => '11.07PM'
-			);
+			$npc_time_format = [];
 
 			// Initial settings for server side state handling
-			$npc_default_settings = array(
-				'date_format' => 's%3AY-m-d',
-				'time_format' => 's%3AH%3Ai%3As',
-				'serviceProblems' => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150',
-				'serviceSummary' => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A120%5E',
-				'servicegroupServiceStatus' => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150',
-				'servicegroupHostStatus' => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150',
-				'monitoringPerf' => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol1%5Ehidden%3Db%253A1%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A120%5E',
-				'hostProblems' => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A0%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150',
-				'hostSummary' => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A1%5Erefresh%3Dn%253A120%5E',
-				'hostgroupServiceStatus' => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A2%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150',
-				'hostgroupHostStatus' => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A0%5Eindex%3Ds%253A3%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150',
-				'eventLog' => 'o%3Acollapsed%3Db%253A0%5Ecolumn%3Ds%253Adashcol2%5Ehidden%3Db%253A1%5Eindex%3Ds%253A4%5Erefresh%3Dn%253A120%5Eheight%3Dn%253A150'
-			);
+			$npc_default_settings = [];
 
 			api_plugin_load_realms();
 		}
@@ -226,7 +193,7 @@ function npc_config_form() {
 	global $fields_host_edit;
 
 	$fields_host_edit2 = $fields_host_edit;
-	$fields_host_edit3 = array();
+	$fields_host_edit3 = [];
 
 	foreach ($fields_host_edit2 as $f => $a) {
 		$fields_host_edit3[$f] = $a;
@@ -311,7 +278,7 @@ function npc_setup_tables() {
 		db_execute("ALTER TABLE host ADD npc_host_object_id int(11) default NULL COMMENT 'Nagios host object mapping'");
 	}
 
-	$sql = array();
+	$sql = [];
 
 	if (!db_table_exists('npc_acknowledgements')) {
 		$sql[] = "CREATE TABLE `npc_acknowledgements` (

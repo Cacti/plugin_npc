@@ -13,28 +13,22 @@ abstract class BaseNpcTimeperiodTimeranges extends Doctrine_Record
     $this->setTableName('npc_timeperiod_timeranges');
     $this->hasColumn('timeperiod_timerange_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => true,
   'notnull' => true,
   'autoincrement' => true,
 ));
     $this->hasColumn('instance_id', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -42,14 +36,11 @@ abstract class BaseNpcTimeperiodTimeranges extends Doctrine_Record
 ));
     $this->hasColumn('timeperiod_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -57,14 +48,11 @@ abstract class BaseNpcTimeperiodTimeranges extends Doctrine_Record
 ));
     $this->hasColumn('day', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -72,14 +60,11 @@ abstract class BaseNpcTimeperiodTimeranges extends Doctrine_Record
 ));
     $this->hasColumn('start_sec', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -87,14 +72,11 @@ abstract class BaseNpcTimeperiodTimeranges extends Doctrine_Record
 ));
     $this->hasColumn('end_sec', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,

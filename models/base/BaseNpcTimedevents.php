@@ -13,28 +13,22 @@ abstract class BaseNpcTimedevents extends Doctrine_Record
     $this->setTableName('npc_timedevents');
     $this->hasColumn('timedevent_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => true,
   'notnull' => true,
   'autoincrement' => true,
 ));
     $this->hasColumn('instance_id', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -42,14 +36,11 @@ abstract class BaseNpcTimedevents extends Doctrine_Record
 ));
     $this->hasColumn('event_type', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -57,13 +48,10 @@ abstract class BaseNpcTimedevents extends Doctrine_Record
 ));
     $this->hasColumn('queued_time', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -71,14 +59,11 @@ abstract class BaseNpcTimedevents extends Doctrine_Record
 ));
     $this->hasColumn('queued_time_usec', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -86,13 +71,10 @@ abstract class BaseNpcTimedevents extends Doctrine_Record
 ));
     $this->hasColumn('event_time', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -100,14 +82,11 @@ abstract class BaseNpcTimedevents extends Doctrine_Record
 ));
     $this->hasColumn('event_time_usec', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -115,13 +94,10 @@ abstract class BaseNpcTimedevents extends Doctrine_Record
 ));
     $this->hasColumn('scheduled_time', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -129,14 +105,11 @@ abstract class BaseNpcTimedevents extends Doctrine_Record
 ));
     $this->hasColumn('recurring_event', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -144,14 +117,11 @@ abstract class BaseNpcTimedevents extends Doctrine_Record
 ));
     $this->hasColumn('object_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -159,13 +129,10 @@ abstract class BaseNpcTimedevents extends Doctrine_Record
 ));
     $this->hasColumn('deletion_time', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -173,14 +140,11 @@ abstract class BaseNpcTimedevents extends Doctrine_Record
 ));
     $this->hasColumn('deletion_time_usec', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,

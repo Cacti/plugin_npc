@@ -36,7 +36,7 @@ class NpcServicegroupsController extends Controller {
      * @var array
      * @access private
      */
-    private $hostStatusCache = array();
+    private $hostStatusCache = [];
 
 
     /**
@@ -51,14 +51,12 @@ class NpcServicegroupsController extends Controller {
         $startTime = $this->getTime();
 
         // Initialize the output array
-        $output = array();
+        $output = [];
 
         // Initialize the hosts array
-        $hosts = array();
+        $hosts = [];
 
-        $fields = array('servicegroup_object_id',
-                        'alias',
-                        'instance_id');
+        $fields = [];
 
         // Combine servicegroup/service/host etc. into a single record
         $results = $this->setupResultsArray();
@@ -70,10 +68,7 @@ class NpcServicegroupsController extends Controller {
         for ($i = 0; $i < count($results); $i++) {
             $sg = $results[$i]['servicegroup_object_id'];
             if(!isset($output[$sg])) {
-                $output[$sg] = array('down'        => 0,
-                                     'unreachable' => 0,
-                                     'up'          => 0,
-                                     'pending'     => 0);
+                $output[$sg] = [];
             }
             if (!isset($hosts[$sg][$results[$i]['host_name']])) {
                 $hostState = $this->getServicegroupMemberHoststatus($results[$i]['host_name']);
@@ -81,7 +76,7 @@ class NpcServicegroupsController extends Controller {
                 $hosts[$sg][$results[$i]['host_name']] = 1;
             }
             foreach ($results[$i] as $key => $val) {
-                if (in_array($key, $fields)) {
+                if (in_[]) {
                     $output[$sg][$key] = $val;
                 }
             }
@@ -114,11 +109,9 @@ class NpcServicegroupsController extends Controller {
         $startTime = $this->getTime();
 
         // Initialize the output array
-        $output = array();
+        $output = [];
 
-        $fields = array('servicegroup_object_id',
-                        'alias',
-                        'instance_id');
+        $fields = [];
 
         // Combine servicegroup/service/host etc. into a single record
         $results = $this->setupResultsArray();
@@ -126,16 +119,12 @@ class NpcServicegroupsController extends Controller {
         for ($i = 0; $i < count($results); $i++) {
             $sg = $results[$i]['servicegroup_object_id'];
             if(!isset($output[$sg])) {
-                $output[$sg] = array('critical' => 0,
-                                   'warning'  => 0,
-                                   'unknown'  => 0,
-                                   'ok'       => 0,
-                                   'pending'  => 0);
+                $output[$sg] = [];
             }
             foreach ($results[$i] as $key => $val) {
                 if ($key == 'current_state') {
                     $output[$sg][$this->serviceState[$val]]++;
-                } else if(in_array($key, $fields)) {
+                } else if(in_[]) {
                     $output[$sg][$key] = $val;
                 }
             }
@@ -168,13 +157,10 @@ class NpcServicegroupsController extends Controller {
 
         $startTime = $this->getTime();
 
-        $fields = array('servicegroup_object_id',
-                        'alias',
-                        'instance_id',
-                        'host_name');
+        $fields = [];
 
         // Initialize the output array
-        $output = array();
+        $output = [];
 
         // Combine servicegroup/service/host etc. into a single record
         $results = $this->setupResultsArray();
@@ -188,17 +174,12 @@ class NpcServicegroupsController extends Controller {
             $host = $results[$i]['host_name'];
             $hostState = $this->getServicegroupMemberHoststatus($host);
             if(!isset($temp[$sg][$host])) {
-                $temp[$sg][$host] = array('host_state' => $hostState,
-                                          'critical' => 0,
-                                          'warning'  => 0,
-                                          'unknown'  => 0,
-                                          'ok'       => 0,
-                                          'pending'  => 0);
+                $temp[$sg][$host] = [];
             }
             foreach ($results[$i] as $key => $val) {
                 if ($key == 'current_state') {
                     $temp[$sg][$host][$this->serviceState[$val]]++;
-                } else if(in_array($key, $fields)) {
+                } else if(in_[]) {
                     $temp[$sg][$host][$key] = $val;
                 }
             }
@@ -289,7 +270,7 @@ class NpcServicegroupsController extends Controller {
           ->from('NpcHoststatus hs, NpcHosts h')
           ->where('hs.host_object_id = h.host_object_id AND h.display_name = ?', $hostname);
 
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        $results = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
         $this->hostStatusCache[$hostname] = $results[0]['current_state'];
 
@@ -309,10 +290,7 @@ class NpcServicegroupsController extends Controller {
         }
 
         // Maps searchable fields passed in from the client
-        $fieldMap = array('service_description' => 'o2.name2',
-                          'host_name' => 'o2.name1',
-                          'alias' => 'sg.alias',
-                          'output' => 'ss.output');
+        $fieldMap = [];
 
         if ($this->searchString) {
             $where .= $this->searchClause(null, $fieldMap);
@@ -334,7 +312,7 @@ class NpcServicegroupsController extends Controller {
             ->where("$where")
             ->orderBy('servicegroup_name ASC, host_name ASC, service_description ASC');
 
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        $results = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
         $this->logger('debug', get_class($this), 'getServicegroups', "Method execution time: ".sprintf("%01.2f", ($this->getTime() - $startTime)). " seconds");
 

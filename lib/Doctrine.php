@@ -422,14 +422,14 @@ final class Doctrine
      *
      * @var array
      */
-    private static $_loadedModelFiles = array();
+    private static $_loadedModelFiles = [];
 
     /**
      * Array of all the loaded validators
      *
      * @var array
      */
-    private static $_validators = array();
+    private static $_validators = [];
 
     /**
      * __construct
@@ -504,7 +504,7 @@ final class Doctrine
 
         $modelLoading = $modelLoading === null ? $manager->getAttribute(Doctrine::ATTR_MODEL_LOADING):$modelLoading;
 
-        $loadedModels = array();
+        $loadedModels = [];
 
         if ($directory !== null) {
             foreach ((array) $directory as $dir) {
@@ -613,10 +613,10 @@ final class Doctrine
      */
     public static function filterInvalidModels($classes)
     {
-        $validModels = array();
+        $validModels = [];
 
         foreach ((array) $classes as $name) {
-            if (self::isValidModelClass($name) && ! in_array($name, $validModels)) {
+            if (self::isValidModelClass($name) && ! in_[]) {
                 $validModels[] = $name;
             }
         }
@@ -685,7 +685,7 @@ final class Doctrine
      * @return boolean
      * @throws Exception
      */
-    public static function generateModelsFromDb($directory, array $databases = array(), array $options = array())
+    public static function generateModelsFromDb($directory, array $databases = [], array $options = [])
     {
         return Doctrine_Manager::connection()->import->importSchema($directory, $databases, $options);
     }
@@ -698,11 +698,11 @@ final class Doctrine
      * @param array  $options Array of options
      * @return void
      */
-    public static function generateYamlFromDb($yamlPath, array $databases = array(), array $options = array())
+    public static function generateYamlFromDb($yamlPath, array $databases = [], array $options = [])
     {
         $directory = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'tmp_doctrine_models';
 
-        $options['generateBaseClasses'] = isset($options['generateBaseClasses']) ? $options['generateBaseClasses']:false;
+        $options['generateBaseClasses'] =  ?? false;
         $result = Doctrine::generateModelsFromDb($directory, $databases, $options);
 
         if ( empty($result) && ! is_dir($directory)) {
@@ -726,7 +726,7 @@ final class Doctrine
      * @param array  $options Array of options to pass to the schema importer
      * @return void
      */
-    public static function generateModelsFromYaml($yamlPath, $directory, $options = array())
+    public static function generateModelsFromYaml($yamlPath, $directory, $options = [])
     {
         $import = new Doctrine_Import_Schema();
         $import->setOptions($options);
@@ -807,7 +807,7 @@ final class Doctrine
      * @param string $specifiedConnections Array of connections you wish to create the database for
      * @return void
      */
-    public static function createDatabases($specifiedConnections = array())
+    public static function createDatabases($specifiedConnections = [])
     {
         return Doctrine_Manager::getInstance()->createDatabases($specifiedConnections);
     }
@@ -818,7 +818,7 @@ final class Doctrine
      * @param string $specifiedConnections Array of connections you wish to drop the database for
      * @return void
      */
-    public static function dropDatabases($specifiedConnections = array())
+    public static function dropDatabases($specifiedConnections = [])
     {
         return Doctrine_Manager::getInstance()->dropDatabases($specifiedConnections);
     }
@@ -834,7 +834,7 @@ final class Doctrine
     {
         $data = new Doctrine_Data();
 
-        return $data->exportData($yamlPath, 'yml', array(), $individualFiles);
+        return $data->exportData($yamlPath, 'yml', [], $individualFiles);
     }
 
     /**
@@ -849,7 +849,7 @@ final class Doctrine
     {
         $data = new Doctrine_Data();
 
-        return $data->importData($yamlPath, 'yml', array(), $append);
+        return $data->importData($yamlPath, 'yml', [], $append);
     }
 
     /**
@@ -930,7 +930,7 @@ final class Doctrine
      * @throws Doctrine_Exception
      * @return void
      */
-    public static function compile($target = null, $includedDrivers = array())
+    public static function compile($target = null, $includedDrivers = [])
     {
         return Doctrine_Compiler::compile($target, $includedDrivers);
     }
@@ -977,7 +977,7 @@ final class Doctrine
      */
     public static function dump($var, $output = true, $indent = "")
     {
-        $ret = array();
+        $ret = [];
         switch (gettype($var)) {
             case 'array':
                 $ret[] = 'Array(';

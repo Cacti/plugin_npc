@@ -13,28 +13,22 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
     $this->setTableName('npc_servicestatus');
     $this->hasColumn('servicestatus_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => true,
   'notnull' => true,
   'autoincrement' => true,
 ));
     $this->hasColumn('instance_id', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -42,14 +36,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('service_object_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -57,13 +48,10 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('status_update_time', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -71,14 +59,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('output', 'string', 255, array (
   'alltypes' => 
-  array (
-    0 => 'string',
-  ),
+  [],
   'ntype' => 'varchar(255)',
   'fixed' => false,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,
@@ -86,14 +71,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('perfdata', 'string', 255, array (
   'alltypes' => 
-  array (
-    0 => 'string',
-  ),
+  [],
   'ntype' => 'varchar(255)',
   'fixed' => false,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,
@@ -101,14 +83,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('current_state', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -116,14 +95,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('has_been_checked', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -131,14 +107,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('should_be_scheduled', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -146,14 +119,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('current_check_attempt', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -161,14 +131,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('max_check_attempts', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -176,13 +143,10 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('last_check', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -190,13 +154,10 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('next_check', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -204,14 +165,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('check_type', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -219,13 +177,10 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('last_state_change', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -233,13 +188,10 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('last_hard_state_change', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -247,14 +199,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('last_hard_state', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -262,13 +211,10 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('last_time_ok', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -276,13 +222,10 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('last_time_warning', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -290,13 +233,10 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('last_time_unknown', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -304,13 +244,10 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('last_time_critical', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -318,14 +255,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('state_type', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -333,13 +267,10 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('last_notification', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -347,13 +278,10 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('next_notification', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -361,14 +289,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('no_more_notifications', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -376,14 +301,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('notifications_enabled', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -391,14 +313,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('problem_has_been_acknowledged', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -406,14 +325,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('acknowledgement_type', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -421,14 +337,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('current_notification_number', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -436,14 +349,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('passive_checks_enabled', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -451,14 +361,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('active_checks_enabled', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -466,14 +373,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('event_handler_enabled', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -481,14 +385,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('flap_detection_enabled', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -496,14 +397,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('is_flapping', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -511,14 +409,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('percent_state_change', 'float', null, array (
   'alltypes' => 
-  array (
-    0 => 'float',
-  ),
+  [],
   'ntype' => 'double',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -526,14 +421,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('latency', 'float', null, array (
   'alltypes' => 
-  array (
-    0 => 'float',
-  ),
+  [],
   'ntype' => 'double',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -541,14 +433,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('execution_time', 'float', null, array (
   'alltypes' => 
-  array (
-    0 => 'float',
-  ),
+  [],
   'ntype' => 'double',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -556,14 +445,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('scheduled_downtime_depth', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -571,14 +457,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('failure_prediction_enabled', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -586,14 +469,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('process_performance_data', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -601,14 +481,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('obsess_over_service', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -616,14 +493,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('modified_service_attributes', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -631,14 +505,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('event_handler', 'string', 255, array (
   'alltypes' => 
-  array (
-    0 => 'string',
-  ),
+  [],
   'ntype' => 'varchar(255)',
   'fixed' => false,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,
@@ -646,14 +517,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('check_command', 'string', 255, array (
   'alltypes' => 
-  array (
-    0 => 'string',
-  ),
+  [],
   'ntype' => 'varchar(255)',
   'fixed' => false,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,
@@ -661,14 +529,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('normal_check_interval', 'float', null, array (
   'alltypes' => 
-  array (
-    0 => 'float',
-  ),
+  [],
   'ntype' => 'double',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -676,14 +541,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('retry_check_interval', 'float', null, array (
   'alltypes' => 
-  array (
-    0 => 'float',
-  ),
+  [],
   'ntype' => 'double',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -691,14 +553,11 @@ abstract class BaseNpcServicestatus extends Doctrine_Record
 ));
     $this->hasColumn('check_timeperiod_object_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,

@@ -47,7 +47,7 @@ class NpcServicesController extends Controller {
         for ($i = 0; $i < count($services); $i++) {
 
                 foreach($services[$i] as $k => $v) {
-                        if (is_array($v)) {
+                        if (is_[]) {
                                 $services[$i] = array_merge($services[$i], $v);
                                 unset($services[$i][$k]);
                         }
@@ -89,38 +89,13 @@ class NpcServicesController extends Controller {
     $hg = $obj->setupResultsArray();
     // $results[$i]['hostgroup_object_id']
 
-        $fields = array(
-            'current_state',
-            'output',
-            'perfdata',
-            'notes',
-            'last_state_change',
-            'check_command',
-            'command_line',
-            'host_address',
-            'Host Groups',
-            'current_check_attempt',
-            'last_check',
-            'next_check',
-            'event_handler',
-            'latency',
-            'execution_time',
-            'is_flapping',
-            'scheduled_downtime_depth',
-            'process_performance_data',
-            'active_checks_enabled',
-            'passive_checks_enabled',
-            'event_handler_enabled',
-            'flap_detection_enabled',
-            'notifications_enabled',
-            'obsess_over_service'
-        );
+        $fields = [];
 
         $service = $this->services();
 
         $results = $this->flattenArray($service);
 
-    $hostgroups = array();
+    $hostgroups = [];
     foreach ($hg as $i => $a) {
             if ($a['host_name'] == $results[0]['host_name']) {
                 $hostgroups[] = $a['hostgroup_name'];
@@ -137,7 +112,7 @@ class NpcServicesController extends Controller {
                 $value = $this->formatStateInfo($key, $results[0]);
             }
 
-            $output[$x] = array('name' => $name, 'value' => $value);
+            $output[$x] = [];
             $x++;
         }
 
@@ -153,11 +128,7 @@ class NpcServicesController extends Controller {
      */
     function summary() {
 
-        $status = array('critical' => 0,
-                        'warning'  => 0,
-                        'unknown'  => 0,
-                        'ok'       => 0,
-                        'pending'  => 0);
+        $status = [];
 
         $q = new Doctrine_Query();
         $q->select('ss.current_state')
@@ -165,7 +136,7 @@ class NpcServicesController extends Controller {
           ->leftJoin('ss.Service s')
           ->where('s.config_type = ?', $this->config_type);
 
-        $services = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        $services = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
         for ($i = 0; $i < count($services); $i++) {
             $status[$this->serviceState[$services[$i]['current_state']]]++;
@@ -189,7 +160,7 @@ class NpcServicesController extends Controller {
           ->from('NpcServicestatus ss, NpcServices s')
           ->where('ss.service_object_id = s.service_object_id AND s.host_object_id = ?', $host_object_id);
 
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        $results = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
         return($results);
     }
@@ -204,11 +175,7 @@ class NpcServicesController extends Controller {
     function services($id=null, $where=null) {
 
         // Maps searchable fields passed in from the client
-        $fieldMap = array('service_description' => 'o.name2',
-                          'host_name'  => 'o.name1',
-                          'host_alias' => 'h.alias',
-                          'notes'      => 's.notes',
-                          'output'     => 'ss.output');
+        $fieldMap = [];
 
 
         // Build the where clause
@@ -272,7 +239,7 @@ class NpcServicesController extends Controller {
             $this->limit
         );
 
-        $services = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        $services = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
         // Set the total number of records
         $this->numRecords = $q->getNumResults();
@@ -313,7 +280,7 @@ class NpcServicesController extends Controller {
         ->from('NpcServicechecks n')
         ->where('n.servicecheck_id = ?', $id[0]['id']);
 
-        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
+        return($q->execute([], Doctrine::HYDRATE_ARRAY));
     }
 
     /**
@@ -335,7 +302,7 @@ class NpcServicesController extends Controller {
             $q->andWhere('n.end_time <= ?', $end);
         }
 
-        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
+        return($q->execute([], Doctrine::HYDRATE_ARRAY));
     }
 
 
@@ -358,7 +325,7 @@ class NpcServicesController extends Controller {
 			$q->where('h.display_name = ?', $host);
 		}
 
-        return($this->flattenArray($q->execute(array(), Doctrine::HYDRATE_ARRAY)));
+        return($this->flattenArray($q->execute([], Doctrine::HYDRATE_ARRAY)));
     }
 
     /**
@@ -374,7 +341,7 @@ class NpcServicesController extends Controller {
           ->from('NpcServiceGraphs sg')
           ->where('sg.service_object_id = ?', $this->id);
 
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        $results = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
         return($this->jsonOutput($results));
     }
@@ -389,7 +356,7 @@ class NpcServicesController extends Controller {
     function setMappedGraph($params) {
         $table = $this->conn->getTable('NpcServiceGraphs');
 
-        $results = $table->findByDql("service_object_id = ?", array($params['object_id']));
+        $results = $table->findByDql("service_object_id = ?", []);
         $graph = $results[0];
 
         if (!isset($graph->local_graph_id)) {
@@ -400,7 +367,7 @@ class NpcServicesController extends Controller {
         $graph->local_graph_id = $params['local_graph_id'];
         $graph->save();
 
-        return(json_encode(array('success' => true)));
+        return(json_encode([]));
     }
 
     /**
@@ -419,13 +386,7 @@ class NpcServicesController extends Controller {
             $return = $results[$key];
         }
 
-        $cs = array(
-            '0'  => '<img ext:qtip="OK" src="images/icons/greendot.gif">',
-            '1'  => '<img ext:qtip="WARNING" src="images/icons/yellowdot.gif">',
-            '2'  => '<img ext:qtip="CRITICAL" src="images/icons/reddot.gif">',
-            '3'  => '<img ext:qtip="UNKNOWN" src="images/icons/orangedot.gif">',
-            '-1' => '<img ext:qtip="PENDING" src="images/icons/bluedot.gif">'
-        );
+        $cs = [];
 
         if ($key == 'current_state') {
             $return = $cs[$results[$key]];

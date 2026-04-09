@@ -13,28 +13,22 @@ abstract class BaseNpcAcknowledgements extends Doctrine_Record
     $this->setTableName('npc_acknowledgements');
     $this->hasColumn('acknowledgement_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => true,
   'notnull' => true,
   'autoincrement' => true,
 ));
     $this->hasColumn('instance_id', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -42,13 +36,10 @@ abstract class BaseNpcAcknowledgements extends Doctrine_Record
 ));
     $this->hasColumn('entry_time', 'timestamp', null, array (
   'alltypes' => 
-  array (
-    0 => 'timestamp',
-  ),
+  [],
   'ntype' => 'datetime',
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0000-00-00 00:00:00',
   'notnull' => true,
@@ -56,14 +47,11 @@ abstract class BaseNpcAcknowledgements extends Doctrine_Record
 ));
     $this->hasColumn('entry_time_usec', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -71,14 +59,11 @@ abstract class BaseNpcAcknowledgements extends Doctrine_Record
 ));
     $this->hasColumn('acknowledgement_type', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -86,14 +71,11 @@ abstract class BaseNpcAcknowledgements extends Doctrine_Record
 ));
     $this->hasColumn('object_id', 'integer', 4, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'int(11)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -101,14 +83,11 @@ abstract class BaseNpcAcknowledgements extends Doctrine_Record
 ));
     $this->hasColumn('state', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -116,14 +95,11 @@ abstract class BaseNpcAcknowledgements extends Doctrine_Record
 ));
     $this->hasColumn('author_name', 'string', 64, array (
   'alltypes' => 
-  array (
-    0 => 'string',
-  ),
+  [],
   'ntype' => 'varchar(64)',
   'fixed' => false,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,
@@ -131,14 +107,11 @@ abstract class BaseNpcAcknowledgements extends Doctrine_Record
 ));
     $this->hasColumn('comment_data', 'string', 255, array (
   'alltypes' => 
-  array (
-    0 => 'string',
-  ),
+  [],
   'ntype' => 'varchar(255)',
   'fixed' => false,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '',
   'notnull' => true,
@@ -146,14 +119,11 @@ abstract class BaseNpcAcknowledgements extends Doctrine_Record
 ));
     $this->hasColumn('is_sticky', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -161,14 +131,11 @@ abstract class BaseNpcAcknowledgements extends Doctrine_Record
 ));
     $this->hasColumn('persistent_comment', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,
@@ -176,14 +143,11 @@ abstract class BaseNpcAcknowledgements extends Doctrine_Record
 ));
     $this->hasColumn('notify_contacts', 'integer', 2, array (
   'alltypes' => 
-  array (
-    0 => 'integer',
-  ),
+  [],
   'ntype' => 'smallint(6)',
   'unsigned' => 0,
   'values' => 
-  array (
-  ),
+  [],
   'primary' => false,
   'default' => '0',
   'notnull' => true,

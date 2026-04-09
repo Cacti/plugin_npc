@@ -52,27 +52,7 @@ class NpcNagiosController extends Controller {
 	 * @return string   json output
 	 */
 	function getProcessInfoGrid() {
-		$fields = array(
-			'program_version',
-			'instance_id',
-			'process_id',
-			'status_update_time',
-			'program_start_time',
-			'program_end_time',
-			//'is_currently_running',
-			'last_command_check',
-			'last_log_rotation',
-			'notifications_enabled',
-			'active_service_checks_enabled',
-			'passive_service_checks_enabled',
-			'active_host_checks_enabled',
-			'passive_host_checks_enabled',
-			'event_handlers_enabled',
-			'flap_detection_enabled',
-			'process_performance_data',
-			'obsess_over_hosts',
-			'obsess_over_services'
-		);
+		$fields = [];
 
 		$results = $this->processInfo();
 
@@ -96,7 +76,7 @@ class NpcNagiosController extends Controller {
 		$q = new Doctrine_Query();
 		$q->select('ps.*')->from('NpcProgramstatus ps');
 
-		$results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+		$results = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
 		if (cacti_sizeof($results)) {
 			$q = new Doctrine_Query();
@@ -105,7 +85,7 @@ class NpcNagiosController extends Controller {
 				->where('p.instance_id = ?', $results[0]['instance_id'])
 				->groupby('p.program_version');
 
-			$version = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+			$version = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
 			$results[0]['server_time'] = date('Y-m-d H:i:s');
 			if (isset($version[0])) {
@@ -131,31 +111,10 @@ class NpcNagiosController extends Controller {
 		// Get the passed command
 		$cmd = $params['command'];
 
-		$globalCommands = array(
-			'DISABLE_EVENT_HANDLERS',
-			'ENABLE_EVENT_HANDLERS',
-			'DISABLE_NOTIFICATIONS',
-			'ENABLE_NOTIFICATIONS',
-			'DISABLE_FLAP_DETECTION',
-			'ENABLE_FLAP_DETECTION',
-			'STOP_ACCEPTING_PASSIVE_HOST_CHECKS',
-			'START_ACCEPTING_PASSIVE_HOST_CHECKS',
-			'STOP_ACCEPTING_PASSIVE_SVC_CHECKS',
-			'START_ACCEPTING_PASSIVE_SVC_CHECKS',
-			'DISABLE_PERFORMANCE_DATA',
-			'ENABLE_PERFORMANCE_DATA',
-			'STOP_EXECUTING_HOST_CHECKS',
-			'START_EXECUTING_HOST_CHECKS',
-			'STOP_EXECUTING_SVC_CHECKS',
-			'START_EXECUTING_SVC_CHECKS',
-			'STOP_OBSESSING_OVER_HOST_CHECKS',
-			'START_OBSESSING_OVER_HOST_CHECKS',
-			'STOP_OBSESSING_OVER_SVC_CHECKS',
-			'START_OBSESSING_OVER_SVC_CHECKS'
-		);
+		$globalCommands = [];
 
 		$nagios = new NagiosCmd;
-		$args = array();
+		$args = [];
 
 		// Do some sanity checking:
 
@@ -170,7 +129,7 @@ class NpcNagiosController extends Controller {
 		}
 
 		if (!$nagios->setCommandFile(read_config_option('npc_nagios_cmd_path'))) {
-			$response = array('success' => false, 'msg' => $nagios->message);
+			$response = [];
 			return(json_encode($response));
 		}
 
@@ -201,7 +160,7 @@ class NpcNagiosController extends Controller {
 
 				if ($k == 'comment') {
 					// Replace newline characters:
-					$value = str_replace(array("\r", "\n"), '<br />', $value);
+					$value = str_replace([], '<br />', $value);
 
 					// Replace html spaces
 					$value = str_replace("&nbsp;", ' ', $value);
@@ -216,13 +175,13 @@ class NpcNagiosController extends Controller {
 
 		// Build the command string
         if (!$nagios->setCommand($cmd, $args)) {
-			$response = array('success' => false, 'msg' => $nagios->message);
+			$response = [];
 			return(json_encode($response));
 		}
 
 		// Execute the command
 		if (!$nagios->execute()) {
-			$response = array('success' => false, 'msg' => $nagios->message);
+			$response = [];
 			return(json_encode($response));
 		}
 
@@ -234,7 +193,7 @@ class NpcNagiosController extends Controller {
 		}
 
 		// Return success to the form
-		return(json_encode(array('success' => true)));
+		return(json_encode([]));
 	}
 
 	/**
@@ -264,7 +223,7 @@ class NpcNagiosController extends Controller {
 		$q->where('hc.host_object_id = o.object_id AND o.is_active = 1 AND hc.start_time > DATE_SUB(NOW(),INTERVAL ? DAY) '
 			. 'AND hc.host_object_id = h.host_object_id AND h.active_checks_enabled = 1');
 
-		$hostPerf = $q->execute(array($resolution), Doctrine::HYDRATE_ARRAY);
+		$hostPerf = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
 		$q = new Doctrine_Query();
 		$q->select('ROUND(MIN(sc.execution_time), 3) AS min_execution,
@@ -278,7 +237,7 @@ class NpcNagiosController extends Controller {
 		$q->where('sc.service_object_id = o.object_id AND o.is_active = 1 AND sc.start_time > DATE_SUB(NOW(),INTERVAL ? DAY) '
 			. 'AND sc.service_object_id = s.service_object_id AND s.active_checks_enabled = 1');
 
-		$servicePerf = $q->execute(array($resolution), Doctrine::HYDRATE_ARRAY);
+		$servicePerf = $q->execute([], Doctrine::HYDRATE_ARRAY);
 
 		$output = array(
 			array_merge(array('name' => __('Service Check Execution Time', 'npc')), array_slice($servicePerf[0], 0, 3)),
@@ -311,20 +270,9 @@ class NpcNagiosController extends Controller {
 		// Set the default return value
 		$return = $results[$key];
 
-		$toggle = array(
-			'notifications_enabled',
-			'active_service_checks_enabled',
-			'passive_service_checks_enabled',
-			'active_host_checks_enabled',
-			'passive_host_checks_enabled',
-			'event_handlers_enabled',
-			'obsess_over_services',
-			'obsess_over_hosts',
-			'flap_detection_enabled',
-			'process_performance_data'
-		);
+		$toggle = [];
 
-		if (in_array($key, $toggle)) {
+		if (in_[]) {
 			if($results[$key]) {
 				$return = '<img src="images/icons/tick.png">';
 			} else {
