@@ -18,7 +18,7 @@
  * Notifications controller class
  *
  * Notifications controller provides functionality, such as building the
- * Doctrine queries and formatting output.
+ * queries and formatting output.
  *
  * @package     npc
  * @subpackage  npc.controllers
@@ -35,30 +35,34 @@ class NpcNotificationsController extends Controller {
     function getNotifications() {
 
         $where = '1 = 1';
+        $params = array();
 
         if ($this->id) {
-            $where = sprintf("n.object_id = %d", $this->id);
+            $where = 'n.object_id = ?';
+            $params[] = $this->id;
         }
 
-        $q = new Doctrine_Pager(
-            Doctrine_Query::create()
-                ->select('i.instance_name,'
-                        .'o.name1 AS host_name,'
-                        .'o.name2 AS service_description,'
-                        .'n.*')
-                ->from('NpcNotifications n')
-                ->leftJoin('n.Object o')
-                ->leftJoin('n.Instance i')
-                ->where("$where")
-                ->orderby( 'n.start_time DESC, n.start_time_usec DESC' ),
-            $this->currentPage,
-            $this->limit
-        );
+        /* Get total count */
+        $this->numRecords = db_fetch_cell_prepared('SELECT COUNT(*)
+            FROM npc_notifications n
+            LEFT JOIN npc_objects o ON n.object_id = o.object_id
+            LEFT JOIN npc_instances i ON n.instance_id = i.instance_id
+            WHERE ' . $where,
+            $params);
 
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        $offset = ($this->currentPage - 1) * $this->limit;
 
-        // Set the total number of records
-        $this->numRecords = $q->getNumResults();
+        $results = db_fetch_assoc_prepared('SELECT i.instance_name,
+                o.name1 AS host_name,
+                o.name2 AS service_description,
+                n.*
+            FROM npc_notifications n
+            LEFT JOIN npc_objects o ON n.object_id = o.object_id
+            LEFT JOIN npc_instances i ON n.instance_id = i.instance_id
+            WHERE ' . $where . '
+            ORDER BY n.start_time DESC, n.start_time_usec DESC
+            LIMIT ?, ?',
+            array_merge($params, array($offset, $this->limit)));
 
         return($this->jsonOutput($results));
     }

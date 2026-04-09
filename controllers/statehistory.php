@@ -18,7 +18,7 @@
  * Statehistory controller class
  *
  * Statehistory controller provides functionality, such as building the
- * Doctrine queries and formatting output.
+ * queries and formatting output.
  *
  * @package     npc
  * @subpackage  npc.controllers
@@ -35,30 +35,34 @@ class NpcStatehistoryController extends Controller {
     function getStateHistory() {
 
         $where = '1 = 1';
+        $params = array();
 
         if ($this->id) {
-            $where = sprintf("sh.object_id = %d ", $this->id);
+            $where = 'sh.object_id = ?';
+            $params[] = $this->id;
         }
 
-        $q = new Doctrine_Pager(
-            Doctrine_Query::create()
-                ->select('i.instance_name,'
-                        .'o.name1 AS host_name,'
-                        .'o.name2 AS service_description,'
-                        .'sh.*')
-                ->from('NpcStatehistory sh')
-                ->leftJoin('sh.Object o')
-                ->leftJoin('sh.Instance i')
-                ->where("$where")
-                ->orderby( 'sh.state_time DESC, sh.state_time_usec DESC' ),
-            $this->currentPage,
-            $this->limit
-        );
+        /* Get total count */
+        $this->numRecords = db_fetch_cell_prepared('SELECT COUNT(*)
+            FROM npc_statehistory sh
+            LEFT JOIN npc_objects o ON sh.object_id = o.object_id
+            LEFT JOIN npc_instances i ON sh.instance_id = i.instance_id
+            WHERE ' . $where,
+            $params);
 
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        $offset = ($this->currentPage - 1) * $this->limit;
 
-        // Set the total number of records
-        $this->numRecords = $q->getNumResults();
+        $results = db_fetch_assoc_prepared('SELECT i.instance_name,
+                o.name1 AS host_name,
+                o.name2 AS service_description,
+                sh.*
+            FROM npc_statehistory sh
+            LEFT JOIN npc_objects o ON sh.object_id = o.object_id
+            LEFT JOIN npc_instances i ON sh.instance_id = i.instance_id
+            WHERE ' . $where . '
+            ORDER BY sh.state_time DESC, sh.state_time_usec DESC
+            LIMIT ?, ?',
+            array_merge($params, array($offset, $this->limit)));
 
         return($this->jsonOutput($results));
     }

@@ -18,7 +18,7 @@
  * Comments controller class
  *
  * Comments controller provides functionality, such as building the
- * Doctrine queries and formatting output.
+ * queries and formatting output.
  *
  * @package     npc
  * @subpackage  npc.controllers
@@ -172,22 +172,13 @@ class NpcCommentsController extends Controller {
      * @return array  icon and alt
      */
     function getHostIcon($id) {
+        $results = db_fetch_row_prepared('SELECT h.icon_image, h.icon_image_alt
+            FROM npc_services s
+            LEFT JOIN npc_hosts h ON s.host_object_id = h.host_object_id
+            WHERE s.service_object_id = ?',
+            array($id));
 
-        $q = new Doctrine_Pager(
-            Doctrine_Query::create()
-                ->select('s.service_id,'
-                        .'h.icon_image,'
-                        .'h.icon_image_alt')
-                ->from('NpcServices s')
-                ->leftJoin('s.Host h')
-                ->where("s.service_object_id = ?", $id),
-            $this->currentPage,
-            $this->limit
-        );
-
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
-
-        return($results[0]['Host']);
+        return($results);
     }
 
     /**
@@ -197,57 +188,68 @@ class NpcCommentsController extends Controller {
      *
      * @return array  The comments
      */
-    function comments($id=null, $where='') {
+    function comments($id = null, $where = '') {
 
-        // Maps searchable fields passed in from the client
+        /* Maps searchable fields passed in from the client */
         $fieldMap = array('service_description' => 'o.name2',
                           'host_name'    => 'o.name1',
                           'author_name'  => 'c.author_name',
                           'comment_data' => 'c.comment_data');
 
+        $params = array();
 
         if ($this->id || $id) {
             if ($where != '') {
                 $where .= ' AND ';
             }
-            $where .= sprintf("c.object_id = %d", is_null($id) ? $this->id : $id);
+            $where .= 'c.object_id = ?';
+            $params[] = is_null($id) ? $this->id : $id;
         }
 
         if ($this->searchString) {
-            $where = $this->searchClause($where, $fieldMap);
+            $where = $this->searchClause($where, $fieldMap, $params);
         }
 
-		if ($this->sort) {
-			$orderBy = $this->sort . ' ' . $this->dir;
-		} else {
-			$orderBy = 'c.entry_time DESC, c.entry_time_usec DESC';
-		}
+        if ($this->sort) {
+            $orderBy = $this->sort . ' ' . $this->dir;
+        } else {
+            $orderBy = 'c.entry_time DESC, c.entry_time_usec DESC';
+        }
 
-        $q = new Doctrine_Pager(
-            Doctrine_Query::create()
-                ->select('i.instance_name,'
-                        .'o.name1 AS host_name,'
-                        .'o.name2 AS service_description,'
-                        .'s.icon_image AS svc_icon_image,'
-                        .'s.icon_image_alt AS svc_icon_image_alt,'
-                        .'h.icon_image AS host_icon_image,'
-                        .'h.icon_image_alt AS host_icon_image_alt,'
-                        .'c.*')
-                ->from('NpcComments c')
-                ->leftJoin('c.Object o')
-                ->leftJoin('c.Instance i')
-                ->leftJoin('c.Service s')
-                ->leftJoin('c.Host h')
-                ->where($where)
-                ->orderby($orderBy),
-            $this->currentPage,
-            $this->limit
-        );
+        $whereClause = '';
+        if ($where != '') {
+            $whereClause = 'WHERE ' . $where;
+        }
 
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        /* Get the total count */
+        $this->numRecords = db_fetch_cell_prepared('SELECT COUNT(*)
+            FROM npc_comments c
+            LEFT JOIN npc_objects o ON c.object_id = o.object_id
+            LEFT JOIN npc_instances i ON c.instance_id = i.instance_id
+            LEFT JOIN npc_services s ON c.object_id = s.service_object_id
+            LEFT JOIN npc_hosts h ON c.object_id = h.host_object_id
+            ' . $whereClause,
+            $params);
 
-        // Set the total number of records
-        $this->numRecords = $q->getNumResults();
+        $offset = ($this->currentPage - 1) * $this->limit;
+
+        $results = db_fetch_assoc_prepared('SELECT i.instance_name,
+                o.name1 AS host_name,
+                o.name2 AS service_description,
+                s.icon_image AS svc_icon_image,
+                s.icon_image_alt AS svc_icon_image_alt,
+                h.icon_image AS host_icon_image,
+                h.icon_image_alt AS host_icon_image_alt,
+                c.*
+            FROM npc_comments c
+            LEFT JOIN npc_objects o ON c.object_id = o.object_id
+            LEFT JOIN npc_instances i ON c.instance_id = i.instance_id
+            LEFT JOIN npc_services s ON c.object_id = s.service_object_id
+            LEFT JOIN npc_hosts h ON c.object_id = h.host_object_id
+            ' . $whereClause . '
+            ORDER BY ' . $orderBy . '
+            LIMIT ?, ?',
+            array_merge($params, array($offset, $this->limit)));
 
         return($results);
     }
