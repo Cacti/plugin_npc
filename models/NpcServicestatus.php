@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class NpcServicestatus extends BaseNpcServicestatus
 {
     public function setUp()

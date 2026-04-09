@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  +-------------------------------------------------------------------------+
  | Copyright (C) 2007 Billy Gunn aka divagater  (billy@gunn.org)           |

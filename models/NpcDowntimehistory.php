@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class NpcDowntimehistory extends BaseNpcDowntimehistory
 {
     public function setUp()

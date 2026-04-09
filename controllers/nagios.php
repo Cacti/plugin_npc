@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /* ex: set tabstop=4 expandtab: */
 /**
  * Nagios controller class

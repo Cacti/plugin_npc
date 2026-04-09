@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 //require the base Doctrine class
 require_once(dirname(__FILE__) . '/lib/Doctrine.php');
 require_once(dirname(__FILE__) . '/controllers/controller.php');

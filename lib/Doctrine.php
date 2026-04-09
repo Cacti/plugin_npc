@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  *  $Id: Doctrine.php 5457 2009-02-03 03:55:57Z jwage $
  *
