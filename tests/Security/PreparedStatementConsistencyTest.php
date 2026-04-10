@@ -49,7 +49,10 @@ describe('prepared statement consistency in npc', function () {
 					continue;
 				}
 
-				if (preg_match($rawPattern, $line) && !preg_match($preparedPattern, $line)) {
+				// Mask out prepared-variant matches first so a line containing
+				// db_fetch_cell_prepared() does not also trip the db_fetch_cell( raw pattern.
+				$masked = preg_replace($preparedPattern, '', $line);
+				if (preg_match($rawPattern, $masked)) {
 					$rawCallsOutsideComments++;
 				}
 			}
