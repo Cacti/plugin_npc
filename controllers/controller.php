@@ -37,7 +37,18 @@ class Controller {
      * @var array
      * @access public
      */
-    var $stringToState = [];
+    var $stringToState = array(
+        'ok'          => '0',
+        'up'          => '0',
+        'warning'     => '1',
+        'down'        => '1',
+        'critical'    => '2',
+        'unreachable' => '2',
+        'unknown'      => '3',
+        'pending'     => '-1',
+        'any'         => '0,1,2,3,-1',
+        'not_ok'      => '1,2,3'
+    );
 
     /**
      * The starting row for fetching results
@@ -126,7 +137,12 @@ class Controller {
      * @var array
      * @access public
      */
-    var $hostState = [];
+    var $hostState = array(
+        '0'  => 'up',
+        '1'  => 'down',
+        '2'  => 'unreachable',
+        '-1' => 'pending'
+    );
 
     /**
      * Maps a services current_state
@@ -134,7 +150,13 @@ class Controller {
      * @var array
      * @access public
      */
-    var $serviceState = [];
+    var $serviceState = array(
+        '0'  => 'ok',
+        '1'  => 'warning',
+        '2'  => 'critical',
+        '3'  => 'unknown',
+        '-1' => 'pending'
+    );
 
     /**
      * Holds all params passed and named.
@@ -142,7 +164,7 @@ class Controller {
      * @var mixed
      * @access public
      */
-    var $passedArgs = [];
+    var $passedArgs = array();
 
     /**
      * Column aliases
@@ -150,7 +172,79 @@ class Controller {
      * @var array
      * @access public
      */
-    var $columnAlias = [];
+    var $columnAlias = array(
+        'instance_id'                   => 'Instance ID',
+        'instance_name'                 => 'Instance Name',
+        'host_object_id'                => 'Host Object Id',
+        'host_name'                     => 'Host Name',
+        'service_id'                    => 'Service Id',
+        'host_id'                       => 'Host Id',
+        'address'                       => 'IP Address',
+        'host_address'                  => 'Host Address',
+        'service_description'           => 'Service Description',
+        'servicestatus_id'              => 'Servicestatus Id',
+        'service_object_id'             => 'Service Object Id',
+        'status_update_time'            => 'Status Update Time',
+        'output'                        => 'Status Information',
+        'perfdata'                      => 'Performance Data',
+        'notes'                         => 'Notes',
+        'current_state'                 => 'Current State',
+        'has_been_checked'              => 'Has Been Checked',
+        'should_be_scheduled'           => 'Should Be Scheduled',
+        'current_check_attempt'         => 'Current Check Attempt',
+        'max_check_attempts'            => 'Max Check Attempts',
+        'last_check'                    => 'Last Check',
+        'next_check'                    => 'Next Check',
+        'check_type'                    => 'Check Type',
+        'last_state_change'             => 'Last State Change',
+        'last_hard_state_change'        => 'Last Hard State Change',
+        'last_hard_state'               => 'Last Hard State',
+        'last_time_ok'                  => 'Last Time Ok',
+        'last_time_warning'             => 'Last Time Warning',
+        'last_time_unknown'             => 'Last Time Unknown',
+        'last_time_critical'            => 'Last Time Critical',
+        'state_type'                    => 'State Type',
+        'last_notification'             => 'Last Notification',
+        'next_notification'             => 'Next Notification',
+        'no_more_notifications'         => 'No More Notifications',
+        'notifications_enabled'         => 'Notifications Enabled',
+        'problem_has_been_acknowledged' => 'Problem Has Been Acknowledged',
+        'acknowledgement_type'          => 'Acknowledgement Type',
+        'current_notification_number'   => 'Current Notification Number',
+        'passive_checks_enabled'        => 'Passive Checks Enabled',
+        'passive_service_checks_enabled' => 'Passive Service Checks Enabled',
+        'passive_host_checks_enabled'   => 'Passive Host Checks Enabled',
+        'active_checks_enabled'         => 'Active Checks Enabled',
+        'active_host_checks_enabled'    => 'Active Host Checks Enabled',
+        'active_service_checks_enabled' => 'Active Service Checks Enabled',
+        'event_handler_enabled'         => 'Event Handler Enabled',
+        'event_handlers_enabled'        => 'Event Handlers Enabled',
+        'flap_detection_enabled'        => 'Flap Detection Enabled',
+        'is_flapping'                   => 'Flapping',
+        'percent_state_change'          => 'Percent State Change',
+        'program_version'               => 'Nagios Version',
+        'latency'                       => 'Latency',
+        'execution_time'                => 'Execution Time',
+        'scheduled_downtime_depth'      => 'In Scheduled Downtime',
+        'failure_prediction_enabled'    => 'Failure Prediction Enabled',
+        'process_performance_data'      => 'Processing Performance Data',
+        'obsess_over_service'           => 'Obsess Over Service',
+        'obsess_over_host'              => 'Obsess Over Host',
+        'obsess_over_services'          => 'Obsess Over Services',
+        'obsess_over_hosts'             => 'Obsess Over Hosts',
+        'is_currently_running'          => 'Currently Running',
+        'last_log_rotation'             => 'Last Log Rotation',
+        'last_command_check'            => 'Last External Command Check',
+        'program_start_time'            => 'Program Start Time',
+        'program_end_time'              => 'Program Stop Time',
+        'modified_service_attributes'   => 'Modified Service Attributes',
+        'event_handler'                 => 'Event Handler',
+        'check_command'                 => 'Check Command',
+        'command_line'                  => 'Command Line',
+        'normal_check_interval'         => 'Normal Check Interval',
+        'retry_check_interval'          => 'Retry Check Interval',
+        'process_id'                    => 'Process ID',
+        'check_timeperiod_object_id'    => 'Check Timeperiod Object Id');
 
     /**
      * Constructor.
@@ -159,25 +253,25 @@ class Controller {
     function __construct() {
         // Get the config type. Default to 1 if not found.
         $config_type = read_config_option('npc_config_type');
-        $this->config_type =  ?? 1;
+        $this->config_type = isset($config_type) ? $config_type : 1;
     }
 
-    function jsonOutput($results=[]) {
+    function jsonOutput($results=array()) {
         if (!$this->numRecords) {
             $this->numRecords = count($results);
         }
 
         if (count($results) && !isset($results[0])) {
-            $results = [];
+            $results = array($results);
         }
 
         // Setup the output array:
-        $output = [];
+        $output = array('totalCount' => $this->numRecords, 'data' => $results);
 
         return(json_encode($output));
     }
 
-    function csvOutput($results=[]) {
+    function csvOutput($results=array()) {
         header('Content-type: text/csv');
         header('Cache-Control: no-store, no-cache');
         header('Content-Disposition: attachment; filename="filename.csv"');
@@ -199,13 +293,13 @@ class Controller {
      *
      * @return array  list of all services with status
      */
-    function flattenArray($array=[]) {
+    function flattenArray($array=array()) {
 
-        $newArray = [];
+        $newArray = array();
 
         for ($i = 0; $i < count($array); $i++) {
             foreach ($array[$i] as $key => $val) {
-                if (is_[]) {
+                if (is_array($val)) {
                     foreach ($val as $k => $v) {
                         $newArray[$i][$k] = $v;
                     }
@@ -257,17 +351,17 @@ class Controller {
 
     function flattenNestedArray($array) {
 
-        $results = [];
+        $results = array();
 
         $x = 0;
         for ($i = 0; $i < count($array); $i++) {
             foreach ($array[$i] as $key => $val) {
-                if (is_[]) {
+                if (is_array($val)) {
                     $t[0] = $val;
                     $v = $this->flattenArray($t);
                     unset($array[$i][$key]);
                     foreach ($array[$i] as $key => $val) {
-                        if (!is_[]) {
+                        if (!is_array($val)) {
                             $a[$key] = $val;
                         }
                     }
@@ -308,7 +402,12 @@ class Controller {
     function logger($level, $class, $method, $message) {
         $logLevelConf = read_config_option('npc_log_level');
 
-        $logLevels = [];
+        $logLevels = array(
+            'error' => 1,
+            'warn'  => 2,
+            'info'  => 3,
+            'debug' => 4
+        );
 
         if ($logLevels[$level] <= $logLevelConf) {
             $message = strtoupper($level) . " [$class] ($method) - $message";

@@ -71,128 +71,308 @@ class NagiosCmd {
      */
     private $commands = array(
 		'ACKNOWLEDGE_HOST_PROBLEM' => array(
-			'host_name' => [],
-			'sticky' => [],
-			'notify' => [],
-			'persistent' => [],
-			'author' => [],
-			'comment' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'sticky' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'notify' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'persistent' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ACKNOWLEDGE_SVC_PROBLEM' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'sticky' => [],
-			'notify' => [],
-			'persistent' => [],
-			'author' => [],
-			'comment' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'sticky' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'notify' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'persistent' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ADD_HOST_COMMENT' => array(
-			'host_name' => [],
-			'persistent' => [],
-			'author' => [],
-			'comment' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'persistent' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ADD_SVC_COMMENT' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'persistent' => [],
-			'author' => [],
-			'comment' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'persistent' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'CHANGE_CONTACT_HOST_NOTIFICATION_TIMEPERIOD' => array(
-			'contact_name' => [],
-			'notification_timeperiod' => []
+			'contact_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'notification_timeperiod' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'CHANGE_CONTACT_MODATTR' => array(
-			'contact_name' => [],
-			'value' => []
+			'contact_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'value' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
  		'CHANGE_CONTACT_MODHATTR' => array(
-			'contact_name' => [],
-			'value' => []
+			'contact_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'value' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
  		'CHANGE_CONTACT_MODSATTR' => array(
-			'contact_name' => [],
-			'value' => []
+			'contact_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'value' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
  		'CHANGE_CONTACT_SVC_NOTIFICATION_TIMEPERIOD' => array(
-			'contact_name' => [],
-			'notification_timeperiod' => []
+			'contact_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'notification_timeperiod' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'CHANGE_CUSTOM_CONTACT_VAR' => array(
-			'contact_name' => [],
-			'varname' => [],
-			'varvalue' => []
+			'contact_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'varname' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'varvalue' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'CHANGE_CUSTOM_HOST_VAR' => array(
-			'host_name' => [],
-			'varname' => [],
-			'varvalue' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'varname' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'varvalue' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'CHANGE_CUSTOM_SVC_VAR' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'varname' => [],
-			'varvalue' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'varname' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'varvalue' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'CHANGE_GLOBAL_HOST_EVENT_HANDLER' => array(
-			'event_handler_command' => []
+			'event_handler_command' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'CHANGE_GLOBAL_SVC_EVENT_HANDLER' => array(
-			'event_handler_command' => []
+			'event_handler_command' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'CHANGE_HOST_CHECK_COMMAND' => array(
-			'host_name' => [],
-			'check_command' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'check_command' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
- 		'CHANGE_HOST_CHECK_TIMEPERIOD' => [],
+ 		'CHANGE_HOST_CHECK_TIMEPERIOD' => array(),
 
  		'CHANGE_HOST_EVENT_HANDLER' => array(
-			'host_name' => [],
-			'event_handler_command' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'event_handler_command' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'CHANGE_HOST_MODATTR' => array(
-			'host_name' => [],
-			'value' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'value' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
  		'CHANGE_MAX_HOST_CHECK_ATTEMPTS' => array(
-			'host_name' => [],
-			'check_attempts' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'check_attempts' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
  		'CHANGE_MAX_SVC_CHECK_ATTEMPTS' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'check_attempts' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'check_attempts' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
  		'CHANGE_NORMAL_HOST_CHECK_INTERVAL' => array(
-			'host_name' => [],
-			'check_interval' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'check_interval' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
  		'CHANGE_NORMAL_SVC_CHECK_INTERVAL' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'check_interval' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'check_interval' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
         /* FIXME I think documentation is incorrect for this command
@@ -202,582 +382,1247 @@ class NagiosCmd {
          * which should be command;<host_name>;<check_interval> (no service_description)
 		*/
  		'CHANGE_RETRY_HOST_CHECK_INTERVAL' => array(
-			'host_name' => [],
-			'check_interval' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'check_interval' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
  		'CHANGE_RETRY_SVC_CHECK_INTERVAL' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'check_interval' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'check_interval' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
  		'CHANGE_SVC_CHECK_COMMAND' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'check_command' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'check_command' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'CHANGE_SVC_CHECK_TIMEPERIOD' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'check_timeperiod' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'check_timeperiod' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'CHANGE_SVC_EVENT_HANDLER' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'event_handler_command' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'event_handler_command' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'CHANGE_SVC_MODATTR' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'value' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'value' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
  		'CHANGE_SVC_NOTIFICATION_TIMEPERIOD' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'notification_timeperiod' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'notification_timeperiod' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'DELAY_HOST_NOTIFICATION' => array(
-			'host_name' => [],
-			'notification_time' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'notification_time' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
  		'DELAY_SVC_NOTIFICATION' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'notification_time' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'notification_time' => array(
+        		'required' => true,
+        		'type' => 'integer'
+			)
 		),
 
  		'DEL_ALL_HOST_COMMENTS' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DEL_ALL_SVC_COMMENTS' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DEL_HOST_COMMENT' => array(
-			'comment_id' => []
+			'comment_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			)
 		),
 
  		'DEL_HOST_DOWNTIME' => array(
-			'downtime_id' => []
+			'downtime_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			)
 		),
 
  		'DEL_SVC_COMMENT' => array(
-			'comment_id' => []
+			'comment_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			)
 		),
 
  		'DEL_SVC_DOWNTIME' => array(
-			'downtime_id' => []
+			'downtime_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			)
 		),
 
  		'DISABLE_ALL_NOTIFICATIONS_BEYOND_HOST' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_CONTACTGROUP_HOST_NOTIFICATIONS' => array(
-			'contactgroup_name' => []
+			'contactgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_CONTACTGROUP_SVC_NOTIFICATIONS' => array(
-			'contactgroup_name' => []
+			'contactgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_CONTACT_HOST_NOTIFICATIONS' => array(
-			'contact_name' => []
+			'contact_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_CONTACT_SVC_NOTIFICATIONS' => array(
-			'contact_name' => []
+			'contact_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
- 		'DISABLE_EVENT_HANDLERS' => [],
- 		'DISABLE_FAILURE_PREDICTION' => [],
- 		'DISABLE_FLAP_DETECTION' => [],
+ 		'DISABLE_EVENT_HANDLERS' => array(),
+ 		'DISABLE_FAILURE_PREDICTION' => array(),
+ 		'DISABLE_FLAP_DETECTION' => array(),
 
  		'DISABLE_HOSTGROUP_HOST_CHECKS' => array(
-			'hostgroup_name' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_HOSTGROUP_HOST_NOTIFICATIONS' => array(
-			'hostgroup_name' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_HOSTGROUP_PASSIVE_HOST_CHECKS' => array(
-			'hostgroup_name' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_HOSTGROUP_PASSIVE_SVC_CHECKS' => array(
-			'hostgroup_name' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_HOSTGROUP_SVC_CHECKS' => array(
-			'hostgroup_name' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_HOSTGROUP_SVC_NOTIFICATIONS' => array(
-			'hostgroup_name' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_HOST_AND_CHILD_NOTIFICATIONS' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_HOST_CHECK' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_HOST_EVENT_HANDLER' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_HOST_FLAP_DETECTION' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
- 		'DISABLE_HOST_FRESHNESS_CHECKS' => [],
+ 		'DISABLE_HOST_FRESHNESS_CHECKS' => array(),
 
  		'DISABLE_HOST_NOTIFICATIONS' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_HOST_SVC_CHECKS' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_HOST_SVC_NOTIFICATIONS' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
- 		'DISABLE_NOTIFICATIONS' => [],
+ 		'DISABLE_NOTIFICATIONS' => array(),
 
  		'DISABLE_PASSIVE_HOST_CHECKS' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_PASSIVE_SVC_CHECKS' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
- 		'DISABLE_PERFORMANCE_DATA' => [],
+ 		'DISABLE_PERFORMANCE_DATA' => array(),
 
  		'DISABLE_SERVICEGROUP_HOST_CHECKS' => array(
-			'servicegroup_name' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_SERVICEGROUP_HOST_NOTIFICATIONS' => array(
-			'servicegroup_name' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_SERVICEGROUP_PASSIVE_HOST_CHECKS' => array(
-			'servicegroup_name' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_SERVICEGROUP_PASSIVE_SVC_CHECKS' => array(
-			'servicegroup_name' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_SERVICEGROUP_SVC_CHECKS' => array(
-			'servicegroup_name' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_SERVICEGROUP_SVC_NOTIFICATIONS' => array(
-			'servicegroup_name' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'DISABLE_SERVICE_FLAP_DETECTION' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
- 		'DISABLE_SERVICE_FRESHNESS_CHECKS' => [],
+ 		'DISABLE_SERVICE_FRESHNESS_CHECKS' => array(),
 
  		'DISABLE_SVC_CHECK' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'DISABLE_SVC_EVENT_HANDLER' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'DISABLE_SVC_FLAP_DETECTION' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'DISABLE_SVC_NOTIFICATIONS' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'ENABLE_ALL_NOTIFICATIONS_BEYOND_HOST' => array(
-			'host_name' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'ENABLE_CONTACTGROUP_HOST_NOTIFICATIONS' => array(
-			'contactgroup_name' => []
+			'contactgroup_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'ENABLE_CONTACTGROUP_SVC_NOTIFICATIONS' => array(
-			'contactgroup_name' => []
+			'contactgroup_name' => array(
+        		'required' => true,
+        		'type' => 'string')
 		),
 
  		'ENABLE_CONTACT_HOST_NOTIFICATIONS' => array(
-			'contact_name' => []
+			'contact_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
  		'ENABLE_CONTACT_SVC_NOTIFICATIONS' => array(
-			'contact_name' => []
+			'contact_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
- 		'ENABLE_EVENT_HANDLERS' => [],
- 		'ENABLE_FAILURE_PREDICTION' => [],
- 		'ENABLE_FLAP_DETECTION' => [],
+ 		'ENABLE_EVENT_HANDLERS' => array(),
+ 		'ENABLE_FAILURE_PREDICTION' => array(),
+ 		'ENABLE_FLAP_DETECTION' => array(),
 
  		'ENABLE_HOSTGROUP_HOST_CHECKS' => array(
-			'hostgroup_name' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ENABLE_HOSTGROUP_HOST_NOTIFICATIONS' => array(
-		'hostgroup_name' => []
+		'hostgroup_name' => array(
+			'required' => true,
+			'type' => 'string')
 		),
 
  		'ENABLE_HOSTGROUP_PASSIVE_HOST_CHECKS' => array(
-			'hostgroup_name' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ENABLE_HOSTGROUP_PASSIVE_SVC_CHECKS' => array(
-			'hostgroup_name' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ENABLE_HOSTGROUP_SVC_CHECKS' => array(
-			'hostgroup_name' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ENABLE_HOSTGROUP_SVC_NOTIFICATIONS' => array(
-			'hostgroup_name' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ENABLE_HOST_AND_CHILD_NOTIFICATIONS' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ENABLE_HOST_CHECK' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ENABLE_HOST_EVENT_HANDLER' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ENABLE_HOST_FLAP_DETECTION' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
- 		'ENABLE_HOST_FRESHNESS_CHECKS' => [],
+ 		'ENABLE_HOST_FRESHNESS_CHECKS' => array(),
 
  		'ENABLE_HOST_NOTIFICATIONS' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ENABLE_HOST_SVC_CHECKS' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ENABLE_HOST_SVC_NOTIFICATIONS' => array(
-		'host_name' => []
+		'host_name' => array(
+			'required' => true,
+			'type' => 'string')
 		),
 
- 		'ENABLE_NOTIFICATIONS' => [],
+ 		'ENABLE_NOTIFICATIONS' => array(),
 
  		'ENABLE_PASSIVE_HOST_CHECKS' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
  		'ENABLE_PASSIVE_SVC_CHECKS' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+        		'required' => true,
+        		'type' => 'string'
+			),
+			'service_description' => array(
+        		'required' => true,
+        		'type' => 'string'
+			)
 		),
 
-		'ENABLE_PERFORMANCE_DATA' => [],
+		'ENABLE_PERFORMANCE_DATA' => array(),
 
 		'ENABLE_SERVICEGROUP_HOST_CHECKS' => array(
-			'servicegroup_name' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'ENABLE_SERVICEGROUP_HOST_NOTIFICATIONS' => array(
-			'servicegroup_name' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'ENABLE_SERVICEGROUP_PASSIVE_HOST_CHECKS' => array(
-			'servicegroup_name' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'ENABLE_SERVICEGROUP_PASSIVE_SVC_CHECKS' => array(
-			'servicegroup_name' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'ENABLE_SERVICEGROUP_SVC_CHECKS' => array(
-			'servicegroup_name' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'ENABLE_SERVICEGROUP_SVC_NOTIFICATIONS' => array(
-			'servicegroup_name' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
-		'ENABLE_SERVICE_FRESHNESS_CHECKS' => [],
+		'ENABLE_SERVICE_FRESHNESS_CHECKS' => array(),
 
 		'ENABLE_SVC_CHECK' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'ENABLE_SVC_EVENT_HANDLER' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'ENABLE_SVC_FLAP_DETECTION' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'ENABLE_SVC_NOTIFICATIONS' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'PROCESS_FILE' => array(
-			'file_name' => [],
-			'delete' => []
+			'file_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'delete' => array(
+				'required' => true,
+				'type' => 'boolean'
+			)
 		),
 
 		'PROCESS_HOST_CHECK_RESULT' => array(
-			'host_name' => [],
-			'status_code' => [],
-			'plugin_output' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'status_code' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'plugin_output' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'PROCESS_SERVICE_CHECK_RESULT' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'return_code' => [],
-			'plugin_output' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'return_code' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'plugin_output' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
-		'READ_STATE_INFORMATION' => [],
+		'READ_STATE_INFORMATION' => array(),
 
 		'REMOVE_HOST_ACKNOWLEDGEMENT' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'REMOVE_SVC_ACKNOWLEDGEMENT' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
-		'RESTART_PROGRAM' => [],
-		'SAVE_STATE_INFORMATION' => [],
+		'RESTART_PROGRAM' => array(),
+		'SAVE_STATE_INFORMATION' => array(),
 
 		'SCHEDULE_AND_PROPAGATE_HOST_DOWNTIME' => array(
-			'host_name' => [],
-			'start_time' => [],
-			'end_time' => [],
-			'fixed' => [],
-			'trigger_id' => [],
-			'duration' => [],
-			'author' => [],
-			'comment' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'start_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'end_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'fixed' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'trigger_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'duration' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'SCHEDULE_AND_PROPAGATE_TRIGGERED_HOST_DOWNTIME' => array(
-			'host_name' => [],
-			'start_time' => [],
-			'end_time' => [],
-			'fixed' => [],
-			'trigger_id' => [],
-			'duration' => [],
-			'author' => [],
-			'comment' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'start_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'end_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'fixed' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'trigger_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'duration' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'SCHEDULE_FORCED_HOST_CHECK' => array(
-			'host_name' => [],
-			'check_time' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'check_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			)
 		),
 
 		'SCHEDULE_FORCED_HOST_SVC_CHECKS' => array(
-			'host_name' => [],
-			'check_time' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'check_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			)
 		),
 
 		'SCHEDULE_FORCED_SVC_CHECK' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'check_time' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'check_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			)
 		),
 
 		'SCHEDULE_HOSTGROUP_HOST_DOWNTIME' => array(
-			'hostgroup_name' => [],
-			'start_time' => [],
-			'end_time' => [],
-			'fixed' => [],
-			'trigger_id' => [],
-			'duration' => [],
-			'author' => [],
-			'comment' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'start_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'end_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'fixed' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'trigger_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'duration' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'SCHEDULE_HOSTGROUP_SVC_DOWNTIME' => array(
-			'hostgroup_name' => [],
-			'start_time' => [],
-			'end_time' => [],
-			'fixed' => [],
-			'trigger_id' => [],
-			'duration' => [],
-			'author' => [],
-			'comment' => []
+			'hostgroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'start_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'end_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'fixed' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'trigger_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'duration' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'SCHEDULE_HOST_CHECK' => array(
-			'host_name' => [],
-			'check_time' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'check_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			)
 		),
 
 		'SCHEDULE_HOST_DOWNTIME' => array(
-			'host_name' => [],
-			'start_time' => [],
-			'end_time' => [],
-			'fixed' => [],
-			'trigger_id' => [],
-			'duration' => [],
-			'author' => [],
-			'comment' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'start_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'end_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'fixed' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'trigger_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'duration' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'SCHEDULE_HOST_SVC_CHECKS' => array(
-			'host_name' => [],
-			'check_time' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'check_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			)
 		),
 
 		'SCHEDULE_HOST_SVC_DOWNTIME' => array(
-			'host_name' => [],
-			'start_time' => [],
-			'end_time' => [],
-			'fixed' => [],
-			'trigger_id' => [],
-			'duration' => [],
-			'author' => [],
-			'comment' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'start_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'end_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'fixed' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'trigger_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'duration' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'SCHEDULE_SERVICEGROUP_HOST_DOWNTIME' => array(
-			'servicegroup_name' => [],
-			'start_time' => [],
-			'end_time' => [],
-			'fixed' => [],
-			'trigger_id' => [],
-			'duration' => [],
-			'author' => [],
-			'comment' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'start_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'end_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'fixed' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'trigger_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'duration' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'SCHEDULE_SERVICEGROUP_SVC_DOWNTIME' => array(
-			'servicegroup_name' => [],
-			'start_time' => [],
-			'end_time' => [],
-			'fixed' => [],
-			'trigger_id' => [],
-			'duration' => [],
-			'author' => [],
-			'comment' => []
+			'servicegroup_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'start_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'end_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'fixed' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'trigger_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'duration' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'SCHEDULE_SVC_CHECK' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'check_time' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'check_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			)
 		),
 
 		'SCHEDULE_SVC_DOWNTIME' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'start_time' => [],
-			'end_time' => [],
-			'fixed' => [],
-			'trigger_id' => [],
-			'duration' => [],
-			'author' => [],
-			'comment' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'start_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'end_time' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'fixed' => array(
+				'required' => true,
+				'type' => 'boolean'
+			),
+			'trigger_id' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'duration' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'SEND_CUSTOM_HOST_NOTIFICATION' => array(
-			'host_name' => [],
-			'options' => [],
-			'author' => [],
-			'comment' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'options' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'SEND_CUSTOM_SVC_NOTIFICATION' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'options' => [],
-			'author' => [],
-			'comment' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'options' => array(
+				'required' => true,
+				'type' => 'integer'
+			),
+			'author' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'comment' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
 		'SET_HOST_NOTIFICATION_NUMBER' => array(
-			'host_name' => [],
-			'notification_number' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'notification_number' => array(
+				'required' => true,
+				'type' => 'integer'
+			)
 		),
 
 		'SET_SVC_NOTIFICATION_NUMBER' => array(
-			'host_name' => [],
-			'service_description' => [],
-			'notification_number' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'notification_number' => array(
+				'required' => true,
+				'type' => 'integer'
+			)
 		),
 
-		'SHUTDOWN_PROGRAM' => [],
-		'START_ACCEPTING_PASSIVE_HOST_CHECKS' => [],
-		'START_ACCEPTING_PASSIVE_SVC_CHECKS' => [],
-		'START_EXECUTING_HOST_CHECKS' => [],
-		'START_EXECUTING_SVC_CHECKS' => [],
+		'SHUTDOWN_PROGRAM' => array(),
+		'START_ACCEPTING_PASSIVE_HOST_CHECKS' => array(),
+		'START_ACCEPTING_PASSIVE_SVC_CHECKS' => array(),
+		'START_EXECUTING_HOST_CHECKS' => array(),
+		'START_EXECUTING_SVC_CHECKS' => array(),
 		'START_OBSESSING_OVER_HOST' => array(
-			'host_name' => []
+			'host_name' => array(
+			'required' => true,
+			'type' => 'string')
 		),
 
-		'START_OBSESSING_OVER_HOST_CHECKS' => [],
+		'START_OBSESSING_OVER_HOST_CHECKS' => array(),
 		'START_OBSESSING_OVER_SVC' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
-		'START_OBSESSING_OVER_SVC_CHECKS' => [],
-		'STOP_ACCEPTING_PASSIVE_HOST_CHECKS' => [],
-		'STOP_ACCEPTING_PASSIVE_SVC_CHECKS' => [],
-		'STOP_EXECUTING_HOST_CHECKS' => [],
-		'STOP_EXECUTING_SVC_CHECKS' => [],
+		'START_OBSESSING_OVER_SVC_CHECKS' => array(),
+		'STOP_ACCEPTING_PASSIVE_HOST_CHECKS' => array(),
+		'STOP_ACCEPTING_PASSIVE_SVC_CHECKS' => array(),
+		'STOP_EXECUTING_HOST_CHECKS' => array(),
+		'STOP_EXECUTING_SVC_CHECKS' => array(),
 		'STOP_OBSESSING_OVER_HOST' => array(
-			'host_name' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
-		'STOP_OBSESSING_OVER_HOST_CHECKS' => [],
+		'STOP_OBSESSING_OVER_HOST_CHECKS' => array(),
 		'STOP_OBSESSING_OVER_SVC' => array(
-			'host_name' => [],
-			'service_description' => []
+			'host_name' => array(
+				'required' => true,
+				'type' => 'string'
+			),
+			'service_description' => array(
+				'required' => true,
+				'type' => 'string'
+			)
 		),
 
-		'STOP_OBSESSING_OVER_SVC_CHECKS' => [],
+		'STOP_OBSESSING_OVER_SVC_CHECKS' => array(),
     );
 
     /**
@@ -857,7 +1702,12 @@ class NagiosCmd {
      * Example of the expected parameters:
      *
      * $cmd = 'ACKNOWLEDGE_HOST_PROBLEM';
-     * $args = [];
+     * $args = array('host_name'  => 'localhost',
+     *   		'sticky'     => 1,
+     *   		'notify'     => 1,
+     *   		'persistent' => 0,
+     *   		'author'     => 'jdoe',
+     *   		'comment'    => 'I am working on this problem');
      *
      * @param  string    $cmd - The command
      * @param  array     $args - The command arguments
@@ -872,7 +1722,7 @@ class NagiosCmd {
         }
 
         // Check that the command is implemented
-        if (!is_[]) {
+        if (!is_array($this->commands[$cmd])) {
             $this->message = 'Command ' . $cmd . ' is not yet implemented.';
             return(false);
         }

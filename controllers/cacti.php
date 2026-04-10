@@ -37,7 +37,7 @@ class NpcCactiController extends Controller {
 		$results = db_fetch_assoc_prepared('SELECT id
 			FROM host
 			WHERE npc_host_object_id = ?',
-			[]);
+			array($id));
 
 		return(cacti_count($results));
 	}
@@ -53,7 +53,7 @@ class NpcCactiController extends Controller {
     function mapHost($npc_id, $cacti_id) {
         return(db_execute_prepared('UPDATE host
 			SET npc_host_object_id = ?
-			WHERE id = ?', [])
+			WHERE id = ?', array($npc_id, $cacti_id))
 		);
 	}
 
@@ -93,7 +93,7 @@ class NpcCactiController extends Controller {
 
         $input = "php <path_cacti>/plugins/npc/perfdata.php --type=$type --id=$object_id 2> /dev/null";
 
-		$save = [];
+		$save = array();
 		$save['hash'] = $this->generateHash();
 		$save['name'] = $name;
 		$save['input_string'] = $input;
@@ -117,7 +117,7 @@ class NpcCactiController extends Controller {
 			}
 		}
 
-		return(json_encode([]));
+		return(json_encode(array('success' => true)));
 	}
 
 	/**

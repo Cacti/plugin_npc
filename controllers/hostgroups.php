@@ -41,7 +41,7 @@ class NpcHostgroupsController extends Controller {
      * @var array
      * @access private
      */
-    private $statusCache = [];
+    private $statusCache = array();
 
     /**
      * getHostgroupHostStatus
@@ -53,26 +53,31 @@ class NpcHostgroupsController extends Controller {
     function getHostgroupHostStatus() {
 
         // Initialize the output array
-        $output = [];
+        $output = array();
 
         // Initialize the hosts array
-        $hosts = [];
+        $hosts = array();
 
-        $fields = [];
+        $fields = array('hostgroup_object_id',
+                        'alias',
+                        'instance_id');
 
         $results = $this->setupResultsArray();
 
         for ($i = 0; $i < count($results); $i++) {
             $hg = $results[$i]['hostgroup_object_id'];
             if(!isset($output[$hg])) {
-                $output[$hg] = [];
+                $output[$hg] = array('down'        => 0,
+                                     'unreachable' => 0,
+                                     'up'          => 0,
+                                     'pending'     => 0);
             }
             if (!isset($hosts[$hg][$results[$i]['host_name']])) {
                 $output[$hg][$this->hostState[$results[$i]['current_state']]]++;
                 $hosts[$hg][$results[$i]['host_name']] = 1;
             }
             foreach ($results[$i] as $key => $val) {
-                if (in_[]) {
+                if (in_array($key, $fields)) {
                     $output[$hg][$key] = $val;
                 }
             }
@@ -101,9 +106,12 @@ class NpcHostgroupsController extends Controller {
     function getHostgroupServiceStatus() {
 
         // Initialize the output array
-        $output = [];
+        $output = array();
 
-        $fields = [];
+        $fields = array('hostgroup_object_id',
+                        'alias',
+                        'hostgroup_name',
+                        'instance_id');
 
         // Combine servicegroup/service/host etc. into a single record
         $results = $this->setupResultsArray();
@@ -119,7 +127,7 @@ class NpcHostgroupsController extends Controller {
                 }
             }
             foreach ($results[$i] as $key => $val) {
-                if (in_[]) {
+                if (in_array($key, $fields)) {
                     $output[$hg][$key] = $val;
                 }
             }
@@ -149,10 +157,13 @@ class NpcHostgroupsController extends Controller {
      */
     function getOverview() {
 
-        $fields = [];
+        $fields = array('hostgroup_object_id',
+                        'alias',
+                        'instance_id',
+                        'host_name');
 
         // Initialize the output array
-        $output = [];
+        $output = array();
 
         // Combine servicegroup/service/host etc. into a single record
         $results = $this->setupResultsArray();
@@ -233,7 +244,7 @@ class NpcHostgroupsController extends Controller {
           ->from('NpcHosts h, NpcHostgroups hg, NpcHostgroupMembers hgm')
           ->where('hg.hostgroup_id = hgm.hostgroup_id AND hgm.host_object_id = h.host_object_id AND hg.'.$column.' = ?', $value);
 
-        $results = $q->execute([], Doctrine::HYDRATE_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         return($results);
     }
@@ -252,7 +263,11 @@ class NpcHostgroupsController extends Controller {
         }
 
         // initialize the status array
-        $this->statusCache[$host_object_id] = [];
+        $this->statusCache[$host_object_id] = array('critical' => 0,
+                                                     'warning'  => 0,
+                                                     'unknown'  => 0,
+                                                     'ok'       => 0,
+                                                     'pending'  => 0);
 
 
         $obj = new NpcServicesController;
@@ -279,7 +294,7 @@ class NpcHostgroupsController extends Controller {
           ->from('NpcHosts h, NpcHostgroups hg, NpcHostgroupMembers hgm')
           ->where('hg.hostgroup_id = hgm.hostgroup_id AND hgm.host_object_id = h.host_object_id AND hg.alias = ?', $hg);
 
-        $results = $q->execute([], Doctrine::HYDRATE_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         return($results);
     }
@@ -297,7 +312,7 @@ class NpcHostgroupsController extends Controller {
         $q = new Doctrine_Query();
         $q->select('alias as name, hostgroup_object_id as id')->from('NpcHostgroups')->orderBy('alias ASC');
 
-        return($q->execute([], Doctrine::HYDRATE_ARRAY));
+        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
     }
 
 
@@ -312,7 +327,10 @@ class NpcHostgroupsController extends Controller {
         $where = '1 = 1';
 
         // Maps searchable fields passed in from the client
-        $fieldMap = [];
+        $fieldMap = array('service_description' => 'o2.name2',
+                          'host_name' => 'o2.name1',
+                          'alias' => 'sg.alias',
+                          'output' => 's.output');
 
         if ($this->id) {
             $where .= " AND hg.hostgroup_object_id = " . $this->id . " ";
@@ -340,7 +358,7 @@ class NpcHostgroupsController extends Controller {
           ->where("$where")
           ->orderBy('hostgroup_name ASC, host_name ASC');
 
-        $results = $q->execute([], Doctrine::HYDRATE_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         return($results);
     }

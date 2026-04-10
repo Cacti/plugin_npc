@@ -11,9 +11,9 @@ class NpcObjects extends BaseNpcObjects
     public function setUp()
     {
 
-        //$this->hasMany('NpcServices as Services', []);
-        //$this->hasMany('NpcHosts as Hosts', []);
-        //$this->hasMany('NpcComments as Comments', []);
+        //$this->hasMany('NpcServices as Services', array('foreign' => 'service_object_id', 'local' => 'object_id'));
+        //$this->hasMany('NpcHosts as Hosts', array('foreign' => 'host_object_id', 'local' => 'object_id'));
+        //$this->hasMany('NpcComments as Comments', array('foreign' => 'object_id', 'local' => 'object_id'));
 
     }
 

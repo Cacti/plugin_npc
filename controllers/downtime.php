@@ -111,7 +111,10 @@ class NpcDowntimeController extends Controller {
 
             $name .= "Starting @ " . $start;
 
-            $output[$i] = [];
+            $output[$i] = array(
+                'name' => $name,
+                'value' => $entry['internal_downtime_id']
+            );
         }
 
         return($this->jsonOutput($output));
@@ -143,7 +146,7 @@ class NpcDowntimeController extends Controller {
           ->where("$where")
           ->orderby( 'd.scheduled_start_time DESC, d.scheduleddowntime_id DESC' );
 
-        $results = $q->execute([], Doctrine::HYDRATE_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         return($results);
     }
@@ -179,7 +182,7 @@ class NpcDowntimeController extends Controller {
             $this->limit
         );
 
-        $results = $q->execute([], Doctrine::HYDRATE_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         // Set the total number of records
         $this->numRecords = $q->getNumResults();

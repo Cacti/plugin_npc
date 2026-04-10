@@ -29,7 +29,7 @@ class NpcLogentries extends BaseNpcLogentries
 
     public function setUp()
     {
-        $this->hasOne('NpcInstances as Instance', []);
+        $this->hasOne('NpcInstances as Instance', array('local' => 'instance_id', 'foreign' => 'instance_id'));
     }
 }
 

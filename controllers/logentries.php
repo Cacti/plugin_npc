@@ -37,7 +37,8 @@ class NpcLogentriesController extends Controller {
     function getLogs() {
 
         // Maps searchable fields passed in from the client
-        $fieldMap = [];
+        $fieldMap = array('logentry_data' => 'l.logentry_data',
+                          'instance_name' => 'i.instance_name');
 
 
         $where = '1 = 1';
@@ -58,7 +59,7 @@ class NpcLogentriesController extends Controller {
             $this->limit
         );
 
-        $results = $this->flattenArray($q->execute([], Doctrine::HYDRATE_ARRAY));
+        $results = $this->flattenArray($q->execute(array(), Doctrine::HYDRATE_ARRAY));
 
         // Set the total number of records
         $this->numRecords = $q->getNumResults();

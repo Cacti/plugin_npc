@@ -78,7 +78,7 @@ class NpcSyncController extends Controller {
 
         exec($importCmd, $status);
 
-        if(is_[]) {
+        if(is_array($status)) {
             foreach ($status as $output) {
 
                 preg_match("/Success - new device-id: \((.*)\)/", $output, $matches);
@@ -116,14 +116,20 @@ class NpcSyncController extends Controller {
             return($this->logger('error', get_class($this), __FUNCTION__ , "json_decode(".$params['data'].") returned: $data"));
         }
 
-        $results = [];
+        $results = array();
 
 	$hgc = new NpcHostgroupsController();
         foreach ($data as $hostgroup) {
-            $hosts = $hgc->getHostList([]);
+            $hosts = $hgc->getHostList(array('alias' => $hostgroup->alias));
             foreach ($hosts as $host) {
                 if (!NpcCactiController::isMapped($host['host_object_id'])) {
-                    $results[] = [];
+                    $results[] = array(
+                        'host_object_id' => $host['host_object_id'],
+                        'display_name' => $host['display_name'],
+                        'address' => $host['address'],
+                        'create_graphs' => $hostgroup->create_graphs,
+                        'template' => $hostgroup->template
+                    );
                 }
             }
         }
@@ -142,7 +148,7 @@ class NpcSyncController extends Controller {
      */
     function listHostgroups() {
 
-        $output = [];
+        $output = array();
 
 	$hgc = new NpcHostgroupsController();
         $results = $hgc->getHostgroups();
@@ -194,7 +200,7 @@ class NpcSyncController extends Controller {
 
             $fh = fopen($cacheFile, 'w') or die("can't open file");
 
-            $hosts = [];
+            $hosts = array();
 
             $string = "<?php\n\n";
             $string .= "\$cacheKey = '" . $cache_id . "';\n";

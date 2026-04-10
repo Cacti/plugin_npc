@@ -65,7 +65,7 @@ if (is_object($conn)) {
 	exit;
 }
 
-if (is_[]) {
+if (is_array($_REQUEST)) {
 	foreach($_REQUEST as $key => $value) {
 		if (preg_match('/^p_/', $key) || $key == 'start' || $key == 'limit') {
 			$parm = preg_replace('/^p_/', '', $key);

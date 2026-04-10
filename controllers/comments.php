@@ -119,14 +119,17 @@ class NpcCommentsController extends Controller {
 
         require_once("plugins/npc/controllers/nagios.php");
 
-        $seen = [];
+        $seen = array();
 
         $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 1'));
 
         for ($i = 0; $i < count($results); $i++) {
             $host = $results[$i]['host_name'];
             if (!isset($seen[$host])) {
-                $params = [];
+                $params = array(
+                    'command' => 'DEL_ALL_HOST_COMMENTS',
+                    'host_name' => $host
+                );
                 NpcNagiosController::command($params);
                 $seen[$host] = 1;
             }
@@ -144,7 +147,7 @@ class NpcCommentsController extends Controller {
 
         require_once("plugins/npc/controllers/nagios.php");
 
-        $seen = [];
+        $seen = array();
 
         $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 2'));
 
@@ -152,7 +155,11 @@ class NpcCommentsController extends Controller {
             $host = $results[$i]['host_name'];
             $service = $results[$i]['service_description'];
             if (!isset($seen[$host][$service])) {
-                $params = [];
+                $params = array(
+                    'command' => 'DEL_ALL_SVC_COMMENTS',
+                    'host_name' => $host,
+                    'service_description' => $service,
+                );
                 NpcNagiosController::command($params);
                 $seen[$host][$service] = 1;
             }
@@ -180,7 +187,7 @@ class NpcCommentsController extends Controller {
             $this->limit
         );
 
-        $results = $q->execute([], Doctrine::HYDRATE_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         return($results[0]['Host']);
     }
@@ -195,7 +202,10 @@ class NpcCommentsController extends Controller {
     function comments($id=null, $where='') {
 
         // Maps searchable fields passed in from the client
-        $fieldMap = [];
+        $fieldMap = array('service_description' => 'o.name2',
+                          'host_name'    => 'o.name1',
+                          'author_name'  => 'c.author_name',
+                          'comment_data' => 'c.comment_data');
 
 
         if ($this->id || $id) {
@@ -236,7 +246,7 @@ class NpcCommentsController extends Controller {
             $this->limit
         );
 
-        $results = $q->execute([], Doctrine::HYDRATE_ARRAY);
+        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
 
         // Set the total number of records
         $this->numRecords = $q->getNumResults();
