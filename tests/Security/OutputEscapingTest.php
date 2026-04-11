@@ -10,6 +10,7 @@
 describe('output escaping in npc', function () {
 	it('does not interpolate raw variables into HTML attributes', function () {
 		$uiFiles = array(
+		'top_graph_header.php',
 		'controllers/layoutDev.php',
 		'controllers/settings.php',
 		'lib/Doctrine/Cache/Db.php',
@@ -51,6 +52,7 @@ describe('output escaping in npc', function () {
 
 	it('uses html_escape or __esc for user-controlled output', function () {
 		$uiFiles = array(
+		'top_graph_header.php',
 		'controllers/layoutDev.php',
 		'controllers/settings.php',
 		'lib/Doctrine/Cache/Db.php',
@@ -74,5 +76,15 @@ describe('output escaping in npc', function () {
 		expect($totalEscapeCalls)->toBeGreaterThan(0,
 			'UI files should contain at least one html_escape/__esc call'
 		);
+	});
+
+	it('escapes the logged in username in the top graph header', function () {
+		$path = realpath(__DIR__ . '/../../top_graph_header.php');
+		expect($path)->not->toBeFalse();
+
+		$contents = file_get_contents($path);
+		expect($contents)->not->toBeFalse();
+
+		expect($contents)->toContain('html_escape(db_fetch_cell("select username from user_auth where id=" . $_SESSION["sess_user_id"]))');
 	});
 });
