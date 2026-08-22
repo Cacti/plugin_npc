@@ -1,478 +1,372 @@
 <?php
-/**
- * Services controller class
- *
- * This is the access point to the npc_services table.
- *
- * @filesource
- * @author              Billy Gunn <billy@gunn.org>
- * @copyright           Copyright (c) 2007
- * @link                http://trac2.assembla.com/npc
- * @package             npc
- * @subpackage          npc.controllers
- * @since               NPC 2.0
- * @version             $Id$
- */
+/*
+ +-------------------------------------------------------------------------+
+ | Nagios Plugin for Cacti                                                 |
+ |                                                                         |
+ | Copyright (C) 2007 Billy Gunn (billy@gunn.org)                          |
+ | Copyright (C) 2004-2026 The Cacti Group                                 |
+ +-------------------------------------------------------------------------+
+ | Cacti and Nagios are the copyright of their respective owners.          |
+ +-------------------------------------------------------------------------+
+*/
 
-require_once($config["base_path"]."/plugins/npc/controllers/comments.php");
-require_once($config["base_path"]."/plugins/npc/controllers/downtime.php");
+require_once($config['base_path'] . '/plugins/npc/controllers/comments.php');
+require_once($config['base_path'] . '/plugins/npc/controllers/downtime.php');
 
-/**
- * Services controller class
- *
- * Services controller provides functionality, such as building the
- * Doctrine queries and formatting output.
- *
- * @package     npc
- * @subpackage  npc.controllers
- */
 class NpcServicesController extends Controller {
 
-    /**
-     * getServices
-     *
-     * Gets and formats services for output.
-     *
-     * @return string   json output
-     */
-    function getServices() {
+	function getServices() {
+		$services = $this->services();
 
-        $services = $this->services();
+		$comments = new NpcCommentsController;
+		$downtime = new NpcDowntimeController;
 
-        $comments = new NpcCommentsController;
-        $downtime = new NpcDowntimeController;
+		for ($i = 0; $i < count($services); $i++) {
+			foreach ($services[$i] as $k => $v) {
+				if (is_array($v)) {
+					$services[$i] = array_merge($services[$i], $v);
+					unset($services[$i][$k]);
+				}
+			}
 
-        for ($i = 0; $i < count($services); $i++) {
+			unset($services[$i]['Host']);
 
-                foreach($services[$i] as $k => $v) {
-                        if (is_array($v)) {
-                                $services[$i] = array_merge($services[$i], $v);
-                                unset($services[$i][$k]);
-                        }
-                }
+			if ($services[$i]['problem_has_been_acknowledged']) {
+				$services[$i]['acknowledgement'] = $comments->getAck($services[$i]['service_object_id']);
+			}
 
-                unset($services[$i]['Host']);
-                if ($services[$i]['problem_has_been_acknowledged']) {
-                        $services[$i]['acknowledgement'] = $comments->getAck($services[$i]['service_object_id']);
-                }
+			$services[$i]['comment'] = $comments->getLastComment($services[$i]['service_object_id']);
 
-                // Add the last comment to the array
-                $services[$i]['comment'] = $comments->getLastComment($services[$i]['service_object_id']);
+			$services[$i]['in_downtime'] = 0;
+			if ($downtime->inDowntime($services[$i]['service_object_id'])) {
+				$services[$i]['in_downtime'] = 1;
+			}
+		}
 
-        // Set the in_downtime bit
-        $services[$i]['in_downtime'] = 0;
-        if ($downtime->inDowntime($services[$i]['service_object_id'])) {
-            $services[$i]['in_downtime'] = 1;
-        }
-        }
+		$response = array(
+			'response' => array(
+				'value' => array(
+					'items'       => $services,
+					'total_count' => $this->numRecords,
+					'version'     => 1,
+				)
+			)
+		);
 
-        $response['response']['value']['items'] = $services;
-        $response['response']['value']['total_count'] = $this->numRecords;
-        $response['response']['value']['version']     = 1;
+		return json_encode($response);
+	}
 
-        return(json_encode($response));
-    }
+	function getStateInfo() {
+		require_once('plugins/npc/controllers/hostgroups.php');
+		$obj = new NpcHostgroupsController;
+		$hg  = $obj->setupResultsArray();
 
-    /**
-     * getStateInfo
-     *
-     * Gets and formats service state information
-     *
-     * @return string   json output
-     */
-    function getStateInfo() {
+		$fields = array(
+			'current_state', 'output', 'perfdata', 'notes',
+			'last_state_change', 'check_command', 'command_line',
+			'host_address', 'Host Groups', 'current_check_attempt',
+			'last_check', 'next_check', 'event_handler', 'latency',
+			'execution_time', 'is_flapping', 'scheduled_downtime_depth',
+			'process_performance_data', 'active_checks_enabled',
+			'passive_checks_enabled', 'event_handler_enabled',
+			'flap_detection_enabled', 'notifications_enabled',
+			'obsess_over_service'
+		);
 
-    require_once("plugins/npc/controllers/hostgroups.php");
-    $obj = new NpcHostgroupsController;
-    $hg = $obj->setupResultsArray();
-    // $results[$i]['hostgroup_object_id']
+		$service = $this->services();
+		$results = $this->flattenArray($service);
 
-        $fields = array(
-            'current_state',
-            'output',
-            'perfdata',
-            'notes',
-            'last_state_change',
-            'check_command',
-            'command_line',
-            'host_address',
-            'Host Groups',
-            'current_check_attempt',
-            'last_check',
-            'next_check',
-            'event_handler',
-            'latency',
-            'execution_time',
-            'is_flapping',
-            'scheduled_downtime_depth',
-            'process_performance_data',
-            'active_checks_enabled',
-            'passive_checks_enabled',
-            'event_handler_enabled',
-            'flap_detection_enabled',
-            'notifications_enabled',
-            'obsess_over_service'
-        );
+		$hostgroups = array();
+		foreach ($hg as $i => $a) {
+			if ($a['host_name'] == $results[0]['host_name']) {
+				$hostgroups[] = $a['hostgroup_name'];
+			}
+		}
 
-        $service = $this->services();
+		$output = array();
+		$x = 0;
+		foreach ($fields as $key) {
+			if ($key == 'Host Groups') {
+				$name  = __('Host Groups', 'npc');
+				$value = implode(', ', array_unique($hostgroups));
+			} else {
+				$name  = $this->columnAlias[$key];
+				$value = $this->formatStateInfo($key, $results[0]);
+			}
+			$output[$x] = array('name' => $name, 'value' => $value);
+			$x++;
+		}
 
-        $results = $this->flattenArray($service);
+		return $this->jsonOutput($output);
+	}
 
-    $hostgroups = array();
-    foreach ($hg as $i => $a) {
-            if ($a['host_name'] == $results[0]['host_name']) {
-                $hostgroups[] = $a['hostgroup_name'];
-        }
-        }
+	function summary() {
+		$status = array(
+			'critical' => 0,
+			'warning'  => 0,
+			'unknown'  => 0,
+			'ok'       => 0,
+			'pending'  => 0
+		);
 
-        $x = 0;
-        foreach ($fields as $key) {
-            if ($key == 'Host Groups') {
-                $name = 'Host Groups';
-                $value = implode(", ", array_unique($hostgroups));
-            } else {
-                $name = $this->columnAlias[$key];
-                $value = $this->formatStateInfo($key, $results[0]);
-            }
+		$services = db_fetch_assoc_prepared('SELECT ss.current_state
+			FROM npc_servicestatus ss
+			LEFT JOIN npc_services s ON ss.service_object_id = s.service_object_id
+			WHERE s.config_type = ?',
+			array($this->config_type));
 
-            $output[$x] = array('name' => $name, 'value' => $value);
-            $x++;
-        }
+		for ($i = 0; $i < count($services); $i++) {
+			$state_key = $services[$i]['current_state'];
+			if (isset($this->serviceState[$state_key])) {
+				$status[$this->serviceState[$state_key]]++;
+			}
+		}
 
-        return($this->jsonOutput($output));
-    }
+		return $this->jsonOutput($status);
+	}
 
-    /**
-     * summary
-     *
-     * Returns a summary of the state of all services.
-     *
-     * @return string   json output
-     */
-    function summary() {
+	function getServiceStatesByHost($host_object_id) {
+		return db_fetch_assoc_prepared('SELECT ss.current_state
+			FROM npc_servicestatus ss
+			INNER JOIN npc_services s ON ss.service_object_id = s.service_object_id
+			WHERE s.host_object_id = ?',
+			array($host_object_id));
+	}
 
-        $status = array('critical' => 0,
-                        'warning'  => 0,
-                        'unknown'  => 0,
-                        'ok'       => 0,
-                        'pending'  => 0);
+	function services($id = null, $where = null) {
+		$fieldMap = array(
+			'service_description' => 'o.name2',
+			'host_name'           => 'o.name1',
+			'host_alias'          => 'h.alias',
+			'notes'               => 's.notes',
+			'output'              => 'ss.output'
+		);
 
-        $q = new Doctrine_Query();
-        $q->select('ss.current_state')
-          ->from('NpcServicestatus ss')
-          ->leftJoin('ss.Service s')
-          ->where('s.config_type = ?', $this->config_type);
+		$params = array();
 
-        $services = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+		if ($where) {
+			$where .= ' AND ';
+		} else {
+			$where = '';
+		}
 
-        for ($i = 0; $i < count($services); $i++) {
-            $status[$this->serviceState[$services[$i]['current_state']]]++;
-        }
+		$states = $this->stringToState[$this->state];
+		$state_list = implode(',', array_map('intval', explode(',', $states)));
+		$where .= 'ss.current_state IN (' . $state_list . ')';
+		$where .= ' AND s.config_type = ?';
+		$params[] = $this->config_type;
 
-        return($this->jsonOutput($status));
-    }
+		if (isset($this->unhandled)) {
+			$where .= ' AND ss.problem_has_been_acknowledged = 0';
+		}
 
-    /**
-     * getServiceStatesByHost
-     *
-     * A utility method to simply return the state of every service belonging
-     * to the specified host.
-     *
-     * @return array  list of all services with status
-     */
-    function getServiceStatesByHost($host_object_id) {
-
-        $q = new Doctrine_Query();
-        $q->select('ss.current_state')
-          ->from('NpcServicestatus ss, NpcServices s')
-          ->where('ss.service_object_id = s.service_object_id AND s.host_object_id = ?', $host_object_id);
-
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
-
-        return($results);
-    }
-
-    /**
-     * services
-     *
-     * Retrieves all services along with status information
-     *
-     * @return array  list of all services with status
-     */
-    function services($id=null, $where=null) {
-
-        // Maps searchable fields passed in from the client
-        $fieldMap = array('service_description' => 'o.name2',
-                          'host_name'  => 'o.name1',
-                          'host_alias' => 'h.alias',
-                          'notes'      => 's.notes',
-                          'output'     => 'ss.output');
-
-
-        // Build the where clause
-        if ($where) {
-            $where .= ' AND ';
-        }
-
-        $where .= " ss.current_state in (" . $this->stringToState[$this->state] . ") AND s.config_type = " . $this->config_type;
-
-        if (isset($this->unhandled)) {
-            $where .= " AND ss.problem_has_been_acknowledged = 0 ";
-        }
-
-        if ($this->id || $id) {
-            $where .= sprintf(" AND s.service_object_id = %d", is_null($id) ? $this->id : $id);;
-        }
+		$svc_id = $this->id ? $this->id : $id;
+		if ($svc_id) {
+			$where .= ' AND s.service_object_id = ?';
+			$params[] = intval($svc_id);
+		}
 
 		if (isset($this->hostgroup)) {
-			$where .= sprintf(" AND hg.alias = '%s'", $this->hostgroup);
+			$where .= ' AND hg.alias = ?';
+			$params[] = $this->hostgroup;
 		}
 
-        if ($this->searchString) {
-            $where = $this->searchClause($where, $fieldMap);
-        }
+		if ($this->searchString) {
+			$where = $this->searchClause($where, $fieldMap, $params);
+		}
 
+		$orderBy = 'o.name1 ASC, o.name2 ASC';
 		if ($this->sort) {
-			$orderBy = $this->sort . ' ' . $this->dir;
-		} else {
-			$orderBy = 'host_name ASC, service_description ASC';
+			$allowed_sorts = array(
+				'instance_name', 'host_name', 'service_description', 'host_alias',
+				'host_address', 'current_state', 'last_check', 'output',
+				'last_state_change'
+			);
+			if (in_array($this->sort, $allowed_sorts, true)) {
+				$dir = ($this->dir == 'DESC') ? 'DESC' : 'ASC';
+				$orderBy = $this->sort . ' ' . $dir;
+			}
 		}
 
-        $q = new Doctrine_Pager(
-            Doctrine_Query::create()
-                ->select('i.instance_name,'
-                        .'s.host_object_id,'
-                        .'s.notes,'
-                        .'s.notes_url,'
-                        .'s.action_url,'
-                        .'s.icon_image,'
-                        .'s.icon_image_alt,'
-                        .'h.alias AS host_alias,'
-                        .'h.address AS host_address,'
-                        .'h.icon_image AS host_icon_image,'
-                        .'h.icon_image_alt AS host_icon_image_alt,'
-                        .'h.host_object_id,'
-                        .'hg.hostgroup_id,'
-                        .'o.name1 AS host_name,'
-                        .'o.name2 AS service_description,'
-                        .'g.local_graph_id,'
-                        .'ss.*')
-                ->from('NpcServicestatus ss')
-                ->leftJoin('ss.Object o')
-                ->leftJoin('ss.Service s')
-                ->leftJoin('s.Host h')
-                ->leftJoin('h.Hostgroup hg')
-                ->leftJoin('ss.Instance i')
-                ->leftJoin('ss.Graph g')
-                ->where($where)
-                ->orderby($orderBy),
-            $this->currentPage,
-            $this->limit
-        );
+		/* Total count */
+		$this->numRecords = db_fetch_cell_prepared(
+			'SELECT COUNT(*)
+			FROM npc_servicestatus ss
+			LEFT JOIN npc_objects o ON ss.service_object_id = o.object_id
+			LEFT JOIN npc_services s ON ss.service_object_id = s.service_object_id
+			LEFT JOIN npc_hosts h ON s.host_object_id = h.host_object_id
+			LEFT JOIN npc_hostgroup_members hgm ON h.host_object_id = hgm.host_object_id
+			LEFT JOIN npc_hostgroups hg ON hgm.hostgroup_id = hg.hostgroup_id
+			LEFT JOIN npc_instances i ON s.instance_id = i.instance_id
+			WHERE ' . $where,
+			$params);
 
-        $services = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+		$offset = ($this->currentPage - 1) * $this->limit;
 
-        // Set the total number of records
-        $this->numRecords = $q->getNumResults();
+		$services = db_fetch_assoc_prepared(
+			'SELECT i.instance_name,
+				s.host_object_id,
+				s.notes,
+				s.notes_url,
+				s.action_url,
+				s.icon_image,
+				s.icon_image_alt,
+				h.alias AS host_alias,
+				h.address AS host_address,
+				h.icon_image AS host_icon_image,
+				h.icon_image_alt AS host_icon_image_alt,
+				h.host_object_id,
+				o.name1 AS host_name,
+				o.name2 AS service_description,
+				sg.local_graph_id,
+				ss.*
+			FROM npc_servicestatus ss
+			LEFT JOIN npc_objects o ON ss.service_object_id = o.object_id
+			LEFT JOIN npc_services s ON ss.service_object_id = s.service_object_id
+			LEFT JOIN npc_hosts h ON s.host_object_id = h.host_object_id
+			LEFT JOIN npc_hostgroup_members hgm ON h.host_object_id = hgm.host_object_id
+			LEFT JOIN npc_hostgroups hg ON hgm.hostgroup_id = hg.hostgroup_id
+			LEFT JOIN npc_instances i ON s.instance_id = i.instance_id
+			LEFT JOIN npc_service_graphs sg ON ss.service_object_id = sg.service_object_id
+			WHERE ' . $where . '
+			ORDER BY ' . $orderBy . '
+			LIMIT ?, ?',
+			array_merge($params, array($offset, $this->limit)));
 
-        return($services);
-    }
+		return $services;
+	}
 
-    /**
-     * Returns the last perfdata entry for a particular service
-     *
-     * @return array
-     */
-    function getPerfData($id=null, $host=null, $service=null) {
+	function getPerfData($id = null, $host = null, $service = null) {
+		$id = $this->id ? $this->id : $id;
 
-        $id = $this->id ? $this->id : $id;
+		if (!$host) {
+			$check_id = db_fetch_cell_prepared(
+				'SELECT MAX(servicecheck_id) FROM npc_servicechecks WHERE service_object_id = ?',
+				array($id));
+		} else {
+			$check_id = db_fetch_cell_prepared(
+				'SELECT MAX(n.servicecheck_id)
+				FROM npc_servicechecks n
+				INNER JOIN npc_objects o ON o.object_id = n.service_object_id
+				WHERE o.is_active = 1 AND o.name1 = ? AND o.name2 = ?',
+				array($host, $service));
+		}
 
+		if (!$check_id) {
+			return array();
+		}
 
-        // Get the last update
-        if (!$host) {
-            $q = new Doctrine_Query();
-            $q->select('max(n.servicecheck_id) AS id')
-            ->from('NpcServicechecks n')
-            ->where('n.service_object_id = ?', $id);
-            $id = $q->execute();
-        } else {
-            $q = new Doctrine_Query();
-            $q->select('max(n.servicecheck_id) AS id')
-            ->from('NpcServicechecks n, NpcObjects o')
-            ->where('o.is_active = 1 AND o.object_id = n.service_object_id')
-            ->andWhere('o.name1 = ?', $host)
-            ->andWhere('o.name2 = ?', $service);
-            $id = $q->execute();
-        }
+		return db_fetch_assoc_prepared(
+			'SELECT * FROM npc_servicechecks WHERE servicecheck_id = ?',
+			array($check_id));
+	}
 
-        // Get the perf data
-        $q = new Doctrine_Query();
-        $q->select('n.*')
-        ->from('NpcServicechecks n')
-        ->where('n.servicecheck_id = ?', $id[0]['id']);
+	function getPerfHistory($host, $service, $begin, $end = null) {
+		$params = array($host, $service, $begin);
+		$sql = 'SELECT n.end_time, n.perfdata
+			FROM npc_servicechecks n
+			INNER JOIN npc_objects o ON o.object_id = n.service_object_id
+			WHERE o.is_active = 1 AND o.name1 = ? AND o.name2 = ?
+			AND n.end_time >= ?';
 
-        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
-    }
+		if ($end) {
+			$sql .= ' AND n.end_time <= ?';
+			$params[] = $end;
+		}
 
-    /**
-     * Returns the performance history for the specified service and period
-     *
-     * @return array
-     */
-    function getPerfHistory($host, $service, $begin, $end=null) {
+		return db_fetch_assoc_prepared($sql, $params);
+	}
 
-        $q = new Doctrine_Query();
-        $q->select('end_time, perfdata')
-        ->from('NpcServicechecks n, NpcObjects o')
-        ->where('o.is_active = 1 AND o.object_id = n.service_object_id')
-        ->andWhere('o.name1 = ?', $host)
-        ->andWhere('o.name2 = ?', $service)
-        ->andWhere('n.end_time >= ?', $begin);
-
-        if ($end) {
-            $q->andWhere('n.end_time <= ?', $end);
-        }
-
-        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
-    }
-
-
-    /**
-     * listServivcesCli
-     *
-     * Returns all services and associated object ID's
-     *
-     * @return array   Array of services/id's
-     */
-    function listServicesCli($host = null) {
-
-        $q = new Doctrine_Query();
-        $q->select('s.*,'
-                  .'h.display_name AS host,'
-                  .'i.instance_name AS instance')
-          ->from('NpcServices s, s.Host h, s.Instance i');
+	function listServicesCli($host = null) {
+		$sql = 'SELECT s.*, h.display_name AS host, i.instance_name AS instance
+			FROM npc_services s
+			LEFT JOIN npc_hosts h ON s.host_object_id = h.host_object_id
+			LEFT JOIN npc_instances i ON s.instance_id = i.instance_id';
 
 		if ($host) {
-			$q->where('h.display_name = ?', $host);
+			$sql .= ' WHERE h.display_name = ?';
+			return $this->flattenArray(db_fetch_assoc_prepared($sql, array($host)));
 		}
 
-        return($this->flattenArray($q->execute(array(), Doctrine::HYDRATE_ARRAY)));
-    }
+		return $this->flattenArray(db_fetch_assoc($sql));
+	}
 
-    /**
-     * getMappedGraph
-     *
-     * Returns the url to the currently mapped graph
-     *
-     * @return string   json encoded results
-     */
-    function getMappedGraph() {
-        $q = new Doctrine_Query();
-        $q->select('sg.*')
-          ->from('NpcServiceGraphs sg')
-          ->where('sg.service_object_id = ?', $this->id);
+	function getMappedGraph() {
+		$results = db_fetch_assoc_prepared(
+			'SELECT * FROM npc_service_graphs WHERE service_object_id = ?',
+			array($this->id));
 
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+		return $this->jsonOutput($results);
+	}
 
-        return($this->jsonOutput($results));
-    }
+	function setMappedGraph($params) {
+		$object_id      = intval($params['object_id']);
+		$local_graph_id = intval($params['local_graph_id']);
 
-    /**
-     * setMappedGraph
-     *
-     * Sets the graph mapping
-     *
-     * @return string   json encoded results
-     */
-    function setMappedGraph($params) {
-        $table = $this->conn->getTable('NpcServiceGraphs');
+		$existing = db_fetch_row_prepared(
+			'SELECT * FROM npc_service_graphs WHERE service_object_id = ?',
+			array($object_id));
 
-        $results = $table->findByDql("service_object_id = ?", array($params['object_id']));
-        $graph = $results[0];
+		if (cacti_sizeof($existing)) {
+			db_execute_prepared(
+				'UPDATE npc_service_graphs SET local_graph_id = ? WHERE service_object_id = ?',
+				array($local_graph_id, $object_id));
+		} else {
+			db_execute_prepared(
+				'INSERT INTO npc_service_graphs (service_object_id, local_graph_id) VALUES (?, ?)',
+				array($object_id, $local_graph_id));
+		}
 
-        if (!isset($graph->local_graph_id)) {
-            $graph = new NpcServiceGraphs();
-        }
+		return json_encode(array('success' => true));
+	}
 
-        $graph->service_object_id = $params['object_id'];
-        $graph->local_graph_id = $params['local_graph_id'];
-        $graph->save();
+	function formatStateInfo($key, $results) {
+		$return = isset($results[$key]) ? $results[$key] : '';
 
-        return(json_encode(array('success' => true)));
-    }
+		$cs = array(
+			'0'  => '<span class="serviceOk" title="OK"></span>',
+			'1'  => '<span class="serviceWarning" title="WARNING"></span>',
+			'2'  => '<span class="serviceCritical" title="CRITICAL"></span>',
+			'3'  => '<span class="serviceUnknown" title="UNKNOWN"></span>',
+			'-1' => '<span class="servicePending" title="PENDING"></span>'
+		);
 
-    /**
-     * formatStateInfo
-     *
-     * Formats the service state info results for display.
-     * This is a workaround for some of the limitations of
-     * EXT property grid.
-     *
-     * @return string   The formatted results
-     */
-    function formatStateInfo($key, $results) {
+		if ($key == 'current_state') {
+			$return = isset($cs[$results[$key]]) ? $cs[$results[$key]] : '';
+			if ($results['problem_has_been_acknowledged']) {
+				$comments = new NpcCommentsController;
+				$string = $comments->getAck($results['service_object_id']);
+				$ack = preg_split('/\*\|\*/', $string);
+				$return .= ' (Acknowledged by ' . html_escape($ack[0]) . ')';
+			}
+		}
 
-        // Set the default return value
-        if (isset($results[$key])) {
-            $return = $results[$key];
-        }
+		if ($key == 'current_check_attempt') {
+			$return = $results[$key] . '/' . $results['max_check_attempts'];
+		}
 
-        $cs = array(
-            '0'  => '<img ext:qtip="OK" src="images/icons/greendot.gif">',
-            '1'  => '<img ext:qtip="WARNING" src="images/icons/yellowdot.gif">',
-            '2'  => '<img ext:qtip="CRITICAL" src="images/icons/reddot.gif">',
-            '3'  => '<img ext:qtip="UNKNOWN" src="images/icons/orangedot.gif">',
-            '-1' => '<img ext:qtip="PENDING" src="images/icons/bluedot.gif">'
-        );
+		if (preg_match('/_enabled/', $key) || $key == 'obsess_over_service') {
+			$return = $results[$key] ? __('Yes', 'npc') : __('No', 'npc');
+		}
 
-        if ($key == 'current_state') {
-            $return = $cs[$results[$key]];
-            if ($results['problem_has_been_acknowledged']) {
-                $comments = new NpcCommentsController;
-                $string = $comments->getAck($results['service_object_id']);
-                $ack = preg_split("/\*\|\*/", $string);
-                $return = '<pre>' . $return . '   (Acknowledged by ' . $ack[0] . ')</pre>';
-            }
-        }
+		if ($key == 'last_state_change' || $key == 'last_check' || $key == 'next_check') {
+			$format = read_config_option('npc_date_format') . ' ' . read_config_option('npc_time_format');
+			$return = date($format, strtotime($results[$key]));
+		}
 
-        if ($key == 'current_check_attempt') {
-            $return = $results[$key] . '/' . $results['max_check_attempts'];
-        }
+		if ($key == 'scheduled_downtime_depth' || $key == 'is_flapping' || $key == 'process_performance_data') {
+			$return = $results[$key] ? __('Yes', 'npc') : __('No', 'npc');
+		}
 
-        if (preg_match("/_enabled/", $key) || $key == 'obsess_over_service') {
-            if($results[$key]) {
-                $return = '<img src="images/icons/tick.png">';
-            } else {
-                $return = '<img src="images/icons/cross.png">';
-            }
-        }
+		if ($key == 'command_line') {
+			$perf = $this->getPerfData($results['service_object_id']);
+			$return = cacti_sizeof($perf) ? $perf[0]['command_line'] : '';
+		}
 
-        if ($key == 'last_state_change' || $key == 'last_check' || $key == 'next_check') {
-            $format = read_config_option('npc_date_format') . ' ' . read_config_option('npc_time_format');
-            $return = date($format, strtotime($results[$key]));
-        }
+		if ($return == '' || !$return) {
+			$return = __('N/A', 'npc');
+		}
 
-        if ($key == 'scheduled_downtime_depth' || $key == 'is_flapping' || $key == 'process_performance_data') {
-            if ($results[$key]) {
-                $return = 'Yes';
-            } else {
-                $return = 'No';
-            }
-        }
-
-        // Add the full command as a tooltip
-        if ($key == 'command_line') {
-            $perf = $this->getPerfData($results['service_object_id']);
-            $return = $perf[0]['command_line'];
-        }
-
-        if ($return == '' || !$return) {
-            $return = 'NA';
-        }
-
-        return($return);
-    }
+		return $return;
+	}
 }
-
-
-

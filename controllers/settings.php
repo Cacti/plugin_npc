@@ -27,12 +27,12 @@
 class NpcSettingsController extends Controller {
 
     function getSettings($id) {
-
-        $q = new Doctrine_Query();
-        $settings = $this->conn->getTable('NpcSettings')->find($id);
+        $settings = db_fetch_row_prepared('SELECT *
+            FROM npc_settings
+            WHERE user_id = ?',
+            array($id));
 
         return($settings);
-
     }
 
     function save($params) {
@@ -40,16 +40,17 @@ class NpcSettingsController extends Controller {
         $user_id = $_SESSION['sess_user_id'];
         $obj = $this->getSettings($user_id);
 
-        $settings = unserialize($obj->settings);
-		if (isset($params['name'])) {
-	        $settings[$params['name']] = $params['value'];
-		}
+        $settings = @unserialize($obj['settings'], ["allowed_classes" => false]);
+        if (isset($params['name'])) {
+            $settings[$params['name']] = $params['value'];
+        }
 
-        $obj->settings = serialize($settings);
-        $obj->save();
+        db_execute_prepared('UPDATE npc_settings
+            SET settings = ?
+            WHERE user_id = ?',
+            array(serialize($settings), $user_id));
 
         return(true);
     }
 
 }
-

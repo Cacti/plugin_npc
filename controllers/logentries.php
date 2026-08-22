@@ -18,7 +18,7 @@
  * Logentries controller class
  *
  * Logentries controller provides basic functionality, such as building the
- * Doctrine queries and formatting output.
+ * queries and formatting output.
  *
  * @package     npc
  * @subpackage  npc.controllers
@@ -34,33 +34,35 @@ class NpcLogentriesController extends Controller {
      */
     function getLogs() {
 
-        // Maps searchable fields passed in from the client
+        /* Maps searchable fields passed in from the client */
         $fieldMap = array('logentry_data' => 'l.logentry_data',
                           'instance_name' => 'i.instance_name');
 
-
         $where = '1 = 1';
+        $params = array();
 
         if ($this->searchString) {
-            $where = $this->searchClause($where, $fieldMap);
+            $where = $this->searchClause($where, $fieldMap, $params);
         }
 
-        $q = new Doctrine_Pager(
-            Doctrine_Query::create()
-                ->select('i.instance_name,'
-                        .'l.*')
-                ->from('NpcLogentries l')
-                ->leftJoin('l.Instance i')
-                ->where("$where")
-                ->orderby( 'l.entry_time DESC, l.entry_time_usec DESC' ),
-            $this->currentPage,
-            $this->limit
-        );
+        /* Get total count */
+        $this->numRecords = db_fetch_cell_prepared('SELECT COUNT(*)
+            FROM npc_logentries l
+            LEFT JOIN npc_instances i ON l.instance_id = i.instance_id
+            WHERE ' . $where,
+            $params);
 
-        $results = $this->flattenArray($q->execute(array(), Doctrine::HYDRATE_ARRAY));
+        $offset = ($this->currentPage - 1) * $this->limit;
 
-        // Set the total number of records
-        $this->numRecords = $q->getNumResults();
+        $results = db_fetch_assoc_prepared('SELECT i.instance_name, l.*
+            FROM npc_logentries l
+            LEFT JOIN npc_instances i ON l.instance_id = i.instance_id
+            WHERE ' . $where . '
+            ORDER BY l.entry_time DESC, l.entry_time_usec DESC
+            LIMIT ?, ?',
+            array_merge($params, array($offset, $this->limit)));
+
+        $results = $this->flattenArray($results);
 
         $response['response']['value']['items'] = $results;
         $response['response']['value']['total_count'] = $this->numRecords;
