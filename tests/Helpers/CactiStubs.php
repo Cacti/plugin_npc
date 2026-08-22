@@ -39,42 +39,51 @@ if (!function_exists('db_fetch_assoc_prepared')) {
 }
 
 if (!function_exists('db_fetch_cell')) {
-    function db_fetch_cell(string $sql, string $col_name = '', bool $log = true): string|false
+    /** @return string|false */
+    function db_fetch_cell(string $sql, string $col_name = '', bool $log = true)
     {
         return false;
     }
 }
 
 if (!function_exists('db_fetch_cell_prepared')) {
-    function db_fetch_cell_prepared(string $sql, array $params = [], string $col_name = '', bool $log = true): string|false
+    /** @return string|false */
+    function db_fetch_cell_prepared(string $sql, array $params = [], string $col_name = '', bool $log = true)
     {
         return false;
     }
 }
 
 if (!function_exists('db_fetch_row')) {
-    function db_fetch_row(string $sql, bool $log = true): array|false
+    /** @return array|false */
+    function db_fetch_row(string $sql, bool $log = true)
     {
         return false;
     }
 }
 
 if (!function_exists('db_fetch_row_prepared')) {
-    function db_fetch_row_prepared(string $sql, array $params = [], bool $log = true): array|false
+    /** @return array|false */
+    function db_fetch_row_prepared(string $sql, array $params = [], bool $log = true)
     {
         return false;
     }
 }
 
 if (!function_exists('html_escape')) {
-    function html_escape(mixed $value): string
+    /** @param mixed $value */
+    function html_escape($value): string
     {
         return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
     }
 }
 
 if (!function_exists('get_filter_request_var')) {
-    function get_filter_request_var(string $name, int $filter = FILTER_DEFAULT, mixed $options = null): mixed
+    /**
+     * @param mixed $options
+     * @return mixed
+     */
+    function get_filter_request_var(string $name, int $filter = FILTER_DEFAULT, $options = null)
     {
         return filter_input(INPUT_GET, $name, $filter, $options)
             ?? filter_input(INPUT_POST, $name, $filter, $options);
@@ -110,14 +119,16 @@ if (!function_exists('cacti_log')) {
 }
 
 if (!function_exists('cacti_sizeof')) {
-    function cacti_sizeof(mixed $value): int
+    /** @param mixed $value */
+    function cacti_sizeof($value): int
     {
         return is_countable($value) ? count($value) : 0;
     }
 }
 
 if (!function_exists('cacti_count')) {
-    function cacti_count(mixed $value): int
+    /** @param mixed $value */
+    function cacti_count($value): int
     {
         return is_countable($value) ? count($value) : 0;
     }
