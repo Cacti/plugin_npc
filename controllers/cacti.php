@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 require_once('include/auth.php');
 require_once($config['base_path'] . '/plugins/npc/controllers/hosts.php');
 require_once($config['base_path'] . '/plugins/npc/controllers/services.php');

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class NpcHosts extends BaseNpcHosts
 {
     public function setUp()
