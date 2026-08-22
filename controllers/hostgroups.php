@@ -33,7 +33,10 @@ class NpcHostgroupsController extends Controller {
 				$output[$hg] = array('down' => 0, 'unreachable' => 0, 'up' => 0, 'pending' => 0);
 			}
 			if (!isset($hosts[$hg][$results[$i]['host_name']])) {
-				$output[$hg][$this->hostState[$results[$i]['current_state']]]++;
+				$state = $results[$i]['current_state'];
+				if (isset($this->hostState[$state])) {
+					$output[$hg][$this->hostState[$state]]++;
+				}
 				$hosts[$hg][$results[$i]['host_name']] = 1;
 			}
 			foreach ($results[$i] as $key => $val) {

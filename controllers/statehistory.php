@@ -50,7 +50,8 @@ class NpcStatehistoryController extends Controller {
             WHERE ' . $where,
             $params);
 
-        $offset = ($this->currentPage - 1) * $this->limit;
+		$offset = (int) (($this->currentPage - 1) * $this->limit);
+		$limit  = (int) $this->limit;
 
         $results = db_fetch_assoc_prepared('SELECT i.instance_name,
                 o.name1 AS host_name,
@@ -62,7 +63,7 @@ class NpcStatehistoryController extends Controller {
             WHERE ' . $where . '
             ORDER BY sh.state_time DESC, sh.state_time_usec DESC
             LIMIT ?, ?',
-            array_merge($params, array($offset, $this->limit)));
+			array_merge($params, array($offset, $limit)));
 
         return($this->jsonOutput($results));
     }

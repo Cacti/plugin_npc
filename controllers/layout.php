@@ -51,7 +51,7 @@ class NpcLayoutController extends Controller {
 			hostIcons:        '<?php echo read_config_option('npc_host_icons'); ?>',
 			serviceIcons:     '<?php echo read_config_option('npc_service_icons'); ?>',
 			currentTab:       '<?php echo addslashes($current_tab); ?>',
-			csrfToken:        '<?php echo csrf_get_tokens(); ?>'
+			csrfToken:        <?php echo json_encode(csrf_get_tokens(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>
 		};
 		</script>
 		<script type='text/javascript' src='<?php echo $npc_base; ?>js/npc.js'></script>

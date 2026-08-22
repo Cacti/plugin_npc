@@ -321,28 +321,30 @@ class Controller {
      * @param array  $params    Existing bind params array (passed by reference)
      * @return string  The appended where clause
      */
-    function searchClause($where, $fieldMap, &$params = array()) {
+	function searchClause($where, $fieldMap, &$params = array()) {
+		$fields = json_decode(stripslashes($this->searchFields));
+		if (!is_array($fields)) {
+			return $where;
+		}
 
-        if (!$where) {
-            $where = ' ( ';
-        } else {
-            $where .= ' AND ( ';
-        }
+		$searchValue = '%' . $this->searchString . '%';
 
-        $fields = json_decode(stripslashes($this->searchFields));
-        $count = count($fields);
-        $searchValue = '%' . $this->searchString . '%';
+		$clauses = array();
+		$searchParams = array();
+		foreach ($fields as $field) {
+			if (isset($fieldMap[$field])) {
+				$clauses[] = $fieldMap[$field] . ' LIKE ?';
+				$searchParams[] = $searchValue;
+			}
+		}
 
-        $clauses = array();
-        foreach ($fields as $field) {
-            if (isset($fieldMap[$field])) {
-                $clauses[] = $fieldMap[$field] . ' LIKE ?';
-                $params[] = $searchValue;
-            }
-        }
+		if (empty($clauses)) {
+			return $where;
+		}
 
-        $where .= implode(' OR ', $clauses);
-        $where .= ' ) ';
+		$params = array_merge($params, $searchParams);
+		$where .= $where ? ' AND ( ' : ' ( ';
+		$where .= implode(' OR ', $clauses) . ' ) ';
 
         return($where);
     }
@@ -483,4 +485,3 @@ class Controller {
 		bottom_footer();
     } // end drawFrame
 }
-

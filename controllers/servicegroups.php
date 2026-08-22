@@ -182,12 +182,22 @@ class NpcServicegroupsController extends Controller {
 	}
 
 	function getServicegroups() {
+		$fieldMap = array(
+			'servicegroup_name'   => 'o1.name1',
+			'host_name'           => 'o2.name1',
+			'service_description' => 'o2.name2',
+			'output'              => 'ss.output'
+		);
 		$params = array();
 		$where  = '1 = 1';
 
 		if ($this->id) {
 			$where .= ' AND sg.servicegroup_object_id = ?';
 			$params[] = intval($this->id);
+		}
+
+		if ($this->searchString) {
+			$where = $this->searchClause($where, $fieldMap, $params);
 		}
 
 		return db_fetch_assoc_prepared(
