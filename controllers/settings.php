@@ -40,7 +40,10 @@ class NpcSettingsController extends Controller {
         $user_id = $_SESSION['sess_user_id'];
         $obj = $this->getSettings($user_id);
 
-        $settings = unserialize($obj->settings, array('allowed_classes' => false));
+		$settings = unserialize($obj->settings, array('allowed_classes' => false));
+		if (!is_array($settings)) {
+			$settings = array();
+		}
 		if (isset($params['name'])) {
 	        $settings[$params['name']] = $params['value'];
 		}
@@ -52,4 +55,3 @@ class NpcSettingsController extends Controller {
     }
 
 }
-

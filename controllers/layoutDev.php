@@ -93,7 +93,7 @@ class NpcLayoutDevController extends controller {
 		$raw_state = db_fetch_cell_prepared('SELECT settings FROM npc_settings WHERE user_id = ?', array($_SESSION['sess_user_id']));
 		$state = ($raw_state !== false && $raw_state !== null) ? @unserialize($raw_state, array('allowed_classes' => false)) : false;
 		?>
-		var ExtState = Ext.decode('<?php echo json_encode($state); ?>');
+		var ExtState = <?php echo json_encode($state, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 
 		// Launch the app
 		Ext.onReady(npc.init, npc);
@@ -135,4 +135,3 @@ class NpcLayoutDevController extends controller {
     	<?php
     }
 }
-
