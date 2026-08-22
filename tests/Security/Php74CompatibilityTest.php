@@ -8,11 +8,11 @@
 */
 
 /*
- * Verify plugin source files do not use PHP 8.0+ syntax.
+ * Verify plugin source files avoid the specific PHP 8.0-only functions
+ * and operator forms checked below.
  * Cacti 1.2.x plugins must remain compatible with PHP 7.4.
  */
 
-describe('PHP 7.4 compatibility in npc', function () {
 	$files = array(
 		'cli.php',
 		'config.php',
@@ -27,14 +27,14 @@ describe('PHP 7.4 compatibility in npc', function () {
 			$path = realpath(__DIR__ . '/../../' . $relativeFile);
 
 			if ($path === false) {
-				continue;
-			}
+			throw new RuntimeException("Unable to resolve required plugin source");
+		}
 
 			$contents = file_get_contents($path);
 
 			if ($contents === false) {
-				continue;
-			}
+			throw new RuntimeException("Unable to read required plugin source");
+		}
 
 			expect(preg_match('/\bstr_contains\s*\(/', $contents))->toBe(0,
 				"{$relativeFile} uses str_contains() which requires PHP 8.0"
@@ -47,14 +47,14 @@ describe('PHP 7.4 compatibility in npc', function () {
 			$path = realpath(__DIR__ . '/../../' . $relativeFile);
 
 			if ($path === false) {
-				continue;
-			}
+			throw new RuntimeException("Unable to resolve required plugin source");
+		}
 
 			$contents = file_get_contents($path);
 
 			if ($contents === false) {
-				continue;
-			}
+			throw new RuntimeException("Unable to read required plugin source");
+		}
 
 			expect(preg_match('/\bstr_starts_with\s*\(/', $contents))->toBe(0,
 				"{$relativeFile} uses str_starts_with() which requires PHP 8.0"
@@ -67,14 +67,14 @@ describe('PHP 7.4 compatibility in npc', function () {
 			$path = realpath(__DIR__ . '/../../' . $relativeFile);
 
 			if ($path === false) {
-				continue;
-			}
+			throw new RuntimeException("Unable to resolve required plugin source");
+		}
 
 			$contents = file_get_contents($path);
 
 			if ($contents === false) {
-				continue;
-			}
+			throw new RuntimeException("Unable to read required plugin source");
+		}
 
 			expect(preg_match('/\bstr_ends_with\s*\(/', $contents))->toBe(0,
 				"{$relativeFile} uses str_ends_with() which requires PHP 8.0"
@@ -87,18 +87,17 @@ describe('PHP 7.4 compatibility in npc', function () {
 			$path = realpath(__DIR__ . '/../../' . $relativeFile);
 
 			if ($path === false) {
-				continue;
-			}
+			throw new RuntimeException("Unable to resolve required plugin source");
+		}
 
 			$contents = file_get_contents($path);
 
 			if ($contents === false) {
-				continue;
-			}
+			throw new RuntimeException("Unable to read required plugin source");
+		}
 
 			expect(preg_match('/\?->/', $contents))->toBe(0,
 				"{$relativeFile} uses nullsafe operator which requires PHP 8.0"
 			);
 		}
 	});
-});
