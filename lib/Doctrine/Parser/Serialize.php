@@ -60,6 +60,6 @@ class Doctrine_Parser_Serialize extends Doctrine_Parser
     {
         $contents = $this->doLoad($path);
         
-        return unserialize($contents);
+        return unserialize($contents, array('allowed_classes' => false));
     }
 }

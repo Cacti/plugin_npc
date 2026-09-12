@@ -89,8 +89,11 @@ class NpcLayoutDevController extends controller {
 			npc.params.cacti_path = npc.params.cacti_path.slice(0,strLen-1);
 		}
 
-		<?php $state = unserialize(db_fetch_cell('SELECT settings FROM npc_settings WHERE user_id = ' . $_SESSION['sess_user_id'])); ?>
-		var ExtState = Ext.decode('<?php echo json_encode($state); ?>');
+		<?php
+		$raw_state = db_fetch_cell_prepared('SELECT settings FROM npc_settings WHERE user_id = ?', array($_SESSION['sess_user_id']));
+		$state = ($raw_state !== false && $raw_state !== null) ? @unserialize($raw_state, array('allowed_classes' => false)) : false;
+		?>
+		var ExtState = <?php echo json_encode($state, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
 
 		// Launch the app
 		Ext.onReady(npc.init, npc);
@@ -132,4 +135,3 @@ class NpcLayoutDevController extends controller {
     	<?php
     }
 }
-
