@@ -1,347 +1,264 @@
 <?php
-/**
- * Hosts controller class
- *
- * This is the access point to the npc_hosts table.
- *
- * @filesource
- * @author              Billy Gunn <billy@gunn.org>
- * @copyright           Copyright (c) 2007
- * @link                http://trac2.assembla.com/npc
- * @package             npc
- * @subpackage          npc.controllers
- * @since               NPC 2.0
- * @version             $Id$
- */
+/*
+ +-------------------------------------------------------------------------+
+ | Nagios Plugin for Cacti                                                 |
+ |                                                                         |
+ | Copyright (C) 2007 Billy Gunn (billy@gunn.org)                          |
+ | Copyright (C) 2004-2026 The Cacti Group                                 |
+ +-------------------------------------------------------------------------+
+ | Cacti and Nagios are the copyright of their respective owners.          |
+ +-------------------------------------------------------------------------+
+*/
 
-require_once($config["base_path"]."/plugins/npc/controllers/comments.php");
+require_once($config['base_path'] . '/plugins/npc/controllers/comments.php');
 
-/**
- * Hosts controller class
- *
- * Hosts controller provides functionality, such as building the 
- * Doctrine queries and formatting output.
- * 
- * @package     npc
- * @subpackage  npc.controllers
- */
 class NpcHostsController extends Controller {
 
-    /**
-     * getHosts
-     * 
-     * Gets and formats hosts for output. 
-     *
-     * @return string   json output
-     */
-    function getHosts() {
+	function getHosts() {
+		$results = $this->hosts();
 
-        $results = $this->hosts();
+		$comments = new NpcCommentsController;
+		$hosts = $this->flattenArray($results);
 
-        $comments = new NpcCommentsController;
+		for ($i = 0; $i < count($hosts); $i++) {
+			if ($hosts[$i]['problem_has_been_acknowledged']) {
+				$hosts[$i]['acknowledgement'] = $comments->getAck($hosts[$i]['host_object_id']);
+			}
+			$hosts[$i]['comment'] = $comments->getLastComment($hosts[$i]['host_object_id']);
 
-        $hosts = $this->flattenArray($results);
+			$services = 0;
+			foreach ($hosts[$i] as $k => $v) {
+				if (is_array($v)) {
+					$services++;
+					unset($hosts[$i][$k]);
+				}
+			}
+			$hosts[$i]['service_count'] = $services;
+		}
 
+		$response = array(
+			'response' => array(
+				'value' => array(
+					'items'       => $hosts,
+					'total_count' => $this->numRecords,
+					'version'     => 1,
+				)
+			)
+		);
 
-        for ($i = 0; $i < count($hosts); $i++) {
-            if ($hosts[$i]['problem_has_been_acknowledged']) {
-                $hosts[$i]['acknowledgement'] = $comments->getAck($hosts[$i]['host_object_id']);
-            }
-            // Add the last comment to the array
-            $hosts[$i]['comment'] = $comments->getLastComment($hosts[$i]['host_object_id']);
+		return json_encode($response);
+	}
 
-            // Count the services and delete the entries
-            $services = 0;
-            foreach ($hosts[$i] as $k => $v) {
-                if (is_array($v)) {
-                    $services++;
-                    unset($hosts[$i][$k]);
-                }
-            }
+	function getStateInfo() {
+		$fields = array(
+			'current_state', 'output', 'perfdata', 'last_state_change',
+			'check_command', 'address', 'current_check_attempt', 'last_check',
+			'next_check', 'event_handler', 'latency', 'execution_time',
+			'is_flapping', 'scheduled_downtime_depth', 'process_performance_data',
+			'active_checks_enabled', 'passive_checks_enabled',
+			'event_handler_enabled', 'flap_detection_enabled',
+			'notifications_enabled', 'obsess_over_host'
+		);
 
-            $hosts[$i]['service_count'] = $services;
-        }    
+		$hosts   = $this->hosts();
+		$results = $this->flattenArray($hosts);
+		$output  = array();
 
-        $response['response']['value']['items'] = $hosts;
-        $response['response']['value']['total_count'] = $this->numRecords;
-        $response['response']['value']['version']     = 1;
+		$x = 0;
+		foreach ($fields as $key) {
+			$output[$x] = array(
+				'name'  => $this->columnAlias[$key],
+				'value' => $this->formatStateInfo($key, $results[0])
+			);
+			$x++;
+		}
 
-        return(json_encode($response));
-    }
+		return $this->jsonOutput($output);
+	}
 
-    /**
-     * getStateInfo
-     * 
-     * Gets and formats host state information
-     *
-     * @return string   json output
-     */
-    function getStateInfo() {
+	function summary() {
+		$status = array(
+			'down'        => 0,
+			'unreachable' => 0,
+			'up'          => 0,
+			'pending'     => 0
+		);
 
-        $fields = array(
-            'current_state',
-            'output',
-            'perfdata',
-            'last_state_change',
-            'check_command',
-            'address',
-            'current_check_attempt',
-            'last_check',
-            'next_check',
-            'event_handler',
-            'latency',
-            'execution_time',
-            'is_flapping',
-            'scheduled_downtime_depth',
-            'process_performance_data',
-            'active_checks_enabled',
-            'passive_checks_enabled',
-            'event_handler_enabled',
-            'flap_detection_enabled',
-            'notifications_enabled',
-            'obsess_over_host'
-        );
+		$hosts = db_fetch_assoc_prepared('SELECT hs.current_state
+			FROM npc_hoststatus hs
+			LEFT JOIN npc_hosts h ON hs.host_object_id = h.host_object_id
+			WHERE h.config_type = ?',
+			array($this->config_type));
 
-        $hosts = $this->hosts();
+		for ($i = 0; $i < count($hosts); $i++) {
+			$state_key = $hosts[$i]['current_state'];
+			if (isset($this->hostState[$state_key])) {
+				$status[$this->hostState[$state_key]]++;
+			}
+		}
 
-        $results = $this->flattenArray($hosts);
+		return $this->jsonOutput($status);
+	}
 
-        $x = 0;
-        foreach ($fields as $key) {
-            $output[$x] = array('name' => $this->columnAlias[$key], 'value' => $this->formatStateInfo($key, $results[0]));
-            $x++;
-        }
+	function getPerfData($id) {
+		return db_fetch_assoc_prepared('SELECT perfdata
+			FROM npc_hostchecks
+			WHERE host_object_id = ?',
+			array($id));
+	}
 
-        return($this->jsonOutput($output));
-    }
+	function hosts() {
+		$fieldMap = array(
+			'host_name' => 'o.name1',
+			'alias'     => 'h.alias',
+			'output'    => 'hs.output'
+		);
 
-    /**
-     * summary
-     * 
-     * Returns a state count for all hosts
-     *
-     * @return string   json output
-     */
-    function summary() {
+		$params = array();
+		$where  = '';
 
-        $status = array(
-            'down'        => 0, 
-            'unreachable' => 0,
-            'up'          => 0,
-            'pending'     => 0
-        );
+		/* State filter */
+		$states = $this->stringToState[$this->state];
+		$state_list = implode(',', array_map('intval', explode(',', $states)));
+		$where .= 'hs.current_state IN (' . $state_list . ')';
+		$where .= ' AND h.config_type = ?';
+		$params[] = $this->config_type;
 
-        $q = new Doctrine_Query();
-        $q->select('hs.current_state')
-          ->from('NpcHoststatus hs')
-          ->leftJoin('hs.Host h')
-          ->where('h.config_type = ?', $this->config_type);
+		if ($this->id) {
+			$where .= ' AND hs.host_object_id = ?';
+			$params[] = intval($this->id);
+		}
 
-        $hosts = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+		if ($this->searchString) {
+			$where = $this->searchClause($where, $fieldMap, $params);
+		}
 
-        for ($i = 0; $i < count($hosts); $i++) {
-            $status[$this->hostState[$hosts[$i]['current_state']]]++;
-        }
+		$orderBy = 'i.instance_name ASC, o.name1 ASC';
+		if ($this->sort) {
+			$allowed_sorts = array(
+				'instance_name', 'host_name', 'alias', 'address',
+				'current_state', 'last_check', 'output', 'last_state_change'
+			);
+			if (in_array($this->sort, $allowed_sorts, true)) {
+				$dir = ($this->dir == 'DESC') ? 'DESC' : 'ASC';
+				$orderBy = $this->sort . ' ' . $dir;
+			}
+		}
 
-        return($this->jsonOutput($status));
-    }
+		/* Total count */
+		$this->numRecords = db_fetch_cell_prepared(
+			'SELECT COUNT(*)
+			FROM npc_hoststatus hs
+			LEFT JOIN npc_objects o ON hs.host_object_id = o.object_id
+			LEFT JOIN npc_hosts h ON hs.host_object_id = h.host_object_id
+			LEFT JOIN npc_instances i ON h.instance_id = i.instance_id
+			WHERE ' . $where,
+			$params);
 
-    function getPerfData($id) {
+		/* Paginated results */
+		$offset = ($this->currentPage - 1) * $this->limit;
 
-        $q = new Doctrine_Query();
-        $q->select('perfdata')->from('NpcHostchecks')->where('host_object_id = ?', $id);
-        
-        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
-    }
+		$hosts = db_fetch_assoc_prepared(
+			'SELECT i.instance_name,
+				o.name1 AS host_name,
+				h.alias,
+				h.address,
+				h.notes,
+				h.notes_url,
+				h.action_url,
+				h.icon_image,
+				h.icon_image_alt,
+				hg.local_graph_id,
+				hs.*
+			FROM npc_hoststatus hs
+			LEFT JOIN npc_objects o ON hs.host_object_id = o.object_id
+			LEFT JOIN npc_hosts h ON hs.host_object_id = h.host_object_id
+			LEFT JOIN npc_instances i ON h.instance_id = i.instance_id
+			LEFT JOIN npc_host_graphs hg ON hs.host_object_id = hg.host_object_id
+			WHERE ' . $where . '
+			ORDER BY ' . $orderBy . '
+			LIMIT ?, ?',
+			array_merge($params, array($offset, $this->limit)));
 
-    /**
-     * hosts
-     * 
-     * Retrieves all hosts along with status information
-     *
-     * @return array 
-     */
-    function hosts() {
+		return $hosts;
+	}
 
-        // Maps searchable fields passed in from the client
-        $fieldMap = array('host_name' => 'o.name1',
-                          'alias' => 'h.alias',
-                          'output' => 'hs.output');
+	function listHostsCli() {
+		return db_fetch_assoc('SELECT display_name AS name, host_object_id AS id, address
+			FROM npc_hosts
+			ORDER BY display_name ASC');
+	}
 
+	function getMappedGraph() {
+		$results = db_fetch_assoc_prepared(
+			'SELECT * FROM npc_host_graphs WHERE host_object_id = ?',
+			array($this->id));
 
-        // Build the where clause
-        $where = " hs.current_state in (" . $this->stringToState[$this->state] . ") AND h.config_type = " . $this->config_type;
+		return $this->jsonOutput($results);
+	}
 
+	function setMappedGraph($params) {
+		$object_id     = intval($params['object_id']);
+		$local_graph_id = intval($params['local_graph_id']);
 
-        if ($this->id) {
-            $where .= sprintf(" AND hs.host_object_id = %d", $this->id);
-        }
+		$existing = db_fetch_row_prepared(
+			'SELECT * FROM npc_host_graphs WHERE host_object_id = ?',
+			array($object_id));
 
-        if ($this->searchString) {
-            $where = $this->searchClause($where, $fieldMap);
-        }
+		if (cacti_sizeof($existing)) {
+			db_execute_prepared(
+				'UPDATE npc_host_graphs SET local_graph_id = ? WHERE host_object_id = ?',
+				array($local_graph_id, $object_id));
+		} else {
+			db_execute_prepared(
+				'INSERT INTO npc_host_graphs (host_object_id, local_graph_id) VALUES (?, ?)',
+				array($object_id, $local_graph_id));
+		}
 
-        if ($this->sort) {
-            $orderBy = $this->sort . ' ' . $this->dir;
-        } else {
-            $orderBy = 'i.instance_name ASC, host_name ASC';
-        }
+		return json_encode(array('success' => true));
+	}
 
-        $q = new Doctrine_Pager(
-            Doctrine_Query::create()
-                ->select('i.instance_name,'
-                        .'o.name1 AS host_name,'
-                        .'h.alias,'
-                        .'h.address,'
-                        .'h.notes,'
-                        .'h.notes_url,'
-                        .'h.action_url,'
-                        .'h.icon_image,'
-                        .'h.icon_image_alt,'
-                        .'s.service_object_id,'
-                        .'s.display_name,'
-                        .'g.local_graph_id,'
-                        .'hs.*')
-                ->from('NpcHoststatus hs')
-                ->leftJoin('hs.Object o')
-                ->leftJoin('hs.Host h')
-                ->leftJoin('hs.Instance i')
-                ->leftJoin('hs.Services s')
-                ->leftJoin('hs.Graph g')
-                ->where($where)
-                ->orderby($orderBy),
-            $this->currentPage,
-            $this->limit
-        );
+	function formatStateInfo($key, $results) {
+		$return = isset($results[$key]) ? $results[$key] : '';
 
-        $hosts = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+		$cs = array(
+			'0'  => '<span class="hostUp" title="UP"></span>',
+			'1'  => '<span class="hostDown" title="DOWN"></span>',
+			'2'  => '<span class="hostUnreachable" title="UNREACHABLE"></span>',
+			'-1' => '<span class="hostPending" title="PENDING"></span>'
+		);
 
-        // Set the total number of records
-        $this->numRecords = $q->getNumResults();
+		if ($key == 'current_state') {
+			$return = isset($cs[$results[$key]]) ? $cs[$results[$key]] : '';
+			if ($results['problem_has_been_acknowledged']) {
+				$comments = new NpcCommentsController;
+				$string = $comments->getAck($results['host_object_id']);
+				$ack = preg_split('/\*\|\*/', $string);
+				$return .= ' (Acknowledged by ' . html_escape($ack[0]) . ')';
+			}
+		}
 
-        return($hosts);
-    }
+		if ($key == 'current_check_attempt') {
+			$return = $results[$key] . '/' . $results['max_check_attempts'];
+		}
 
-    /**
-     * listHostsCli
-     * 
-     * Returns all hosts and associated object ID's
-     *
-     * @return array   Array of hosts/id's
-     */
-    function listHostsCli() {
+		if (preg_match('/_enabled/', $key) || $key == 'obsess_over_host') {
+			$return = $results[$key] ? __('Yes', 'npc') : __('No', 'npc');
+		}
 
-        $q = new Doctrine_Query();
-        $q->select('display_name as name, host_object_id as id, address')->from('NpcHosts')->orderBy('display_name ASC');
+		if ($key == 'last_state_change' || $key == 'last_check' || $key == 'next_check') {
+			$format = read_config_option('npc_date_format') . ' ' . read_config_option('npc_time_format');
+			$return = date($format, strtotime($results[$key]));
+		}
 
-        return($q->execute(array(), Doctrine::HYDRATE_ARRAY));
-    }
+		if ($key == 'scheduled_downtime_depth' || $key == 'is_flapping' || $key == 'process_performance_data') {
+			$return = $results[$key] ? __('Yes', 'npc') : __('No', 'npc');
+		}
 
-    /**
-     * getMappedGraph
-     *
-     * Returns the requested npc_host_graphs record
-     *
-     * @return string   json encoded results
-     */
-    function getMappedGraph() {
+		if ($return == '' || !$return) {
+			$return = __('N/A', 'npc');
+		}
 
-        $q = new Doctrine_Query();
-        $q->select('hg.*')
-          ->from('NpcHostGraphs hg')
-          ->where('hg.host_object_id = ?', $this->id);
-
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
-
-        return($this->jsonOutput($results));
-    }
-
-    /**
-     * setMappedGraph
-     *
-     * Sets the graph mapping
-     *
-     * @return string   json encoded results
-     */
-    function setMappedGraph($params) {
-
-        $table = $this->conn->getTable('NpcHostGraphs');
-
-        $results = $table->findByDql("host_object_id = ?", array($params['object_id']));
-        $graph = $results[0];
-
-        if (!isset($graph->local_graph_id)) {
-            $graph = new NpcServiceGraphs();
-        }
-
-        $graph->host_object_id = $params['object_id'];
-        $graph->local_graph_id = $params['local_graph_id'];
-        $graph->save();
-
-        return(json_encode(array('success' => true)));
-    }
-
-
-
-    /**
-     * formatStateInfo
-     * 
-     * Formats the host state info results for display
-     *
-     * @return string   The formatted results
-     */
-    function formatStateInfo($key, $results) {
-
-        // Set the default return value
-        $return = $results[$key];
-
-        $cs = array(
-            '0'  => '<img ext:qtip="UP" src="images/icons/greendot.gif">',
-            '1'  => '<img ext:qtip="DOWN" src="images/icons/reddot.gif">',
-            '2'  => '<img ext:qtip="UNREACHABLE" src="images/icons/reddot.gif">',
-            '-1' => '<img ext:qtip="PENDING" src="images/icons/bluedot.gif">'
-        );
-
-        if ($key == 'current_state') {
-            $return = $cs[$results[$key]];
-            if ($results['problem_has_been_acknowledged']) {
-                $comments = new NpcCommentsController;
-                $string = $comments->getAck($results['host_object_id']);
-                $ack = preg_split("/\*\|\*/", $string);
-                $return = '<pre>' . $return . '   (Acknowledged by ' . $ack[0] . ')</pre>';
-            }
-        }
-
-        if ($key == 'current_check_attempt') {
-            $return = $results[$key] . '/' . $results['max_check_attempts'];
-        }
-
-        if (preg_match("/_enabled/", $key) || $key == 'obsess_over_host') {
-            if($results[$key]) {
-                $return = '<img src="images/icons/tick.png">';
-            } else {
-                $return = '<img src="images/icons/cross.png">';
-            }
-        }
-
-        if ($key == 'last_state_change' || $key == 'last_check' || $key == 'next_check') {
-            $format = read_config_option('npc_date_format') . ' ' . read_config_option('npc_time_format');
-            $return = date($format, strtotime($results[$key]));
-        }
-
-        if ($key == 'scheduled_downtime_depth' || $key == 'is_flapping' || $key == 'process_performance_data') {
-            if ($results[$key]) {
-                $return = 'Yes';
-            } else {
-                $return = 'No';
-            }
-        }
-
-        if ($return == '' || !$return) {
-            $return = 'NA';
-        }
-
-        return($return);
-    }
-
+		return $return;
+	}
 }

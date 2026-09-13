@@ -83,68 +83,68 @@ function npc_page_head() {
  */
 function plugin_npc_uninstall() {
 	// Drop all npc tables
-	db_execute('DROP TABLE `npc_acknowledgements`');
-	db_execute('DROP TABLE `npc_commands`');
-	db_execute('DROP TABLE `npc_commenthistory`');
-	db_execute('DROP TABLE `npc_comments`');
-	db_execute('DROP TABLE `npc_configfiles`');
-	db_execute('DROP TABLE `npc_configfilevariables`');
-	db_execute('DROP TABLE `npc_conninfo`');
-	db_execute('DROP TABLE `npc_contact_addresses`');
-	db_execute('DROP TABLE `npc_contact_notificationcommands`');
-	db_execute('DROP TABLE `npc_contactgroup_members`');
-	db_execute('DROP TABLE `npc_contactgroups`');
-	db_execute('DROP TABLE `npc_contactnotificationmethods`');
-	db_execute('DROP TABLE `npc_contactnotifications`');
-	db_execute('DROP TABLE `npc_contacts`');
-	db_execute('DROP TABLE `npc_contactstatus`');
-	db_execute('DROP TABLE `npc_customvariables`');
-	db_execute('DROP TABLE `npc_customvariablestatus`');
-	db_execute('DROP TABLE `npc_dbversion`');
-	db_execute('DROP TABLE `npc_downtimehistory`');
-	db_execute('DROP TABLE `npc_eventhandlers`');
-	db_execute('DROP TABLE `npc_externalcommands`');
-	db_execute('DROP TABLE `npc_flappinghistory`');
-	db_execute('DROP TABLE `npc_host_contactgroups`');
-	db_execute('DROP TABLE `npc_host_contacts`');
-	db_execute('DROP TABLE `npc_host_graphs`');
-	db_execute('DROP TABLE `npc_host_parenthosts`');
-	db_execute('DROP TABLE `npc_hostchecks`');
-	db_execute('DROP TABLE `npc_hostdependencies`');
-	db_execute('DROP TABLE `npc_hostescalation_contactgroups`');
-	db_execute('DROP TABLE `npc_hostescalation_contacts`');
-	db_execute('DROP TABLE `npc_hostescalations`');
-	db_execute('DROP TABLE `npc_hostgroup_members`');
-	db_execute('DROP TABLE `npc_hostgroups`');
-	db_execute('DROP TABLE `npc_hosts`');
-	db_execute('DROP TABLE `npc_hoststatus`');
-	db_execute('DROP TABLE `npc_instances`');
-	db_execute('DROP TABLE `npc_logentries`');
-	db_execute('DROP TABLE `npc_notifications`');
-	db_execute('DROP TABLE `npc_objects`');
-	db_execute('DROP TABLE `npc_processevents`');
-	db_execute('DROP TABLE `npc_programstatus`');
-	db_execute('DROP TABLE `npc_runtimevariables`');
-	db_execute('DROP TABLE `npc_scheduleddowntime`');
-	db_execute('DROP TABLE `npc_service_contactgroups`');
-	db_execute('DROP TABLE `npc_service_contacts`');
-	db_execute('DROP TABLE `npc_service_graphs`');
-	db_execute('DROP TABLE `npc_servicechecks`');
-	db_execute('DROP TABLE `npc_servicedependencies`');
-	db_execute('DROP TABLE `npc_serviceescalation_contactgroups`');
-	db_execute('DROP TABLE `npc_serviceescalation_contacts`');
-	db_execute('DROP TABLE `npc_serviceescalations`');
-	db_execute('DROP TABLE `npc_servicegroup_members`');
-	db_execute('DROP TABLE `npc_servicegroups`');
-	db_execute('DROP TABLE `npc_services`');
-	db_execute('DROP TABLE `npc_servicestatus`');
-	db_execute('DROP TABLE `npc_settings`');
-	db_execute('DROP TABLE `npc_statehistory`');
-	db_execute('DROP TABLE `npc_systemcommands`');
-	db_execute('DROP TABLE `npc_timedeventqueue`');
-	db_execute('DROP TABLE `npc_timedevents`');
-	db_execute('DROP TABLE `npc_timeperiod_timeranges`');
-	db_execute('DROP TABLE `npc_timeperiods`');
+	db_execute('DROP TABLE IF EXISTS `npc_acknowledgements`');
+	db_execute('DROP TABLE IF EXISTS `npc_commands`');
+	db_execute('DROP TABLE IF EXISTS `npc_commenthistory`');
+	db_execute('DROP TABLE IF EXISTS `npc_comments`');
+	db_execute('DROP TABLE IF EXISTS `npc_configfiles`');
+	db_execute('DROP TABLE IF EXISTS `npc_configfilevariables`');
+	db_execute('DROP TABLE IF EXISTS `npc_conninfo`');
+	db_execute('DROP TABLE IF EXISTS `npc_contact_addresses`');
+	db_execute('DROP TABLE IF EXISTS `npc_contact_notificationcommands`');
+	db_execute('DROP TABLE IF EXISTS `npc_contactgroup_members`');
+	db_execute('DROP TABLE IF EXISTS `npc_contactgroups`');
+	db_execute('DROP TABLE IF EXISTS `npc_contactnotificationmethods`');
+	db_execute('DROP TABLE IF EXISTS `npc_contactnotifications`');
+	db_execute('DROP TABLE IF EXISTS `npc_contacts`');
+	db_execute('DROP TABLE IF EXISTS `npc_contactstatus`');
+	db_execute('DROP TABLE IF EXISTS `npc_customvariables`');
+	db_execute('DROP TABLE IF EXISTS `npc_customvariablestatus`');
+	db_execute('DROP TABLE IF EXISTS `npc_dbversion`');
+	db_execute('DROP TABLE IF EXISTS `npc_downtimehistory`');
+	db_execute('DROP TABLE IF EXISTS `npc_eventhandlers`');
+	db_execute('DROP TABLE IF EXISTS `npc_externalcommands`');
+	db_execute('DROP TABLE IF EXISTS `npc_flappinghistory`');
+	db_execute('DROP TABLE IF EXISTS `npc_host_contactgroups`');
+	db_execute('DROP TABLE IF EXISTS `npc_host_contacts`');
+	db_execute('DROP TABLE IF EXISTS `npc_host_graphs`');
+	db_execute('DROP TABLE IF EXISTS `npc_host_parenthosts`');
+	db_execute('DROP TABLE IF EXISTS `npc_hostchecks`');
+	db_execute('DROP TABLE IF EXISTS `npc_hostdependencies`');
+	db_execute('DROP TABLE IF EXISTS `npc_hostescalation_contactgroups`');
+	db_execute('DROP TABLE IF EXISTS `npc_hostescalation_contacts`');
+	db_execute('DROP TABLE IF EXISTS `npc_hostescalations`');
+	db_execute('DROP TABLE IF EXISTS `npc_hostgroup_members`');
+	db_execute('DROP TABLE IF EXISTS `npc_hostgroups`');
+	db_execute('DROP TABLE IF EXISTS `npc_hosts`');
+	db_execute('DROP TABLE IF EXISTS `npc_hoststatus`');
+	db_execute('DROP TABLE IF EXISTS `npc_instances`');
+	db_execute('DROP TABLE IF EXISTS `npc_logentries`');
+	db_execute('DROP TABLE IF EXISTS `npc_notifications`');
+	db_execute('DROP TABLE IF EXISTS `npc_objects`');
+	db_execute('DROP TABLE IF EXISTS `npc_processevents`');
+	db_execute('DROP TABLE IF EXISTS `npc_programstatus`');
+	db_execute('DROP TABLE IF EXISTS `npc_runtimevariables`');
+	db_execute('DROP TABLE IF EXISTS `npc_scheduleddowntime`');
+	db_execute('DROP TABLE IF EXISTS `npc_service_contactgroups`');
+	db_execute('DROP TABLE IF EXISTS `npc_service_contacts`');
+	db_execute('DROP TABLE IF EXISTS `npc_service_graphs`');
+	db_execute('DROP TABLE IF EXISTS `npc_servicechecks`');
+	db_execute('DROP TABLE IF EXISTS `npc_servicedependencies`');
+	db_execute('DROP TABLE IF EXISTS `npc_serviceescalation_contactgroups`');
+	db_execute('DROP TABLE IF EXISTS `npc_serviceescalation_contacts`');
+	db_execute('DROP TABLE IF EXISTS `npc_serviceescalations`');
+	db_execute('DROP TABLE IF EXISTS `npc_servicegroup_members`');
+	db_execute('DROP TABLE IF EXISTS `npc_servicegroups`');
+	db_execute('DROP TABLE IF EXISTS `npc_services`');
+	db_execute('DROP TABLE IF EXISTS `npc_servicestatus`');
+	db_execute('DROP TABLE IF EXISTS `npc_settings`');
+	db_execute('DROP TABLE IF EXISTS `npc_statehistory`');
+	db_execute('DROP TABLE IF EXISTS `npc_systemcommands`');
+	db_execute('DROP TABLE IF EXISTS `npc_timedeventqueue`');
+	db_execute('DROP TABLE IF EXISTS `npc_timedevents`');
+	db_execute('DROP TABLE IF EXISTS `npc_timeperiod_timeranges`');
+	db_execute('DROP TABLE IF EXISTS `npc_timeperiods`');
 
 	db_execute('ALTER TABLE `host` DROP `npc_host_object_id`');
 	db_execute('DELETE FROM `settings` WHERE `name` like "npc\_%"');
@@ -159,8 +159,8 @@ function npc_config_arrays() {
 	if (isset($_SESSION['sess_user_id'])) {
 		$user_id=$_SESSION['sess_user_id'];
 
-		$npc_realm = db_fetch_cell("SELECT id FROM plugin_config WHERE directory = 'npc'");
-		$npc_enabled = db_fetch_cell("SELECT status FROM plugin_config WHERE directory = 'npc'");
+		$npc_realm = db_fetch_cell_prepared("SELECT id FROM plugin_config WHERE directory = ?", array('npc'));
+		$npc_enabled = db_fetch_cell_prepared("SELECT status FROM plugin_config WHERE directory = ?", array('npc'));
 
 		if ($npc_enabled == '1') {
 			$user_auth_realm_filenames['npc.php'] = 9000 + $npc_realm;
@@ -251,8 +251,8 @@ function npc_config_form() {
 }
 
 function npc_api_device_save($save) {
-	if (isset($_POST['npc_host_object_id'])) {
-		$save['npc_host_object_id'] = form_input_validate($_POST['npc_host_object_id'], 'npc_host_object_id', '', true, 3);
+	if (isset_request_var('npc_host_object_id')) {
+		$save['npc_host_object_id'] = form_input_validate(get_filter_request_var('npc_host_object_id'), 'npc_host_object_id', '^[0-9]+$', true, 3);
 	} else {
 		$save['npc_host_object_id'] = form_input_validate('', 'npc_host_object_id', '', true, 3);
 	}
@@ -301,9 +301,9 @@ function npc_setup_tables() {
 	$version = plugin_npc_version();
 	$version = $version['version'];
 
-	db_execute("REPLACE INTO settings
+	db_execute_prepared("REPLACE INTO settings
 		(name, value) VALUES
-		('plugin_npc_version', '$version')");
+		('plugin_npc_version', ?)", array($version));
 
 	if (!db_column_exists('host', 'npc_host_object_id')) {
 		db_execute("ALTER TABLE host ADD npc_host_object_id int(11) default NULL COMMENT 'Nagios host object mapping'");
@@ -1609,8 +1609,8 @@ function npc_show_tab() {
 	if (isset($_SESSION["sess_user_id"])) {
 		$user_id = $_SESSION["sess_user_id"];
 
-		$npc_realm = db_fetch_cell("SELECT id FROM plugin_config WHERE directory = 'npc'");
-		$npc_enabled = db_fetch_cell("SELECT status FROM plugin_config WHERE directory = 'npc'");
+		$npc_realm = db_fetch_cell_prepared("SELECT id FROM plugin_config WHERE directory = ?", array('npc'));
+		$npc_enabled = db_fetch_cell_prepared("SELECT status FROM plugin_config WHERE directory = ?", array('npc'));
 
 		if ($npc_enabled == "1") {
 			if (api_user_realm_auth('npc.php')) {
@@ -1634,8 +1634,8 @@ function npc_config_settings() {
 	if (isset($_SESSION['sess_user_id'])) {
 		$user_id = $_SESSION['sess_user_id'];
 
-		$npc_realm = db_fetch_cell("SELECT id FROM plugin_config WHERE directory = 'npc'");
-		$npc_enabled = db_fetch_cell("SELECT status FROM plugin_config WHERE directory = 'npc'");
+		$npc_realm = db_fetch_cell_prepared("SELECT id FROM plugin_config WHERE directory = ?", array('npc'));
+		$npc_enabled = db_fetch_cell_prepared("SELECT status FROM plugin_config WHERE directory = ?", array('npc'));
 
 		# Check for upgraded NPC
 		$current = plugin_npc_version();
