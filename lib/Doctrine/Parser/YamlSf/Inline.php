@@ -368,7 +368,7 @@ class Doctrine_Parser_YamlSf_Inline
       case 0 === strpos($scalar, '! '):
         return intval(self::parseScalar(substr($scalar, 2)));
       case 0 === strpos($scalar, '!!php/object:'):
-        return unserialize(substr($scalar, 13));
+        return unserialize(substr($scalar, 13), array('allowed_classes' => false));
       case ctype_digit($scalar):
         $raw = $scalar;
         $cast = intval($scalar);

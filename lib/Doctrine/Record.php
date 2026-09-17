@@ -743,7 +743,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         $this->preUnserialize($event);
         $this->getTable()->getRecordListener()->preUnserialize($event);
 
-        $array = unserialize($serialized);
+        $array = unserialize($serialized, array('allowed_classes' => false));
 
         foreach($array as $k => $v) {
             $this->$k = $v;
@@ -753,7 +753,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             switch ($this->_table->getTypeOf($k)) {
                 case 'array':
                 case 'object':
-                    $this->_data[$k] = unserialize($this->_data[$k]);
+                    $this->_data[$k] = unserialize($this->_data[$k], array('allowed_classes' => false));
                     break;
                 case 'gzip':
                    $this->_data[$k] = gzuncompress($this->_data[$k]);

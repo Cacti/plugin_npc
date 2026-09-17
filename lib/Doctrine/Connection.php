@@ -1595,7 +1595,7 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
      */
     public function unserialize($serialized)
     {
-        $array = unserialize($serialized);
+        $array = unserialize($serialized, array('allowed_classes' => false));
 
         foreach ($array as $name => $values) {
             $this->$name = $values;
