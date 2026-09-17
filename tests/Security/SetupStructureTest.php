@@ -9,7 +9,12 @@
 
 describe('npc setup.php structure', function () {
 	$source = file_get_contents(realpath(__DIR__ . '/../../setup.php'));
-	$info   = file_get_contents(realpath(__DIR__ . '/../../INFO'));
+
+	$infoFile = parse_ini_file(realpath(__DIR__ . '/../../INFO'), true);
+	if (!is_array($infoFile) || !isset($infoFile['info']) || !is_array($infoFile['info'])) {
+		throw new RuntimeException('Unable to parse the INFO section');
+	}
+	$info = $infoFile['info'];
 
 	it('defines plugin_npc_install function', function () use ($source) {
 		expect($source)->toContain('function plugin_npc_install');
@@ -23,14 +28,14 @@ describe('npc setup.php structure', function () {
 		expect($source)->toContain('function plugin_npc_uninstall');
 	});
 
-	it('reads version info from the INFO file with a name key', function () use ($source, $info) {
+	it('declares a plugin name in INFO', function () use ($source, $info) {
 		expect($source)->toContain("parse_ini_file(\$config['base_path'] . '/plugins/npc/INFO', true)");
-		expect($info)->toMatch('/^name\s*=/m');
+		expect($info)->toHaveKey('name');
 	});
 
-	it('reads version info from the INFO file with a version key', function () use ($source, $info) {
+	it('declares a plugin version in INFO', function () use ($source, $info) {
 		expect($source)->toContain("parse_ini_file(\$config['base_path'] . '/plugins/npc/INFO', true)");
-		expect($info)->toMatch('/^version\s*=/m');
+		expect($info)->toHaveKey('version');
 	});
 
 	it('registers hooks in install function', function () use ($source) {
