@@ -28,11 +28,13 @@ describe('npc setup.php structure', function () {
 		expect($source)->toContain('function plugin_npc_uninstall');
 	});
 
-	it('declares a plugin name in INFO', function () use ($info) {
+	it('declares a plugin name in INFO', function () use ($source, $info) {
+		expect($source)->toContain("parse_ini_file(\$config['base_path'] . '/plugins/npc/INFO', true)");
 		expect($info)->toHaveKey('name');
 	});
 
-	it('declares a plugin version in INFO', function () use ($info) {
+	it('declares a plugin version in INFO', function () use ($source, $info) {
+		expect($source)->toContain("parse_ini_file(\$config['base_path'] . '/plugins/npc/INFO', true)");
 		expect($info)->toHaveKey('version');
 	});
 
