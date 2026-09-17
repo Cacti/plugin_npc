@@ -85,6 +85,6 @@ describe('output escaping in npc', function () {
 		$contents = file_get_contents($path);
 		expect($contents)->not->toBeFalse();
 
-		expect($contents)->toContain('html_escape(db_fetch_cell("select username from user_auth where id=" . $_SESSION["sess_user_id"]))');
+		expect($contents)->toContain('html_escape(db_fetch_cell_prepared("select username from user_auth where id = ?", array($_SESSION["sess_user_id"])))');
 	});
 });

@@ -47,7 +47,7 @@ class NpcLayoutController extends controller {
 		}
 
 		<?php $state = unserialize(db_fetch_cell_prepared('SELECT settings FROM npc_settings WHERE user_id = ?', array($_SESSION['sess_user_id'])), ['allowed_classes' => false]); ?>
-		var ExtState = Ext.decode('<?php echo json_encode($state); ?>');
+		var ExtState = Ext.decode(<?php echo json_encode(json_encode($state)); ?>);
 
 		// Launch the app
 		Ext.onReady(npc.init, npc);

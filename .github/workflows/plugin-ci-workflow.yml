@@ -55,7 +55,7 @@ jobs:
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping"
+          --health-cmd="mysqladmin ping -uroot -pcactiroot"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -79,7 +79,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php }}
-        extensions: intl, mysql, gd, ldap, gmp, xml, curl, json, mbstring, snmp
+        extensions: intl, mysqli, pdo_mysql, gd, ldap, gmp, xml, curl, json, mbstring, snmp
         ini-values: "post_max_size=256M, max_execution_time=60, date.timezone=America/New_York"
 
     - name: Check PHP version
@@ -206,7 +206,7 @@ jobs:
 
     - name: Remove the plugins directory exclusion from the .phpstan.neon
       if: ${{ env.CACTI != '1.2.x' }}
-      run: sed '/plugins/d' -i .phpstan.neon
+      run: sed -i '/plugins/d' .phpstan.neon
       working-directory: ${{ github.workspace }}/cacti
 
     - name: Mark composer scripts executable
