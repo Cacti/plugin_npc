@@ -114,4 +114,94 @@ describe('PHP 7.4 compatibility in npc', function () {
 
 		expect(true)->toBeTrue();
 	});
+
+	// Entry-point/CLI files, extracted from PR #20 (test/add-security-test-infrastructure)
+	$entryFiles = array(
+		'cli.php',
+		'config.php',
+		'controllers/cacti.php',
+		'controllers/hosts.php',
+		'controllers/services.php',
+		'setup.php',
+	);
+
+	it('does not use str_contains in entry-point files (PHP 8.0)', function () use ($entryFiles) {
+		foreach ($entryFiles as $relativeFile) {
+			$path = realpath(__DIR__ . '/../../' . $relativeFile);
+
+			if ($path === false) {
+				throw new RuntimeException("Unable to resolve required plugin source");
+			}
+
+			$contents = file_get_contents($path);
+
+			if ($contents === false) {
+				throw new RuntimeException("Unable to read required plugin source");
+			}
+
+			expect(preg_match('/\bstr_contains\s*\(/', $contents))->toBe(0,
+				"{$relativeFile} uses str_contains() which requires PHP 8.0"
+			);
+		}
+	});
+
+	it('does not use str_starts_with in entry-point files (PHP 8.0)', function () use ($entryFiles) {
+		foreach ($entryFiles as $relativeFile) {
+			$path = realpath(__DIR__ . '/../../' . $relativeFile);
+
+			if ($path === false) {
+				throw new RuntimeException("Unable to resolve required plugin source");
+			}
+
+			$contents = file_get_contents($path);
+
+			if ($contents === false) {
+				throw new RuntimeException("Unable to read required plugin source");
+			}
+
+			expect(preg_match('/\bstr_starts_with\s*\(/', $contents))->toBe(0,
+				"{$relativeFile} uses str_starts_with() which requires PHP 8.0"
+			);
+		}
+	});
+
+	it('does not use str_ends_with in entry-point files (PHP 8.0)', function () use ($entryFiles) {
+		foreach ($entryFiles as $relativeFile) {
+			$path = realpath(__DIR__ . '/../../' . $relativeFile);
+
+			if ($path === false) {
+				throw new RuntimeException("Unable to resolve required plugin source");
+			}
+
+			$contents = file_get_contents($path);
+
+			if ($contents === false) {
+				throw new RuntimeException("Unable to read required plugin source");
+			}
+
+			expect(preg_match('/\bstr_ends_with\s*\(/', $contents))->toBe(0,
+				"{$relativeFile} uses str_ends_with() which requires PHP 8.0"
+			);
+		}
+	});
+
+	it('does not use nullsafe operator in entry-point files (PHP 8.0)', function () use ($entryFiles) {
+		foreach ($entryFiles as $relativeFile) {
+			$path = realpath(__DIR__ . '/../../' . $relativeFile);
+
+			if ($path === false) {
+				throw new RuntimeException("Unable to resolve required plugin source");
+			}
+
+			$contents = file_get_contents($path);
+
+			if ($contents === false) {
+				throw new RuntimeException("Unable to read required plugin source");
+			}
+
+			expect(preg_match('/\?->/', $contents))->toBe(0,
+				"{$relativeFile} uses nullsafe operator which requires PHP 8.0"
+			);
+		}
+	});
 });
