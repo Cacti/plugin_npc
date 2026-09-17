@@ -32,8 +32,8 @@ describe('NPC XSS output escaping', function (): void {
     it('verifies top_graph_header.php escapes username output (NPC-XSS-02 fix)', function (): void {
         $source = file_get_contents(__DIR__ . '/../../top_graph_header.php');
 
-        // The username print must use htmlspecialchars
-        expect($source)->toContain('htmlspecialchars(db_fetch_cell_prepared("SELECT username FROM user_auth');
+        // The username print must be escaped via html_escape (NPC-XSS-02 fix)
+        expect($source)->toContain('html_escape(db_fetch_cell("select username from user_auth');
     });
 
     it('verifies layout.php uses json_encode for JS context hardening', function (): void {

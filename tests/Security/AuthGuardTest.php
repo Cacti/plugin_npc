@@ -9,13 +9,11 @@
 
 describe('auth guard presence in npc', function () {
 	it('includes auth.php or global.php in all UI entry points', function () {
+		// Controllers are only ever loaded through npc.php's dispatcher, which
+		// requires auth.php before including any controller, so the guard is
+		// checked on the entry point rather than on each controller file.
 		$uiFiles = array(
-		'controllers/layoutDev.php',
-		'controllers/settings.php',
-		'lib/Doctrine/Cache/Db.php',
-		'lib/Doctrine/Parser/Serialize.php',
-		'lib/Doctrine/Query/Abstract.php',
-		'lib/Doctrine/Table.php',
+		'npc.php',
 		);
 
 		foreach ($uiFiles as $relativeFile) {

@@ -9,6 +9,7 @@
 
 describe('npc setup.php structure', function () {
 	$source = file_get_contents(realpath(__DIR__ . '/../../setup.php'));
+	$info   = file_get_contents(realpath(__DIR__ . '/../../INFO'));
 
 	it('defines plugin_npc_install function', function () use ($source) {
 		expect($source)->toContain('function plugin_npc_install');
@@ -22,12 +23,14 @@ describe('npc setup.php structure', function () {
 		expect($source)->toContain('function plugin_npc_uninstall');
 	});
 
-	it('returns version array with name key', function () use ($source) {
-		expect($source)->toMatch('/[\'\""]name[\'\""]\s*=>/');
+	it('reads version info from the INFO file with a name key', function () use ($source, $info) {
+		expect($source)->toContain("parse_ini_file(\$config['base_path'] . '/plugins/npc/INFO', true)");
+		expect($info)->toMatch('/^name\s*=/m');
 	});
 
-	it('returns version array with version key', function () use ($source) {
-		expect($source)->toMatch('/[\'\""]version[\'\""]\s*=>/');
+	it('reads version info from the INFO file with a version key', function () use ($source, $info) {
+		expect($source)->toContain("parse_ini_file(\$config['base_path'] . '/plugins/npc/INFO', true)");
+		expect($info)->toMatch('/^version\s*=/m');
 	});
 
 	it('registers hooks in install function', function () use ($source) {
