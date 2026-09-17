@@ -1152,7 +1152,7 @@ abstract class Doctrine_Query_Abstract
      */
     protected function _constructQueryFromCache($cached)
     {
-        $cached = unserialize($cached);
+        $cached = unserialize($cached, array('allowed_classes' => false));
         $this->_tableAliasMap = $cached[2];
         $customComponent = $cached[0];
 

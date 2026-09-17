@@ -88,7 +88,7 @@ class Doctrine_Cache_Db extends Doctrine_Cache_Driver implements Countable
             return false;
         }
         
-        return unserialize($result[0]['data']);
+        return unserialize($result[0]['data'], array('allowed_classes' => false));
     }
 
     /**

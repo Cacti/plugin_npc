@@ -217,10 +217,20 @@ class NpcCommentsController extends Controller {
             $where = $this->searchClause($where, $fieldMap);
         }
 
-		if ($this->sort) {
-			$orderBy = $this->sort . ' ' . $this->dir;
-		} else {
-			$orderBy = 'c.entry_time DESC, c.entry_time_usec DESC';
+		$allowedSort = array(
+			'entry_time'          => 'c.entry_time',
+			'author_name'         => 'c.author_name',
+			'comment_data'        => 'c.comment_data',
+			'host_name'           => 'o.name1',
+			'service_description' => 'o.name2',
+		);
+		$sortCol = ($this->sort && isset($allowedSort[$this->sort]))
+			? $allowedSort[$this->sort]
+			: 'c.entry_time';
+		$sortDir = (strtoupper((string) $this->dir) === 'ASC') ? 'ASC' : 'DESC';
+		$orderBy = $sortCol . ' ' . $sortDir;
+		if ($sortCol === 'c.entry_time') {
+			$orderBy .= ', c.entry_time_usec ' . $sortDir;
 		}
 
         $q = new Doctrine_Pager(
