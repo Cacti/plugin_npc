@@ -163,7 +163,7 @@ class Doctrine_RawSql extends Doctrine_Query_Abstract
                     }
                     break;
                 case 'by':
-                    continue;
+                    break;
                 default:
                     //not a keyword so we add it to the previous type.
                     if ( ! isset($parts[$type][0])) {
