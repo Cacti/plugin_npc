@@ -20,7 +20,7 @@ describe('NPC unserialize object injection', function (): void {
         expect($source)->not->toMatch('/unserialize\(\$obj->settings\)\s*;/');
 
         // Must contain the allowed_classes guard
-        expect($source)->toContain("'allowed_classes' => false");
+        expect($source)->toMatch('/[\'"]allowed_classes[\'"]\s*=>\s*false/');
     });
 
     it('verifies layoutDev.php uses allowed_classes => false (NPC-SQL-04 fix)', function (): void {
