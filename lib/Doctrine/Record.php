@@ -797,6 +797,29 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     }
 
     /**
+     * PHP 8.1+ replacement for Serializable::serialize(), delegating to the
+     * existing string-based implementation.
+     *
+     * @return array
+     */
+    public function __serialize()
+    {
+        return array('serialized' => $this->serialize());
+    }
+
+    /**
+     * PHP 8.1+ replacement for Serializable::unserialize(), delegating to the
+     * existing string-based implementation.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function __unserialize(array $data)
+    {
+        $this->unserialize($data['serialized']);
+    }
+
+    /**
      * state
      * returns / assigns the state of this record
      *
@@ -1496,6 +1519,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      *
      * @return integer          the number of columns in this record
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->_data);
@@ -1740,6 +1764,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
      * getIterator
      * @return Doctrine_Record_Iterator     a Doctrine_Record_Iterator that iterates through the data
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new Doctrine_Record_Iterator($this);

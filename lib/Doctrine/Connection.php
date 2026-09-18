@@ -1155,6 +1155,7 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
      *
      * @return ArrayIterator        SPL ArrayIterator object
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator($this->tables);
@@ -1165,6 +1166,7 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
      *
      * @return integer
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->_count;
@@ -1610,5 +1612,28 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
         foreach ($array as $name => $values) {
             $this->$name = $values;
         }
+    }
+
+    /**
+     * PHP 8.1+ replacement for Serializable::serialize(), delegating to the
+     * existing string-based implementation.
+     *
+     * @return array
+     */
+    public function __serialize()
+    {
+        return array('serialized' => $this->serialize());
+    }
+
+    /**
+     * PHP 8.1+ replacement for Serializable::unserialize(), delegating to the
+     * existing string-based implementation.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function __unserialize(array $data)
+    {
+        $this->unserialize($data['serialized']);
     }
 }

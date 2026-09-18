@@ -180,6 +180,29 @@ class Doctrine_Collection extends Doctrine_Access implements Countable, Iterator
     }
 
     /**
+     * PHP 8.1+ replacement for Serializable::serialize(), delegating to the
+     * existing string-based implementation.
+     *
+     * @return array
+     */
+    public function __serialize()
+    {
+        return array('serialized' => $this->serialize());
+    }
+
+    /**
+     * PHP 8.1+ replacement for Serializable::unserialize(), delegating to the
+     * existing string-based implementation.
+     *
+     * @param array $data
+     * @return void
+     */
+    public function __unserialize(array $data)
+    {
+        $this->unserialize($data['serialized']);
+    }
+
+    /**
      * Sets the key column for this collection
      *
      * @param string $column
@@ -408,6 +431,7 @@ class Doctrine_Collection extends Doctrine_Access implements Countable, Iterator
      *
      * @return integer
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return count($this->data);
@@ -906,6 +930,7 @@ class Doctrine_Collection extends Doctrine_Access implements Countable, Iterator
      *
      * @return object ArrayIterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $data = $this->data;
