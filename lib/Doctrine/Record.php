@@ -667,6 +667,25 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
     }
 
     /**
+     * Classes safe to restore when unserializing a trusted Doctrine_Record/Doctrine_Collection
+     * payload: Doctrine_Record itself plus every currently declared model subclass.
+     *
+     * @return array
+     */
+    public static function getUnserializeAllowedClasses()
+    {
+        $allowed = array('Doctrine_Record', 'Doctrine_Collection', 'Doctrine_Null');
+
+        foreach (get_declared_classes() as $class) {
+            if (is_subclass_of($class, 'Doctrine_Record')) {
+                $allowed[] = $class;
+            }
+        }
+
+        return $allowed;
+    }
+
+    /**
      * serialize
      * this method is automatically called when this Doctrine_Record is serialized
      *
@@ -743,7 +762,9 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
         $this->preUnserialize($event);
         $this->getTable()->getRecordListener()->preUnserialize($event);
 
-        $array = unserialize($serialized, array('allowed_classes' => false));
+        $allowedClasses = self::getUnserializeAllowedClasses();
+
+        $array = unserialize($serialized, array('allowed_classes' => $allowedClasses));
 
         foreach($array as $k => $v) {
             $this->$k = $v;
@@ -753,7 +774,7 @@ abstract class Doctrine_Record extends Doctrine_Record_Abstract implements Count
             switch ($this->_table->getTypeOf($k)) {
                 case 'array':
                 case 'object':
-                    $this->_data[$k] = unserialize($this->_data[$k], array('allowed_classes' => false));
+                    $this->_data[$k] = unserialize($this->_data[$k], array('allowed_classes' => $allowedClasses));
                     break;
                 case 'gzip':
                    $this->_data[$k] = gzuncompress($this->_data[$k]);

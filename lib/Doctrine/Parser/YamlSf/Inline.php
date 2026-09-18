@@ -59,7 +59,7 @@ class Doctrine_Parser_YamlSf_Inline
       case is_resource($value):
         throw new InvalidArgumentException('Unable to dump PHP resources in a YAML file.');
       case is_object($value):
-        return '!!php/object:'.serialize($value);
+        throw new InvalidArgumentException('Unable to dump PHP objects in a YAML file.');
       case is_array($value):
         return self::dumpArray($value);
       case is_null($value):
@@ -368,7 +368,7 @@ class Doctrine_Parser_YamlSf_Inline
       case 0 === strpos($scalar, '! '):
         return intval(self::parseScalar(substr($scalar, 2)));
       case 0 === strpos($scalar, '!!php/object:'):
-        return unserialize(substr($scalar, 13), array('allowed_classes' => false));
+        throw new InvalidArgumentException('Unable to load PHP objects from a YAML file.');
       case ctype_digit($scalar):
         $raw = $scalar;
         $cast = intval($scalar);

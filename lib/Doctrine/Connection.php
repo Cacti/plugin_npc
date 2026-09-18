@@ -1595,7 +1595,17 @@ abstract class Doctrine_Connection extends Doctrine_Configurable implements Coun
      */
     public function unserialize($serialized)
     {
-        $array = unserialize($serialized, array('allowed_classes' => false));
+        // $tables holds the Doctrine_Table instances known to this connection; restrict
+        // restore to Doctrine_Table (and any of its subclasses) rather than any class.
+        $allowedClasses = array('Doctrine_Table');
+
+        foreach (get_declared_classes() as $class) {
+            if (is_subclass_of($class, 'Doctrine_Table')) {
+                $allowedClasses[] = $class;
+            }
+        }
+
+        $array = unserialize($serialized, array('allowed_classes' => $allowedClasses));
 
         foreach ($array as $name => $values) {
             $this->$name = $values;
