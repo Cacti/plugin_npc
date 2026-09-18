@@ -161,7 +161,7 @@ class Doctrine_Collection extends Doctrine_Access implements Countable, Iterator
         $manager    = Doctrine_Manager::getInstance();
         $connection    = $manager->getCurrentConnection();
 
-        $array = unserialize($serialized);
+        $array = unserialize($serialized, array('allowed_classes' => Doctrine_Record::getUnserializeAllowedClasses()));
 
         foreach ($array as $name => $values) {
             $this->$name = $values;
