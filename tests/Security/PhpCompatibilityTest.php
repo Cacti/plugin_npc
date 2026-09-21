@@ -49,7 +49,7 @@ foreach ($iterator as $file) {
         $relativeFile = ltrim(str_replace($pluginRoot, '', $file->getPathname()), DIRECTORY_SEPARATOR);
         $relativeFile = str_replace(DIRECTORY_SEPARATOR, '/', $relativeFile);
 
-        if (strpos($relativeFile, 'tests/') === 0 || strpos($relativeFile, 'vendor/') === 0 || strpos($relativeFile, 'include/vendor/') === 0) {
+        if (strpos($relativeFile, 'tests/') === 0 || strpos($relativeFile, 'vendor/') === 0 || strpos($relativeFile, 'include/vendor/') === 0 || strpos($relativeFile, 'lib/Doctrine/') === 0) {
                 continue;
         }
 
