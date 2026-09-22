@@ -143,6 +143,12 @@ if (!function_exists('db_column_exists')) {
 	}
 }
 
+if (!function_exists('db_table_exists')) {
+	function db_table_exists($table) {
+		return false;
+	}
+}
+
 if (!function_exists('api_plugin_db_add_column')) {
 	function api_plugin_db_add_column($plugin, $table, $data) {
 		return true;
@@ -151,6 +157,46 @@ if (!function_exists('api_plugin_db_add_column')) {
 
 if (!function_exists('api_plugin_db_table_create')) {
 	function api_plugin_db_table_create($plugin, $table, $data) {
+		return true;
+	}
+}
+
+$GLOBALS['__test_registered_hooks'] = array();
+
+if (!function_exists('api_plugin_register_hook')) {
+	function api_plugin_register_hook($plugin, $hook, $function, $file, $subtype = '') {
+		$GLOBALS['__test_registered_hooks'][] = array(
+			'name'     => $plugin,
+			'hook'     => $hook,
+			'function' => $function,
+			'file'     => $file,
+		);
+
+		return true;
+	}
+}
+
+$GLOBALS['__test_registered_realms'] = array();
+
+if (!function_exists('api_plugin_register_realm')) {
+	function api_plugin_register_realm($plugin, $file, $description, $enabled) {
+		$GLOBALS['__test_registered_realms'][] = array(
+			'name'        => $plugin,
+			'file'        => $file,
+			'description' => $description,
+			'enabled'     => $enabled,
+		);
+
+		return true;
+	}
+}
+
+$GLOBALS['__test_removed_realms'] = array();
+
+if (!function_exists('api_plugin_remove_realms')) {
+	function api_plugin_remove_realms($plugin) {
+		$GLOBALS['__test_removed_realms'][] = $plugin;
+
 		return true;
 	}
 }
