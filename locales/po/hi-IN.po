@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-09-21 13:14-0400\n"
+"POT-Creation-Date: 2026-09-23 13:34-0400\n"
 "PO-Revision-Date: 2024-06-08 08:58-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -21,42 +21,102 @@ msgstr ""
 msgid "None"
 msgstr "कोई नहीं"
 
-#: controllers/controller.php:417
+#: controllers/controller.php:419
 #, php-format
 msgid "An error occurred in %s. See error logs for detail."
 msgstr "%s में एक त्रुटि हुई। विस्तार के लिए त्रुटि लॉग देखें।"
 
-#: controllers/nagios.php:161
+#: controllers/hosts.php:246 controllers/hosts.php:255
+#: controllers/nagios.php:312 controllers/services.php:349
+#: controllers/services.php:358
+#, fuzzy
+msgid "No"
+msgstr "कोई नहीं"
+
+#: controllers/hosts.php:246 controllers/hosts.php:255
+#: controllers/nagios.php:312 controllers/services.php:349
+#: controllers/services.php:358
+msgid "Yes"
+msgstr ""
+
+#: controllers/hosts.php:259 controllers/services.php:367
+msgid "N/A"
+msgstr ""
+
+#: controllers/layout.php:19
+msgid "Dashboard"
+msgstr ""
+
+#: controllers/layout.php:20
+#, fuzzy
+msgid "Hosts"
+msgstr "होस्ट प्रतीक"
+
+#: controllers/layout.php:21
+#, fuzzy
+msgid "Services"
+msgstr "सेवा प्रतीक"
+
+#: controllers/layout.php:22
+msgid "Comments"
+msgstr ""
+
+#: controllers/layout.php:23
+msgid "Downtime"
+msgstr ""
+
+#: controllers/layout.php:24
+msgid "Event Log"
+msgstr ""
+
+#: controllers/layout.php:25
+msgid "Process Info"
+msgstr ""
+
+#: controllers/nagios.php:157
 msgid "Remote Commands must be enabled under console->Settings->NPC"
 msgstr "रिमोट कमांड को कंसोल-> सेटिंग्स-> एनपीसी के तहत सक्षम किया जाना चाहिए"
 
-#: controllers/nagios.php:166
+#: controllers/nagios.php:162
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
 msgstr "Nagios कमांड फ़ाइल पथ को कंसोल-> सेटिंग्स-> NPC के तहत सेट किया जाना चाहिए"
 
-#: controllers/nagios.php:178
+#: controllers/nagios.php:173
 msgid "You do not have permission to execute this command."
 msgstr "आपके पास इस आदेश को निष्पादित करने की अनुमति नहीं है।"
 
-#: controllers/nagios.php:282
+#: controllers/nagios.php:271
 msgid "Service Check Execution Time"
 msgstr "सेवा जाँच निष्पादन समय"
 
-#: controllers/nagios.php:283
+#: controllers/nagios.php:272
 msgid "Service Check Latency"
 msgstr "सेवा जाँच विलंबता"
 
-#: controllers/nagios.php:284
+#: controllers/nagios.php:273
 msgid "Host Check Execution Time"
 msgstr "मेजबान चेक निष्पादन समय"
 
-#: controllers/nagios.php:285
+#: controllers/nagios.php:274
 msgid "Host Check Latency"
 msgstr "होस्ट चेक लेटेंसी"
 
-#: npc.php:62
-msgid "FATAL: Unable to make NPC Connection"
-msgstr "FATAL: NPC कनेक्शन बनाने में असमर्थ"
+#: controllers/services.php:90
+#, fuzzy
+msgid "Host Groups"
+msgstr "होस्ट प्रतीक"
+
+#: npc.php:61
+msgid "Invalid module requested."
+msgstr ""
+
+#: npc.php:69
+msgid "Invalid action requested."
+msgstr ""
+
+#: npc.php:79
+msgid "Controller not found."
+msgstr ""
 
 #: setup.php:170
 msgid "ERROR - Log errors only"
@@ -185,3 +245,6 @@ msgstr "लॉगिंग स्तर"
 #: setup.php:1746
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
 msgstr "आपके द्वारा Cacti लॉग फ़ाइल को भेजे गए विवरण का स्तर। चेतावनी: DEBUG में छोड़ने से कैक्टि लॉग जल्दी भर जाएगा।"
+
+#~ msgid "FATAL: Unable to make NPC Connection"
+#~ msgstr "FATAL: NPC कनेक्शन बनाने में असमर्थ"

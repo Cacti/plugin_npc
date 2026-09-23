@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-09-21 13:14-0400\n"
+"POT-Creation-Date: 2026-09-23 13:34-0400\n"
 "PO-Revision-Date: 2024-06-08 08:58-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -21,42 +21,102 @@ msgstr ""
 msgid "None"
 msgstr "Aucun"
 
-#: controllers/controller.php:417
+#: controllers/controller.php:419
 #, php-format
 msgid "An error occurred in %s. See error logs for detail."
 msgstr "Une erreur s'est produite dans %s. Voir les journaux d'erreurs pour plus de détails."
 
-#: controllers/nagios.php:161
+#: controllers/hosts.php:246 controllers/hosts.php:255
+#: controllers/nagios.php:312 controllers/services.php:349
+#: controllers/services.php:358
+#, fuzzy
+msgid "No"
+msgstr "Aucun"
+
+#: controllers/hosts.php:246 controllers/hosts.php:255
+#: controllers/nagios.php:312 controllers/services.php:349
+#: controllers/services.php:358
+msgid "Yes"
+msgstr ""
+
+#: controllers/hosts.php:259 controllers/services.php:367
+msgid "N/A"
+msgstr ""
+
+#: controllers/layout.php:19
+msgid "Dashboard"
+msgstr ""
+
+#: controllers/layout.php:20
+#, fuzzy
+msgid "Hosts"
+msgstr "Icônes d'hôte"
+
+#: controllers/layout.php:21
+#, fuzzy
+msgid "Services"
+msgstr "Icônes de service"
+
+#: controllers/layout.php:22
+msgid "Comments"
+msgstr ""
+
+#: controllers/layout.php:23
+msgid "Downtime"
+msgstr ""
+
+#: controllers/layout.php:24
+msgid "Event Log"
+msgstr ""
+
+#: controllers/layout.php:25
+msgid "Process Info"
+msgstr ""
+
+#: controllers/nagios.php:157
 msgid "Remote Commands must be enabled under console->Settings->NPC"
 msgstr "Les commandes à distance doivent être activées sous console-> Paramètres-> NPC"
 
-#: controllers/nagios.php:166
+#: controllers/nagios.php:162
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
 msgstr "Le chemin du fichier de commande Nagios doit être défini sous console-> Paramètres-> NPC"
 
-#: controllers/nagios.php:178
+#: controllers/nagios.php:173
 msgid "You do not have permission to execute this command."
 msgstr "Vous n'êtes pas autorisé à exécuter cette commande."
 
-#: controllers/nagios.php:282
+#: controllers/nagios.php:271
 msgid "Service Check Execution Time"
 msgstr "Heure d'exécution du contrôle de service"
 
-#: controllers/nagios.php:283
+#: controllers/nagios.php:272
 msgid "Service Check Latency"
 msgstr "Latence de vérification de service"
 
-#: controllers/nagios.php:284
+#: controllers/nagios.php:273
 msgid "Host Check Execution Time"
 msgstr "Heure d'exécution de la vérification de l'hôte"
 
-#: controllers/nagios.php:285
+#: controllers/nagios.php:274
 msgid "Host Check Latency"
 msgstr "Latence de vérification de l'hôte"
 
-#: npc.php:62
-msgid "FATAL: Unable to make NPC Connection"
-msgstr "FATAL: impossible d'établir une connexion avec un PNJ"
+#: controllers/services.php:90
+#, fuzzy
+msgid "Host Groups"
+msgstr "Icônes d'hôte"
+
+#: npc.php:61
+msgid "Invalid module requested."
+msgstr ""
+
+#: npc.php:69
+msgid "Invalid action requested."
+msgstr ""
+
+#: npc.php:79
+msgid "Controller not found."
+msgstr ""
 
 #: setup.php:170
 msgid "ERROR - Log errors only"
@@ -185,3 +245,6 @@ msgstr "Niveau de journalisation"
 #: setup.php:1746
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
 msgstr "Le niveau de détail que vous souhaitez envoyer au fichier journal Cacti. AVERTISSEMENT: laisser dans DEBUG remplira rapidement le journal des cactus."
+
+#~ msgid "FATAL: Unable to make NPC Connection"
+#~ msgstr "FATAL: impossible d'établir une connexion avec un PNJ"
