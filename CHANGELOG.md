@@ -2,6 +2,7 @@
 
 --- develop ---
 
+* issue: Add Security & Quality Conventions section to .github/copilot-instructions.md
 * issue#13: Nagios sync partially to NPC plugin - only can see update of
   hostgroup
 

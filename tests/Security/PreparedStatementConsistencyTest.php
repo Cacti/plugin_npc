@@ -31,8 +31,6 @@ $pluginRoot = dirname(__DIR__, 2);
  */
 $knownRawCallFiles = array(
 	'controllers/cacti.php',
-	'controllers/layout.php',
-	'controllers/layoutDev.php',
 );
 
 /**

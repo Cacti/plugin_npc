@@ -82,9 +82,9 @@ it('every controller file requires is_realm_allowed or auth include', function (
 	$controllerDir = $pluginRoot . DIRECTORY_SEPARATOR . 'controllers';
 	$unguarded     = array();
 
-	// layout.php and layoutDev.php are included by npc.php which already
-	// enforces auth; they do not re-include auth themselves.
-	$allowNoDirectAuth = array('layout.php', 'layoutDev.php');
+	// layout.php is included by npc.php which already enforces auth; it
+	// does not re-include auth itself.
+	$allowNoDirectAuth = array('layout.php');
 
 	$iter = new DirectoryIterator($controllerDir);
 	foreach ($iter as $file) {

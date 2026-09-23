@@ -41,6 +41,9 @@ class NpcSettingsController extends Controller {
         $obj = $this->getSettings($user_id);
 
         $settings = @unserialize($obj['settings'], ["allowed_classes" => false]);
+        if (!is_array($settings)) {
+            $settings = array();
+        }
         if (isset($params['name'])) {
             $settings[$params['name']] = $params['value'];
         }

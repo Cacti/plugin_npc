@@ -47,7 +47,7 @@ class NpcLayoutController extends Controller {
 			dateFormat:       '<?php echo addslashes(read_config_option('npc_date_format')); ?>',
 			timeFormat:       '<?php echo addslashes(read_config_option('npc_time_format')); ?>',
 			nagiosUrl:        '<?php echo addslashes(read_config_option('npc_nagios_url')); ?>',
-			userName:         '<?php echo addslashes(db_fetch_cell_prepared('SELECT username FROM user_auth WHERE id = ?', array($_SESSION['sess_user_id']))); ?>',
+			userName:         <?php echo json_encode(db_fetch_cell_prepared('SELECT username FROM user_auth WHERE id = ?', array($_SESSION['sess_user_id']))); ?>,
 			hostIcons:        '<?php echo read_config_option('npc_host_icons'); ?>',
 			serviceIcons:     '<?php echo read_config_option('npc_service_icons'); ?>',
 			currentTab:       '<?php echo addslashes($current_tab); ?>',

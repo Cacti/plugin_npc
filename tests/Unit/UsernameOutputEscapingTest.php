@@ -7,8 +7,12 @@
  +-------------------------------------------------------------------------+
 */
 
-/*
- * Pest configuration file. The bootstrap is loaded via phpunit.xml's
- * bootstrap attribute (tests/bootstrap-unit.php), which requires Cacti's
- * own Composer-managed vendor tree checked out by the CI workflow.
- */
+describe('username output escaping helper behavior', function () {
+	it('escapes html metacharacters in usernames', function () {
+		$payload = '<img src=x onerror=alert(1)>';
+		$escaped = html_escape($payload);
+
+		expect($escaped)->not->toContain('<img');
+		expect($escaped)->toContain('&lt;img');
+	});
+});
