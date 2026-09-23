@@ -197,9 +197,10 @@ class NpcHostgroupsController extends Controller {
 	}
 
 	function listHostgroupsCli() {
-		return db_fetch_assoc('SELECT alias AS name, hostgroup_object_id AS id
+		return db_fetch_assoc_prepared('SELECT alias AS name, hostgroup_object_id AS id
 			FROM npc_hostgroups
-			ORDER BY alias ASC');
+			ORDER BY alias ASC',
+			array());
 	}
 
 	function getHostgroups() {

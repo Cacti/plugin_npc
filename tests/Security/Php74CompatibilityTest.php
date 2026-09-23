@@ -118,10 +118,12 @@ it('uses no constructor property promotion (PHP 8.0+)', function () use ($source
 });
 
 it('uses no named arguments (PHP 8.0+)', function () use ($sourceFiles) {
-	// "funcName(argName: value)" — identifier followed by colon inside a call.
-	// Best-effort heuristic: "word: " inside parentheses. May have false
-	// positives in string literals; acceptable for a security scan.
-	$hits = npc_php74_scan($sourceFiles, '/\(\s*\w+\s*:\s*[^\s)]/', 'named arguments');
+	// "funcName(argName: value)" — identifier followed by a single colon
+	// inside a call. Excludes "Class::method(" (scope resolution, not a
+	// named-argument colon) and "(http://", "(https://", etc. (URL schemes
+	// inside string literals, e.g. translatable help text), both of which
+	// otherwise false-positive on this best-effort heuristic.
+	$hits = npc_php74_scan($sourceFiles, '/\(\s*(?!(?:https?|ftp|mailto)\s*:)\w+\s*:(?!:)\s*[^\s)]/i', 'named arguments');
 	expect($hits)->toBe(array(), 'PHP 8.0 named arguments found in: ' . implode(', ', $hits));
 });
 

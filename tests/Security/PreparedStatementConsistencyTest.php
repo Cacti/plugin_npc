@@ -66,7 +66,8 @@ function npc_strip_comments($source) {
 	// Remove single-line // comments.
 	$source = preg_replace('#//[^\n]*#', '', $source);
 	// Remove single-line # comments (not inside strings, best-effort).
-	$source = preg_replace('#(?<!\$)#[^\n]*#', '', $source);
+	// Delimiter is "/" (not "#") since the pattern itself matches a literal "#".
+	$source = preg_replace('/(?<!\$)#[^\n]*/', '', $source);
 	return $source;
 }
 

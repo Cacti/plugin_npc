@@ -78,37 +78,37 @@ it('config.php does not bypass auth (only defines, no output)', function () use 
 	}
 });
 
-it('every controller file requires is_realm_allowed or auth include', function () use ($pluginRoot) {
+it('every controller file is either the base class or reachable only through npc.php\'s authenticated module allowlist', function () use ($pluginRoot) {
+	/*
+	 * npc.php requires include/auth.php once, then gates every request
+	 * against an $allowed_modules allowlist before including
+	 * controllers/{$module}.php (see npc.php). Controllers never
+	 * re-check auth themselves; instead, verify that npc.php's allowlist
+	 * covers every controller file except the shared base class.
+	 */
 	$controllerDir = $pluginRoot . DIRECTORY_SEPARATOR . 'controllers';
+	$npcSource     = npc_auth_source($pluginRoot, 'npc.php');
 	$unguarded     = array();
-
-	// layout.php is included by npc.php which already enforces auth; it
-	// does not re-include auth itself.
-	$allowNoDirectAuth = array('layout.php');
 
 	$iter = new DirectoryIterator($controllerDir);
 	foreach ($iter as $file) {
 		if (!$file->isFile() || $file->getExtension() !== 'php') {
 			continue;
 		}
-		if (in_array($file->getFilename(), $allowNoDirectAuth, true)) {
+		if ($file->getFilename() === 'controller.php') {
 			continue;
 		}
 
-		$source = file_get_contents($file->getPathname());
+		$module = $file->getBasename('.php');
 
-		$hasAuth = npc_has_auth_include($source)
-			|| (bool) preg_match('/is_realm_allowed\s*\(/', $source)
-			|| (bool) preg_match('/\$_SESSION\s*\[\s*[\'"]sess_user_id[\'"]\s*\]/', $source);
-
-		if (!$hasAuth) {
+		if (!preg_match('/[\'"]' . preg_quote($module, '/') . '[\'"]\s*=>\s*array\s*\(/', $npcSource)) {
 			$unguarded[] = $file->getFilename();
 		}
 	}
 
 	expect($unguarded)->toBe(
 		array(),
-		'Controllers with no auth guard: ' . implode(', ', $unguarded)
+		'Controllers not covered by npc.php\'s module allowlist: ' . implode(', ', $unguarded)
 	);
 });
 

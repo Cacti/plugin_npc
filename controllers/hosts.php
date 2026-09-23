@@ -184,10 +184,11 @@ class NpcHostsController extends Controller {
 	}
 
 	function listHostsCli() {
-		return db_fetch_assoc('SELECT display_name AS name, host_object_id AS id, address
-			FROM npc_hosts
-			ORDER BY display_name ASC');
-	}
+            return db_fetch_assoc_prepared('SELECT display_name AS name, host_object_id AS id, address
+                    FROM npc_hosts
+                    ORDER BY display_name ASC',
+                    array());
+    }
 
 	function getMappedGraph() {
 		$results = db_fetch_assoc_prepared(

@@ -92,11 +92,21 @@ it('has no unescaped superglobal interpolation in echo/print statements', functi
 	 * Pattern: echo/print containing $_GET/$_POST/$_REQUEST/$_COOKIE
 	 * without passing through html_escape or __esc. This is a conservative
 	 * regex that catches the most common forms; manual review covers edge cases.
+	 *
+	 * top_graph_header.php prints the binary PNG returned by
+	 * rrdtool_function_graph($_GET['local_graph_id'], $_GET['rra_id'], ...):
+	 * the superglobals are numeric-ish arguments to that internal Cacti
+	 * function, not reflected into the output themselves, so html_escape()
+	 * does not apply here.
 	 */
+	$allowedMatches = array(
+		'top_graph_header.php' => array('print trim(rrdtool_function_graph('),
+	);
 	$violations = array();
 
 	foreach ($phpFiles as $path) {
-		$src = npc_oe_strip_comments(file_get_contents($path));
+		$src  = npc_oe_strip_comments(file_get_contents($path));
+		$file = basename($path);
 
 		// Find echo/print lines that reference a superglobal directly.
 		if (preg_match_all(
@@ -106,9 +116,22 @@ it('has no unescaped superglobal interpolation in echo/print statements', functi
 		)) {
 			// Check each match to see if it is wrapped in html_escape/__esc.
 			foreach ($matches[0] as $match) {
-				if (!preg_match('/html_escape\s*\(|__esc\s*\(/', $match)) {
-					$violations[] = basename($path) . ': ' . trim(substr($match, 0, 80));
+				if (preg_match('/html_escape\s*\(|__esc\s*\(/', $match)) {
+					continue;
 				}
+
+				$allowed = false;
+				foreach ($allowedMatches[$file] ?? array() as $prefix) {
+					if (strpos($match, $prefix) === 0) {
+						$allowed = true;
+						break;
+					}
+				}
+				if ($allowed) {
+					continue;
+				}
+
+				$violations[] = $file . ': ' . trim(substr($match, 0, 80));
 			}
 		}
 	}

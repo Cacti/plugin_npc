@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-09-23 13:34-0400\n"
+"POT-Creation-Date: 2026-09-23 13:47-0400\n"
 "PO-Revision-Date: 2024-06-08 08:56-0400\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -26,20 +26,20 @@ msgstr "لا شيء"
 msgid "An error occurred in %s. See error logs for detail."
 msgstr "حدث خطأ في %s. انظر سجلات الخطأ لمزيد من التفاصيل."
 
-#: controllers/hosts.php:246 controllers/hosts.php:255
+#: controllers/hosts.php:247 controllers/hosts.php:256
 #: controllers/nagios.php:312 controllers/services.php:349
 #: controllers/services.php:358
 #, fuzzy
 msgid "No"
 msgstr "لا شيء"
 
-#: controllers/hosts.php:246 controllers/hosts.php:255
+#: controllers/hosts.php:247 controllers/hosts.php:256
 #: controllers/nagios.php:312 controllers/services.php:349
 #: controllers/services.php:358
 msgid "Yes"
 msgstr ""
 
-#: controllers/hosts.php:259 controllers/services.php:367
+#: controllers/hosts.php:260 controllers/services.php:367
 msgid "N/A"
 msgstr ""
 
