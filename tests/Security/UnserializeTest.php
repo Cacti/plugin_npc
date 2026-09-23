@@ -8,8 +8,10 @@ declare(strict_types=1);
  * Finding NPC-UNSER-01: controllers/settings.php:43
  *   unserialize() called on DB-fetched blob without allowed_classes guard.
  *
- * Finding NPC-SQL-04 (chained): controllers/layoutDev.php:92
- *   SQLi-tainted row selection + unserialize = object injection.
+ * NPC-SQL-04's original sink, controllers/layoutDev.php, was removed along
+ * with the rest of the legacy ExtJS/Doctrine code; layout.php no longer
+ * unserializes state itself (settings.php's save() is the only remaining
+ * unserialize() call, covered by NPC-UNSER-01 above).
  */
 
 describe('NPC unserialize object injection', function (): void {
@@ -23,16 +25,14 @@ describe('NPC unserialize object injection', function (): void {
         expect($source)->toMatch('/[\'"]allowed_classes[\'"]\s*=>\s*false/');
     });
 
-    it('verifies layoutDev.php uses allowed_classes => false (NPC-SQL-04 fix)', function (): void {
-        $source = file_get_contents(__DIR__ . '/../../controllers/layoutDev.php');
-
-        expect($source)->toContain("'allowed_classes' => false");
+    it('layoutDev.php no longer exists (removed with ExtJS/Doctrine)', function (): void {
+        expect(realpath(__DIR__ . '/../../controllers/layoutDev.php'))->toBeFalse();
     });
 
-    it('verifies layout.php uses allowed_classes => false', function (): void {
+    it('verifies layout.php does not unserialize state directly', function (): void {
         $source = file_get_contents(__DIR__ . '/../../controllers/layout.php');
 
-        expect($source)->toContain("'allowed_classes' => false");
+        expect($source)->not->toContain('unserialize(');
     });
 
     it('demonstrates allowed_classes => false prevents object instantiation', function (): void {

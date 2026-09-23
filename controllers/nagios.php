@@ -91,19 +91,15 @@ class NpcNagiosController extends Controller {
 	 * @return string   json output
 	 */
 	function processInfo() {
-		$q = new Doctrine_Query();
-		$q->select('ps.*')->from('NpcProgramstatus ps');
-
-		$results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+		$results = db_fetch_assoc_prepared('SELECT ps.*
+			FROM npc_programstatus ps', array());
 
 		if (cacti_sizeof($results)) {
-			$q = new Doctrine_Query();
-			$q->select('p.instance_id, p.program_version, max(p.processevent_id)')
-				->from('NpcProcessevents p')
-				->where('p.instance_id = ?', $results[0]['instance_id'])
-				->groupby('p.program_version');
-
-			$version = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+			$version = db_fetch_assoc_prepared('SELECT p.instance_id, p.program_version, MAX(p.processevent_id) AS max_id
+				FROM npc_processevents p
+				WHERE p.instance_id = ?
+				GROUP BY p.program_version',
+				array($results[0]['instance_id']));
 
 			$results[0]['server_time'] = date('Y-m-d H:i:s');
 			if (isset($version[0])) {
@@ -126,7 +122,7 @@ class NpcNagiosController extends Controller {
 	 * @return string
 	 */
 	function command($params) {
-		// Get the passed command
+		/* Get the passed command */
 		$cmd = $params['command'];
 
 		$globalCommands = array(
@@ -155,7 +151,7 @@ class NpcNagiosController extends Controller {
 		$nagios = new NagiosCmd;
 		$args = array();
 
-		// Do some sanity checking:
+		/* Do some sanity checking */
 
 		if (!read_config_option('npc_nagios_commands')) {
 			$response = array('success' => false, 'msg' => __('Remote Commands must be enabled under console->Settings->NPC', 'npc'));
@@ -172,23 +168,21 @@ class NpcNagiosController extends Controller {
 			return(json_encode($response));
 		}
 
-		// A quick hack to check that the user has permission to
-		// execute the command based on realm setting
+		/* Check that the user has permission to execute the command */
 		if (!api_plugin_user_realm_auth('npc1.php')) {
 			$response = array('success' => false, 'msg' => __('You do not have permission to execute this command.', 'npc'));
 			return(json_encode($response));
 		}
 
-		// Get the command definition
+		/* Get the command definition */
 		$commandDef = $nagios->getCommands($cmd);
 
-		// Build the args array
+		/* Build the args array */
 		foreach ($commandDef as $k => $v) {
 			if (isset($params[$k])) {
 				$value = $params[$k];
 
-				// Checkboxes from EXT come as a string of either "true" or "false".
-				// These need to be set to 1 or 0
+				/* Checkboxes from EXT come as a string of either "true" or "false". */
 				if ($value == 'true') {
 					$value = 1;
 				}
@@ -198,13 +192,8 @@ class NpcNagiosController extends Controller {
 				}
 
 				if ($k == 'comment') {
-					// Replace newline characters:
 					$value = str_replace(array("\r", "\n"), '<br />', $value);
-
-					// Replace html spaces
 					$value = str_replace("&nbsp;", ' ', $value);
-
-					// Strip any semicolons
 					$value = str_replace(";", ' ', $value);
 				}
 
@@ -212,26 +201,25 @@ class NpcNagiosController extends Controller {
 			}
 		}
 
-		// Build the command string
+		/* Build the command string */
         if (!$nagios->setCommand($cmd, $args)) {
 			$response = array('success' => false, 'msg' => $nagios->message);
 			return(json_encode($response));
 		}
 
-		// Execute the command
+		/* Execute the command */
 		if (!$nagios->execute()) {
 			$response = array('success' => false, 'msg' => $nagios->message);
 			return(json_encode($response));
 		}
 
-		// Some forms require extra business logic like running another command.
+		/* Some forms require extra business logic */
 		if ($cmd == "SCHEDULE_HOSTGROUP_SVC_DOWNTIME" && $params['hosts'] == 'true') {
 			$cmd = 'SCHEDULE_HOSTGROUP_HOST_DOWNTIME';
 			$nagios->setCommand($cmd, $args);
 			$nagios->execute();
 		}
 
-		// Return success to the form
 		return(json_encode(array('success' => true)));
 	}
 
@@ -243,40 +231,41 @@ class NpcNagiosController extends Controller {
 	 * @return string   json output
 	 */
 	function checkPerf($params) {
-		// Set the resolution in days to measure check performance.
 		if (isset($params['resolution'])) {
 			$resolution = $params['resolution'];
 		} else {
 			$resolution = 7;
 		}
 
-		$q = new Doctrine_Query();
-		$q->select('ROUND(MIN(hc.execution_time), 3) AS min_execution,
-			ROUND(MAX(hc.execution_time), 3) AS max_execution,
-			ROUND(AVG(hc.execution_time), 3) AS avg_execution,
-			ROUND(MIN(hc.latency), 3) AS min_latency,
-			ROUND(MAX(hc.latency), 3) AS max_latency,
-			ROUND(AVG(hc.latency), 3) AS avg_latency'
-		);
-		$q->from('NpcHostchecks hc, NpcHosts h, NpcObjects o');
-		$q->where('hc.host_object_id = o.object_id AND o.is_active = 1 AND hc.start_time > DATE_SUB(NOW(),INTERVAL ? DAY) '
-			. 'AND hc.host_object_id = h.host_object_id AND h.active_checks_enabled = 1');
+		$hostPerf = db_fetch_assoc_prepared('SELECT
+				ROUND(MIN(hc.execution_time), 3) AS min_execution,
+				ROUND(MAX(hc.execution_time), 3) AS max_execution,
+				ROUND(AVG(hc.execution_time), 3) AS avg_execution,
+				ROUND(MIN(hc.latency), 3) AS min_latency,
+				ROUND(MAX(hc.latency), 3) AS max_latency,
+				ROUND(AVG(hc.latency), 3) AS avg_latency
+			FROM npc_hostchecks hc, npc_hosts h, npc_objects o
+			WHERE hc.host_object_id = o.object_id
+				AND o.is_active = 1
+				AND hc.start_time > DATE_SUB(NOW(), INTERVAL ? DAY)
+				AND hc.host_object_id = h.host_object_id
+				AND h.active_checks_enabled = 1',
+			array($resolution));
 
-		$hostPerf = $q->execute(array($resolution), Doctrine::HYDRATE_ARRAY);
-
-		$q = new Doctrine_Query();
-		$q->select('ROUND(MIN(sc.execution_time), 3) AS min_execution,
-			ROUND(MAX(sc.execution_time), 3) AS max_execution,
-			ROUND(AVG(sc.execution_time), 3) AS avg_execution,
-			ROUND(MIN(sc.latency), 3) AS min_latency,
-			ROUND(MAX(sc.latency), 3) AS max_latency,
-			ROUND(AVG(sc.latency), 3) AS avg_latency'
-		);
-		$q->from('NpcServicechecks sc, NpcServices s, NpcObjects o');
-		$q->where('sc.service_object_id = o.object_id AND o.is_active = 1 AND sc.start_time > DATE_SUB(NOW(),INTERVAL ? DAY) '
-			. 'AND sc.service_object_id = s.service_object_id AND s.active_checks_enabled = 1');
-
-		$servicePerf = $q->execute(array($resolution), Doctrine::HYDRATE_ARRAY);
+		$servicePerf = db_fetch_assoc_prepared('SELECT
+				ROUND(MIN(sc.execution_time), 3) AS min_execution,
+				ROUND(MAX(sc.execution_time), 3) AS max_execution,
+				ROUND(AVG(sc.execution_time), 3) AS avg_execution,
+				ROUND(MIN(sc.latency), 3) AS min_latency,
+				ROUND(MAX(sc.latency), 3) AS max_latency,
+				ROUND(AVG(sc.latency), 3) AS avg_latency
+			FROM npc_servicechecks sc, npc_services s, npc_objects o
+			WHERE sc.service_object_id = o.object_id
+				AND o.is_active = 1
+				AND sc.start_time > DATE_SUB(NOW(), INTERVAL ? DAY)
+				AND sc.service_object_id = s.service_object_id
+				AND s.active_checks_enabled = 1',
+			array($resolution));
 
 		$output = array(
 			array_merge(array('name' => __('Service Check Execution Time', 'npc')), array_slice($servicePerf[0], 0, 3)),
@@ -300,13 +289,10 @@ class NpcNagiosController extends Controller {
 	 * formatProcessInfo
 	 *
 	 * Formats the process info results for display.
-	 * This is a workaround for some of the limitations of
-	 * EXT property grid.
 	 *
 	 * @return string   The formatted results
 	 */
 	function formatProcessInfo($key, $results) {
-		// Set the default return value
 		$return = $results[$key];
 
 		$toggle = array(
@@ -322,12 +308,8 @@ class NpcNagiosController extends Controller {
 			'process_performance_data'
 		);
 
-		if (in_array($key, $toggle)) {
-			if($results[$key]) {
-				$return = '<img src="images/icons/tick.png">';
-			} else {
-				$return = '<img src="images/icons/cross.png">';
-			}
+		if (in_array($key, $toggle, true)) {
+			$return = $results[$key] ? __('Yes', 'npc') : __('No', 'npc');
 		}
 
 		if ($key == 'program_start_time' || $key == 'status_update_time' || $key == 'last_command_check' || $key == 'last_log_rotation' || $key == 'program_end_time') {
@@ -348,4 +330,3 @@ class NpcNagiosController extends Controller {
 		return($return);
     }
 }
-

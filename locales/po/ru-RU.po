@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-09-21 13:14-0400\n"
+"POT-Creation-Date: 2026-09-23 13:34-0400\n"
 "PO-Revision-Date: 2023-06-26 11:06+0000\n"
 "Last-Translator: Coool (github.com/Coool) <coool@mail.lv>\n"
 "Language-Team: Russian <http://translate.cacti.net/projects/cacti/npc/ru/>\n"
@@ -22,42 +22,102 @@ msgstr ""
 msgid "None"
 msgstr "Нет"
 
-#: controllers/controller.php:417
+#: controllers/controller.php:419
 #, php-format
 msgid "An error occurred in %s. See error logs for detail."
 msgstr "Произошла ошибка в %s. См. Подробности в журналах ошибок."
 
-#: controllers/nagios.php:161
+#: controllers/hosts.php:246 controllers/hosts.php:255
+#: controllers/nagios.php:312 controllers/services.php:349
+#: controllers/services.php:358
+#, fuzzy
+msgid "No"
+msgstr "Нет"
+
+#: controllers/hosts.php:246 controllers/hosts.php:255
+#: controllers/nagios.php:312 controllers/services.php:349
+#: controllers/services.php:358
+msgid "Yes"
+msgstr ""
+
+#: controllers/hosts.php:259 controllers/services.php:367
+msgid "N/A"
+msgstr ""
+
+#: controllers/layout.php:19
+msgid "Dashboard"
+msgstr ""
+
+#: controllers/layout.php:20
+#, fuzzy
+msgid "Hosts"
+msgstr "Иконки хоста"
+
+#: controllers/layout.php:21
+#, fuzzy
+msgid "Services"
+msgstr "Иконки сервисов"
+
+#: controllers/layout.php:22
+msgid "Comments"
+msgstr ""
+
+#: controllers/layout.php:23
+msgid "Downtime"
+msgstr ""
+
+#: controllers/layout.php:24
+msgid "Event Log"
+msgstr ""
+
+#: controllers/layout.php:25
+msgid "Process Info"
+msgstr ""
+
+#: controllers/nagios.php:157
 msgid "Remote Commands must be enabled under console->Settings->NPC"
 msgstr "Удаленные Команды должны быть включены в консоли -> Настройки -> NPC"
 
-#: controllers/nagios.php:166
+#: controllers/nagios.php:162
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
 msgstr "Путь к командному файлу Nagios должен быть установлен в консоли -> Настройки -> NPC"
 
-#: controllers/nagios.php:178
+#: controllers/nagios.php:173
 msgid "You do not have permission to execute this command."
 msgstr "У вас нет разрешения на выполнение этой команды."
 
-#: controllers/nagios.php:282
+#: controllers/nagios.php:271
 msgid "Service Check Execution Time"
 msgstr "Время выполнения сервисной проверки"
 
-#: controllers/nagios.php:283
+#: controllers/nagios.php:272
 msgid "Service Check Latency"
 msgstr "Задержка сервисной проверки"
 
-#: controllers/nagios.php:284
+#: controllers/nagios.php:273
 msgid "Host Check Execution Time"
 msgstr "Время выполнения проверки хоста"
 
-#: controllers/nagios.php:285
+#: controllers/nagios.php:274
 msgid "Host Check Latency"
 msgstr "Задержка проверки хоста"
 
-#: npc.php:62
-msgid "FATAL: Unable to make NPC Connection"
-msgstr "FATAL: невозможно установить соединение с NPC"
+#: controllers/services.php:90
+#, fuzzy
+msgid "Host Groups"
+msgstr "Иконки хоста"
+
+#: npc.php:61
+msgid "Invalid module requested."
+msgstr ""
+
+#: npc.php:69
+msgid "Invalid action requested."
+msgstr ""
+
+#: npc.php:79
+msgid "Controller not found."
+msgstr ""
 
 #: setup.php:170
 msgid "ERROR - Log errors only"
@@ -186,3 +246,6 @@ msgstr "Уровень Журнала"
 #: setup.php:1746
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
 msgstr "Уровень детализации, который вы хотите отправить в файл журнала Cacti. ВНИМАНИЕ: установка в DEBUG быстро заполнит журнал cacti."
+
+#~ msgid "FATAL: Unable to make NPC Connection"
+#~ msgstr "FATAL: невозможно установить соединение с NPC"

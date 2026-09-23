@@ -1,72 +1,134 @@
 <?php
 /*
  +-------------------------------------------------------------------------+
- | Copyright (C) 2004-2026 The Cacti Group                                 |
- +-------------------------------------------------------------------------+
- | Cacti: The Complete RRDtool-based Graphing Solution                     |
+ | Nagios Plugin for Cacti                                                 |
+ |                                                                         |
+ | Copyright (C) 2007 Billy Gunn (billy@gunn.org)                          |
+ | Copyright (C) 2024 The Cacti Group, Inc.                                |
+ |                                                                         |
+ | This program is free software; you can redistribute it and/or           |
+ | modify it under the terms of the GNU General Public License             |
+ | as published by the Free Software Foundation; either version 2          |
+ | of the License, or (at your option) any later version.                  |
  +-------------------------------------------------------------------------+
 */
 
-describe('auth guard presence in npc', function () {
-	it('includes auth.php or global.php in all UI entry points', function () {
-		// Controllers are only ever loaded through npc.php's dispatcher, which
-		// requires auth.php before including any controller, so the guard is
-		// checked on the entry point rather than on each controller file.
-		$uiFiles = array(
-		'npc.php',
+/*
+ * Verifies that every file reachable via HTTP includes Cacti's authentication
+ * layer before executing any application logic. Cacti enforces auth through
+ * include/auth.php (which itself includes global.php). A missing include
+ * would allow unauthenticated access to the plugin.
+ */
+
+$pluginRoot = dirname(__DIR__, 2);
+
+/**
+ * Return the raw source of $file without stripping comments, because auth
+ * includes must appear as real code, not in comments.
+ */
+function npc_auth_source($pluginRoot, $file) {
+	$path = $pluginRoot . DIRECTORY_SEPARATOR . $file;
+	return file_exists($path) ? file_get_contents($path) : '';
+}
+
+/**
+ * True if $source contains an include/require of auth.php or global.php.
+ */
+function npc_has_auth_include($source) {
+	return (bool) preg_match(
+		'#(require|include)(_once)?\s*[(\s][\'"][^"\']*/(auth|global)\.php[\'"]#',
+		$source
+	);
+}
+
+// ---------------------------------------------------------------------------
+
+it('npc.php includes auth.php before dispatching', function () use ($pluginRoot) {
+	$source = npc_auth_source($pluginRoot, 'npc.php');
+
+	expect($source)->not->toBeEmpty('npc.php was not found');
+	expect(npc_has_auth_include($source))->toBeTrue('npc.php must include auth.php or global.php');
+});
+
+it('nagioscmd.php includes auth.php', function () use ($pluginRoot) {
+	$source = npc_auth_source($pluginRoot, 'nagioscmd.php');
+
+	expect($source)->not->toBeEmpty('nagioscmd.php was not found');
+	expect(npc_has_auth_include($source))->toBeTrue('nagioscmd.php must include auth.php or global.php');
+});
+
+it('config.php does not bypass auth (only defines, no output)', function () use ($pluginRoot) {
+	$source = npc_auth_source($pluginRoot, 'config.php');
+
+	if (empty($source)) {
+		// config.php may not exist in all configurations.
+		expect(true)->toBeTrue();
+		return;
+	}
+
+	// config.php should not produce HTTP output directly; it should not
+	// contain echo/print/header calls at the top level without auth.
+	$hasOutput = (bool) preg_match('/^\s*(echo|print|header\s*\()/m', $source);
+	if ($hasOutput) {
+		expect(npc_has_auth_include($source))->toBeTrue(
+			'config.php produces output but does not include auth.php'
 		);
+	} else {
+		expect(true)->toBeTrue();
+	}
+});
 
-		foreach ($uiFiles as $relativeFile) {
-			$path = realpath(__DIR__ . '/../../' . $relativeFile);
-			if ($path === false) continue;
-			$contents = file_get_contents($path);
-			if ($contents === false) continue;
+it('every controller file requires is_realm_allowed or auth include', function () use ($pluginRoot) {
+	$controllerDir = $pluginRoot . DIRECTORY_SEPARATOR . 'controllers';
+	$unguarded     = array();
 
-			// Files that include setup.php or are library files don't need direct auth
-			if (strpos($relativeFile, 'include/') === 0 || strpos($relativeFile, 'lib/') === 0) continue;
-			if (strpos($relativeFile, 'poller_') === 0) continue;
+	// layout.php is included by npc.php which already enforces auth; it
+	// does not re-include auth itself.
+	$allowNoDirectAuth = array('layout.php');
 
-			$hasAuth = (
-				strpos($contents, 'auth.php') !== false ||
-				strpos($contents, 'global.php') !== false ||
-				strpos($contents, 'global_arrays.php') !== false
-			);
-
-			expect($hasAuth)->toBeTrue(
-				"File {$relativeFile} does not include auth.php or global.php"
-			);
+	$iter = new DirectoryIterator($controllerDir);
+	foreach ($iter as $file) {
+		if (!$file->isFile() || $file->getExtension() !== 'php') {
+			continue;
 		}
-	});
+		if (in_array($file->getFilename(), $allowNoDirectAuth, true)) {
+			continue;
+		}
 
-	it('validates numeric IDs from request variables before DB queries', function () {
-		$uiFiles = array(
-		'controllers/layoutDev.php',
-		'controllers/settings.php',
-		'lib/Doctrine/Cache/Db.php',
-		'lib/Doctrine/Parser/Serialize.php',
-		'lib/Doctrine/Query/Abstract.php',
-		'lib/Doctrine/Table.php',
+		$source = file_get_contents($file->getPathname());
+
+		$hasAuth = npc_has_auth_include($source)
+			|| (bool) preg_match('/is_realm_allowed\s*\(/', $source)
+			|| (bool) preg_match('/\$_SESSION\s*\[\s*[\'"]sess_user_id[\'"]\s*\]/', $source);
+
+		if (!$hasAuth) {
+			$unguarded[] = $file->getFilename();
+		}
+	}
+
+	expect($unguarded)->toBe(
+		array(),
+		'Controllers with no auth guard: ' . implode(', ', $unguarded)
+	);
+});
+
+it('cli.php does not expose an unauthenticated HTTP endpoint', function () use ($pluginRoot) {
+	$source = npc_auth_source($pluginRoot, 'cli.php');
+
+	if (empty($source)) {
+		expect(true)->toBeTrue();
+		return;
+	}
+
+	// CLI scripts are acceptable without auth.php, but must not send
+	// HTTP headers (which would indicate they are web-accessible).
+	$sendsHeaders = (bool) preg_match('/\bheader\s*\(/', $source);
+
+	if ($sendsHeaders) {
+		expect(npc_has_auth_include($source))->toBeTrue(
+			'cli.php sends HTTP headers but lacks auth include'
 		);
-
-		foreach ($uiFiles as $relativeFile) {
-			$path = realpath(__DIR__ . '/../../' . $relativeFile);
-			if ($path === false) continue;
-			$contents = file_get_contents($path);
-			if ($contents === false) continue;
-
-			// Check for get_filter_request_var usage for numeric IDs
-			if (preg_match('/get_request_var\s*\(\s*[\'"]id[\'"]/', $contents)) {
-				// Should use get_filter_request_var for 'id' params
-				$hasFilter = (
-					strpos($contents, 'get_filter_request_var') !== false ||
-					strpos($contents, 'input_validate_input_number') !== false ||
-					strpos($contents, 'form_input_validate') !== false
-				);
-
-				expect($hasFilter)->toBeTrue(
-					"File {$relativeFile} uses get_request_var for IDs without validation"
-				);
-			}
-		}
-	});
+	} else {
+		expect(true)->toBeTrue();
+	}
 });

@@ -40,8 +40,8 @@ describe('NPC XSS output escaping', function (): void {
     it('verifies layout.php uses json_encode for JS context hardening', function (): void {
         $source = file_get_contents(__DIR__ . '/../../controllers/layout.php');
 
-        expect($source)->toContain('npc.params.userName            = <?php echo json_encode(db_fetch_cell_prepared');
-        expect($source)->toContain('npc.params.cacti_path          = <?php echo json_encode(URL_PATH); ?>;');
+        expect($source)->toContain('userName:         <?php echo json_encode(db_fetch_cell_prepared');
+        expect($source)->toContain("csrfToken:        <?php echo json_encode(csrf_get_tokens()");
     });
 
     it('allow-list comparison blocks XSS in action parameter', function (): void {

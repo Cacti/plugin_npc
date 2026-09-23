@@ -18,7 +18,7 @@
  * Downtime controller class
  *
  * Downtime controller provides functionality, such as building the
- * Doctrine queries and formatting output.
+ * queries and formatting output.
  *
  * @package     npc
  * @subpackage  npc.controllers
@@ -125,26 +125,26 @@ class NpcDowntimeController extends Controller {
      *
      * @return array
      */
-    function scheduledDowntime($id=null, $where='1=1') {
+    function scheduledDowntime($id = null, $where = '1=1') {
+
+        $params = array();
 
         if ($this->id || $id) {
-            $where .= ' AND ';
-            $where .= sprintf("d.object_id = %d", is_null($id) ? $this->id : $id);
+            $where .= ' AND d.object_id = ?';
+            $params[] = is_null($id) ? $this->id : $id;
         }
 
-        $q = new Doctrine_Query();
-        $q->select('i.instance_name,'
-                  .'o.objecttype_id,'
-                  .'o.name1 AS host_name,'
-                  .'o.name2 AS service_description,'
-                  .'d.*')
-          ->from('NpcScheduleddowntime d')
-          ->leftJoin('d.Object o')
-          ->leftJoin('d.Instance i')
-          ->where("$where")
-          ->orderby( 'd.scheduled_start_time DESC, d.scheduleddowntime_id DESC' );
-
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        $results = db_fetch_assoc_prepared('SELECT i.instance_name,
+                o.objecttype_id,
+                o.name1 AS host_name,
+                o.name2 AS service_description,
+                d.*
+            FROM npc_scheduleddowntime d
+            LEFT JOIN npc_objects o ON d.object_id = o.object_id
+            LEFT JOIN npc_instances i ON d.instance_id = i.instance_id
+            WHERE ' . $where . '
+            ORDER BY d.scheduled_start_time DESC, d.scheduleddowntime_id DESC',
+            $params);
 
         return($results);
     }
@@ -156,34 +156,44 @@ class NpcDowntimeController extends Controller {
      *
      * @return array
      */
-    function downtimeHistory($id=null, $where='') {
+    function downtimeHistory($id = null, $where = '') {
+
+        $params = array();
 
         if ($this->id || $id) {
             if ($where != '') {
                 $where .= ' AND ';
             }
-            $where .= sprintf("d.object_id = %d", is_null($id) ? $this->id : $id);
+            $where .= 'd.object_id = ?';
+            $params[] = is_null($id) ? $this->id : $id;
         }
 
-        $q = new Doctrine_Pager(
-            Doctrine_Query::create()
-                ->select('i.instance_name,'
-                        .'o.name1 AS host_name,'
-                        .'o.name2 AS service_description,'
-                        .'d.*')
-                ->from('NpcDowntimehistory d')
-                ->leftJoin('d.Object o')
-                ->leftJoin('d.Instance i')
-                ->where("$where")
-                ->orderby( 'd.scheduled_start_time DESC, d.actual_start_time DESC, d.actual_start_time_usec DESC' ),
-            $this->currentPage,
-            $this->limit
-        );
+        $whereClause = '';
+        if ($where != '') {
+            $whereClause = 'WHERE ' . $where;
+        }
 
-        $results = $q->execute(array(), Doctrine::HYDRATE_ARRAY);
+        /* Get total count */
+        $this->numRecords = db_fetch_cell_prepared('SELECT COUNT(*)
+            FROM npc_downtimehistory d
+            LEFT JOIN npc_objects o ON d.object_id = o.object_id
+            LEFT JOIN npc_instances i ON d.instance_id = i.instance_id
+            ' . $whereClause,
+            $params);
 
-        // Set the total number of records
-        $this->numRecords = $q->getNumResults();
+        $offset = ($this->currentPage - 1) * $this->limit;
+
+        $results = db_fetch_assoc_prepared('SELECT i.instance_name,
+                o.name1 AS host_name,
+                o.name2 AS service_description,
+                d.*
+            FROM npc_downtimehistory d
+            LEFT JOIN npc_objects o ON d.object_id = o.object_id
+            LEFT JOIN npc_instances i ON d.instance_id = i.instance_id
+            ' . $whereClause . '
+            ORDER BY d.scheduled_start_time DESC, d.actual_start_time DESC, d.actual_start_time_usec DESC
+            LIMIT ?, ?',
+            array_merge($params, array($offset, $this->limit)));
 
         return($results);
     }

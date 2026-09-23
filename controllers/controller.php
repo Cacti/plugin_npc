@@ -19,7 +19,6 @@
  * @subpackage  npc.controllers
  */
 class Controller {
-    var $conn = null;
 
     /**
      * The default state to query
@@ -313,36 +312,39 @@ class Controller {
     /**
      * searchClause
      *
-     * Appends search parameters to the passed in where clause
-     * @param string $where  An existing where clause
-     * @param array $fieldMap  Maps passed in field names
-     * @return string  The appended where clasue
+     * Appends search parameters to the passed in where clause.
+     * Returns both the SQL fragment and an array of bind params
+     * for use with prepared statements.
+     *
+     * @param string $where     An existing where clause
+     * @param array  $fieldMap  Maps passed in field names
+     * @param array  $params    Existing bind params array (passed by reference)
+     * @return string  The appended where clause
      */
-    function searchClause($where, $fieldMap) {
+	function searchClause($where, $fieldMap, &$params = array()) {
+		$fields = json_decode(stripslashes($this->searchFields));
+		if (!is_array($fields)) {
+			return $where;
+		}
 
-        if (!$where) {
-            $where = ' ( ';
-        } else {
-            $where .= ' AND ( ';
-        }
+		$searchValue = '%' . $this->searchString . '%';
 
-        $fields = json_decode(stripslashes($this->searchFields));
-        $count = count($fields);
+		$clauses = array();
+		$searchParams = array();
+		foreach ($fields as $field) {
+			if (isset($fieldMap[$field])) {
+				$clauses[] = $fieldMap[$field] . ' LIKE ?';
+				$searchParams[] = $searchValue;
+			}
+		}
 
-        $x = 1;
-        foreach ($fields as $field) {
-            if (isset($fieldMap[$field])) {
-                $where .= $fieldMap[$field] . " LIKE '%" . $this->searchString . "%' ";
-                if ($x < $count) {
-                    $where .= ' OR ';
-                }
-                $x++;
-            } else {
-                $count = $count - 1;
-            }
-        }
+		if (empty($clauses)) {
+			return $where;
+		}
 
-        $where .= ' ) ';
+		$params = array_merge($params, $searchParams);
+		$where .= $where ? ' AND ( ' : ' ( ';
+		$where .= implode(' OR ', $clauses) . ' ) ';
 
         return($where);
     }
@@ -483,4 +485,3 @@ class Controller {
 		bottom_footer();
     } // end drawFrame
 }
-

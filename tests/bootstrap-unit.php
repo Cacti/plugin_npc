@@ -252,21 +252,52 @@ if (!function_exists('raise_message')) {
 	}
 }
 
+/*
+ * Cacti populates $_REQUEST from the live request at process start. Tests
+ * instead set $_POST/$_GET directly, which PHP does not mirror into
+ * $_REQUEST outside of a real HTTP request, so these stubs check all three.
+ */
+function npc_test_request_value($name) {
+	if (array_key_exists($name, $_REQUEST)) {
+		return $_REQUEST[$name];
+	}
+	if (array_key_exists($name, $_POST)) {
+		return $_POST[$name];
+	}
+	if (array_key_exists($name, $_GET)) {
+		return $_GET[$name];
+	}
+
+	return null;
+}
+
 if (!function_exists('get_request_var')) {
-	function get_request_var($name) {
-		return '';
+	function get_request_var($name, $default = '') {
+		$value = npc_test_request_value($name);
+
+		return $value !== null ? $value : $default;
 	}
 }
 
 if (!function_exists('get_nfilter_request_var')) {
-	function get_nfilter_request_var($name) {
-		return '';
+	function get_nfilter_request_var($name, $default = '') {
+		$value = npc_test_request_value($name);
+
+		return $value !== null ? $value : $default;
 	}
 }
 
 if (!function_exists('get_filter_request_var')) {
-	function get_filter_request_var($name) {
-		return '';
+	function get_filter_request_var($name, $filter = FILTER_DEFAULT, $default = '') {
+		$value = npc_test_request_value($name);
+
+		return $value !== null ? filter_var($value, $filter) : $default;
+	}
+}
+
+if (!function_exists('isset_request_var')) {
+	function isset_request_var($name) {
+		return npc_test_request_value($name) !== null;
 	}
 }
 

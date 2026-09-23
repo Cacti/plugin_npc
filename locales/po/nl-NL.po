@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-09-21 13:14-0400\n"
+"POT-Creation-Date: 2026-09-23 13:34-0400\n"
 "PO-Revision-Date: 2024-06-08 09:00-0400\n"
 "Last-Translator: Edwin Lankamp <edwin.lankamp@gmail.com>\n"
 "Language-Team: Dutch <http://translate.cacti.net/projects/cacti/npc/nl/>\n"
@@ -22,42 +22,102 @@ msgstr ""
 msgid "None"
 msgstr "Geen"
 
-#: controllers/controller.php:417
+#: controllers/controller.php:419
 #, php-format
 msgid "An error occurred in %s. See error logs for detail."
 msgstr "Er is een fout opgetreden in %s. Zie foutenlogboeken voor details."
 
-#: controllers/nagios.php:161
+#: controllers/hosts.php:246 controllers/hosts.php:255
+#: controllers/nagios.php:312 controllers/services.php:349
+#: controllers/services.php:358
+#, fuzzy
+msgid "No"
+msgstr "Geen"
+
+#: controllers/hosts.php:246 controllers/hosts.php:255
+#: controllers/nagios.php:312 controllers/services.php:349
+#: controllers/services.php:358
+msgid "Yes"
+msgstr ""
+
+#: controllers/hosts.php:259 controllers/services.php:367
+msgid "N/A"
+msgstr ""
+
+#: controllers/layout.php:19
+msgid "Dashboard"
+msgstr ""
+
+#: controllers/layout.php:20
+#, fuzzy
+msgid "Hosts"
+msgstr "Host pictogrammen"
+
+#: controllers/layout.php:21
+#, fuzzy
+msgid "Services"
+msgstr "Service Pictogrammen"
+
+#: controllers/layout.php:22
+msgid "Comments"
+msgstr ""
+
+#: controllers/layout.php:23
+msgid "Downtime"
+msgstr ""
+
+#: controllers/layout.php:24
+msgid "Event Log"
+msgstr ""
+
+#: controllers/layout.php:25
+msgid "Process Info"
+msgstr ""
+
+#: controllers/nagios.php:157
 msgid "Remote Commands must be enabled under console->Settings->NPC"
 msgstr "Remote Commands moeten zijn ingeschakeld onder console-> Instellingen-> NPC"
 
-#: controllers/nagios.php:166
+#: controllers/nagios.php:162
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
 msgstr "Het Nagios Command File Path moet worden ingesteld onder console-> Instellingen-> NPC"
 
-#: controllers/nagios.php:178
+#: controllers/nagios.php:173
 msgid "You do not have permission to execute this command."
 msgstr "U heeft geen toestemming om deze opdracht uit te voeren."
 
-#: controllers/nagios.php:282
+#: controllers/nagios.php:271
 msgid "Service Check Execution Time"
 msgstr "Uitvoeringstijd voor servicecontrole"
 
-#: controllers/nagios.php:283
+#: controllers/nagios.php:272
 msgid "Service Check Latency"
 msgstr "Wachttijd servicecontrole"
 
-#: controllers/nagios.php:284
+#: controllers/nagios.php:273
 msgid "Host Check Execution Time"
 msgstr "Uitvoeringsduur hostcontrole"
 
-#: controllers/nagios.php:285
+#: controllers/nagios.php:274
 msgid "Host Check Latency"
 msgstr "Wachttijd hostcontrole"
 
-#: npc.php:62
-msgid "FATAL: Unable to make NPC Connection"
-msgstr "FATAAL: kan geen NPC-verbinding maken"
+#: controllers/services.php:90
+#, fuzzy
+msgid "Host Groups"
+msgstr "Host pictogrammen"
+
+#: npc.php:61
+msgid "Invalid module requested."
+msgstr ""
+
+#: npc.php:69
+msgid "Invalid action requested."
+msgstr ""
+
+#: npc.php:79
+msgid "Controller not found."
+msgstr ""
 
 #: setup.php:170
 msgid "ERROR - Log errors only"
@@ -186,3 +246,6 @@ msgstr "Logboekregistratieniveau"
 #: setup.php:1746
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
 msgstr "Het detailniveau dat u naar het Cacti-logbestand wilt verzenden. WAARSCHUWING: als je in DEBUG vertrekt, wordt het cactussenlogboek snel gevuld."
+
+#~ msgid "FATAL: Unable to make NPC Connection"
+#~ msgstr "FATAAL: kan geen NPC-verbinding maken"
