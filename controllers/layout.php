@@ -39,7 +39,7 @@ class NpcLayoutController extends Controller {
 
 		/* pass config to JS */
 		?>
-		<script type='text/javascript'>
+		<script type='text/javascript' <?php print plugin_npc_csp_nonce(); ?>>
 		var npcConfig = {
 			baseUrl:          '<?php echo $npc_base; ?>',
 			npcUrl:           '<?php echo $npc_base; ?>npc.php',
@@ -54,7 +54,7 @@ class NpcLayoutController extends Controller {
 			csrfToken:        <?php echo json_encode(csrf_get_tokens(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>
 		};
 		</script>
-		<script type='text/javascript' src='<?php echo $npc_base; ?>js/npc.js'></script>
+		<?php print get_md5_include_js('plugins/npc/js/npc.js'); ?>
 		<?php
 
 		print "<div id='npc-content'></div>\n";

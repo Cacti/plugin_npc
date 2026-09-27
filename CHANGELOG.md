@@ -2,6 +2,7 @@
 
 --- develop ---
 
+* security: Add a version-safe CSP nonce (`plugin_npc_csp_nonce()`) to every inline `<script>` tag so pages stay compatible with Cacti's Content-Security-Policy nonce enforcement, while falling back cleanly on older Cacti releases that lack the `CactiSecureHeaders` class
 * issue: Add Security & Quality Conventions section to .github/copilot-instructions.md
 * issue#13: Nagios sync partially to NPC plugin - only can see update of
   hostgroup
