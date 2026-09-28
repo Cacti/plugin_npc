@@ -67,6 +67,51 @@ function npc_php74_scan($files, $pattern, $description) {
 	return $hits;
 }
 
+/**
+ * Determine whether $source uses PHP 8.0 named-argument syntax, i.e. an
+ * argument label (identifier followed by a single ':') that immediately
+ * follows the opening '(' or a ',' of a call. Uses the tokenizer so that
+ * '::' scope resolution, ternary/switch/goto colons, and colons inside string
+ * literals do not produce false positives.
+ *
+ * @param string $source PHP source to scan.
+ *
+ * @return bool True if at least one named argument is present, false otherwise.
+ */
+function npc_php74_uses_named_arguments($source) {
+	$tokens = token_get_all($source);
+	$count  = count($tokens);
+	$skip   = array(T_WHITESPACE, T_COMMENT, T_DOC_COMMENT);
+
+	for ($i = 0; $i < $count; $i++) {
+		// A named-argument colon is a bare ':' character token; '::' is a
+		// single T_DOUBLE_COLON token and is skipped automatically.
+		if ($tokens[$i] !== ':') {
+			continue;
+		}
+
+		// The preceding significant token must be the identifier label.
+		$label = $i - 1;
+		while ($label >= 0 && is_array($tokens[$label]) && in_array($tokens[$label][0], $skip, true)) {
+			$label--;
+		}
+		if ($label < 0 || !is_array($tokens[$label]) || $tokens[$label][0] !== T_STRING) {
+			continue;
+		}
+
+		// The token before the label must open an argument list: '(' or ','.
+		$open = $label - 1;
+		while ($open >= 0 && is_array($tokens[$open]) && in_array($tokens[$open][0], $skip, true)) {
+			$open--;
+		}
+		if ($open >= 0 && ($tokens[$open] === '(' || $tokens[$open] === ',')) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 $sourceFiles = npc_php74_collect_files($pluginRoot);
 
 // ---------------------------------------------------------------------------
@@ -118,10 +163,15 @@ it('uses no constructor property promotion (PHP 8.0+)', function () use ($source
 });
 
 it('uses no named arguments (PHP 8.0+)', function () use ($sourceFiles) {
-	// "funcName(argName: value)" — identifier followed by colon inside a call.
-	// Best-effort heuristic: "word: " inside parentheses. May have false
-	// positives in string literals; acceptable for a security scan.
-	$hits = npc_php74_scan($sourceFiles, '/\(\s*\w+\s*:\s*[^\s)]/', 'named arguments');
+	// Detect real named-argument syntax (func(label: value)) with the PHP
+	// tokenizer so that scope resolution (Class::method), ternary/switch/goto
+	// colons, and colons inside string literals are not misreported.
+	$hits = array();
+	foreach ($sourceFiles as $path) {
+		if (npc_php74_uses_named_arguments(file_get_contents($path))) {
+			$hits[] = basename($path);
+		}
+	}
 	expect($hits)->toBe(array(), 'PHP 8.0 named arguments found in: ' . implode(', ', $hits));
 });
 

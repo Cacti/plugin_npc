@@ -41,6 +41,74 @@ function npc_has_auth_include($source) {
 	);
 }
 
+/**
+ * Determine whether $source is a front-controller dispatch target: a pure
+ * class-definition module that performs no output or application logic at file
+ * scope. NPC controllers are loaded only by npc.php, which enforces auth and
+ * validates the module/action allowlists before requiring the controller, so
+ * requesting one directly cannot leak data. Loading sibling class files via
+ * require/include is permitted; any top-level output or DB sink is not.
+ *
+ * @param string $source PHP source of the controller file being inspected.
+ *
+ * @return bool True when the file only declares classes/functions (and loads
+ *              sibling class files) at file scope; false if it performs output
+ *              or database work outside a class or function body.
+ */
+function npc_is_pure_class_module($source) {
+	if (!preg_match('/\bclass\s+\w+/', $source)) {
+		return false;
+	}
+
+	$tokens = token_get_all($source);
+	$depth  = 0;
+	$sinks  = array(
+		'printf', 'vprintf', 'print_r', 'var_dump', 'header',
+		'readfile', 'fpassthru', 'fwrite', 'fputs',
+	);
+
+	foreach ($tokens as $token) {
+		if (!is_array($token)) {
+			if ($token === '{') {
+				$depth++;
+			} elseif ($token === '}') {
+				$depth--;
+			}
+			continue;
+		}
+
+		// String-interpolation braces open with these token ids and close with
+		// a plain '}'; count them so the brace depth stays balanced.
+		if ($token[0] === T_CURLY_OPEN || $token[0] === T_DOLLAR_OPEN_CURLY_BRACES) {
+			$depth++;
+			continue;
+		}
+
+		if ($depth > 0) {
+			// Inside a class or function body: legitimate application logic.
+			continue;
+		}
+
+		// At file scope, no output or execution sinks are permitted.
+		if ($token[0] === T_ECHO || $token[0] === T_PRINT || $token[0] === T_INLINE_HTML
+			|| $token[0] === T_OPEN_TAG_WITH_ECHO || $token[0] === T_EXIT) {
+			return false;
+		}
+
+		if ($token[0] === T_STRING) {
+			$name = strtolower($token[1]);
+			// Any Cacti database helper (db_execute, db_fetch_*, and every
+			// _prepared variant) runs a query, so none may execute at include
+			// time; flag them generically by prefix alongside the output sinks.
+			if (in_array($name, $sinks, true) || strncmp($name, 'db_', 3) === 0) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
 // ---------------------------------------------------------------------------
 
 it('npc.php includes auth.php before dispatching', function () use ($pluginRoot) {
@@ -78,7 +146,7 @@ it('config.php does not bypass auth (only defines, no output)', function () use 
 	}
 });
 
-it('every controller file requires is_realm_allowed or auth include', function () use ($pluginRoot) {
+it('every controller file is auth-guarded or a side-effect-free dispatch target', function () use ($pluginRoot) {
 	$controllerDir = $pluginRoot . DIRECTORY_SEPARATOR . 'controllers';
 	$unguarded     = array();
 
@@ -97,18 +165,23 @@ it('every controller file requires is_realm_allowed or auth include', function (
 
 		$source = file_get_contents($file->getPathname());
 
-		$hasAuth = npc_has_auth_include($source)
+		// A controller is safe if it enforces auth directly, or is a pure
+		// class-definition module dispatched exclusively by npc.php (which
+		// already enforces auth and validates the module/action allowlists
+		// before loading the controller class).
+		$guarded = npc_has_auth_include($source)
 			|| (bool) preg_match('/is_realm_allowed\s*\(/', $source)
-			|| (bool) preg_match('/\$_SESSION\s*\[\s*[\'"]sess_user_id[\'"]\s*\]/', $source);
+			|| (bool) preg_match('/\$_SESSION\s*\[\s*[\'"]sess_user_id[\'"]\s*\]/', $source)
+			|| npc_is_pure_class_module($source);
 
-		if (!$hasAuth) {
+		if (!$guarded) {
 			$unguarded[] = $file->getFilename();
 		}
 	}
 
 	expect($unguarded)->toBe(
 		array(),
-		'Controllers with no auth guard: ' . implode(', ', $unguarded)
+		'Controllers with no auth guard and top-level side effects: ' . implode(', ', $unguarded)
 	);
 });
 

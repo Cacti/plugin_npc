@@ -3,6 +3,12 @@
 --- develop ---
 
 * security: Add a version-safe CSP nonce (`plugin_npc_csp_nonce()`) to every inline `<script>` tag so pages stay compatible with Cacti's Content-Security-Policy nonce enforcement, while falling back cleanly on older Cacti releases that lack the `CactiSecureHeaders` class
+* issue: Fix outdated Security Pest tests that failed CI after the Cacti-native
+  controller refactor (front-controller auth model, graph passthrough, PHP 7.4
+  named-argument tokenizer check, prepared-statement allowlist, redirect stubs)
+* security: Convert the remaining static raw `db_fetch_assoc()` calls in the
+  hostgroups/hosts/services CLI helpers to `db_fetch_assoc_prepared()`, and add
+  an explicit `exit` after the `Location` redirect in the directory-index stubs
 * issue: Add Security & Quality Conventions section to .github/copilot-instructions.md
 * issue#13: Nagios sync partially to NPC plugin - only can see update of
   hostgroup
