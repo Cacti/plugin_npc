@@ -288,7 +288,7 @@ class NpcServicesController extends Controller {
 			return $this->flattenArray(db_fetch_assoc_prepared($sql, array($host)));
 		}
 
-		return $this->flattenArray(db_fetch_assoc($sql));
+		return $this->flattenArray(db_fetch_assoc_prepared($sql, array()));
 	}
 
 	function getMappedGraph() {

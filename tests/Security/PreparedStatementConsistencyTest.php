@@ -33,13 +33,11 @@ $pluginRoot = dirname(__DIR__, 2);
  * entries here as each file is converted to the _prepared variants.
  */
 $knownRawCallFiles = array(
-	// Legacy CLI/sync helpers that still issue static (non-user-input)
-	// SELECT statements. The parameterised queries alongside them already
-	// use db_*_prepared().
-	'controllers/cacti.php'      => 3,
-	'controllers/hostgroups.php' => 1,
-	'controllers/hosts.php'      => 1,
-	'controllers/services.php'   => 1,
+	// cacti.php still issues a few static (non-user-input) raw SELECTs; the
+	// value is the EXACT number currently present so a new raw call here (or
+	// in any other file) is reported, and a removed one flags the entry for
+	// update. Convert these and drop the entry as the file is migrated.
+	'controllers/cacti.php' => 3,
 );
 
 /**
