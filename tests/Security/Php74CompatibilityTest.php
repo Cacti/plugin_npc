@@ -67,6 +67,49 @@ function npc_php74_scan($files, $pattern, $description) {
 	return $hits;
 }
 
+/**
+ * Detect PHP 8.0+ named-argument syntax using the tokenizer instead of a
+ * regex, so it catches named arguments in any position (including after a
+ * positional argument, e.g. `foo($value, name: $value)`) and never
+ * false-matches URL schemes inside string literals.
+ *
+ * A named argument is an identifier (T_STRING) that directly follows an
+ * argument boundary (`(` or `,`) and is immediately followed by a single
+ * `:` token. `::` is tokenized as T_DOUBLE_COLON, and ternary/label/case/
+ * return-type colons are not preceded by an identifier at an argument
+ * boundary, so they are excluded.
+ */
+function npc_php74_named_arg_hits($files) {
+	$hits = array();
+	foreach ($files as $path) {
+		$meaningful = array();
+		foreach (token_get_all(file_get_contents($path)) as $tok) {
+			if (is_array($tok)) {
+				if ($tok[0] === T_WHITESPACE || $tok[0] === T_COMMENT || $tok[0] === T_DOC_COMMENT) {
+					continue;
+				}
+				$meaningful[] = array($tok[0], $tok[1]);
+			} else {
+				$meaningful[] = array($tok, $tok);
+			}
+		}
+
+		$count = count($meaningful);
+		for ($i = 2; $i < $count; $i++) {
+			if ($meaningful[$i][0] !== ':') {
+				continue;
+			}
+			$name     = $meaningful[$i - 1];
+			$boundary = $meaningful[$i - 2];
+			if ($name[0] === T_STRING && ($boundary[0] === '(' || $boundary[0] === ',')) {
+				$hits[] = basename($path);
+				break;
+			}
+		}
+	}
+	return array_values(array_unique($hits));
+}
+
 $sourceFiles = npc_php74_collect_files($pluginRoot);
 
 // ---------------------------------------------------------------------------
@@ -118,12 +161,10 @@ it('uses no constructor property promotion (PHP 8.0+)', function () use ($source
 });
 
 it('uses no named arguments (PHP 8.0+)', function () use ($sourceFiles) {
-	// "funcName(argName: value)" — identifier followed by a single colon
-	// inside a call. Excludes "Class::method(" (scope resolution, not a
-	// named-argument colon) and "(http://", "(https://", etc. (URL schemes
-	// inside string literals, e.g. translatable help text), both of which
-	// otherwise false-positive on this best-effort heuristic.
-	$hits = npc_php74_scan($sourceFiles, '/\(\s*(?!(?:https?|ftp|mailto)\s*:)\w+\s*:(?!:)\s*[^\s)]/i', 'named arguments');
+	// Tokenizer-based detection catches named arguments in any position
+	// (including after a positional argument) without the URL-scheme false
+	// positives a regex heuristic would hit.
+	$hits = npc_php74_named_arg_hits($sourceFiles);
 	expect($hits)->toBe(array(), 'PHP 8.0 named arguments found in: ' . implode(', ', $hits));
 });
 

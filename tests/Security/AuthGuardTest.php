@@ -41,6 +41,37 @@ function npc_has_auth_include($source) {
 	);
 }
 
+/**
+ * Extract the balanced body of npc.php's `$allowed_modules = array( ... )`
+ * (or `[ ... ]`) assignment so the allowlist check only matches real entries,
+ * not an incidental `'name' => array(` in a comment or unrelated structure.
+ * Returns '' if the assignment cannot be located.
+ */
+function npc_auth_allowlist_body($source) {
+	if (!preg_match('/\$allowed_modules\s*=\s*(array\s*\(|\[)/', $source, $m, PREG_OFFSET_CAPTURE)) {
+		return '';
+	}
+
+	$open  = (substr($m[1][0], -1) === '[') ? '[' : '(';
+	$close = ($open === '[') ? ']' : ')';
+	$start = $m[1][1] + strlen($m[1][0]) - 1; // index of the opening bracket
+	$depth = 0;
+	$len   = strlen($source);
+
+	for ($i = $start; $i < $len; $i++) {
+		if ($source[$i] === $open) {
+			$depth++;
+		} elseif ($source[$i] === $close) {
+			$depth--;
+			if ($depth === 0) {
+				return substr($source, $start, $i - $start + 1);
+			}
+		}
+	}
+
+	return '';
+}
+
 // ---------------------------------------------------------------------------
 
 it('npc.php includes auth.php before dispatching', function () use ($pluginRoot) {
@@ -88,7 +119,13 @@ it('every controller file is either the base class or reachable only through npc
 	 */
 	$controllerDir = $pluginRoot . DIRECTORY_SEPARATOR . 'controllers';
 	$npcSource     = npc_auth_source($pluginRoot, 'npc.php');
+	$allowlist     = npc_auth_allowlist_body($npcSource);
 	$unguarded     = array();
+
+	expect($allowlist)->not->toBe(
+		'',
+		'Could not locate the $allowed_modules assignment in npc.php'
+	);
 
 	$iter = new DirectoryIterator($controllerDir);
 	foreach ($iter as $file) {
@@ -101,7 +138,7 @@ it('every controller file is either the base class or reachable only through npc
 
 		$module = $file->getBasename('.php');
 
-		if (!preg_match('/[\'"]' . preg_quote($module, '/') . '[\'"]\s*=>\s*array\s*\(/', $npcSource)) {
+		if (!preg_match('/[\'"]' . preg_quote($module, '/') . '[\'"]\s*=>\s*array\s*\(/', $allowlist)) {
 			$unguarded[] = $file->getFilename();
 		}
 	}
