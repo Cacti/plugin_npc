@@ -444,7 +444,7 @@ class Controller {
 					}
 				</style>
 				<iframe class='cactiTable' id='npc' src='<?php print $file;?>'></iframe>
-				<script>
+				<script <?php print plugin_npc_csp_nonce(); ?>>
 				var csrfTimeout = null;
 
 				function npcSize() {

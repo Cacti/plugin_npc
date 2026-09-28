@@ -4,9 +4,21 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: Cacti\nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-09-23 13:34-0400\nPO-Revision-Date: 2026-09-25 03:18+0000\nLast-Translator: Ekaterine papava <papava.e@gtu.ge>\nLanguage-Team: Georgian <https://translate.cacti.net/projects/cacti/npc/ka/>\nLanguage: ka-GE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.11.4\n"
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-09-27 11:39-0400\n"
+"PO-Revision-Date: 2026-09-25 03:18+0000\n"
+"Last-Translator: Ekaterine papava <papava.e@gtu.ge>\n"
+"Language-Team: Georgian <https://translate.cacti.net/projects/cacti/npc/ka/>\n"
+"Language: ka-GE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.11.4\n"
 
-#: controllers/cacti.php:150 setup.php:169 setup.php:237
+#: controllers/cacti.php:150 setup.php:185 setup.php:253
 msgid "None"
 msgstr "არცერთი"
 
@@ -105,131 +117,131 @@ msgstr ""
 msgid "Controller not found."
 msgstr ""
 
-#: setup.php:170
+#: setup.php:186
 msgid "ERROR - Log errors only"
 msgstr "შეცდომა - ჟურნალში მხოლოდ შეცდომების ჩაწერა"
 
-#: setup.php:171
+#: setup.php:187
 msgid "WARN  - Log errors and warnings"
 msgstr "გაფრტხილება - ჟურნაში შეცდომების და გაფრთხილებების ჩაწერა"
 
-#: setup.php:172
+#: setup.php:188
 msgid "INFO  - Log errors, warnings, and info messages"
 msgstr "ინფო    - ჟურნალში ჩაიწერება შეცდომები, გაფრთხილებები და ინფორმაცია"
 
-#: setup.php:173
+#: setup.php:189
 msgid "DEBUG - Log everything"
 msgstr "გამართვა - ჟურნალში ყველაფრის ჩაწერა"
 
-#: setup.php:234
+#: setup.php:250
 msgid "Nagios Host Mapping"
 msgstr "Nagios-ის ჰოსტის ასახვა"
 
-#: setup.php:235
+#: setup.php:251
 msgid "Select the Nagios host that maps to this host."
 msgstr "აირჩიეთ Nagios-ის ჰოსტი, რომელიც ამ ჰოსტს შეესაბამება."
 
-#: setup.php:265 setup.php:1624
+#: setup.php:281 setup.php:1640
 msgid "NPC"
 msgstr "NPC"
 
-#: setup.php:272
+#: setup.php:288
 msgid "Status Detail"
 msgstr "სტატუსის დეტალები"
 
-#: setup.php:279
+#: setup.php:295
 msgid "Service / Host Information"
 msgstr "ინფორმაცის სერვისის/ჰოსტის შესახებ"
 
-#: setup.php:286
+#: setup.php:302
 msgid "Command Execution"
 msgstr "ბრძანების შესრულება"
 
-#: setup.php:1682
+#: setup.php:1698
 msgid "General Settings"
 msgstr "ზოგადი პარამეტრები"
 
-#: setup.php:1686
+#: setup.php:1702
 msgid "Remote Commands"
 msgstr "დაშორებული ბრძანებები"
 
-#: setup.php:1687
+#: setup.php:1703
 msgid "Allow commands to be written to the Nagios command file."
 msgstr "Nagios-ის ბრძანებების ფაილში ბრძანებების ჩაწერის დაშვება."
 
-#: setup.php:1691
+#: setup.php:1707
 msgid "Nagios Command File Path"
 msgstr "Nagios-ის ბრძანების ფაილის ბილიკი"
 
-#: setup.php:1692
+#: setup.php:1708
 msgid "The path to the Nagios command file (nagios.cmd)."
 msgstr "ბილიკი Nagios-ის ბრძანების ფაილამდე (nagios.cmd)."
 
-#: setup.php:1697
+#: setup.php:1713
 msgid "Nagios URL"
 msgstr "Nagios-ის URL"
 
-#: setup.php:1698
+#: setup.php:1714
 msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
 msgstr "ბმული თქვენს Nagios-მდე (http://nagios.company.com/nagios/)"
 
-#: setup.php:1703
+#: setup.php:1719
 msgid "Date Format"
 msgstr "თარიღის ფორმატი"
 
-#: setup.php:1704
+#: setup.php:1720
 msgid "Select the format you want for displaying dates."
 msgstr "აირჩიეთ ფორმატი, რომელშიც თარიღის ჩვენება გნებავთ."
 
-#: setup.php:1710
+#: setup.php:1726
 msgid "Time Format"
 msgstr "დროის ფორმატი"
 
-#: setup.php:1711
+#: setup.php:1727
 msgid "Select the format you want for displaying times."
 msgstr "აირჩიეთ ფორმატი დროის საჩვენებლად."
 
-#: setup.php:1717
+#: setup.php:1733
 msgid "Portlet Refresh Rate"
 msgstr "პორტლეტის განახლების სიხშირე"
 
-#: setup.php:1718
+#: setup.php:1734
 msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
 msgstr "დრო წამებში, რომელიც უნდა გავა, სანამ პორტლეტები განახლდება. მინიმალური დროა 30 წამი."
 
-#: setup.php:1724
+#: setup.php:1740
 msgid "Host/Service Config Type"
 msgstr "ჰოსტის/სერვისის კონფიგურაციის ტიპი"
 
-#: setup.php:1725
+#: setup.php:1741
 msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
 msgstr "კონფიგურაციის ტიპი ეყრდნობა, ახდენთ თუ არა შენარჩუნებული ინფორმაციის აღდგენას Nagios-ის გაშვებისას. თუ დარწმუნებული არ ბრძანდებით, უბრალოდ დატოვეთ ნაგულისხმევი მნიშვნელობა. თუ ხედავთ ჰოსტების და სერვისის ჯგუფებს, მაგრამ არა ჰოსტებს ან სერვისებს, სცადეთ, ეს პარამეტრი შეცვალოთ."
 
-#: setup.php:1731
+#: setup.php:1747
 msgid "Host Icons"
 msgstr "ჰოსტის ხატულები"
 
-#: setup.php:1732
+#: setup.php:1748
 msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
 msgstr "ჰოსტის ხატულების ჩვენების ჩართვა ჰოსტების ბადეზე. პარამეტრები icon_image და icon_image_alt Nagios-ის ჰოსტის აღწერაში გამოიყენება გამოსახულების დასაყენებლად. ხატულები უნდა იყოს 16x16 ზომის. ამ პარამეტრს არ აქვს გავლენა ჰოსტის სტატუსის ხატულებზე."
 
-#: setup.php:1736
+#: setup.php:1752
 msgid "Service Icons"
 msgstr "სერვისის ხატულები"
 
-#: setup.php:1737
+#: setup.php:1753
 msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
 msgstr "ჩართავს სერვისის ხატულების ჩვენებას სერვისების ბადეზე. Nagios-ის სერვისის აღწერაში icon_image და icon_image_alt გამოიყენება გამოსახულების დასაყენებლად. ხატულები უნდა იყოს 16x16 ზომით. ამ პარამეტრს არ აქვს გავლენა სერვისის სტატუსის ხატულებზე."
 
-#: setup.php:1741
+#: setup.php:1757
 msgid "Logging"
 msgstr "ჟურნალი"
 
-#: setup.php:1745
+#: setup.php:1761
 msgid "Logging Level"
 msgstr "ჟურნალის დონე"
 
-#: setup.php:1746
+#: setup.php:1762
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
 msgstr "დეტალების დონე, რომელიც გნებავთ, Cacti-ის ჟურნალში ჩაწეროთ. გაფრთხილება: თუ დატოვებთ გამართვის დონეზე, cacti-ის ჟურნალი მალევე გადაივსება."
 
