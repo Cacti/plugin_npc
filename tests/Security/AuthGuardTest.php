@@ -42,12 +42,18 @@ function npc_has_auth_include($source) {
 }
 
 /**
- * True if $source is a front-controller dispatch target: a pure class-
- * definition module that performs no output or application logic at file
+ * Determine whether $source is a front-controller dispatch target: a pure
+ * class-definition module that performs no output or application logic at file
  * scope. NPC controllers are loaded only by npc.php, which enforces auth and
  * validates the module/action allowlists before requiring the controller, so
  * requesting one directly cannot leak data. Loading sibling class files via
  * require/include is permitted; any top-level output or DB sink is not.
+ *
+ * @param string $source PHP source of the controller file being inspected.
+ *
+ * @return bool True when the file only declares classes/functions (and loads
+ *              sibling class files) at file scope; false if it performs output
+ *              or database work outside a class or function body.
  */
 function npc_is_pure_class_module($source) {
 	if (!preg_match('/\bclass\s+\w+/', $source)) {
@@ -59,7 +65,6 @@ function npc_is_pure_class_module($source) {
 	$sinks  = array(
 		'printf', 'vprintf', 'print_r', 'var_dump', 'header',
 		'readfile', 'fpassthru', 'fwrite', 'fputs',
-		'db_execute', 'db_fetch_assoc', 'db_fetch_row', 'db_fetch_cell',
 	);
 
 	foreach ($tokens as $token) {
@@ -90,8 +95,14 @@ function npc_is_pure_class_module($source) {
 			return false;
 		}
 
-		if ($token[0] === T_STRING && in_array(strtolower($token[1]), $sinks, true)) {
-			return false;
+		if ($token[0] === T_STRING) {
+			$name = strtolower($token[1]);
+			// Any Cacti database helper (db_execute, db_fetch_*, and every
+			// _prepared variant) runs a query, so none may execute at include
+			// time; flag them generically by prefix alongside the output sinks.
+			if (in_array($name, $sinks, true) || strncmp($name, 'db_', 3) === 0) {
+				return false;
+			}
 		}
 	}
 

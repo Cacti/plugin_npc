@@ -26,17 +26,20 @@ $pluginRoot = dirname(__DIR__, 2);
 
 /*
  * Files known to contain intentional raw DB calls that predate the rewrite
- * and are accepted as technical debt during the transition. Remove entries
- * here as each file is converted.
+ * and are accepted as technical debt during the transition. The value is the
+ * EXACT number of raw calls currently present in each file, so that adding a
+ * new raw call to an allowlisted file (or any raw call to a non-listed file)
+ * still fails, and removing one flags the entry for update. Reduce/remove
+ * entries here as each file is converted to the _prepared variants.
  */
 $knownRawCallFiles = array(
 	// Legacy CLI/sync helpers that still issue static (non-user-input)
-	// SELECT statements pending migration to the _prepared variants. The
-	// parameterised queries alongside them already use db_*_prepared().
-	'controllers/cacti.php',
-	'controllers/hostgroups.php',
-	'controllers/hosts.php',
-	'controllers/services.php',
+	// SELECT statements. The parameterised queries alongside them already
+	// use db_*_prepared().
+	'controllers/cacti.php'      => 3,
+	'controllers/hostgroups.php' => 1,
+	'controllers/hosts.php'      => 1,
+	'controllers/services.php'   => 1,
 );
 
 /**
@@ -48,11 +51,12 @@ function npc_collect_php_files($dir, $base) {
 	foreach ($iter as $file) {
 		if ($file->isFile() && $file->getExtension() === 'php') {
 			$rel = ltrim(str_replace($base, '', $file->getPathname()), DIRECTORY_SEPARATOR);
+			$rel = str_replace(DIRECTORY_SEPARATOR, '/', $rel);
 			// Skip test files themselves and vendor.
-			if (strpos($rel, 'tests' . DIRECTORY_SEPARATOR) === 0) {
+			if (strpos($rel, 'tests/') === 0) {
 				continue;
 			}
-			if (strpos($rel, 'vendor' . DIRECTORY_SEPARATOR) === 0) {
+			if (strpos($rel, 'vendor/') === 0) {
 				continue;
 			}
 			$files[] = $rel;
@@ -91,7 +95,7 @@ $allFiles = npc_collect_php_files($pluginRoot, $pluginRoot . DIRECTORY_SEPARATOR
 
 // ---------------------------------------------------------------------------
 
-it('has no raw DB calls in controller files', function () use ($pluginRoot, $rawRegex, $knownRawCallFiles) {
+it('has no raw DB calls in controller files beyond the tracked allowlist', function () use ($pluginRoot, $rawRegex, $knownRawCallFiles) {
 	$controllerDir = $pluginRoot . DIRECTORY_SEPARATOR . 'controllers';
 	$violations    = array();
 
@@ -100,12 +104,12 @@ it('has no raw DB calls in controller files', function () use ($pluginRoot, $raw
 		if (!$file->isFile() || $file->getExtension() !== 'php') {
 			continue;
 		}
-		$rel    = 'controllers' . DIRECTORY_SEPARATOR . $file->getFilename();
-		$source = npc_strip_comments(file_get_contents($file->getPathname()));
-		if (preg_match($rawRegex, $source)) {
-			if (!in_array($rel, $knownRawCallFiles, true)) {
-				$violations[] = $rel;
-			}
+		$rel     = 'controllers/' . $file->getFilename();
+		$source  = npc_strip_comments(file_get_contents($file->getPathname()));
+		$count   = preg_match_all($rawRegex, $source);
+		$allowed = isset($knownRawCallFiles[$rel]) ? $knownRawCallFiles[$rel] : 0;
+		if ($count > $allowed) {
+			$violations[] = $rel . ' (' . $count . ' raw calls, ' . $allowed . ' allowed)';
 		}
 	}
 
@@ -121,11 +125,11 @@ it('has no raw DB calls in top-level entry points', function () use ($pluginRoot
 		if (!file_exists($path)) {
 			continue;
 		}
-		$source = npc_strip_comments(file_get_contents($path));
-		if (preg_match($rawRegex, $source)) {
-			if (!in_array($rel, $knownRawCallFiles, true)) {
-				$violations[] = $rel;
-			}
+		$source  = npc_strip_comments(file_get_contents($path));
+		$count   = preg_match_all($rawRegex, $source);
+		$allowed = isset($knownRawCallFiles[$rel]) ? $knownRawCallFiles[$rel] : 0;
+		if ($count > $allowed) {
+			$violations[] = $rel;
 		}
 	}
 
@@ -134,13 +138,15 @@ it('has no raw DB calls in top-level entry points', function () use ($pluginRoot
 
 it('tracks known raw-call files and does not silently grow the allowlist', function () use ($pluginRoot, $rawRegex, $knownRawCallFiles) {
 	/*
-	 * Confirm that every file listed in $knownRawCallFiles actually contains
-	 * a raw DB call. If a file is cleaned up it should be removed from the
-	 * allowlist, otherwise the allowlist becomes meaningless.
+	 * Confirm that every allowlisted file still contains EXACTLY the recorded
+	 * number of raw DB calls. If a file is cleaned up (or partially
+	 * converted) the count drops and the entry must be reduced or removed,
+	 * otherwise the allowlist becomes meaningless. Growth is caught by the
+	 * controller/entry-point tests above.
 	 */
 	$staleEntries = array();
 
-	foreach ($knownRawCallFiles as $rel) {
+	foreach ($knownRawCallFiles as $rel => $allowed) {
 		$path = $pluginRoot . DIRECTORY_SEPARATOR . $rel;
 		if (!file_exists($path)) {
 			// File was deleted; entry is stale.
@@ -148,8 +154,11 @@ it('tracks known raw-call files and does not silently grow the allowlist', funct
 			continue;
 		}
 		$source = npc_strip_comments(file_get_contents($path));
-		if (!preg_match($rawRegex, $source)) {
+		$count  = preg_match_all($rawRegex, $source);
+		if ($count === 0) {
 			$staleEntries[] = $rel . ' (no raw calls found; remove from allowlist)';
+		} elseif ($count < $allowed) {
+			$staleEntries[] = $rel . ' (allowlist expects ' . $allowed . ' raw calls but found ' . $count . '; update the count)';
 		}
 	}
 

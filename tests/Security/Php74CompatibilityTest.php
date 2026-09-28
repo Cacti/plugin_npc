@@ -68,11 +68,15 @@ function npc_php74_scan($files, $pattern, $description) {
 }
 
 /**
- * True if $source uses PHP 8.0 named-argument syntax, i.e. an argument label
- * (identifier followed by a single ':') that immediately follows the opening
- * '(' or a ',' of a call. Uses the tokenizer so that '::' scope resolution,
- * ternary/switch/goto colons, and colons inside string literals do not
- * produce false positives.
+ * Determine whether $source uses PHP 8.0 named-argument syntax, i.e. an
+ * argument label (identifier followed by a single ':') that immediately
+ * follows the opening '(' or a ',' of a call. Uses the tokenizer so that
+ * '::' scope resolution, ternary/switch/goto colons, and colons inside string
+ * literals do not produce false positives.
+ *
+ * @param string $source PHP source to scan.
+ *
+ * @return bool True if at least one named argument is present, false otherwise.
  */
 function npc_php74_uses_named_arguments($source) {
 	$tokens = token_get_all($source);

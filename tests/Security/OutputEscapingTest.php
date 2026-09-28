@@ -122,14 +122,23 @@ it('has no unescaped superglobal interpolation in echo/print statements', functi
 					continue;
 				}
 
-				$reviewedSafe = false;
+				// Remove any reviewed-safe rendering call, together with its
+				// balanced argument list, from the matched expression. If no
+				// superglobal remains afterwards, every superglobal was an
+				// argument to that helper and the printed value is the
+				// helper's return, not the raw request value. A superglobal
+				// left outside the call (e.g.
+				// "print $_GET['x'] . rrdtool_function_graph(...)") is still
+				// flagged.
+				$outside = $match;
 				foreach ($reviewedSafeCalls as $safeCall) {
-					if (strpos($match, $safeCall . '(') !== false) {
-						$reviewedSafe = true;
-						break;
-					}
+					$outside = preg_replace(
+						'/' . preg_quote($safeCall, '/') . '\s*(\((?:[^()]++|(?1))*\))/',
+						'',
+						$outside
+					);
 				}
-				if ($reviewedSafe) {
+				if (!preg_match('/\$_(GET|POST|REQUEST|COOKIE)\s*\[/', $outside)) {
 					continue;
 				}
 
