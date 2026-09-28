@@ -156,7 +156,7 @@ $page_title = api_plugin_hook_function('page_title', 'Cacti');
 		<td valign="top" style="padding: 5px; border-right: #aaaaaa 1px solid;" bgcolor='#efefef' width='<?php print read_graph_config_option("default_dual_pane_width");?>' class='noprint'>
 			<table border=0 cellpadding=0 cellspacing=0><tr><td><font size=-2><a style="font-size:7pt;text-decoration:none;color:silver" href="http://www.treemenu.net/" target=_blank></a></font></td></tr></table>
 			<?php grow_dhtml_trees(); ?>
-			<script type="text/javascript" ' . plugin_npc_csp_nonce() . '>initializeDocument();</script>
+			<script type="text/javascript" <?php print plugin_npc_csp_nonce(); ?>>initializeDocument();</script>
 
 			<?php if (isset($_GET["select_first"])) { ?>
 			<script type="text/javascript" <?php print plugin_npc_csp_nonce(); ?>>
