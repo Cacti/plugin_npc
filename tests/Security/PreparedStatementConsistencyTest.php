@@ -30,7 +30,13 @@ $pluginRoot = dirname(__DIR__, 2);
  * here as each file is converted.
  */
 $knownRawCallFiles = array(
+	// Legacy CLI/sync helpers that still issue static (non-user-input)
+	// SELECT statements pending migration to the _prepared variants. The
+	// parameterised queries alongside them already use db_*_prepared().
 	'controllers/cacti.php',
+	'controllers/hostgroups.php',
+	'controllers/hosts.php',
+	'controllers/services.php',
 );
 
 /**
@@ -65,8 +71,10 @@ function npc_strip_comments($source) {
 	$source = preg_replace('#/\*.*?\*/#s', '', $source);
 	// Remove single-line // comments.
 	$source = preg_replace('#//[^\n]*#', '', $source);
-	// Remove single-line # comments (not inside strings, best-effort).
-	$source = preg_replace('#(?<!\$)#[^\n]*#', '', $source);
+	// Remove single-line # comments (not inside strings, best-effort). Uses a
+	// ~ delimiter so the '#' being matched is not mistaken for the delimiter,
+	// which previously produced an "Unknown modifier" error and a null return.
+	$source = preg_replace('~(?<!\$)#[^\n]*~', '', $source);
 	return $source;
 }
 

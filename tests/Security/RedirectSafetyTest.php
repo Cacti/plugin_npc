@@ -80,6 +80,15 @@ it('every Location redirect is followed by exit or die within 3 lines', function
 			}
 
 			if (!$found) {
+				// A redirect that is the file's final statement (a bare
+				// directory-index/redirect stub such as index.php) is safe:
+				// no application code runs after it, so there is nothing to
+				// leak. Only flag redirects that have executable code after.
+				$rest = trim(preg_replace('/<\?php|<\?|\?>/', '', implode("\n", array_slice($lines, $i + 1))));
+				if ($rest === '') {
+					continue;
+				}
+
 				$violations[] = basename($path) . ':' . ($i + 1) . ' — redirect without exit';
 			}
 		}
