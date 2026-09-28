@@ -64,12 +64,12 @@ $page_title = api_plugin_hook_function('page_title', 'Cacti');
 
 	<link href="<?php echo $config['url_path']; ?>include/main.css" rel="stylesheet">
 	<link href="<?php echo $config['url_path']; ?>images/favicon.ico" rel="shortcut icon"/>
-	<script type="text/javascript" src="<?php echo $config['url_path']; ?>include/layout.js"></script>
-	<script type="text/javascript" src="<?php echo $config['url_path']; ?>include/treeview/ua.js"></script>
-	<script type="text/javascript" src="<?php echo $config['url_path']; ?>include/treeview/ftiens4.js"></script>
-	<script type="text/javascript" src="<?php echo $config['url_path']; ?>include/jscalendar/calendar.js"></script>
-	<script type="text/javascript" src="<?php echo $config['url_path']; ?>include/jscalendar/lang/calendar-en.js"></script>
-	<script type="text/javascript" src="<?php echo $config['url_path']; ?>include/jscalendar/calendar-setup.js"></script>
+	<?php print get_md5_include_js('include/layout.js'); ?>
+	<?php print get_md5_include_js('include/treeview/ua.js'); ?>
+	<?php print get_md5_include_js('include/treeview/ftiens4.js'); ?>
+	<?php print get_md5_include_js('include/jscalendar/calendar.js'); ?>
+	<?php print get_md5_include_js('include/jscalendar/lang/calendar-en.js'); ?>
+	<?php print get_md5_include_js('include/jscalendar/calendar-setup.js'); ?>
 	<?php api_plugin_hook('page_head'); ?>
 </head>
 
@@ -156,10 +156,10 @@ $page_title = api_plugin_hook_function('page_title', 'Cacti');
 		<td valign="top" style="padding: 5px; border-right: #aaaaaa 1px solid;" bgcolor='#efefef' width='<?php print read_graph_config_option("default_dual_pane_width");?>' class='noprint'>
 			<table border=0 cellpadding=0 cellspacing=0><tr><td><font size=-2><a style="font-size:7pt;text-decoration:none;color:silver" href="http://www.treemenu.net/" target=_blank></a></font></td></tr></table>
 			<?php grow_dhtml_trees(); ?>
-			<script type="text/javascript">initializeDocument();</script>
+			<script type="text/javascript" <?php print plugin_npc_csp_nonce(); ?>>initializeDocument();</script>
 
 			<?php if (isset($_GET["select_first"])) { ?>
-			<script type="text/javascript">
+			<script type="text/javascript" <?php print plugin_npc_csp_nonce(); ?>>
 			var obj;
 			obj = findObj(1);
 
