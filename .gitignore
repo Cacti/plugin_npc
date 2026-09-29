@@ -1,2 +1,4 @@
 locales/po/*.mo
 .omc/
+locales/po/*.po
+locales/LC_MESSAGES/*.mo
