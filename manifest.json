@@ -1,8 +1,6 @@
 {
     "tombstones": [],
     "expected": [
-        ".mdl_style.rb",
-        ".mdlrc",
         "CHANGELOG.md",
         "INFO",
         "LICENSE",
@@ -20,7 +18,6 @@
         "nagioscmd.php",
         "npc.php",
         "perfdata.php",
-        "phpunit.xml",
         "setup.php",
         "top_graph_header.php",
         "upgrade_schema.sql"
