@@ -1,0 +1,29 @@
+{
+    "tombstones": [],
+    "expected": [
+        ".mdl_style.rb",
+        ".mdlrc",
+        "CHANGELOG.md",
+        "INFO",
+        "LICENSE",
+        "QandA.md",
+        "README.md",
+        "cli.php",
+        "config.php",
+        "controllers/",
+        "images/",
+        "includes/",
+        "index.php",
+        "js/",
+        "locales/",
+        "manifest.json",
+        "nagioscmd.php",
+        "npc.php",
+        "perfdata.php",
+        "phpunit.xml",
+        "setup.php",
+        "top_graph_header.php",
+        "upgrade_schema.sql"
+    ],
+    "whitelist": []
+}
