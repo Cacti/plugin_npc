@@ -14,6 +14,19 @@
  +-------------------------------------------------------------------------+
 */
 
+/**
+ * Provisions the NPC schema on install/upgrade. Records the current plugin
+ * version in the Cacti settings table, adds the npc_host_object_id column to
+ * the core host table when absent, and creates every npc_* table that does
+ * not yet exist (existing tables are left untouched, so the call is
+ * idempotent). Invoked from the plugin install/upgrade path.
+ *
+ * @return void
+ *
+ * @global array $config           Cacti global configuration array; used to
+ *                                  locate the core database library.
+ * @global array $database_default Cacti default database connection details.
+ */
 function npc_setup_tables() {
 	global $config, $database_default;
 
