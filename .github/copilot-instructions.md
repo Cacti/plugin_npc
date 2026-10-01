@@ -25,23 +25,23 @@ When generating code for this repository:
 ## Project Structure
 
 ```
-npc/                       # Repository root (install to plugins/npc/ in Cacti)
-├── controllers/             # Request/action controllers
-├── css/ js/                   # Frontend assets (ExtJS-based UI)
-├── lib/                          # Command class and supporting library code
-├── locales/                        # Internationalization files
-├── models/                           # Data model helpers
-├── queries/                            # Data query definitions
-├── cli.php                               # CLI entry point
-├── config.php                              # Plugin-specific configuration
-├── nagioscmd.php                             # Nagios external command interface
-├── npc.php                                     # Main NPC UI entry point
-├── perfdata.php                                  # Performance data ingestion
-├── top_graph_header.php                            # Graph header integration
-├── upgrade_schema.sql                                # Schema upgrade reference
-├── INFO                                                # Plugin metadata (name, version, compat)
+npc/                     # Repository root (install to plugins/npc/ in Cacti)
+├── controllers/         # Request/action controllers
+├── css/ js/             # Frontend assets (ExtJS-based UI)
+├── lib/                 # Command class and supporting library code
+├── locales/             # Internationalization files
+├── models/              # Data model helpers
+├── queries/             # Data query definitions
+├── cli.php              # CLI entry point
+├── config.php           # Plugin-specific configuration
+├── nagioscmd.php        # Nagios external command interface
+├── npc.php              # Main NPC UI entry point
+├── perfdata.php         # Performance data ingestion
+├── top_graph_header.php # Graph header integration
+├── upgrade_schema.sql   # Schema upgrade reference
+├── INFO                 # Plugin metadata (name, version, compat)
 ├── README.md
-└── setup.php                                            # Plugin install/uninstall/upgrade hooks
+└── setup.php            # Plugin install/uninstall/upgrade hooks
 ```
 
 ## Naming Conventions
