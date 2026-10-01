@@ -8,7 +8,7 @@
 /*
  * Unit coverage for npc_config_settings()'s version-drift upgrade path in
  * setup.php, including the upgrade-time manifest prune
- * (plugin_npc_prune_files()).
+ * (npc_prune_files()).
  */
 
 beforeAll(function () {
