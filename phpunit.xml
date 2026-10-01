@@ -29,8 +29,6 @@
     <source>
         <include>
             <file>setup.php</file>
-            <file>include/database.php</file>
-            <file>include/functions.php</file>
         </include>
     </source>
 </phpunit>
