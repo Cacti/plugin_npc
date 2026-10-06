@@ -4,11 +4,11 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-09-28 16:07-0400\nPO-Revision-Date: 2026-10-05 08:52+0000\nLast-Translator: Daniel Nylander <daniel@danielnylander.se>\nLanguage-Team: Swedish <https://translate.cacti.net/projects/cacti/npc/sv/>\nLanguage: sv-SE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.11.4\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-09-28 16:07-0400\nPO-Revision-Date: 2026-10-06 09:18+0000\nLast-Translator: Daniel Nylander <daniel@danielnylander.se>\nLanguage-Team: Swedish <https://translate.cacti.net/projects/cacti/npc/sv/>\nLanguage: sv-SE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php setup.php
 msgid "None"
-msgstr "inget"
+msgstr "Ingen"
 
 #: controllers/controller.php
 #, php-format
@@ -16,13 +16,12 @@ msgid "An error occurred in %s. See error logs for detail."
 msgstr "Ett fel inträffade i %s. Se felloggar för detaljer."
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
-#, fuzzy
 msgid "No"
-msgstr "inget"
+msgstr "Nej"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
@@ -33,30 +32,28 @@ msgid "Dashboard"
 msgstr "Instrumentpanel"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "Värdikoner"
+msgstr "Värdar"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "Serviceikoner"
+msgstr "Tjänster"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "Kommentarer"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "Driftstopp"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "Händelselogg"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "Processinformation"
 
 #: controllers/nagios.php
 msgid "Remote Commands must be enabled under console->Settings->NPC"
@@ -87,21 +84,20 @@ msgid "Host Check Latency"
 msgstr "Latency för värdkontroll"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "Värdikoner"
+msgstr "Värdgrupper"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "Ogiltig modul begärdes."
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "Ogiltig åtgärd begärdes."
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "Styrenheten hittades inte."
 
 #: setup.php
 msgid "ERROR - Log errors only"
