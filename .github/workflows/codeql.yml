@@ -6,8 +6,8 @@
 # | http://www.cacti.net/                                                   |
 # +-------------------------------------------------------------------------+
 #
-# CodeQL has no PHP analysis, so this covers the plugin JavaScript and Ruby only.
-# The PHP is covered by the syntax check and integration jobs in
+# CodeQL has no PHP analysis, so this covers the plugin JavaScript only. The
+# PHP is covered by the syntax check and integration jobs in
 # plugin-ci-workflow.yml.
 
 name: "CodeQL"
@@ -44,7 +44,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ["javascript-typescript", "ruby"]
+        language: ["javascript-typescript"]
     steps:
       - name: Checkout repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
