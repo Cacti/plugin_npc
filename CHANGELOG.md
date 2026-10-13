@@ -1,6 +1,7 @@
 ## Changelog
 
 --- develop ---
+* security: Pin CI fixtures and shared test dependencies, disable persisted checkout credentials, and limit workflow permissions and runtime
 
 * dev: Relocate the schema provisioning function `npc_setup_tables()` from
   `setup.php` into `includes/database.php` (loaded via `require_once`) to align
