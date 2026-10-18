@@ -1,7 +1,6 @@
 ## Changelog
 
 --- develop ---
-* security: Pin CI fixtures and shared test dependencies, disable persisted checkout credentials, and limit workflow permissions and runtime
 
 * dev: Relocate the schema provisioning function `npc_setup_tables()` from
   `setup.php` into `includes/database.php` (loaded via `require_once`) to align
@@ -11,6 +10,7 @@
   version change, plus a CI `validate-manifest.php` drift check
 * dev: Measure CI coverage with xdebug instead of pcov so the plugin's own sources are instrumented (pcov auto-scopes to the Composer root and skipped cacti/plugins/, leaving the patch-coverage gate with nothing to measure)
 * dev: Enforce patch coverage of changed lines in CI and remove the inert COMPOSER_ROOT_VERSION env from the Pest step
+* dev: Pin CI fixtures and shared test dependencies, disable persisted checkout credentials, and limit workflow permissions and runtime
 * security: Add a version-safe CSP nonce (`plugin_npc_csp_nonce()`) to every inline `<script>` tag so pages stay compatible with Cacti's Content-Security-Policy nonce enforcement, while falling back cleanly on older Cacti releases that lack the `CactiSecureHeaders` class
 * issue: Fix outdated Security Pest tests that failed CI after the Cacti-native
   controller refactor (front-controller auth model, graph passthrough,
