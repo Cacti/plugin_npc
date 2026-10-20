@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-09-28 16:07-0400\nPO-Revision-Date: 2026-10-06 09:18+0000\nLast-Translator: Daniel Nylander <daniel@danielnylander.se>\nLanguage-Team: Swedish <https://translate.cacti.net/projects/cacti/npc/sv/>\nLanguage: sv-SE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.11.4\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-09-28 16:07-0400\nPO-Revision-Date: 2026-10-20 08:18+0000\nLast-Translator: Daniel Nylander <daniel@danielnylander.se>\nLanguage-Team: Swedish <https://translate.cacti.net/projects/cacti/npc/sv/>\nLanguage: sv-SE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -25,7 +25,7 @@ msgstr "Ja"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr "Ej tillämpligt"
+msgstr "Inte tillämpligt"
 
 #: controllers/layout.php
 msgid "Dashboard"
@@ -121,7 +121,7 @@ msgstr "Nagios värdmappning"
 
 #: setup.php
 msgid "Select the Nagios host that maps to this host."
-msgstr "Välj Nagios-värden som mappas till den här värden."
+msgstr "Välj den Nagios-värd som motsvarar den här värden."
 
 #: setup.php
 msgid "NPC"
@@ -153,7 +153,7 @@ msgstr "Tillåt att kommandon skrivs till Nagios-kommandofilen."
 
 #: setup.php
 msgid "Nagios Command File Path"
-msgstr "Sökvägen till Nagios kommandofil"
+msgstr "Sökväg till Nagios-kommandofilen"
 
 #: setup.php
 msgid "The path to the Nagios command file (nagios.cmd)."
@@ -161,7 +161,7 @@ msgstr "Sökvägen till Nagios-kommandofilen (nagios.cmd)."
 
 #: setup.php
 msgid "Nagios URL"
-msgstr "Nagios URL"
+msgstr "Nagios-webbadress"
 
 #: setup.php
 msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
@@ -205,7 +205,7 @@ msgstr "Värdikoner"
 
 #: setup.php
 msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
-msgstr "Aktivera visning av värdikoner i värdnätet. Parameterna icon_image och icon_image_alt i Nagios värddefinition används för att ställa in bilden. Ikonerna bör vara 16x16 för att få det bästa utseendet. den här inställningen påverkar inte värdstatusikonerna."
+msgstr "Aktivera visning av värdikoner i värdnätet. Parametrarna icon_image och icon_image_alt i Nagios-värddefinitionen används för att ställa in bilden. Ikonerna bör vara 16×16 för bästa utseende. Den här inställningen påverkar inte värdstatusikonerna."
 
 #: setup.php
 msgid "Service Icons"
@@ -213,7 +213,7 @@ msgstr "Serviceikoner"
 
 #: setup.php
 msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
-msgstr "Aktivera visning av tjänstikoner i servicenätet. Parameterna icon_image och icon_image_alt i Nagios-tjänstedefinitionen används för att ställa in bilden. Ikonerna bör vara 16x16 för att få det bästa utseendet. Denna inställning påverkar inte tjänstestatusikonerna."
+msgstr "Aktivera visning av tjänstikoner i tjänstenätet. Parametrarna icon_image och icon_image_alt i Nagios-tjänstedefinitionen används för att ställa in bilden. Ikonerna bör vara 16×16 för bästa utseende. Den här inställningen påverkar inte tjänstestatusikonerna."
 
 #: setup.php
 msgid "Logging"
