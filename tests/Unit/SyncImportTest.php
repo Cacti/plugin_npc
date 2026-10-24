@@ -267,3 +267,26 @@ it('refuses the import to a user without device management rights', function () 
 	expect($GLOBALS['__test_db_calls'])->toBe(array());
 	expect(file_exists($base . '/cli/argv.json'))->toBeFalse();
 });
+
+it('lists the unmapped hosts of the selected hostgroups', function () {
+	$GLOBALS['__test_db_results']['db_fetch_assoc_prepared']['INNER JOIN npc_hostgroup_members'] = array(
+		array('host_object_id' => 10, 'display_name' => 'web1', 'address' => '192.0.2.10'),
+	);
+
+	$out = json_decode((new NpcSyncController())->getHosts(array('data' => '{"g1":{"alias":"web","create_graphs":1,"template":2}}')), true);
+
+	expect($out)->toBe(array(
+		array('host_object_id' => 10, 'display_name' => 'web1', 'address' => '192.0.2.10', 'create_graphs' => 1, 'template' => 2),
+	));
+});
+
+it('leaves hosts that are already mapped out of the selection', function () {
+	$GLOBALS['__test_db_results']['db_fetch_assoc_prepared']['INNER JOIN npc_hostgroup_members'] = array(
+		array('host_object_id' => 10, 'display_name' => 'web1', 'address' => '192.0.2.10'),
+	);
+	$GLOBALS['__test_db_results']['db_fetch_assoc_prepared']['WHERE npc_host_object_id'] = array(array('id' => 3));
+
+	$out = (new NpcSyncController())->getHosts(array('data' => '{"g1":{"alias":"web","create_graphs":1,"template":2}}'));
+
+	expect(json_decode($out, true))->toBe(array());
+});
