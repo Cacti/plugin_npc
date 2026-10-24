@@ -8,19 +8,43 @@ will provide a single point of access for trending and alert monitoring.
 you should be using it in a non-production setup until further migration testing
 has been performed by the Cacti community.
 
+## Status
+
+**Known issue:** `npc.php` does not load the base controller class
+(`controllers/controller.php`), so opening NPC from the console tab ends in a
+fatal error (`Class "Controller" not found`). Cacti then disables the plugin
+and it has to be enabled again under Console > Configuration > Plugins. The
+settings tab, the device Nagios host mapping and the command line scripts do
+not go through `npc.php` and are not affected.
+
+The screens, settings and scripts described below are what the code provides.
+Anything that was part of the original ExtJS plugin and is not listed here is
+not implemented in this version.
+
 ## Features
 
-1) A complete Nagios UI replacement integrated into Cacti.
+1) An NPC tab in the console header with seven screens: Dashboard, Hosts,
+   Services, Comments, Downtime, Event Log and Process Info.
 
-2) A feature rich user interface developed on ExtJS.
+2) The screens are built with jQuery on the Cacti theme. ExtJS is not used.
 
-3) A central location to monitor trending and alerting.
+3) The data of a screen is requested as JSON. The Hosts, Services and Event Log
+   screens refresh themselves every Portlet Refresh Rate seconds. Changing the
+   tab loads a new page.
 
-4) All NPC data is updated asynchronously via JSON (no reloading web pages).
+4) Host and service commands are written to the Nagios command file. The
+   Acknowledge, Add Comment, Schedule Downtime and Schedule Check options of the
+   command dialog do not send the values those commands need, and NPC rejects
+   them with "Missing required parameter". Enable and Disable Notifications
+   need nothing more than the host or service and are accepted.
 
-5) Automated importing/syncing of hosts from Nagios to Cacti (N2C).
+5) A "Nagios Host Mapping" drop-down on the Cacti device page.
 
-6) The UI can be customized on a per user basis.
+6) The command line scripts `perfdata.php` and `cli.php`, which print Nagios
+   performance data in the form a Cacti data input method reads.
+
+Importing Nagios hosts into Cacti (N2C) and per user screen layouts have server
+side code but no screen, so neither can be used from the interface.
 
 ## Usage
 
@@ -28,38 +52,22 @@ With the exception of some installation notes documentation is very slim. Watch
 the forums and the NPC GitHub for additional info. Here are a few tips to get
 you started:
 
-* Most lists including services or hosts can be double clicked to open
-  additional detail screens.
+* Click a host or service name to open a dialog with its details.
 
-* Most lists including services or hosts can be right clicked to popup a context
-  menu used to issue service or host commands.
+* The gear icon at the end of a host or service row opens the command dialog.
+  Commands need Remote Commands to be enabled in the settings and the NPC
+  Global Commands realm for the user.
 
-* If a graph is mapped to a service or host, a graph icon will be displayed in
-  the hosts and services screens.  A single left click of this icon will popup
-  the graph.
+* The Hosts and Services screens have a state filter (any, up/ok, down/warning,
+  unreachable/critical, unknown, problems).
 
-* Most green check marks (started/enabled) or most red X (stopped/disabled) can
-  be double clicked to toggle the option (requires that remote commands are
-  enabled.)
+* The Comments screen lists host and service comments. The cross at the end of
+  a host comment deletes it after a confirmation.
 
-* Most grid columns can be re-ordered via drag and drop.
+* The Dashboard shows the host and service status counts and the host and
+  service problems.
 
-* Most grid columns can be hidden and currently hidden columns can be viewed by
-  clicking a down arrow to the right of the column heading.
-
-* Dashboard portlets can be closed or minimized. Closed portlets can be made
-  visible again by clicking the Portlets button on the far right of the toolbar
-  on the Dashboard tab and then select which portlets you want displayed.
-
-* All changes to the interface (portlets, column order, etc.) are saved server
-  side on a per user basis.  Customize the UI your way and it is available
-  anywhere you login.
-
-* Importing Nagios hosts is done from the N2C link on the left side tree menu.
-  Before starting an import you need to click in the template field to the right
-  of the hostgroup you are importing. Doing so will expose a select box for
-  assigning a host template.  Presently, this may be broken in Cacti 1.x due to
-  it's redesigned tree architecture.
+* Every list shows the first 25 rows. There are no paging controls.
 
 **IMPORTANT NOTE:** Since this is a fresh port of a 10 year old Cacti plugin,
 you should be using it in a non-production setup until further migration testing
@@ -74,17 +82,20 @@ and configure the NPC Plugin for Cacti.
 
 Below are the minimum requirements:
 
-- Cacti 1.2.1
+- Cacti 1.2.1 or later in the 1.2 series (`compat` in the `INFO` file). The
+  CI workflow tests against the Cacti 1.2.x branch only.
+- PHP 8.2 or later. The CI workflow runs PHP 8.2, 8.3 and 8.4.
+- MySQL or MariaDB, as required by Cacti.
 - NDOUtils 1.4b7
 - Nagios 3.x
+
+The plugin needs no PHP extension beyond the ones Cacti itself needs. Importing
+hosts from Nagios runs `cli/add_device.php` with `exec()`, which needs `php` in
+the PATH of the web server user.
 
 The NPC Plugin, first written for Cacti 0.8.7, has been updated to work with
 Cacti 1.2.x.  However, testing has been very light.  We will need feedback from
 users as to its usability with this Cacti version.
-
-It is anticipated that there will be many changes forthcoming as we review the
-architecture and the ExtJS framework to see how it co-exists with the Cacti
-Framework.  So far so good.
 
 The default memory limit for PHP probably will not be enough to run NPC. Edit
 /etc/php.ini and update the memory_limit option if you find times when NPC is
@@ -102,6 +113,8 @@ Grab the latest version of NPC from GitHub using the following steps:
 
 2. `git clone https://github.com/Cacti/plugin_npc.git npc`
 
+   The directory has to be named `npc`.
+
 3. Ensure permissions are set for the apache user to read
 
 4. login to Cacti as an admin.
@@ -110,12 +123,32 @@ Grab the latest version of NPC from GitHub using the following steps:
 
    1. Go to Console > Configuration > Plugins
 
-   2. Click the Install link to the left of the 'Npc' plugin line
+   2. Click the Install Plugin icon to the left of the 'Npc' plugin line. The
+      plugin is listed as "Nagios Plugin for Cacti" with the status Installed.
 
-   3. Next, click 'Enable' link to the left of the 'Npc' plugin line
+   3. Next, click the Enable Plugin icon on the same line
 
-6. You can find the NPC plugin options under Console > Configuration > Settings
-   section
+   The same can be done from the command line:
+
+   ```shell
+   php cli/plugin_manage.php --plugin=npc --install --enable
+   ```
+
+6. Grant the realms under Console > Configuration > Users, on the Permissions
+   tab of each user:
+
+   * **NPC** - the NPC tab and all of its screens.
+
+   * **NPC Global Commands** - sending commands to Nagios. The NPC realm alone
+     is not enough.
+
+7. You can find the NPC plugin options under Console > Configuration > Settings
+   in the NPC tab.
+
+Installing creates 62 tables with the prefix `npc_` in the Cacti database, one
+column (`npc_host_object_id`) on the Cacti `host` table, the two realms, and the
+settings `npc_date_format`, `npc_time_format` and `npc_log_level` with their
+defaults.
 
 Without NDO2DB feeding Nagios data into NPC the dashboard (and other screens)
 will be empty.
@@ -123,18 +156,78 @@ will be empty.
 Next, there are a few NPC settings to add/update. Goto Console > Configuration >
 Settings > NPC.
 
-* **Remote Commands** - Check the checkbox to enable remote commands. At the
-  moment this is system wide so all users that can access NPC will be able to
-  execute commands.
+* **Remote Commands** - Check the checkbox to enable remote commands (off by
+  default). Users also need the NPC Global Commands realm to send commands.
 
 * **Nagios Command File Path** - Add the path to the Nagios command file. It
-  will be something like /usr/local/nagios/var/rw/nagios.cmd
+  will be something like /usr/local/nagios/var/rw/nagios.cmd. The web server
+  user has to be able to read and write the file.
 
-* **Nagios URL** - The URL to the Nagios web interface is used to get access to
-  the status map and reporting CGI's. You can also access the Nagios UI by
-  clicking the "Nagios" link in the left hand "Navigation" pane in NPC.
+* **Nagios URL** - The URL of the Nagios web interface. The value is stored and
+  handed to the page, but no screen uses it in this version.
 
-* Set the date and time format to your liking.
+* **Date Format** and **Time Format** - Default Y-m-d and H:i. The choices are
+  the nine date and six time formats in the drop-downs. They format the dates
+  on the Process Info screen. The other screens show the dates as Nagios stored
+  them.
+
+* **Portlet Refresh Rate** - Seconds between refreshes of the Hosts, Services
+  and Event Log screens, default 60. The text next to the field gives a minimum
+  of 30 seconds, which is not enforced.
+
+* **Host/Service Config Type** - 0 or 1, default 1. It selects the rows with
+  that `config_type` in the host and service tables. If you can see host and
+  service groups but not hosts or services try the other value.
+
+* **Host Icons** and **Service Icons** - Stored, but no screen uses them in this
+  version.
+
+* **Logging Level** - None (default), Error, Warn, Info or Debug. NPC writes to
+  the Cacti log (`log/cacti.log`) with the component NPC. Debug fills the log
+  quickly.
+
+## Upgrading and uninstalling
+
+Replace the files (for example `git pull` in the plugin directory). When the
+version in `INFO` differs from the version Cacti has stored, the next load of
+Console > Configuration > Settings runs the schema upgrade, removes the files
+that `manifest.json` lists as tombstones together with the `tests` directory
+and `phpunit.xml`, resets the stored per user NPC settings and records the new
+version.
+
+Disable and Uninstall are the same Plugins page icons, or `--disable` and
+`--uninstall` of `plugin_manage.php`. Uninstalling drops all `npc_` tables,
+including the Nagios data collected in them, drops the `npc_host_object_id`
+column, and removes the realms and the NPC settings.
+
+## Command line scripts
+
+Both scripts are run with `php` from any directory and read the Cacti
+configuration. `perfdata.php` is the one a Cacti data input method runs, for
+example `php <path_cacti>/plugins/npc/perfdata.php --type=service --id=<service
+object id>`. It prints the numeric performance values of the newest stored
+service check as `label:value` pairs separated by spaces, which is the form a
+Cacti script data input method reads. A service can also be selected with
+`--host=<host name> --service=<service description>`. For a host
+(`--type=host`) the output comes from the first stored check row, not the
+newest. An entry such as `load15=U` adds a stray ` : ` to the output.
+
+Options of `perfdata.php`:
+
+* `--type=host|service` and `--id=<object id>`, `--host=<name>`,
+  `--service=<description>` select the object.
+
+* `--list-hosts [--hostgroup=<alias>]`, `--list-hostgroups` and
+  `--list-services` print the objects with their IDs.
+
+* `--hostgroup` and `--ds` are accepted. `--ds` is not used.
+
+`cli.php` takes the same options and adds `--perfdata` (the default),
+`--perf-history` with `--host`, `--service`, `--begin=<date>` and `--end=<date>`,
+which prints the end time and performance data of the checks in that range.
+`--list-services` accepts `--host=<display name>`. The usage text of both
+scripts names `--datasource` and does not list all options; the options above
+are the ones the code reads.
 
 ## Configuring Nagios
 
@@ -296,11 +389,52 @@ Apr 19 11:11:55 acid init: Id "ndo" respawning too fast: disabled for 5 minutes
 Besides muddying the logs there is no harm and so far this is the only way I
 have been able to keep ndo2db running.
 
+## Translations
+
+Translatable strings are collected into `locales/po/cacti.pot` by
+`locales/build_gettext.sh`, which needs GNU gettext (`xgettext`, `msgmerge`,
+`msgfmt`), `realpath` and GNU `sed` (the script fails with the BSD `sed` of
+macOS). The per language `.po` and `.mo` files are maintained on the Cacti
+translation server (Weblate) and are not changed in pull requests. A pull
+request that adds or changes a string wrapped in `__()` includes only the
+regenerated `locales/po/cacti.pot`.
+
+## Development and tests
+
+The tests run inside a Cacti checkout of the 1.2.x branch that has its
+development dependencies installed (Pest, in `include/vendor/bin`), with
+the plugin at `plugins/npc`, PHP 8.2 or later with Xdebug for the coverage
+report, and a database configured in `include/config.php`. The file
+`tests/.cacti-version` has to contain `1.2.x`, `develop`, or the exact contents
+of the Cacti `include/cacti_version`.
+
+From the Cacti root:
+
+```shell
+echo -n "1.2.x" > plugins/npc/tests/.cacti-version
+include/vendor/bin/pest --configuration=plugins/npc/phpunit.xml --coverage-clover=plugins/npc/coverage/clover.xml
+```
+
+From the plugin directory, with the branch the change is based on as the
+reference:
+
+```shell
+php tests/bin/patch-coverage.php coverage/clover.xml origin/develop 100
+php tests/bin/check-i18n-pot.php origin/develop
+php tests/bin/validate-manifest.php
+```
+
+`patch-coverage.php` fails when fewer than 100 percent of the changed lines of
+the measured files are executed. `check-i18n-pot.php` fails when translatable
+strings changed without a regenerated `locales/po/cacti.pot`.
+`validate-manifest.php` fails when the top level files do not match `expected`
+in `manifest.json`.
+
 ## Bugs and Feature Enhancements
 
 Bug and feature enhancements for the npc plugin are handled in GitHub. If you
-find a first search the Cacti forums for a solution before creating an issue in
-GitHub.
+find a bug, first search the Cacti forums for a solution before creating an
+issue in GitHub.
 
 -----------------------------------------------
 Copyright (c) 2004-2026 - The Cacti Group, Inc.
