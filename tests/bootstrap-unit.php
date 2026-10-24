@@ -80,6 +80,42 @@ $GLOBALS['config'] = array(
 );
 
 $GLOBALS['__test_db_calls'] = array();
+$GLOBALS['__test_db_results'] = array();
+$GLOBALS['__test_db_fetch_log'] = array();
+
+/**
+ * Result for a db_fetch_* stub.
+ *
+ * A test maps a substring of the SQL to the rows it wants back, per stub:
+ * $GLOBALS['__test_db_results']['db_fetch_assoc']['FROM user_auth'] = array(...).
+ * Every fetch is logged so a test can assert the bound parameters.
+ */
+function npc_test_db_result($fn, $sql, $params, $default) {
+	$GLOBALS['__test_db_fetch_log'][] = array('fn' => $fn, 'sql' => $sql, 'params' => $params);
+
+	foreach (($GLOBALS['__test_db_results'][$fn] ?? array()) as $match => $result) {
+		if (strpos($sql, (string) $match) !== false) {
+			return $result;
+		}
+	}
+
+	return $default;
+}
+
+/**
+ * Make require_once('include/auth.php') resolve to an empty stub, ahead of
+ * the real Cacti file that the working directory would otherwise supply.
+ */
+function npc_test_stub_cacti_includes() {
+	static $dir = null;
+
+	if ($dir === null) {
+		$dir = sys_get_temp_dir() . '/npc-inc-' . uniqid();
+		mkdir($dir . '/include', 0777, true);
+		file_put_contents($dir . '/include/auth.php', "<?php\n");
+		set_include_path($dir . PATH_SEPARATOR . $GLOBALS['config']['base_path'] . PATH_SEPARATOR . get_include_path());
+	}
+}
 
 if (!function_exists('get_md5_include_js')) {
 	function get_md5_include_js($path, $async = false) {
@@ -109,37 +145,37 @@ if (!function_exists('db_execute_prepared')) {
 
 if (!function_exists('db_fetch_assoc')) {
 	function db_fetch_assoc($sql) {
-		return array();
+		return npc_test_db_result('db_fetch_assoc', $sql, array(), array());
 	}
 }
 
 if (!function_exists('db_fetch_assoc_prepared')) {
 	function db_fetch_assoc_prepared($sql, $params = array()) {
-		return array();
+		return npc_test_db_result('db_fetch_assoc_prepared', $sql, $params, array());
 	}
 }
 
 if (!function_exists('db_fetch_row')) {
 	function db_fetch_row($sql) {
-		return array();
+		return npc_test_db_result('db_fetch_row', $sql, array(), array());
 	}
 }
 
 if (!function_exists('db_fetch_row_prepared')) {
 	function db_fetch_row_prepared($sql, $params = array()) {
-		return array();
+		return npc_test_db_result('db_fetch_row_prepared', $sql, $params, array());
 	}
 }
 
 if (!function_exists('db_fetch_cell')) {
 	function db_fetch_cell($sql) {
-		return $GLOBALS['__test_db_fetch_cell'] ?? '';
+		return npc_test_db_result('db_fetch_cell', $sql, array(), $GLOBALS['__test_db_fetch_cell'] ?? '');
 	}
 }
 
 if (!function_exists('db_fetch_cell_prepared')) {
 	function db_fetch_cell_prepared($sql, $params = array()) {
-		return '';
+		return npc_test_db_result('db_fetch_cell_prepared', $sql, $params, '');
 	}
 }
 
@@ -252,6 +288,30 @@ if (!function_exists('cacti_log')) {
 if (!function_exists('cacti_sizeof')) {
 	function cacti_sizeof($array) {
 		return is_array($array) ? count($array) : 0;
+	}
+}
+
+if (!function_exists('cacti_count')) {
+	function cacti_count($array) {
+		return is_array($array) ? count($array) : 0;
+	}
+}
+
+if (!function_exists('cacti_escapeshellarg')) {
+	function cacti_escapeshellarg($string) {
+		return escapeshellarg($string);
+	}
+}
+
+if (!function_exists('api_user_realm_auth')) {
+	function api_user_realm_auth($filename = '') {
+		return !in_array($filename, $GLOBALS['__test_denied_realms'] ?? array(), true);
+	}
+}
+
+if (!function_exists('api_plugin_user_realm_auth')) {
+	function api_plugin_user_realm_auth($filename = '') {
+		return !in_array($filename, $GLOBALS['__test_denied_realms'] ?? array(), true);
 	}
 }
 

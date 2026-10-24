@@ -48,11 +48,12 @@ class NpcSyncController extends Controller {
 
         $config = $params['config'];
         $path = $config["base_path"] . "/cli/add_device.php";
+        $cacti = new NpcCactiController();
 
         $return = $params['description'] . '|';
 
         // If the host exists and is already mapped return with notice
-        if (NpcCactiController::isMapped($params['host_object_id'])) {
+        if ($cacti->isMapped($params['host_object_id'])) {
             $this->logger('info', get_class($this), __FUNCTION__ , $params['description'] . " already exists and is mapped.");
             $return .= '0|0|The host already exists and is mapped';
             return($return);
@@ -60,7 +61,7 @@ class NpcSyncController extends Controller {
 
         // If the host already exists, map it and return.
         if ($cactiId = $this->checkHostExists($params['ip'], $params['cache_id'])) {
-            NpcCactiController::mapHost($params['host_object_id'], $cactiId);
+            $cacti->mapHost($params['host_object_id'], $cactiId);
             $this->logger('info', get_class($this), __FUNCTION__ , $params['description'] . " already existed and was mapped.");
             $return .= '0|1|The host already existed in Cacti with device ID: ' . $cactiId;
             return($return);
@@ -83,7 +84,7 @@ class NpcSyncController extends Controller {
 
                 if (isset($matches[1])) {
                     // Import was successful. Now map the hosts
-                    NpcCactiController::mapHost($params['host_object_id'], $matches[1]);
+                    $cacti->mapHost($params['host_object_id'], $matches[1]);
                     $this->logger('info', get_class($this), __FUNCTION__ , "Successfully imported and mapped " . $params['description'] . ": $output");
                     $return .= '1|1|' . $output;
                 } elseif (isset($matches[0])) {
@@ -204,7 +205,8 @@ class NpcSyncController extends Controller {
             $string .= "\$cacheKey = '" . $cache_id . "';\n";
             $string .= "\$hosts = array(\n";
 
-            $results = NpcCactiController::getHostnames();
+            $cacti = new NpcCactiController();
+            $results = $cacti->getHostnames();
 
             for ($i = 0; $i < count($results); $i++) {
                 $address = gethostbyname($results[$i]['hostname']);
