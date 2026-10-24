@@ -2,6 +2,10 @@
 
 --- develop ---
 
+* issue: Rewrite the README to match the code: the screens and settings that exist,
+  the realms, the requirements, install, upgrade and uninstall behaviour, the
+  command line scripts, the translation workflow and the test commands; add a
+  known issues note
 * dev: Relocate the schema provisioning function `npc_setup_tables()` from
   `setup.php` into `includes/database.php` (loaded via `require_once`) to align
   with the fleet schema/includes convention; behavior is unchanged
