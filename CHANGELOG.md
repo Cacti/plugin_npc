@@ -2,6 +2,9 @@
 
 --- develop ---
 
+* issue: Add the minimum_importance column to npc_contacts on upgrade (the upgrade
+  named a table that does not exist) and remove the settings of deleted users
+  (the cleanup read a column the query does not return)
 * issue: Skip perfdata entries without a numeric value (label=U) in perfdata.php and
   cli.php instead of printing PHP warnings into the data input output
 * issue: Declare the hostgroup and unhandled request properties on the base

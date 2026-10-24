@@ -383,8 +383,8 @@ function npc_config_settings() {
 
 			// Delete non existent users from npc_settings
 			for ($i = 0; $i < count($nUser); $i++) {
-				if (isset($nUser[$i]['id']) && !db_fetch_cell('SELECT id FROM user_auth WHERE id = ' . $nUser[$i]['id'])) {
-					db_execute('DELETE FROM npc_settings WHERE user_id = ' . $nUser[$i]['id']);
+				if (!db_fetch_cell_prepared('SELECT id FROM user_auth WHERE id = ?', array($nUser[$i]['user_id']))) {
+					db_execute_prepared('DELETE FROM npc_settings WHERE user_id = ?', array($nUser[$i]['user_id']));
 				}
 			}
 
@@ -505,8 +505,8 @@ function npc_upgrade_tables() {
 		db_execute("ALTER TABLE `npc_hosts` ADD COLUMN `importance` smallint(6) NOT NULL default '0' AFTER `z_3d`");
 	}
 
-	if (!db_column_exists('npc_contracts', 'minimum_importance')) {
-		db_execute("ALTER TABLE `npc_contracts` ADD COLUMN `minimum_importance` smallint(6) NOT NULL default '0' AFTER `notify_host_downtime`");
+	if (!db_column_exists('npc_contacts', 'minimum_importance')) {
+		db_execute("ALTER TABLE `npc_contacts` ADD COLUMN `minimum_importance` smallint(6) NOT NULL default '0' AFTER `notify_host_downtime`");
 	}
 }
 
