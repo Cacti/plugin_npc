@@ -49,7 +49,7 @@ it('validates and defaults the npc_host_object_id on device save', function () {
 
 	$_POST['npc_host_object_id'] = '42';
 	$save = npc_api_device_save(array('id' => 1));
-	expect($save['npc_host_object_id'])->toBe('42');
+	expect($save['npc_host_object_id'])->toBe(42);
 });
 
 it('prints no meaningful header output', function () {

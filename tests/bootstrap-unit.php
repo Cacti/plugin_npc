@@ -159,7 +159,7 @@ if (!function_exists('get_md5_include_css')) {
 }
 
 if (!function_exists('db_execute')) {
-	function db_execute($sql) {
+	function db_execute($sql, $log = true, $db_conn = false) {
 		$GLOBALS['__test_db_calls'][] = array('fn' => 'db_execute', 'sql' => $sql, 'params' => array());
 
 		if (isset($GLOBALS['__test_pdo'])) {
@@ -171,7 +171,7 @@ if (!function_exists('db_execute')) {
 }
 
 if (!function_exists('db_execute_prepared')) {
-	function db_execute_prepared($sql, $params = array()) {
+	function db_execute_prepared($sql, $params = array(), $log = true, $db_conn = false, $execute_name = 'Exec', $default_value = true) {
 		$GLOBALS['__test_db_calls'][] = array('fn' => 'db_execute_prepared', 'sql' => $sql, 'params' => $params);
 
 		if (isset($GLOBALS['__test_pdo'])) {
@@ -183,49 +183,49 @@ if (!function_exists('db_execute_prepared')) {
 }
 
 if (!function_exists('db_fetch_assoc')) {
-	function db_fetch_assoc($sql) {
+	function db_fetch_assoc($sql, $log = true, $db_conn = false) {
 		return npc_test_db_result('db_fetch_assoc', $sql, array(), array());
 	}
 }
 
 if (!function_exists('db_fetch_assoc_prepared')) {
-	function db_fetch_assoc_prepared($sql, $params = array()) {
+	function db_fetch_assoc_prepared($sql, $params = array(), $log = true, $db_conn = false) {
 		return npc_test_db_result('db_fetch_assoc_prepared', $sql, $params, array());
 	}
 }
 
 if (!function_exists('db_fetch_row')) {
-	function db_fetch_row($sql) {
+	function db_fetch_row($sql, $log = true, $db_conn = false) {
 		return npc_test_db_result('db_fetch_row', $sql, array(), array());
 	}
 }
 
 if (!function_exists('db_fetch_row_prepared')) {
-	function db_fetch_row_prepared($sql, $params = array()) {
+	function db_fetch_row_prepared($sql, $params = array(), $log = true, $db_conn = false) {
 		return npc_test_db_result('db_fetch_row_prepared', $sql, $params, array());
 	}
 }
 
 if (!function_exists('db_fetch_cell')) {
-	function db_fetch_cell($sql) {
+	function db_fetch_cell($sql, $col_name = '', $log = true, $db_conn = false) {
 		return npc_test_db_result('db_fetch_cell', $sql, array(), $GLOBALS['__test_db_fetch_cell'] ?? '');
 	}
 }
 
 if (!function_exists('db_fetch_cell_prepared')) {
-	function db_fetch_cell_prepared($sql, $params = array()) {
+	function db_fetch_cell_prepared($sql, $params = array(), $col_name = '', $log = true, $db_conn = false) {
 		return npc_test_db_result('db_fetch_cell_prepared', $sql, $params, '');
 	}
 }
 
 if (!function_exists('db_index_exists')) {
-	function db_index_exists($table, $index) {
+	function db_index_exists($table, $index, $log = true, $db_conn = false) {
 		return false;
 	}
 }
 
 if (!function_exists('db_column_exists')) {
-	function db_column_exists($table, $column) {
+	function db_column_exists($table, $column, $log = true, $db_conn = false) {
 		if (isset($GLOBALS['__test_pdo'])) {
 			return $GLOBALS['__test_pdo']->query('SHOW COLUMNS FROM `' . $table . "` LIKE '" . $column . "'")->rowCount() > 0;
 		}
@@ -235,7 +235,7 @@ if (!function_exists('db_column_exists')) {
 }
 
 if (!function_exists('db_table_exists')) {
-	function db_table_exists($table) {
+	function db_table_exists($table, $log = true, $db_conn = false) {
 		if (isset($GLOBALS['__test_pdo'])) {
 			return $GLOBALS['__test_pdo']->query("SHOW TABLES LIKE '" . $table . "'")->rowCount() > 0;
 		}
@@ -259,7 +259,7 @@ if (!function_exists('api_plugin_db_table_create')) {
 $GLOBALS['__test_registered_hooks'] = array();
 
 if (!function_exists('api_plugin_register_hook')) {
-	function api_plugin_register_hook($plugin, $hook, $function, $file, $subtype = '') {
+	function api_plugin_register_hook($plugin, $hook, $function, $file, $enable = false) {
 		$GLOBALS['__test_registered_hooks'][] = array(
 			'name'     => $plugin,
 			'hook'     => $hook,
@@ -274,12 +274,12 @@ if (!function_exists('api_plugin_register_hook')) {
 $GLOBALS['__test_registered_realms'] = array();
 
 if (!function_exists('api_plugin_register_realm')) {
-	function api_plugin_register_realm($plugin, $file, $description, $enabled) {
+	function api_plugin_register_realm($plugin, $file, $display, $admin = true) {
 		$GLOBALS['__test_registered_realms'][] = array(
 			'name'        => $plugin,
 			'file'        => $file,
-			'description' => $description,
-			'enabled'     => $enabled,
+			'description' => $display,
+			'enabled'     => $admin,
 		);
 
 		return true;
@@ -297,13 +297,13 @@ if (!function_exists('api_plugin_remove_realms')) {
 }
 
 if (!function_exists('read_config_option')) {
-	function read_config_option($name, $force = false) {
-		return $GLOBALS['__test_config'][$name] ?? '';
+	function read_config_option($config_name, $force = false) {
+		return $GLOBALS['__test_config'][$config_name] ?? '';
 	}
 }
 
 if (!function_exists('set_config_option')) {
-	function set_config_option($name, $value) {
+	function set_config_option($config_name, $value, $remote = false) {
 	}
 }
 
@@ -326,7 +326,7 @@ if (!function_exists('__esc')) {
 }
 
 if (!function_exists('cacti_log')) {
-	function cacti_log($message, $also_print = false, $log_type = '', $level = 0) {
+	function cacti_log($string, $output = false, $environ = 'CMDPHP', $level = '') {
 		$args = func_get_args();
 		$GLOBALS["__test_cacti_log"][] = isset($args[0]) ? (string) $args[0] : "";
 	}
@@ -345,7 +345,7 @@ if (!function_exists('cacti_count')) {
 }
 
 if (!function_exists('cacti_escapeshellarg')) {
-	function cacti_escapeshellarg($string) {
+	function cacti_escapeshellarg($string, $quote = true) {
 		return escapeshellarg($string);
 	}
 }
@@ -363,13 +363,13 @@ if (!function_exists('api_plugin_user_realm_auth')) {
 }
 
 if (!function_exists('is_realm_allowed')) {
-	function is_realm_allowed($realm) {
+	function is_realm_allowed($realm, $check_user = false) {
 		return true;
 	}
 }
 
 if (!function_exists('raise_message')) {
-	function raise_message($id, $text = '', $level = 0) {
+	function raise_message($message_id, $message = '', $message_level = 0) {
 	}
 }
 
@@ -409,22 +409,22 @@ if (!function_exists('get_nfilter_request_var')) {
 }
 
 if (!function_exists('get_filter_request_var')) {
-	function get_filter_request_var($name, $filter = FILTER_DEFAULT, $default = '') {
+	function get_filter_request_var($name, $filter = FILTER_VALIDATE_INT, $options = array()) {
 		$value = npc_test_request_value($name);
 
-		return $value !== null ? filter_var($value, $filter) : $default;
+		return $value !== null ? filter_var($value, $filter, $options) : '';
 	}
 }
 
 if (!function_exists('isset_request_var')) {
-	function isset_request_var($name) {
-		return npc_test_request_value($name) !== null;
+	function isset_request_var($variable) {
+		return npc_test_request_value($variable) !== null;
 	}
 }
 
 if (!function_exists('form_input_validate')) {
-	function form_input_validate($value, $name, $regex, $optional, $error) {
-		return $value;
+	function form_input_validate($field_value, $field_name, $regexp_match, $allow_nulls, $custom_message = 3) {
+		return $field_value;
 	}
 }
 
@@ -435,10 +435,10 @@ if (!function_exists('is_error_message')) {
 }
 
 if (!function_exists('sql_save')) {
-	function sql_save($array, $table, $key = 'id') {
-		$GLOBALS['__test_sql_save'][] = array('table' => $table, 'row' => $array);
+	function sql_save($array_items, $table_name, $key_cols = 'id', $autoinc = true, $db_conn = false) {
+		$GLOBALS['__test_sql_save'][] = array('table' => $table_name, 'row' => $array_items);
 
-		return isset($array['id']) ? $array['id'] : 1;
+		return isset($array_items['id']) ? $array_items['id'] : 1;
 	}
 }
 

@@ -102,50 +102,50 @@ function npc_e2e_rows($fn, $sql, $params, $default) {
 	return $default;
 }
 
-function db_fetch_assoc($sql) {
+function db_fetch_assoc($sql, $log = true, $db_conn = false) {
 	return npc_e2e_rows(__FUNCTION__, $sql, array(), array());
 }
 
-function db_fetch_assoc_prepared($sql, $params = array()) {
+function db_fetch_assoc_prepared($sql, $params = array(), $log = true, $db_conn = false) {
 	return npc_e2e_rows(__FUNCTION__, $sql, $params, array());
 }
 
-function db_fetch_row_prepared($sql, $params = array()) {
+function db_fetch_row_prepared($sql, $params = array(), $log = true, $db_conn = false) {
 	return npc_e2e_rows(__FUNCTION__, $sql, $params, array());
 }
 
-function db_fetch_cell($sql) {
+function db_fetch_cell($sql, $col_name = '', $log = true, $db_conn = false) {
 	return npc_e2e_rows(__FUNCTION__, $sql, array(), '');
 }
 
-function db_fetch_cell_prepared($sql, $params = array()) {
+function db_fetch_cell_prepared($sql, $params = array(), $col_name = '', $log = true, $db_conn = false) {
 	return npc_e2e_rows(__FUNCTION__, $sql, $params, '');
 }
 
-function db_execute_prepared($sql, $params = array()) {
+function db_execute_prepared($sql, $params = array(), $log = true, $db_conn = false, $execute_name = 'Exec', $default_value = true) {
 	npc_e2e_record(__FUNCTION__, array('sql' => $sql, 'params' => $params));
 
 	return true;
 }
 
-function sql_save($array, $table, $key = 'id') {
-	npc_e2e_record(__FUNCTION__, array('table' => $table, 'row' => $array));
+function sql_save($array_items, $table_name, $key_cols = 'id', $autoinc = true, $db_conn = false) {
+	npc_e2e_record(__FUNCTION__, array('table' => $table_name, 'row' => $array_items));
 
 	return 1;
 }
 
-function read_config_option($name, $force = false) {
+function read_config_option($config_name, $force = false) {
 	global $scenario;
 
-	return $scenario['options'][$name] ?? '';
+	return $scenario['options'][$config_name] ?? '';
 }
 
-function cacti_log($message, $also_print = false, $log_type = '', $level = 0) {
-	npc_e2e_record('cacti_log', array('message' => $message));
+function cacti_log($string, $output = false, $environ = 'CMDPHP', $level = '') {
+	npc_e2e_record('cacti_log', array('message' => $string));
 }
 
-function raise_message($id, $text = '', $level = 0) {
-	npc_e2e_record('raise_message', array('id' => $id));
+function raise_message($message_id, $message = '', $message_level = 0) {
+	npc_e2e_record('raise_message', array('id' => $message_id));
 }
 
 function api_user_realm_auth($filename = '') {
@@ -164,7 +164,7 @@ function cacti_count($array) {
 	return is_array($array) ? count($array) : 0;
 }
 
-function cacti_escapeshellarg($string) {
+function cacti_escapeshellarg($string, $quote = true) {
 	return escapeshellarg($string);
 }
 
@@ -186,12 +186,12 @@ function general_header() {
 function bottom_footer() {
 }
 
-function html_start_box() {
+function html_start_box($title, $width, $div, $cell_padding, $align, $add_text, $add_label = false) {
 }
 
-function html_end_box() {
+function html_end_box($trailing_br = true, $div = false) {
 }
 
-function get_md5_include_js($path) {
+function get_md5_include_js($path, $async = false) {
 	return "<script src='" . $path . "'></script>";
 }
