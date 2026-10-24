@@ -51,6 +51,12 @@ var npc = (function($) {
 		return div.innerHTML;
 	}
 
+	/* escHtml leaves quotes alone, which is fine between tags but not inside an
+	   attribute value */
+	function escAttr(str) {
+		return escHtml(str).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+	}
+
 	/* Rows of a list response. The grid controllers answer with
 	   {data: [...]} or with {response: {value: {items: [...]}}}. */
 	function rowsOf(data) {
@@ -236,14 +242,14 @@ var npc = (function($) {
 			var rows = rowsOf(data);
 			var html = buildTable('hosts-grid', 'Hosts', [
 				{label: 'Host Name', field: 'host_name', render: function(v, row) {
-					return '<a href="#" class="npc-host-link" data-id="' + escHtml(row.host_object_id) + '">' + escHtml(v) + '</a>';
+					return '<a href="#" class="npc-host-link" data-id="' + escAttr(row.host_object_id) + '">' + escHtml(v) + '</a>';
 				}},
 				{label: 'Address', field: 'address'},
 				{label: 'State', field: 'current_state', render: function(v) { return stateLabel(v, hostStateMap, hostStateClass); }},
 				{label: 'Output', field: 'output'},
 				{label: 'Last Check', field: 'last_check'},
 				{label: 'Actions', field: 'host_object_id', render: function(v, row) {
-					return '<a href="#" class="npc-cmd-link" data-host="' + escHtml(row.host_name) +
+					return '<a href="#" class="npc-cmd-link" data-host="' + escAttr(row.host_name) +
 						'" title="Commands">&#9881;</a>';
 				}}
 			], rows);
@@ -298,14 +304,14 @@ var npc = (function($) {
 			var html = buildTable('svc-grid', 'Services', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'Service', field: 'service_description', render: function(v, row) {
-					return '<a href="#" class="npc-svc-link" data-id="' + escHtml(row.service_object_id) + '">' + escHtml(v) + '</a>';
+					return '<a href="#" class="npc-svc-link" data-id="' + escAttr(row.service_object_id) + '">' + escHtml(v) + '</a>';
 				}},
 				{label: 'State', field: 'current_state', render: function(v) { return stateLabel(v, svcStateMap, svcStateClass); }},
 				{label: 'Output', field: 'output'},
 				{label: 'Last Check', field: 'last_check'},
 				{label: 'Actions', field: 'service_object_id', render: function(v, row) {
-					return '<a href="#" class="npc-svc-cmd-link" data-host="' + escHtml(row.host_name) +
-						'" data-svc="' + escHtml(row.service_description) + '" title="Commands">&#9881;</a>';
+					return '<a href="#" class="npc-svc-cmd-link" data-host="' + escAttr(row.host_name) +
+						'" data-svc="' + escAttr(row.service_description) + '" title="Commands">&#9881;</a>';
 				}}
 			], rows);
 			$('#npc-svc-table').html(html);
@@ -338,7 +344,7 @@ var npc = (function($) {
 				{label: 'Entry Time', field: 'comment_time'},
 				{label: 'Persistent', field: 'is_persistent', render: function(v) { return v == 1 ? 'Yes' : 'No'; }},
 				{label: 'Actions', field: 'internal_comment_id', render: function(v) {
-					return '<a href="#" class="npc-del-comment" data-id="' + escHtml(v) + '" title="Delete">&#10005;</a>';
+					return '<a href="#" class="npc-del-comment" data-id="' + escAttr(v) + '" title="Delete">&#10005;</a>';
 				}}
 			], rows);
 			$('#npc-comments-table').html(html);
@@ -463,7 +469,7 @@ var npc = (function($) {
 			}
 			html += '</table>';
 
-			var $dlg = $('<div title="Host Detail: ' + escHtml(host.host_name) + '">' + html + '</div>');
+			var $dlg = $('<div title="Host Detail: ' + escAttr(host.host_name) + '">' + html + '</div>');
 			$dlg.dialog({
 				width: 600,
 				modal: true,
@@ -507,7 +513,7 @@ var npc = (function($) {
 			}
 			html += '</table>';
 
-			var $dlg = $('<div title="Service Detail: ' + escHtml(svc.service_description) + '">' + html + '</div>');
+			var $dlg = $('<div title="Service Detail: ' + escAttr(svc.service_description) + '">' + html + '</div>');
 			$dlg.dialog({
 				width: 600,
 				modal: true,
@@ -536,14 +542,14 @@ var npc = (function($) {
 			'<option value="DISABLE_HOST_NOTIFICATIONS">Disable Notifications</option>' +
 			'</select></td></tr>' +
 			'<tr><td><label>Host:</label></td>' +
-			'<td><input type="text" name="p_host_name" value="' + escHtml(hostName) + '" readonly class="ui-state-disabled" style="width:250px;"></td></tr>' +
+			'<td><input type="text" name="p_host_name" value="' + escAttr(hostName) + '" readonly class="ui-state-disabled" style="width:250px;"></td></tr>' +
 			'<tr><td><label for="npc-hcmd-author">Author:</label></td>' +
-			'<td><input type="text" id="npc-hcmd-author" name="p_author" value="' + escHtml(cfg.userName) + '" style="width:250px;"></td></tr>' +
+			'<td><input type="text" id="npc-hcmd-author" name="p_author" value="' + escAttr(cfg.userName) + '" style="width:250px;"></td></tr>' +
 			'<tr><td><label for="npc-hcmd-comment">Comment:</label></td>' +
 			'<td><textarea id="npc-hcmd-comment" name="p_comment" rows="3" style="width:250px;"></textarea></td></tr>' +
 			'</table></form>';
 
-		var $dlg = $('<div title="Host Command: ' + escHtml(hostName) + '">' + html + '</div>');
+		var $dlg = $('<div title="Host Command: ' + escAttr(hostName) + '">' + html + '</div>');
 		$dlg.dialog({
 			width: 500,
 			modal: true,
@@ -581,16 +587,16 @@ var npc = (function($) {
 			'<option value="DISABLE_SVC_NOTIFICATIONS">Disable Notifications</option>' +
 			'</select></td></tr>' +
 			'<tr><td><label>Host:</label></td>' +
-			'<td><input type="text" name="p_host_name" value="' + escHtml(hostName) + '" readonly class="ui-state-disabled" style="width:250px;"></td></tr>' +
+			'<td><input type="text" name="p_host_name" value="' + escAttr(hostName) + '" readonly class="ui-state-disabled" style="width:250px;"></td></tr>' +
 			'<tr><td><label>Service:</label></td>' +
-			'<td><input type="text" name="p_service_description" value="' + escHtml(svcDesc) + '" readonly class="ui-state-disabled" style="width:250px;"></td></tr>' +
+			'<td><input type="text" name="p_service_description" value="' + escAttr(svcDesc) + '" readonly class="ui-state-disabled" style="width:250px;"></td></tr>' +
 			'<tr><td><label for="npc-scmd-author">Author:</label></td>' +
-			'<td><input type="text" id="npc-scmd-author" name="p_author" value="' + escHtml(cfg.userName) + '" style="width:250px;"></td></tr>' +
+			'<td><input type="text" id="npc-scmd-author" name="p_author" value="' + escAttr(cfg.userName) + '" style="width:250px;"></td></tr>' +
 			'<tr><td><label for="npc-scmd-comment">Comment:</label></td>' +
 			'<td><textarea id="npc-scmd-comment" name="p_comment" rows="3" style="width:250px;"></textarea></td></tr>' +
 			'</table></form>';
 
-		var $dlg = $('<div title="Service Command: ' + escHtml(svcDesc) + '">' + html + '</div>');
+		var $dlg = $('<div title="Service Command: ' + escAttr(svcDesc) + '">' + html + '</div>');
 		$dlg.dialog({
 			width: 500,
 			modal: true,
@@ -660,6 +666,7 @@ var npc = (function($) {
 		showHostDetail: showHostDetail,
 		rowsOf: rowsOf,
 		summaryRows: summaryRows,
+		escAttr: escAttr,
 		showServiceDetail: showServiceDetail
 	};
 

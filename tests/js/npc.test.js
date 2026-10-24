@@ -96,3 +96,41 @@ test('rowsOf accepts either shape and nothing else', () => {
 	assert.deepStrictEqual(plain(env.npc.rowsOf({data: 'x'})), []);
 	assert.deepStrictEqual(plain(env.npc.rowsOf(null)), []);
 });
+
+const quoted = 'a"b\'c';
+
+test('escapes quotes in values placed inside attributes', () => {
+	const env = load({});
+
+	assert.strictEqual(env.npc.escAttr(quoted), 'a&quot;b&#39;c');
+	assert.strictEqual(env.npc.escAttr('<b>&'), '&lt;b&gt;&amp;');
+});
+
+test('keeps a host name with quotes inside its attributes in the host grid', () => {
+	const rows = [{host_object_id: 10, host_name: quoted, address: 'x', current_state: 0, output: '', last_check: ''}];
+	const env  = load({responses: {'hosts/getHosts': gridResponse(rows)}});
+
+	env.npc.route('hosts');
+
+	assert.match(env.html['#npc-host-table'], /data-host="a&quot;b&#39;c"/);
+	assert.ok(!env.html['#npc-host-table'].includes('data-host="a"'));
+});
+
+test('keeps a service description with quotes inside its attributes in the service grid', () => {
+	const rows = [{host_name: 'web1', service_description: quoted, service_object_id: 3, current_state: 0, output: ''}];
+	const env  = load({responses: {'services/getServices': gridResponse(rows)}});
+
+	env.npc.route('services');
+
+	assert.match(env.html['#npc-svc-table'], /data-svc="a&quot;b&#39;c"/);
+});
+
+test('keeps the user name with quotes inside the value attribute of the command dialog', () => {
+	const rows = [{host_object_id: 10, host_name: 'web1', address: 'x', current_state: 0, output: '', last_check: ''}];
+	const env  = load({config: {userName: quoted}, responses: {'hosts/getHosts': gridResponse(rows)}});
+
+	env.npc.route('hosts');
+	env.handlers['#npc-host-table click .npc-cmd-link'].call({__data: {host: 'web1'}}, {preventDefault() {}});
+
+	assert.match(env.dialogs[0].markup, /name="p_author" value="a&quot;b&#39;c"/);
+});

@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* security: Escape quotes in values the front end places inside HTML attributes
+  (host and service names, user name)
 * issue: Show the host, service, comment and event log grids and the summary and
   process tables; the front end read a response shape the controllers do not
   send, so every table rendered empty
