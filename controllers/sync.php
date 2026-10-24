@@ -67,10 +67,16 @@ class NpcSyncController extends Controller {
             return($return);
         }
 
-        $importCmd = 'php ' . $path
-                   . ' --description=' . $params['description']
-                   . ' --ip=' . $params['ip']
-                   . ' --template=' . $params['template_id']
+        if ($params['description'] === '' || $params['ip'] === '' || !ctype_digit((string) $params['template_id'])) {
+            $this->logger('warn', get_class($this), __FUNCTION__ , "Import rejected, invalid parameters for " . $params['description']);
+            $return .= '0|0|Invalid import parameters';
+            return($return);
+        }
+
+        $importCmd = 'php ' . cacti_escapeshellarg($path)
+                   . ' --description=' . cacti_escapeshellarg($params['description'])
+                   . ' --ip=' . cacti_escapeshellarg($params['ip'])
+                   . ' --template=' . cacti_escapeshellarg($params['template_id'])
                    . ' 2> /dev/null';
 
         $this->logger('debug', get_class($this), __FUNCTION__ , "Import command: $importCmd");

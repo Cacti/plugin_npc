@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* security: Quote the description, address and template arguments of the Nagios host
+  import command and reject non-numeric template IDs
 * dev: Relocate the schema provisioning function `npc_setup_tables()` from
   `setup.php` into `includes/database.php` (loaded via `require_once`) to align
   with the fleet schema/includes convention; behavior is unchanged

@@ -114,3 +114,43 @@ it('builds the address cache from Cacti devices when none exists', function () {
 		}
 	}
 });
+
+it('passes the import arguments to add_device.php as single values', function () {
+	$base = npc_sync_sandbox();
+
+	$out = npc_sync_unmapped_controller()->import(array(
+		'config'         => array('base_path' => $base),
+		'description'    => 'web 1 & echo extra',
+		'host_object_id' => 10,
+		'ip'             => '192.0.2.10',
+		'cache_id'       => 'k',
+		'template_id'    => 7,
+	));
+
+	expect($out)->toBe('web 1 & echo extra|1|1|Success - new device-id: (12)');
+	expect(json_decode(file_get_contents($base . '/cli/argv.json'), true))->toBe(array(
+		'--description=web 1 & echo extra',
+		'--ip=192.0.2.10',
+		'--template=7',
+	));
+})->skip(trim((string) shell_exec('command -v php')) === '', 'php binary is not on PATH');
+
+it('rejects an import with a non-numeric template id or an empty address', function (array $override) {
+	$base = npc_sync_sandbox();
+
+	$out = npc_sync_unmapped_controller()->import(array_merge(array(
+		'config'         => array('base_path' => $base),
+		'description'    => 'web1',
+		'host_object_id' => 10,
+		'ip'             => '192.0.2.10',
+		'cache_id'       => 'k',
+		'template_id'    => 7,
+	), $override));
+
+	expect($out)->toBe(($override['description'] ?? 'web1') . '|0|0|Invalid import parameters');
+	expect(file_exists($base . '/cli/argv.json'))->toBeFalse();
+})->with(array(
+	'template id with a suffix' => array(array('template_id' => '7; id')),
+	'empty address'             => array(array('ip' => '')),
+	'empty description'         => array(array('description' => '')),
+));
