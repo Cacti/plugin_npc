@@ -108,7 +108,13 @@ if (!function_exists('db_execute_prepared')) {
 }
 
 if (!function_exists('db_fetch_assoc')) {
-	function db_fetch_assoc($sql) {
+	function db_fetch_assoc($sql, $log = true, $db_conn = false) {
+		foreach (($GLOBALS['__test_db_results']['db_fetch_assoc'] ?? array()) as $match => $result) {
+			if (strpos($sql, (string) $match) !== false) {
+				return $result;
+			}
+		}
+
 		return array();
 	}
 }
@@ -249,6 +255,12 @@ if (!function_exists('cacti_log')) {
 	}
 }
 
+if (!function_exists('cacti_count')) {
+	function cacti_count($array) {
+		return is_array($array) ? count($array) : 0;
+	}
+}
+
 if (!function_exists('cacti_sizeof')) {
 	function cacti_sizeof($array) {
 		return is_array($array) ? count($array) : 0;
@@ -370,6 +382,21 @@ if (!function_exists('plugin_test_read_source')) {
 		}
 
 		return $contents;
+	}
+}
+
+/**
+ * Make require_once('include/auth.php') resolve to an empty stub, ahead of
+ * the real Cacti file that the working directory would otherwise supply.
+ */
+function npc_test_stub_cacti_includes() {
+	static $dir = null;
+
+	if ($dir === null) {
+		$dir = sys_get_temp_dir() . '/npc-inc-' . uniqid();
+		mkdir($dir . '/include', 0777, true);
+		file_put_contents($dir . '/include/auth.php', "<?php\n");
+		set_include_path($dir . PATH_SEPARATOR . $GLOBALS['config']['base_path'] . PATH_SEPARATOR . get_include_path());
 	}
 }
 
