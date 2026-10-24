@@ -290,3 +290,85 @@ it('leaves hosts that are already mapped out of the selection', function () {
 
 	expect(json_decode($out, true))->toBe(array());
 });
+
+it('passes hostile description values through as one argument', function (string $description) {
+	$base = npc_sync_sandbox();
+
+	$out = npc_sync_unmapped_controller()->import(array(
+		'config'         => array('base_path' => $base),
+		'description'    => $description,
+		'host_object_id' => 10,
+		'ip'             => '192.0.2.10',
+		'cache_id'       => 'k',
+		'template_id'    => 7,
+	));
+
+	expect($out)->toBe($description . '|1|1|Success - new device-id: (12)');
+	expect(json_decode(file_get_contents($base . '/cli/argv.json'), true)[0])->toBe('--description=' . $description);
+	expect(glob($base . '/*'))->toBe(array($base . '/cli'));
+})->with(array(
+	'single quote'          => array("web1' ; echo extra ; '"),
+	'double quote'          => array('web1" ; echo extra ; "'),
+	'command substitution'  => array('web1 $(echo extra)'),
+	'backticks'             => array('web1 `echo extra`'),
+	'redirect and pipe'     => array('web1 > out.txt | cat'),
+	'new line'              => array("web1\necho extra"),
+	'option like text'      => array('--ip=203.0.113.9 --template=1'),
+	'ampersands only'       => array('&& &'),
+))->skip(trim((string) shell_exec('command -v php')) === '', 'php binary is not on PATH');
+
+it('reports a failed import when add_device.php prints no device id', function () {
+	$base = sys_get_temp_dir() . '/npc-sync-' . uniqid();
+	mkdir($base . '/cli', 0777, true);
+	file_put_contents($base . '/cli/add_device.php', "<?php\nprint \"ERROR: Template 7 does not exist\\n\";\nexit(1);\n");
+
+	$out = npc_sync_unmapped_controller()->import(array(
+		'config'         => array('base_path' => $base),
+		'description'    => 'web1',
+		'host_object_id' => 10,
+		'ip'             => '192.0.2.10',
+		'cache_id'       => 'k',
+		'template_id'    => 7,
+	));
+
+	expect($out)->toBe('web1|');
+	expect($GLOBALS['__test_db_calls'])->toBe(array());
+})->skip(trim((string) shell_exec('command -v php')) === '', 'php binary is not on PATH');
+
+it('does not map a host when the import prints a malformed device id', function () {
+	$base = sys_get_temp_dir() . '/npc-sync-' . uniqid();
+	mkdir($base . '/cli', 0777, true);
+	file_put_contents($base . '/cli/add_device.php', "<?php\nprint \"Success - new device-id: ()\\n\";\n");
+
+	$out = npc_sync_unmapped_controller()->import(array(
+		'config'         => array('base_path' => $base),
+		'description'    => 'web1',
+		'host_object_id' => 10,
+		'ip'             => '192.0.2.10',
+		'cache_id'       => 'k',
+		'template_id'    => 7,
+	));
+
+	expect($out)->toBe('web1|1|1|Success - new device-id: ()');
+})->skip(trim((string) shell_exec('command -v php')) === '', 'php binary is not on PATH');
+
+it('answers an unknown address with null from a current cache', function () {
+	list($found) = npc_sync_cache_run('203.0.113.9', 'k1', function ($file) {
+		file_put_contents($file, json_encode(array('key' => 'k1', 'hosts' => array('10.0.0.1' => 7))));
+	});
+
+	expect($found)->toBeNull();
+	expect($GLOBALS['__test_db_fetch_log'])->toBe(array());
+});
+
+it('reports a selection that is not a JSON object', function (string $data) {
+	$out = json_decode((new NpcSyncController())->getHosts(array('data' => $data)), true);
+
+	expect($out['success'])->toBeFalse();
+	expect($out['msg'])->toBe('An error occurred in NpcSyncController::getHosts. See error logs for detail.');
+})->with(array(
+	'plain text'    => array('web servers'),
+	'broken JSON'   => array('{"g1":'),
+	'a JSON list'   => array('["web servers"]'),
+	'empty string'  => array(''),
+));

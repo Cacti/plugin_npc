@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* issue: Log a fixed message when the host import selection is not a JSON object;
+  the old message converted an array to a string
 * issue: Cast the date format, time format and Nagios URL settings to strings in the
   NPC frame; unsaved settings raised the PHP 8.1 null deprecation on every page
 * dev: Run the schema and the listing, perfdata and upgrade queries against MariaDB

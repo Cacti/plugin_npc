@@ -122,7 +122,7 @@ class NpcSyncController extends Controller {
         $data = json_decode(stripslashes($params['data']));
 
         if (!is_object($data)) {
-            return($this->logger('error', get_class($this), __FUNCTION__ , "json_decode(".$params['data'].") returned: $data"));
+            return($this->logger('error', get_class($this), __FUNCTION__ , 'The host selection is not a JSON object'));
         }
 
         $results = array();
