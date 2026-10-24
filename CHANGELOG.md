@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* security: Check the NPC command realm before the command file settings so users
+  without the realm no longer see the configured command file path
 * issue: Call the Nagios controller on an instance when deleting all host or service
   comments; the static call raised an Error on PHP 8
 * security: Accept only known tab names for the `tab` request variable of the NPC
