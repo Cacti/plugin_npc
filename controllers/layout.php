@@ -10,11 +10,6 @@ class NpcLayoutController extends Controller {
 
 		$npc_base = $config['url_path'] . 'plugins/npc/';
 
-		$current_tab = 'dashboard';
-		if (isset_request_var('tab')) {
-			$current_tab = get_request_var('tab');
-		}
-
 		$tabs = array(
 			'dashboard'  => __('Dashboard', 'npc'),
 			'hosts'      => __('Hosts', 'npc'),
@@ -24,6 +19,16 @@ class NpcLayoutController extends Controller {
 			'eventlog'   => __('Event Log', 'npc'),
 			'process'    => __('Process Info', 'npc'),
 		);
+
+		/* only a known tab name is ever written into the page */
+		$current_tab = 'dashboard';
+		if (isset_request_var('tab')) {
+			$requested_tab = get_request_var('tab');
+
+			if (is_string($requested_tab) && isset($tabs[$requested_tab])) {
+				$current_tab = $requested_tab;
+			}
+		}
 
 		/* draw the tabs */
 		print "<div class='tabs' style='margin-bottom:0px;'><nav><ul role='tablist'>\n";

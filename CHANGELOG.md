@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* security: Accept only known tab names for the `tab` request variable of the NPC
+  frame; the raw value was written into an inline script block
 * issue: Look up the stored perfdata with the plain object ID when creating a
   perfdata data input method; the shell-quoted value never matched, so no output
   fields were created
