@@ -33,9 +33,9 @@ $allowed_modules = array(
 	'logentries'    => array('getLogs'),
 	'statehistory'  => array('getStateHistory'),
 	'nagios'        => array('getProgramStatus', 'getProcessInfoGrid', 'processInfo', 'command', 'checkPerf'),
-	'settings'      => array('getSettings', 'save'),
-	'cacti'         => array('getSetting', 'getHostTemplates', 'isMapped', 'mapHost', 'getHostnames', 'addDataInputMethod', 'generateHash', 'getGraphList'),
-	'sync'          => array('import', 'getHosts', 'listHostgroups', 'checkHostExists'),
+	'settings'      => array('save'),
+	'cacti'         => array('getHostTemplates', 'getHostnames', 'addDataInputMethod', 'generateHash', 'getGraphList'),
+	'sync'          => array('import', 'getHosts', 'listHostgroups'),
 );
 
 $module = 'layout';

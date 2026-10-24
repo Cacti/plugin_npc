@@ -206,3 +206,16 @@ it('reads the hostgroup selection of the import as JSON', function () {
 
 	expect($lookup[0]['params'])->toBe(array('web servers'));
 });
+
+it('rejects actions that were removed from the dispatcher', function (string $module, string $action) {
+	$run = npc_e2e_run(array('get' => array('module' => $module, 'action' => $action)));
+
+	expect($run['stdout'])->toBe('');
+	expect(implode("\n", array_column(npc_e2e_calls($run, 'cacti_log'), 'message')))->toContain('rejected unknown action: ' . $module . '/' . $action);
+})->with(array(
+	'setting lookup'       => array('cacti', 'getSetting'),
+	'mapped check'         => array('cacti', 'isMapped'),
+	'host mapping'         => array('cacti', 'mapHost'),
+	'user settings lookup' => array('settings', 'getSettings'),
+	'address lookup'       => array('sync', 'checkHostExists'),
+));

@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* issue: Remove dispatcher actions that cannot work with the single parameter array
+  they are called with (getSetting, isMapped, mapHost, getSettings, checkHostExists)
 * issue: Pass the searchFields and data request values to the controllers as
   JSON; the search string sanitizer removed their quotes, so grid searches and the
   host import selection never applied; the selection lookup also called a
