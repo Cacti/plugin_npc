@@ -29,6 +29,8 @@
     <source>
         <include>
             <file>setup.php</file>
+            <file>nagioscmd.php</file>
+            <directory suffix=".php">controllers</directory>
         </include>
     </source>
 </phpunit>

@@ -76,6 +76,10 @@ class NpcCactiController extends Controller {
 	 * @return string   json encoded results
 	 */
 	function addDataInputMethod($params) {
+		if (!api_user_realm_auth('data_input.php')) {
+			return(json_encode(array('success' => false, 'msg' => __('You do not have permission to create data input methods.', 'npc'))));
+		}
+
 		$name = 'NPC - Perfdata - ' . $params['host'];
 
         if (isset($params['service'])) {
@@ -87,9 +91,9 @@ class NpcCactiController extends Controller {
             $class = 'NpcHostsController';
         }
 
-        $object_id = cacti_escapeshellarg($params['object_id']);
+        $object_id = $params['object_id'];
 
-        $input = "php <path_cacti>/plugins/npc/perfdata.php --type=$type --id=$object_id 2> /dev/null";
+        $input = "php <path_cacti>/plugins/npc/perfdata.php --type=$type --id=" . cacti_escapeshellarg($object_id) . " 2> /dev/null";
 
 		$save = array();
 		$save['hash'] = $this->generateHash();
@@ -102,7 +106,7 @@ class NpcCactiController extends Controller {
         $obj = new $class;
         $results = $obj->getPerfData($object_id);
 
-        $perfParts = explode(';', $results[0]['perfdata']);
+        $perfParts = explode(';', isset($results[0]['perfdata']) ? $results[0]['perfdata'] : '');
 
         foreach ($perfParts as $perf) {
             if (preg_match('/=/', $perf)) {

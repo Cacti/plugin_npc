@@ -259,3 +259,46 @@ it('Controller initializes start at 0', function () use ($controllerFile) {
 	$ctrl = new Controller();
 	expect($ctrl->start)->toBe(0);
 });
+
+// ---------------------------------------------------------------------------
+// searchClause()
+// ---------------------------------------------------------------------------
+
+it('searchClause leaves the clause alone when no search fields were sent', function () {
+	$ctrl               = new Controller();
+	$ctrl->searchString = 'web';
+	$params             = array();
+
+	expect($ctrl->searchClause('', array('host_name' => 'o.name1'), $params))->toBe('');
+	expect($params)->toBe(array());
+});
+
+it('searchClause ignores fields that are not in the field map', function () {
+	$ctrl               = new Controller();
+	$ctrl->searchString = 'web';
+	$ctrl->searchFields = '["host_name","evil; DROP TABLE x"]';
+	$params             = array();
+
+	$where = $ctrl->searchClause('hs.current_state IN (0)', array('host_name' => 'o.name1'), $params);
+
+	expect($where)->toBe('hs.current_state IN (0) AND ( o.name1 LIKE ? ) ');
+	expect($params)->toBe(array('%web%'));
+});
+
+it('searchClause leaves the clause alone when no field matches', function () {
+	$ctrl               = new Controller();
+	$ctrl->searchFields = '["nothing"]';
+	$params             = array();
+
+	expect($ctrl->searchClause('a = 1', array('host_name' => 'o.name1'), $params))->toBe('a = 1');
+});
+
+it('searchClause combines several fields with OR', function () {
+	$ctrl               = new Controller();
+	$ctrl->searchString = '50%';
+	$ctrl->searchFields = '["host_name","alias"]';
+	$params             = array();
+
+	expect($ctrl->searchClause('', array('host_name' => 'o.name1', 'alias' => 'h.alias'), $params))->toBe(' ( o.name1 LIKE ? OR h.alias LIKE ? ) ');
+	expect($params)->toBe(array('%50%%', '%50%%'));
+});

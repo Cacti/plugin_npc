@@ -118,6 +118,7 @@ class NpcCommentsController extends Controller {
         require_once("plugins/npc/controllers/nagios.php");
 
         $seen = array();
+        $nagios = new NpcNagiosController();
 
         $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 1'));
 
@@ -128,7 +129,7 @@ class NpcCommentsController extends Controller {
                     'command' => 'DEL_ALL_HOST_COMMENTS',
                     'host_name' => $host
                 );
-                NpcNagiosController::command($params);
+                $nagios->command($params);
                 $seen[$host] = 1;
             }
         }
@@ -146,6 +147,7 @@ class NpcCommentsController extends Controller {
         require_once("plugins/npc/controllers/nagios.php");
 
         $seen = array();
+        $nagios = new NpcNagiosController();
 
         $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 2'));
 
@@ -158,7 +160,7 @@ class NpcCommentsController extends Controller {
                     'host_name' => $host,
                     'service_description' => $service,
                 );
-                NpcNagiosController::command($params);
+                $nagios->command($params);
                 $seen[$host][$service] = 1;
             }
         }
@@ -241,7 +243,6 @@ class NpcCommentsController extends Controller {
             ' . $whereClause,
             $params);
 
-        $offset = ($this->currentPage - 1) * $this->limit;
 
         $results = db_fetch_assoc_prepared('SELECT i.instance_name,
                 o.name1 AS host_name,
@@ -258,8 +259,8 @@ class NpcCommentsController extends Controller {
             LEFT JOIN npc_hosts h ON c.object_id = h.host_object_id
             ' . $whereClause . '
             ORDER BY ' . $orderBy . '
-            LIMIT ?, ?',
-            array_merge($params, array($offset, $this->limit)));
+            ' . $this->limitClause(),
+            $params);
 
         return($results);
     }

@@ -51,6 +51,38 @@ var npc = (function($) {
 		return div.innerHTML;
 	}
 
+	/* escHtml leaves quotes alone, which is fine between tags but not inside an
+	   attribute value */
+	function escAttr(str) {
+		return escHtml(str).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+	}
+
+	/* Rows of a list response. The grid controllers answer with
+	   {data: [...]} or with {response: {value: {items: [...]}}}. */
+	function rowsOf(data) {
+		if (data && Array.isArray(data.data)) {
+			return data.data;
+		}
+
+		if (data && data.response && data.response.value && Array.isArray(data.response.value.items)) {
+			return data.response.value.items;
+		}
+
+		return [];
+	}
+
+	/* The summary actions answer with one object of counts per state. */
+	function summaryRows(data) {
+		var counts = rowsOf(data)[0] || {};
+		var rows   = [];
+
+		Object.keys(counts).forEach(function(state) {
+			rows.push({label: state.charAt(0).toUpperCase() + state.slice(1), count: counts[state]});
+		});
+
+		return rows;
+	}
+
 	function stateLabel(val, map, classMap) {
 		var label = map[val] || 'Unknown';
 		var cls   = classMap[val] || '';
@@ -131,7 +163,7 @@ var npc = (function($) {
 
 	function loadHostSummary() {
 		npcGet({module: 'hosts', action: 'summary'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = summaryRows(data);
 			var html = buildTable('host-summary', 'Host Status Summary', [
 				{label: 'State', field: 'label'},
 				{label: 'Count', field: 'count'}
@@ -142,7 +174,7 @@ var npc = (function($) {
 
 	function loadServiceSummary() {
 		npcGet({module: 'services', action: 'summary'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = summaryRows(data);
 			var html = buildTable('svc-summary', 'Service Status Summary', [
 				{label: 'State', field: 'label'},
 				{label: 'Count', field: 'count'}
@@ -153,7 +185,7 @@ var npc = (function($) {
 
 	function loadHostProblems() {
 		npcGet({module: 'hosts', action: 'getHosts', p_state: 'not_ok'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('host-problems', 'Host Problems', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'State', field: 'current_state', render: function(v) { return stateLabel(v, hostStateMap, hostStateClass); }},
@@ -166,7 +198,7 @@ var npc = (function($) {
 
 	function loadServiceProblems() {
 		npcGet({module: 'services', action: 'getServices', p_state: 'not_ok'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('svc-problems', 'Service Problems', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'Service', field: 'service_description'},
@@ -207,17 +239,17 @@ var npc = (function($) {
 
 	function loadHostTable(filter) {
 		npcGet({module: 'hosts', action: 'getHosts', p_state: filter}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('hosts-grid', 'Hosts', [
 				{label: 'Host Name', field: 'host_name', render: function(v, row) {
-					return '<a href="#" class="npc-host-link" data-id="' + escHtml(row.host_object_id) + '">' + escHtml(v) + '</a>';
+					return '<a href="#" class="npc-host-link" data-id="' + escAttr(row.host_object_id) + '">' + escHtml(v) + '</a>';
 				}},
 				{label: 'Address', field: 'address'},
 				{label: 'State', field: 'current_state', render: function(v) { return stateLabel(v, hostStateMap, hostStateClass); }},
 				{label: 'Output', field: 'output'},
 				{label: 'Last Check', field: 'last_check'},
 				{label: 'Actions', field: 'host_object_id', render: function(v, row) {
-					return '<a href="#" class="npc-cmd-link" data-host="' + escHtml(row.host_name) +
+					return '<a href="#" class="npc-cmd-link" data-host="' + escAttr(row.host_name) +
 						'" title="Commands">&#9881;</a>';
 				}}
 			], rows);
@@ -268,18 +300,18 @@ var npc = (function($) {
 
 	function loadServiceTable(filter) {
 		npcGet({module: 'services', action: 'getServices', p_state: filter}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('svc-grid', 'Services', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'Service', field: 'service_description', render: function(v, row) {
-					return '<a href="#" class="npc-svc-link" data-id="' + escHtml(row.service_object_id) + '">' + escHtml(v) + '</a>';
+					return '<a href="#" class="npc-svc-link" data-id="' + escAttr(row.service_object_id) + '">' + escHtml(v) + '</a>';
 				}},
 				{label: 'State', field: 'current_state', render: function(v) { return stateLabel(v, svcStateMap, svcStateClass); }},
 				{label: 'Output', field: 'output'},
 				{label: 'Last Check', field: 'last_check'},
 				{label: 'Actions', field: 'service_object_id', render: function(v, row) {
-					return '<a href="#" class="npc-svc-cmd-link" data-host="' + escHtml(row.host_name) +
-						'" data-svc="' + escHtml(row.service_description) + '" title="Commands">&#9881;</a>';
+					return '<a href="#" class="npc-svc-cmd-link" data-host="' + escAttr(row.host_name) +
+						'" data-svc="' + escAttr(row.service_description) + '" title="Commands">&#9881;</a>';
 				}}
 			], rows);
 			$('#npc-svc-table').html(html);
@@ -304,7 +336,7 @@ var npc = (function($) {
 		$('#npc-content').html('<div id="npc-comments-table"></div>');
 
 		npcGet({module: 'comments', action: 'getHostComments'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('host-comments', 'Host Comments', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'Author', field: 'author_name'},
@@ -312,13 +344,13 @@ var npc = (function($) {
 				{label: 'Entry Time', field: 'comment_time'},
 				{label: 'Persistent', field: 'is_persistent', render: function(v) { return v == 1 ? 'Yes' : 'No'; }},
 				{label: 'Actions', field: 'internal_comment_id', render: function(v) {
-					return '<a href="#" class="npc-del-comment" data-id="' + escHtml(v) + '" title="Delete">&#10005;</a>';
+					return '<a href="#" class="npc-del-comment" data-id="' + escAttr(v) + '" title="Delete">&#10005;</a>';
 				}}
 			], rows);
 			$('#npc-comments-table').html(html);
 
 			npcGet({module: 'comments', action: 'getServiceComments'}, function(sdata) {
-				var srows = (sdata.data) ? sdata.data : [];
+				var srows = rowsOf(sdata);
 				var shtml = buildTable('svc-comments', 'Service Comments', [
 					{label: 'Host', field: 'host_name'},
 					{label: 'Service', field: 'service_description'},
@@ -347,7 +379,7 @@ var npc = (function($) {
 		$('#npc-content').html('<div id="npc-downtime-table"></div>');
 
 		npcGet({module: 'downtime', action: 'getHostDowntime'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('host-downtime', 'Host Downtime', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'Author', field: 'author_name'},
@@ -360,7 +392,7 @@ var npc = (function($) {
 		});
 
 		npcGet({module: 'downtime', action: 'getServiceDowntime'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('svc-downtime', 'Service Downtime', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'Service', field: 'service_description'},
@@ -379,7 +411,7 @@ var npc = (function($) {
 		$('#npc-content').html('<div id="npc-eventlog-table"></div>');
 
 		npcGet({module: 'logentries', action: 'getLogs'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('eventlog', 'Event Log', [
 				{label: 'Entry Time', field: 'entry_time'},
 				{label: 'Log Entry', field: 'logentry_data'}
@@ -396,9 +428,9 @@ var npc = (function($) {
 		$('#npc-content').html('<div id="npc-process-table"></div>');
 
 		npcGet({module: 'nagios', action: 'getProcessInfoGrid'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('process-info', 'Nagios Process Information', [
-				{label: 'Property', field: 'key'},
+				{label: 'Property', field: 'name'},
 				{label: 'Value', field: 'value'}
 			], rows);
 			$('#npc-process-table').html(html);
@@ -409,7 +441,7 @@ var npc = (function($) {
 
 	function showHostDetail(hostObjectId) {
 		npcGet({module: 'hosts', action: 'getHosts', p_id: hostObjectId}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			if (rows.length === 0) {
 				return;
 			}
@@ -437,7 +469,7 @@ var npc = (function($) {
 			}
 			html += '</table>';
 
-			var $dlg = $('<div title="Host Detail: ' + escHtml(host.host_name) + '">' + html + '</div>');
+			var $dlg = $('<div title="Host Detail: ' + escAttr(host.host_name) + '">' + html + '</div>');
 			$dlg.dialog({
 				width: 600,
 				modal: true,
@@ -453,7 +485,7 @@ var npc = (function($) {
 
 	function showServiceDetail(svcObjectId) {
 		npcGet({module: 'services', action: 'getServices', p_id: svcObjectId}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			if (rows.length === 0) {
 				return;
 			}
@@ -481,7 +513,7 @@ var npc = (function($) {
 			}
 			html += '</table>';
 
-			var $dlg = $('<div title="Service Detail: ' + escHtml(svc.service_description) + '">' + html + '</div>');
+			var $dlg = $('<div title="Service Detail: ' + escAttr(svc.service_description) + '">' + html + '</div>');
 			$dlg.dialog({
 				width: 600,
 				modal: true,
@@ -494,6 +526,102 @@ var npc = (function($) {
 	}
 
 	/* --- command dialogs --- */
+
+	/* The Nagios commands the dialogs offer need more than a host, an author and a
+	   comment: which extra values depend on the kind of command. */
+	function commandKind(cmd) {
+		if (/^ACKNOWLEDGE_/.test(cmd)) {
+			return 'ack';
+		}
+
+		if (/^ADD_(HOST|SVC)_COMMENT$/.test(cmd)) {
+			return 'comment';
+		}
+
+		if (/^SCHEDULE_(HOST|SVC)_DOWNTIME$/.test(cmd)) {
+			return 'downtime';
+		}
+
+		if (/^SCHEDULE_(HOST|SVC)_CHECK$/.test(cmd)) {
+			return 'check';
+		}
+
+		return 'plain';
+	}
+
+	/* Completes the serialized dialog form with the values the command needs.
+	   A downtime starts now, is fixed, and is not triggered by another one. */
+	function buildCommandParams(form, now) {
+		var params = {};
+		var kind   = commandKind(form.p_command);
+
+		Object.keys(form).forEach(function(name) {
+			if (name !== 'duration_minutes' && !/^p_(sticky|notify|persistent)$/.test(name)) {
+				params[name] = form[name];
+			}
+		});
+
+		if (kind === 'ack') {
+			params.p_sticky     = form.p_sticky ? 1 : 0;
+			params.p_notify     = form.p_notify ? 1 : 0;
+			params.p_persistent = form.p_persistent ? 1 : 0;
+		} else if (kind === 'comment') {
+			params.p_persistent = form.p_persistent ? 1 : 0;
+		} else if (kind === 'downtime') {
+			var minutes = Number.parseInt(form.duration_minutes, 10);
+			var seconds = (minutes > 0 ? minutes : 60) * 60;
+
+			params.p_start_time = now;
+			params.p_end_time   = now + seconds;
+			params.p_fixed      = 1;
+			params.p_trigger_id = 0;
+			params.p_duration   = seconds;
+		} else if (kind === 'check') {
+			params.p_check_time = now;
+		}
+
+		return params;
+	}
+
+	function commandOptionRows() {
+		return '<tr class="npc-opt" data-kinds="ack"><td>Options:</td>' +
+			'<td><label><input type="checkbox" name="p_sticky" value="1" checked> Sticky</label> ' +
+			'<label><input type="checkbox" name="p_notify" value="1" checked> Notify</label></td></tr>' +
+			'<tr class="npc-opt" data-kinds="ack comment"><td>Persistent:</td>' +
+			'<td><input type="checkbox" name="p_persistent" value="1"></td></tr>' +
+			'<tr class="npc-opt" data-kinds="downtime"><td><label>Minutes:</label></td>' +
+			'<td><input type="number" name="duration_minutes" value="60" min="1" style="width:80px;"></td></tr>';
+	}
+
+	function showCommandOptions($form) {
+		var kind = commandKind($form.find('select[name="p_command"]').val());
+
+		$form.find('.npc-opt').each(function() {
+			$(this).toggle((' ' + $(this).data('kinds') + ' ').indexOf(' ' + kind + ' ') !== -1);
+		});
+	}
+
+	function bindCommandOptions($form) {
+		$form.find('select[name="p_command"]').on('change', function() {
+			showCommandOptions($form);
+		});
+
+		showCommandOptions($form);
+	}
+
+	function submitCommand($form) {
+		var formData = {};
+
+		$form.serializeArray().forEach(function(item) {
+			formData[item.name] = item.value;
+		});
+
+		npcPost(buildCommandParams(formData, Math.floor(Date.now() / 1000)), function(resp) {
+			if (resp && !resp.success) {
+				alert(resp.msg || 'Command failed');
+			}
+		});
+	}
 
 	function showHostCommandDialog(hostName) {
 		var html = '<form id="npc-host-cmd-form">' +
@@ -510,34 +638,29 @@ var npc = (function($) {
 			'<option value="DISABLE_HOST_NOTIFICATIONS">Disable Notifications</option>' +
 			'</select></td></tr>' +
 			'<tr><td><label>Host:</label></td>' +
-			'<td><input type="text" name="p_host_name" value="' + escHtml(hostName) + '" readonly class="ui-state-disabled" style="width:250px;"></td></tr>' +
+			'<td><input type="text" name="p_host_name" value="' + escAttr(hostName) + '" readonly class="ui-state-disabled" style="width:250px;"></td></tr>' +
 			'<tr><td><label for="npc-hcmd-author">Author:</label></td>' +
-			'<td><input type="text" id="npc-hcmd-author" name="p_author" value="' + escHtml(cfg.userName) + '" style="width:250px;"></td></tr>' +
+			'<td><input type="text" id="npc-hcmd-author" name="p_author" value="' + escAttr(cfg.userName) + '" style="width:250px;"></td></tr>' +
 			'<tr><td><label for="npc-hcmd-comment">Comment:</label></td>' +
 			'<td><textarea id="npc-hcmd-comment" name="p_comment" rows="3" style="width:250px;"></textarea></td></tr>' +
+			commandOptionRows() +
 			'</table></form>';
 
-		var $dlg = $('<div title="Host Command: ' + escHtml(hostName) + '">' + html + '</div>');
+		var $dlg = $('<div title="Host Command: ' + escAttr(hostName) + '">' + html + '</div>');
 		$dlg.dialog({
 			width: 500,
 			modal: true,
 			buttons: {
 				'Submit': function() {
-					var formData = {};
-					$('#npc-host-cmd-form').serializeArray().forEach(function(item) {
-						formData[item.name] = item.value;
-					});
-					npcPost(formData, function(resp) {
-						if (resp && !resp.success) {
-							alert(resp.msg || 'Command failed');
-						}
-					});
+					submitCommand($('#npc-host-cmd-form'));
 					$(this).dialog('close');
 				},
 				'Cancel': function() { $(this).dialog('close'); }
 			},
 			close: function() { $(this).remove(); }
 		});
+
+		bindCommandOptions($dlg.find('form'));
 	}
 
 	function showServiceCommandDialog(hostName, svcDesc) {
@@ -555,36 +678,31 @@ var npc = (function($) {
 			'<option value="DISABLE_SVC_NOTIFICATIONS">Disable Notifications</option>' +
 			'</select></td></tr>' +
 			'<tr><td><label>Host:</label></td>' +
-			'<td><input type="text" name="p_host_name" value="' + escHtml(hostName) + '" readonly class="ui-state-disabled" style="width:250px;"></td></tr>' +
+			'<td><input type="text" name="p_host_name" value="' + escAttr(hostName) + '" readonly class="ui-state-disabled" style="width:250px;"></td></tr>' +
 			'<tr><td><label>Service:</label></td>' +
-			'<td><input type="text" name="p_service_description" value="' + escHtml(svcDesc) + '" readonly class="ui-state-disabled" style="width:250px;"></td></tr>' +
+			'<td><input type="text" name="p_service_description" value="' + escAttr(svcDesc) + '" readonly class="ui-state-disabled" style="width:250px;"></td></tr>' +
 			'<tr><td><label for="npc-scmd-author">Author:</label></td>' +
-			'<td><input type="text" id="npc-scmd-author" name="p_author" value="' + escHtml(cfg.userName) + '" style="width:250px;"></td></tr>' +
+			'<td><input type="text" id="npc-scmd-author" name="p_author" value="' + escAttr(cfg.userName) + '" style="width:250px;"></td></tr>' +
 			'<tr><td><label for="npc-scmd-comment">Comment:</label></td>' +
 			'<td><textarea id="npc-scmd-comment" name="p_comment" rows="3" style="width:250px;"></textarea></td></tr>' +
+			commandOptionRows() +
 			'</table></form>';
 
-		var $dlg = $('<div title="Service Command: ' + escHtml(svcDesc) + '">' + html + '</div>');
+		var $dlg = $('<div title="Service Command: ' + escAttr(svcDesc) + '">' + html + '</div>');
 		$dlg.dialog({
 			width: 500,
 			modal: true,
 			buttons: {
 				'Submit': function() {
-					var formData = {};
-					$('#npc-svc-cmd-form').serializeArray().forEach(function(item) {
-						formData[item.name] = item.value;
-					});
-					npcPost(formData, function(resp) {
-						if (resp && !resp.success) {
-							alert(resp.msg || 'Command failed');
-						}
-					});
+					submitCommand($('#npc-svc-cmd-form'));
 					$(this).dialog('close');
 				},
 				'Cancel': function() { $(this).dialog('close'); }
 			},
 			close: function() { $(this).remove(); }
 		});
+
+		bindCommandOptions($dlg.find('form'));
 	}
 
 	/* --- tab routing --- */
@@ -632,7 +750,17 @@ var npc = (function($) {
 		npcGet: npcGet,
 		npcPost: npcPost,
 		showHostDetail: showHostDetail,
+		rowsOf: rowsOf,
+		summaryRows: summaryRows,
+		escAttr: escAttr,
+		commandKind: commandKind,
+		buildCommandParams: buildCommandParams,
 		showServiceDetail: showServiceDetail
 	};
 
 })(jQuery);
+
+/* The Node tests load this file with require(); browsers have no module object. */
+if (typeof module !== 'undefined' && module.exports) {
+	module.exports = npc;
+}

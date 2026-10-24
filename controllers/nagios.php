@@ -151,6 +151,12 @@ class NpcNagiosController extends Controller {
 		$nagios = new NagiosCmd;
 		$args = array();
 
+		/* Check that the user has permission to execute the command */
+		if (!api_plugin_user_realm_auth('npc1.php')) {
+			$response = array('success' => false, 'msg' => __('You do not have permission to execute this command.', 'npc'));
+			return(json_encode($response));
+		}
+
 		/* Do some sanity checking */
 
 		if (!read_config_option('npc_nagios_commands')) {
@@ -165,12 +171,6 @@ class NpcNagiosController extends Controller {
 
 		if (!$nagios->setCommandFile(read_config_option('npc_nagios_cmd_path'))) {
 			$response = array('success' => false, 'msg' => $nagios->message);
-			return(json_encode($response));
-		}
-
-		/* Check that the user has permission to execute the command */
-		if (!api_plugin_user_realm_auth('npc1.php')) {
-			$response = array('success' => false, 'msg' => __('You do not have permission to execute this command.', 'npc'));
 			return(json_encode($response));
 		}
 

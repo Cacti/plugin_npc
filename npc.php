@@ -33,9 +33,9 @@ $allowed_modules = array(
 	'logentries'    => array('getLogs'),
 	'statehistory'  => array('getStateHistory'),
 	'nagios'        => array('getProgramStatus', 'getProcessInfoGrid', 'processInfo', 'command', 'checkPerf'),
-	'settings'      => array('getSettings', 'save'),
-	'cacti'         => array('getSetting', 'getHostTemplates', 'isMapped', 'mapHost', 'getHostnames', 'addDataInputMethod', 'generateHash', 'getGraphList'),
-	'sync'          => array('import', 'getHosts', 'listHostgroups', 'checkHostExists'),
+	'settings'      => array('save'),
+	'cacti'         => array('getHostTemplates', 'getHostnames', 'addDataInputMethod', 'generateHash', 'getGraphList'),
+	'sync'          => array('import', 'getHosts', 'listHostgroups'),
 );
 
 $module = 'layout';
@@ -71,7 +71,30 @@ if (!in_array($action, $allowed_modules[$module], true)) {
 	exit;
 }
 
+/* Actions that change state are only accepted from POST, the one method
+whose request csrf-magic validates. */
+$post_only = array(
+	'nagios'   => array('command'),
+	'comments' => array('deleteAllHostComments', 'deleteAllServiceComments'),
+	'cacti'    => array('addDataInputMethod'),
+	'sync'     => array('import'),
+	'hosts'    => array('setMappedGraph'),
+	'services' => array('setMappedGraph'),
+	'settings' => array('save'),
+);
+
+if (isset($post_only[$module]) && in_array($action, $post_only[$module], true)
+	&& (!isset($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'POST')) {
+	cacti_log('SECURITY: NPC rejected non-POST request for ' . $module . '/' . $action, false, 'NPC');
+	http_response_code(405);
+	header('Allow: POST');
+	print json_encode(array('success' => false, 'msg' => __('This action requires a POST request.', 'npc')));
+	exit;
+}
+
 /* Include the validated controller */
+require_once(dirname(__FILE__) . '/controllers/controller.php');
+
 $controller_path = dirname(__FILE__) . '/controllers/' . $module . '.php';
 
 if (!file_exists($controller_path)) {
@@ -93,7 +116,10 @@ if (!class_exists($class)) {
 
 $obj = new $class;
 
-/* Collect sanitized parameters. Only allow known parameter prefixes. */
+/* Collect sanitized parameters. Only allow known parameter prefixes. Only the
+   names in $request_properties are copied onto the controller, so a request
+   cannot overwrite its other properties. */
+$request_properties = array('state', 'id', 'searchString', 'searchFields', 'hostgroup', 'unhandled');
 $params = array('config' => $config);
 
 if (is_array($_REQUEST)) {
@@ -101,11 +127,32 @@ if (is_array($_REQUEST)) {
 		/* Only accept p_ prefixed parameters, start, limit, and sort params */
 		if (preg_match('/^p_[a-zA-Z0-9_]+$/', $key)) {
 			$parm = preg_replace('/^p_/', '', $key);
-			$obj->$parm = get_filter_request_var($key, FILTER_CALLBACK, array('options' => 'sanitize_search_string'));
-			$params[$parm] = $obj->$parm;
+
+			/* $params['config'] carries the Cacti configuration */
+			if ($parm === 'config') {
+				continue;
+			}
+
+			if ($parm === 'searchFields' || $parm === 'data') {
+				/* JSON documents. The search sanitizer would strip their quotes; the
+				   controllers only decode them and match field names against fixed
+				   maps. */
+				$parsed = get_nfilter_request_var($key);
+				$parsed = is_string($parsed) ? $parsed : '';
+			} else {
+				$parsed = get_filter_request_var($key, FILTER_CALLBACK, array('options' => 'sanitize_search_string'));
+			}
+
+			if (in_array($parm, $request_properties, true)) {
+				$obj->$parm = $parsed;
+			}
+
+			$params[$parm] = $parsed;
 		} elseif (in_array($key, array('start', 'limit', 'sort', 'dir'), true)) {
-			if ($key == 'start' || $key == 'limit') {
-				$obj->$key = get_filter_request_var($key, FILTER_VALIDATE_INT);
+			if ($key == 'start') {
+				$obj->start = max(0, (int) get_filter_request_var($key, FILTER_VALIDATE_INT));
+			} elseif ($key == 'limit') {
+				$obj->limit = min(1000, max(1, (int) get_filter_request_var($key, FILTER_VALIDATE_INT)));
 			} elseif ($key == 'dir') {
 				$val = strtoupper(get_filter_request_var($key, FILTER_CALLBACK, array('options' => 'sanitize_search_string')));
 				$obj->dir = in_array($val, array('ASC', 'DESC'), true) ? $val : 'ASC';

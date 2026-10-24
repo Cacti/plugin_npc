@@ -121,6 +121,22 @@ class Controller {
     var $searchString = null;
 
     /**
+     * Restricts a listing to the hostgroup with this alias
+     *
+     * @var string
+     * @access public
+     */
+    var $hostgroup = null;
+
+    /**
+     * When set, a service listing leaves out acknowledged problems
+     *
+     * @var string
+     * @access public
+     */
+    var $unhandled = null;
+
+    /**
      * json encoded list of fields to search
      *
      * @var string
@@ -253,6 +269,48 @@ class Controller {
         $this->config_type = isset($config_type) ? $config_type : 1;
     }
 
+    /**
+     * limitClause
+     *
+     * The LIMIT clause for the current page. The values are written into the
+     * statement because Cacti's database layer sends bound values as strings,
+     * and MariaDB and MySQL reject a quoted LIMIT value.
+     *
+     * @return string  for example " LIMIT 0, 25"
+     */
+    function limitClause() {
+        $limit  = max(1, (int) $this->limit);
+        $offset = max(0, ((int) $this->currentPage - 1) * $limit);
+
+        return ' LIMIT ' . $offset . ', ' . $limit;
+    }
+
+    /**
+     * perfdataOutput
+     *
+     * Reduces Nagios perfdata to the "label:value" pairs a Cacti data input
+     * method reads. Entries without a numeric value, such as label=U, are left
+     * out.
+     *
+     * @param  string $perfdata  The perfdata of a check
+     * @return string  for example "load1:0.52 load5:0.4 "
+     */
+    function perfdataOutput($perfdata) {
+        $output = '';
+
+        foreach (explode(' ', (string) $perfdata) as $perf) {
+            if (preg_match('/(\S+)=([-+]?[0-9]*\.?[0-9]+)/', $perf, $matches)) {
+                if (preg_match('/^iso./', $matches[1])) {
+                    $matches[1] = 'output';
+                }
+
+                $output .= $matches[1] . ':' . $matches[2] . ' ';
+            }
+        }
+
+        return $output;
+    }
+
     function jsonOutput($results=array()) {
         if (!$this->numRecords) {
             $this->numRecords = count($results);
@@ -322,7 +380,7 @@ class Controller {
      * @return string  The appended where clause
      */
 	function searchClause($where, $fieldMap, &$params = array()) {
-		$fields = json_decode(stripslashes($this->searchFields));
+		$fields = json_decode(stripslashes((string) $this->searchFields));
 		if (!is_array($fields)) {
 			return $where;
 		}
@@ -416,7 +474,7 @@ class Controller {
 
         // If this was an error send a generic response to the client
         if ($level == 'error') {
-            return(json_encode(array('success' => false, 'msg' => __('An error occurred in %s. See error logs for detail.', $class -> $method, 'npc'))));
+            return(json_encode(array('success' => false, 'msg' => sprintf(__('An error occurred in %s. See error logs for detail.', 'npc'), $class . '::' . $method))));
         }
     }
 

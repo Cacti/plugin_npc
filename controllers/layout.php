@@ -10,11 +10,6 @@ class NpcLayoutController extends Controller {
 
 		$npc_base = $config['url_path'] . 'plugins/npc/';
 
-		$current_tab = 'dashboard';
-		if (isset_request_var('tab')) {
-			$current_tab = get_request_var('tab');
-		}
-
 		$tabs = array(
 			'dashboard'  => __('Dashboard', 'npc'),
 			'hosts'      => __('Hosts', 'npc'),
@@ -24,6 +19,16 @@ class NpcLayoutController extends Controller {
 			'eventlog'   => __('Event Log', 'npc'),
 			'process'    => __('Process Info', 'npc'),
 		);
+
+		/* only a known tab name is ever written into the page */
+		$current_tab = 'dashboard';
+		if (isset_request_var('tab')) {
+			$requested_tab = get_request_var('tab');
+
+			if (is_string($requested_tab) && isset($tabs[$requested_tab])) {
+				$current_tab = $requested_tab;
+			}
+		}
 
 		/* draw the tabs */
 		print "<div class='tabs' style='margin-bottom:0px;'><nav><ul role='tablist'>\n";
@@ -44,9 +49,9 @@ class NpcLayoutController extends Controller {
 			baseUrl:          '<?php echo $npc_base; ?>',
 			npcUrl:           '<?php echo $npc_base; ?>npc.php',
 			portletRefresh:   <?php echo (int) read_config_option('npc_portlet_refresh'); ?>,
-			dateFormat:       '<?php echo addslashes(read_config_option('npc_date_format')); ?>',
-			timeFormat:       '<?php echo addslashes(read_config_option('npc_time_format')); ?>',
-			nagiosUrl:        '<?php echo addslashes(read_config_option('npc_nagios_url')); ?>',
+			dateFormat:       '<?php echo addslashes((string) read_config_option('npc_date_format')); ?>',
+			timeFormat:       '<?php echo addslashes((string) read_config_option('npc_time_format')); ?>',
+			nagiosUrl:        '<?php echo addslashes((string) read_config_option('npc_nagios_url')); ?>',
 			userName:         <?php echo json_encode(db_fetch_cell_prepared('SELECT username FROM user_auth WHERE id = ?', array($_SESSION['sess_user_id']))); ?>,
 			hostIcons:        '<?php echo read_config_option('npc_host_icons'); ?>',
 			serviceIcons:     '<?php echo read_config_option('npc_service_icons'); ?>',
