@@ -44,6 +44,10 @@ class NpcSyncController extends Controller {
      */
     function import($params) {
 
+        if (!api_user_realm_auth('host.php')) {
+            return($params['description'] . '|0|0|You do not have permission to add devices');
+        }
+
         $this->logger('info', get_class($this), __FUNCTION__ , "Starting import of " . $params['description']);
 
         $config = $params['config'];

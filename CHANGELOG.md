@@ -2,6 +2,9 @@
 
 --- develop ---
 
+* security: Require the Devices realm for the Nagios host import and the Data Input
+  Methods realm for creating a perfdata data input method; both were open to any
+  user with NPC access
 * security: Keep the host import address cache as JSON in the Cacti cache directory
   instead of a PHP file in the system temp directory that was included on each call
 * security: Quote the description, address and template arguments of the Nagios host

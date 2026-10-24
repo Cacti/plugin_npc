@@ -76,6 +76,10 @@ class NpcCactiController extends Controller {
 	 * @return string   json encoded results
 	 */
 	function addDataInputMethod($params) {
+		if (!api_user_realm_auth('data_input.php')) {
+			return(json_encode(array('success' => false, 'msg' => __('You do not have permission to create data input methods.', 'npc'))));
+		}
+
 		$name = 'NPC - Perfdata - ' . $params['host'];
 
         if (isset($params['service'])) {

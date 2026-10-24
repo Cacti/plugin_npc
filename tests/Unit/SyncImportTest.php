@@ -22,6 +22,7 @@ beforeEach(function () {
 	$GLOBALS['__test_db_calls']   = array();
 	$GLOBALS['__test_db_results'] = array();
 	$GLOBALS['__test_db_fetch_log'] = array();
+	$GLOBALS['__test_denied_realms'] = array();
 });
 
 /**
@@ -247,3 +248,22 @@ it('rejects an import with a non-numeric template id or an empty address', funct
 	'empty address'             => array(array('ip' => '')),
 	'empty description'         => array(array('description' => '')),
 ));
+
+it('refuses the import to a user without device management rights', function () {
+	$GLOBALS['__test_denied_realms'] = array('host.php');
+
+	$base = npc_sync_sandbox();
+
+	$out = npc_sync_unmapped_controller()->import(array(
+		'config'         => array('base_path' => $base),
+		'description'    => 'web1',
+		'host_object_id' => 10,
+		'ip'             => '192.0.2.10',
+		'cache_id'       => 'k',
+		'template_id'    => 7,
+	));
+
+	expect($out)->toBe('web1|0|0|You do not have permission to add devices');
+	expect($GLOBALS['__test_db_calls'])->toBe(array());
+	expect(file_exists($base . '/cli/argv.json'))->toBeFalse();
+});
