@@ -13,70 +13,7 @@
  * do the validation and sanitizing.
  */
 
-/**
- * Run npc.php for one request.
- *
- * @param array $request method, get, post, rows (database fixtures), options
- *
- * @return array stdout, the recorded calls, the sandbox path
- */
-function npc_e2e_run(array $request) {
-	$cacti = $GLOBALS['config']['base_path'];
-	$base  = sys_get_temp_dir() . '/npc-e2e-' . uniqid();
-	$npc   = $base . '/plugins/npc';
-
-	mkdir($npc, 0777, true);
-	mkdir($base . '/include', 0777, true);
-	copy(dirname(__DIR__, 2) . '/npc.php', $npc . '/npc.php');
-	copy(__DIR__ . '/support/front-controller-auth.php', $base . '/include/auth.php');
-
-	foreach (array('controllers', 'includes', 'nagioscmd.php', 'setup.php', 'INFO') as $entry) {
-		symlink(dirname(__DIR__, 2) . '/' . $entry, $npc . '/' . $entry);
-	}
-
-	$scenario = array_merge(array(
-		'method'     => 'GET',
-		'get'        => array(),
-		'post'       => array(),
-		'rows'       => array(),
-		'options'    => array('npc_config_type' => '1'),
-		'cacti_path' => $cacti,
-		'base_path'  => $base,
-		'log'        => $base . '/calls.log',
-	), $request);
-
-	if ($scenario['method'] === 'POST') {
-		$scenario['post'] = $scenario['post'] + $scenario['get'];
-	}
-
-	$process = proc_open(
-		array(PHP_BINARY, '-d', 'display_errors=stderr', 'npc.php'),
-		array(1 => array('pipe', 'w'), 2 => array('pipe', 'w')),
-		$pipes,
-		$npc,
-		array('NPC_E2E' => json_encode($scenario))
-	);
-
-	$stdout = stream_get_contents($pipes[1]);
-	$stderr = stream_get_contents($pipes[2]);
-	proc_close($process);
-
-	$calls = array();
-
-	if (is_file($scenario['log'])) {
-		foreach (array_filter(explode("\n", file_get_contents($scenario['log']))) as $line) {
-			$calls[] = json_decode($line, true);
-		}
-	}
-
-	return array('stdout' => $stdout, 'stderr' => $stderr, 'calls' => $calls, 'base' => $base);
-}
-
-function npc_e2e_calls(array $run, $kind) {
-	return array_values(array_filter($run['calls'], function ($call) use ($kind) {
-		return $call['kind'] === $kind;
-	}));
-}
+require_once __DIR__ . '/support/harness.php';
 
 it('serves the frame for a known tab', function () {
 	$run = npc_e2e_run(array('get' => array('module' => 'layout', 'action' => 'drawFrame', 'tab' => 'hosts')));
@@ -219,3 +156,9 @@ it('rejects actions that were removed from the dispatcher', function (string $mo
 	'user settings lookup' => array('settings', 'getSettings'),
 	'address lookup'       => array('sync', 'checkHostExists'),
 ));
+
+it('does nothing when its stand-in auth file is requested without the test environment', function () {
+	$output = shell_exec('NPC_E2E= ' . escapeshellarg(PHP_BINARY) . ' -r \'putenv("NPC_E2E"); require $argv[1];\' ' . escapeshellarg(__DIR__ . '/support/front-controller-auth.php') . ' 2>&1');
+
+	expect((string) $output)->toBe('');
+});

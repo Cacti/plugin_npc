@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* issue: Skip perfdata entries without a numeric value (label=U) in perfdata.php and
+  cli.php instead of printing PHP warnings into the data input output
 * issue: Declare the hostgroup and unhandled request properties on the base
   controller; assigning them raised the PHP 8.2 dynamic property deprecation
 * issue: List each service once; the service grid joined the hostgroup members

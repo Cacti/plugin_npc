@@ -18,6 +18,17 @@
  * the same JSON so the test can inspect what the plugin did.
  */
 
+/*
+ * Inert unless a test process started it: tests/ can end up in the web root,
+ * so a request for this file must do nothing. Every path below comes from the
+ * NPC_E2E environment variable the test sets, never from the request.
+ */
+if (PHP_SAPI !== 'cli' || getenv('NPC_E2E') === false) {
+	http_response_code(404);
+
+	exit;
+}
+
 $scenario = json_decode((string) getenv('NPC_E2E'), true);
 
 $config = array(
@@ -33,22 +44,31 @@ require_once $scenario['cacti_path'] . '/lib/html_utility.php';
 /*
  * lib/functions.php cannot be loaded next to the stubs below, so the one
  * helper the front controller needs from it, the search string sanitizer, is
- * taken from the file source unchanged.
+ * copied unchanged into a private file in the sandbox and required from there.
  */
-$source = file_get_contents($scenario['cacti_path'] . '/lib/functions.php');
-$start  = strpos($source, 'function sanitize_search_string');
-$open   = strpos($source, '{', $start);
-$depth  = 0;
+if (!function_exists('sanitize_search_string')) {
+	$source = file_get_contents($scenario['cacti_path'] . '/lib/functions.php');
+	$start  = strpos($source, 'function sanitize_search_string');
+	$open   = strpos($source, '{', $start);
+	$depth  = 0;
 
-for ($end = $open; $end < strlen($source); $end++) {
-	if ($source[$end] === '{') {
-		$depth++;
-	} elseif ($source[$end] === '}' && --$depth === 0) {
-		break;
+	for ($end = $open; $end < strlen($source); $end++) {
+		if ($source[$end] === '{') {
+			$depth++;
+		} elseif ($source[$end] === '}' && --$depth === 0) {
+			break;
+		}
 	}
+
+	$extracted = tempnam($scenario['base_path'], 'san');
+	file_put_contents($extracted, "<?php\n" . substr($source, $start, $end - $start + 1) . "\n");
+	register_shutdown_function(function () use ($extracted) {
+		unlink($extracted);
+	});
+
+	require_once $extracted;
 }
 
-eval(substr($source, $start, $end - $start + 1));
 require_once $scenario['base_path'] . '/plugins/npc/setup.php';
 
 $_SERVER['REQUEST_METHOD'] = $scenario['method'];
@@ -59,6 +79,11 @@ $_SESSION['sess_user_id']  = 1;
 
 function npc_e2e_record($kind, $detail) {
 	global $scenario;
+
+	/* Only a plain file name inside the sandbox directory may be written. */
+	if (!preg_match('/^[a-z0-9._-]+$/', basename($scenario['log'])) || realpath(dirname($scenario['log'])) !== realpath($scenario['base_path'])) {
+		return;
+	}
 
 	file_put_contents($scenario['log'], json_encode(array('kind' => $kind) + $detail) . "\n", FILE_APPEND);
 }
