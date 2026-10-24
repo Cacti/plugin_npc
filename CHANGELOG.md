@@ -2,6 +2,9 @@
 
 --- develop ---
 
+* issue: Show the host, service, comment and event log grids and the summary and
+  process tables; the front end read a response shape the controllers do not
+  send, so every table rendered empty
 * issue: Document the NPC Global Commands realm that gates remote commands
 * issue: Add the minimum_importance column to npc_contacts on upgrade (the upgrade
   named a table that does not exist) and remove the settings of deleted users

@@ -51,6 +51,32 @@ var npc = (function($) {
 		return div.innerHTML;
 	}
 
+	/* Rows of a list response. The grid controllers answer with
+	   {data: [...]} or with {response: {value: {items: [...]}}}. */
+	function rowsOf(data) {
+		if (data && Array.isArray(data.data)) {
+			return data.data;
+		}
+
+		if (data && data.response && data.response.value && Array.isArray(data.response.value.items)) {
+			return data.response.value.items;
+		}
+
+		return [];
+	}
+
+	/* The summary actions answer with one object of counts per state. */
+	function summaryRows(data) {
+		var counts = rowsOf(data)[0] || {};
+		var rows   = [];
+
+		Object.keys(counts).forEach(function(state) {
+			rows.push({label: state.charAt(0).toUpperCase() + state.slice(1), count: counts[state]});
+		});
+
+		return rows;
+	}
+
 	function stateLabel(val, map, classMap) {
 		var label = map[val] || 'Unknown';
 		var cls   = classMap[val] || '';
@@ -131,7 +157,7 @@ var npc = (function($) {
 
 	function loadHostSummary() {
 		npcGet({module: 'hosts', action: 'summary'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = summaryRows(data);
 			var html = buildTable('host-summary', 'Host Status Summary', [
 				{label: 'State', field: 'label'},
 				{label: 'Count', field: 'count'}
@@ -142,7 +168,7 @@ var npc = (function($) {
 
 	function loadServiceSummary() {
 		npcGet({module: 'services', action: 'summary'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = summaryRows(data);
 			var html = buildTable('svc-summary', 'Service Status Summary', [
 				{label: 'State', field: 'label'},
 				{label: 'Count', field: 'count'}
@@ -153,7 +179,7 @@ var npc = (function($) {
 
 	function loadHostProblems() {
 		npcGet({module: 'hosts', action: 'getHosts', p_state: 'not_ok'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('host-problems', 'Host Problems', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'State', field: 'current_state', render: function(v) { return stateLabel(v, hostStateMap, hostStateClass); }},
@@ -166,7 +192,7 @@ var npc = (function($) {
 
 	function loadServiceProblems() {
 		npcGet({module: 'services', action: 'getServices', p_state: 'not_ok'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('svc-problems', 'Service Problems', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'Service', field: 'service_description'},
@@ -207,7 +233,7 @@ var npc = (function($) {
 
 	function loadHostTable(filter) {
 		npcGet({module: 'hosts', action: 'getHosts', p_state: filter}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('hosts-grid', 'Hosts', [
 				{label: 'Host Name', field: 'host_name', render: function(v, row) {
 					return '<a href="#" class="npc-host-link" data-id="' + escHtml(row.host_object_id) + '">' + escHtml(v) + '</a>';
@@ -268,7 +294,7 @@ var npc = (function($) {
 
 	function loadServiceTable(filter) {
 		npcGet({module: 'services', action: 'getServices', p_state: filter}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('svc-grid', 'Services', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'Service', field: 'service_description', render: function(v, row) {
@@ -304,7 +330,7 @@ var npc = (function($) {
 		$('#npc-content').html('<div id="npc-comments-table"></div>');
 
 		npcGet({module: 'comments', action: 'getHostComments'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('host-comments', 'Host Comments', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'Author', field: 'author_name'},
@@ -318,7 +344,7 @@ var npc = (function($) {
 			$('#npc-comments-table').html(html);
 
 			npcGet({module: 'comments', action: 'getServiceComments'}, function(sdata) {
-				var srows = (sdata.data) ? sdata.data : [];
+				var srows = rowsOf(sdata);
 				var shtml = buildTable('svc-comments', 'Service Comments', [
 					{label: 'Host', field: 'host_name'},
 					{label: 'Service', field: 'service_description'},
@@ -347,7 +373,7 @@ var npc = (function($) {
 		$('#npc-content').html('<div id="npc-downtime-table"></div>');
 
 		npcGet({module: 'downtime', action: 'getHostDowntime'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('host-downtime', 'Host Downtime', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'Author', field: 'author_name'},
@@ -360,7 +386,7 @@ var npc = (function($) {
 		});
 
 		npcGet({module: 'downtime', action: 'getServiceDowntime'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('svc-downtime', 'Service Downtime', [
 				{label: 'Host', field: 'host_name'},
 				{label: 'Service', field: 'service_description'},
@@ -379,7 +405,7 @@ var npc = (function($) {
 		$('#npc-content').html('<div id="npc-eventlog-table"></div>');
 
 		npcGet({module: 'logentries', action: 'getLogs'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('eventlog', 'Event Log', [
 				{label: 'Entry Time', field: 'entry_time'},
 				{label: 'Log Entry', field: 'logentry_data'}
@@ -396,9 +422,9 @@ var npc = (function($) {
 		$('#npc-content').html('<div id="npc-process-table"></div>');
 
 		npcGet({module: 'nagios', action: 'getProcessInfoGrid'}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			var html = buildTable('process-info', 'Nagios Process Information', [
-				{label: 'Property', field: 'key'},
+				{label: 'Property', field: 'name'},
 				{label: 'Value', field: 'value'}
 			], rows);
 			$('#npc-process-table').html(html);
@@ -409,7 +435,7 @@ var npc = (function($) {
 
 	function showHostDetail(hostObjectId) {
 		npcGet({module: 'hosts', action: 'getHosts', p_id: hostObjectId}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			if (rows.length === 0) {
 				return;
 			}
@@ -453,7 +479,7 @@ var npc = (function($) {
 
 	function showServiceDetail(svcObjectId) {
 		npcGet({module: 'services', action: 'getServices', p_id: svcObjectId}, function(data) {
-			var rows = (data.data) ? data.data : [];
+			var rows = rowsOf(data);
 			if (rows.length === 0) {
 				return;
 			}
@@ -632,6 +658,8 @@ var npc = (function($) {
 		npcGet: npcGet,
 		npcPost: npcPost,
 		showHostDetail: showHostDetail,
+		rowsOf: rowsOf,
+		summaryRows: summaryRows,
 		showServiceDetail: showServiceDetail
 	};
 
