@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* issue: Return an empty definition for an unknown Nagios command instead of raising
+  undefined index and foreach warnings before the not a valid command message
 * issue: Log a fixed message when the host import selection is not a JSON object;
   the old message converted an array to a string
 * issue: Cast the date format, time format and Nagios URL settings to strings in the
