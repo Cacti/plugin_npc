@@ -75,3 +75,26 @@ it('deletes the comments of every service once', function () {
 
 	expect(npc_comments_commands($reader))->toBe(array('DEL_ALL_SVC_COMMENTS;web1;Load', 'DEL_ALL_SVC_COMMENTS;web1;Disk'));
 })->skip(!function_exists('posix_mkfifo'), 'posix extension is not loaded');
+
+it('writes nothing when there are no comments', function () {
+	$reader = npc_comments_command_pipe();
+
+	(new NpcCommentsController())->deleteAllHostComments();
+	(new NpcCommentsController())->deleteAllServiceComments();
+
+	expect(npc_comments_commands($reader))->toBe(array());
+})->skip(!function_exists('posix_mkfifo'), 'posix extension is not loaded');
+
+it('writes nothing when the user lacks the command realm', function () {
+	$reader = npc_comments_command_pipe();
+
+	$GLOBALS['__test_denied_realms']                                           = array('npc1.php');
+	$GLOBALS['__test_db_results']['db_fetch_assoc_prepared']['FROM npc_comments'] = array(array('host_name' => 'web1', 'service_description' => 'Load', 'comment_data' => 'a'));
+
+	(new NpcCommentsController())->deleteAllHostComments();
+	(new NpcCommentsController())->deleteAllServiceComments();
+
+	$GLOBALS['__test_denied_realms'] = array();
+
+	expect(npc_comments_commands($reader))->toBe(array());
+})->skip(!function_exists('posix_mkfifo'), 'posix extension is not loaded');

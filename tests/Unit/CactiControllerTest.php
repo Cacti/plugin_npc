@@ -62,3 +62,40 @@ it('creates the data input method without fields when no check has been stored',
 	expect($GLOBALS['__test_sql_save'][0]['row']['input_string'])->toContain('--type=service --id=');
 	expect($GLOBALS['__test_db_calls'])->toBe(array());
 });
+
+it('stores the host and service names of a data input method as text', function (string $host) {
+	(new NpcCactiController())->addDataInputMethod(array('host' => $host, 'service' => $host, 'object_id' => '12'));
+
+	$row = $GLOBALS['__test_sql_save'][0]['row'];
+
+	expect($row['name'])->toBe('NPC - Perfdata - ' . $host . ': ' . $host);
+	expect($row['input_string'])->toBe("php <path_cacti>/plugins/npc/perfdata.php --type=service --id='12' 2> /dev/null");
+})->with(array(
+	'quotes'          => array("web1' OR '1'='1"),
+	'markup'          => array('<b>web1</b>'),
+	'shell characters' => array('web1; touch the-marker'),
+));
+
+it('quotes a hostile object id in the stored command', function (string $object_id, string $expected) {
+	(new NpcCactiController())->addDataInputMethod(array('host' => 'web1', 'object_id' => $object_id));
+
+	expect($GLOBALS['__test_sql_save'][0]['row']['input_string'])->toBe('php <path_cacti>/plugins/npc/perfdata.php --type=host --id=' . $expected . ' 2> /dev/null');
+})->with(array(
+	'plain number'      => array('12', "'12'"),
+	'command separator' => array('12; id', "'12; id'"),
+	'quote'             => array("12' id", "'12'\\'' id'"),
+));
+
+it('refuses the data input method to a user without the realm whatever the input', function (array $params) {
+	$GLOBALS['__test_denied_realms'] = array('data_input.php');
+
+	$out = json_decode((new NpcCactiController())->addDataInputMethod($params), true);
+
+	expect($out['success'])->toBeFalse();
+	expect($GLOBALS['__test_sql_save'])->toBe(array());
+	expect($GLOBALS['__test_db_calls'])->toBe(array());
+})->with(array(
+	'host check'    => array(array('host' => 'web1', 'object_id' => '12')),
+	'service check' => array(array('host' => 'web1', 'service' => 'Load', 'object_id' => '12')),
+	'nothing'       => array(array()),
+));

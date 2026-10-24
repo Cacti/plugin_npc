@@ -101,3 +101,36 @@ it('keeps the settings of users that still exist', function () {
 
 	expect($deletes)->toBe(array());
 });
+
+it('does nothing for the settings of users when nobody is logged in', function () {
+	unset($_SESSION['sess_user_id']);
+
+	npc_config_settings();
+
+	expect($GLOBALS['__test_db_calls'])->toBe(array());
+});
+
+it('leaves the settings alone when the plugin is not enabled', function () {
+	$_SESSION['sess_user_id']                                         = 1;
+	$GLOBALS['__test_db_results']['db_fetch_cell_prepared']['status'] = '0';
+	$GLOBALS['__test_db_results']['db_fetch_assoc']['FROM npc_settings'] = array(array('user_id' => 9));
+
+	npc_config_settings();
+
+	expect($GLOBALS['__test_db_calls'])->toBe(array());
+});
+
+it('does not touch the schema when the stored version is current', function () {
+	$_SESSION['sess_user_id']                                         = 1;
+	$GLOBALS['npc_default_settings']                                  = array();
+	$GLOBALS['__test_db_results']['db_fetch_cell_prepared']['status'] = '1';
+	$GLOBALS['__test_db_results']['db_fetch_cell']['SELECT version FROM plugin_config'] = plugin_npc_version()['version'];
+
+	npc_config_settings();
+
+	$alters = array_filter(array_column($GLOBALS['__test_db_calls'], 'sql'), function ($sql) {
+		return stripos($sql, 'ALTER TABLE') !== false || stripos($sql, 'UPDATE plugin_config') !== false;
+	});
+
+	expect($alters)->toBe(array());
+});

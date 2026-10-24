@@ -32,3 +32,7 @@ it('asks for only the newest stored check of a host', function () {
 	expect(preg_replace('/\s+/', ' ', $query['sql']))->toContain('WHERE host_object_id = ? ORDER BY hostcheck_id DESC LIMIT 1');
 	expect($query['params'])->toBe(array(12));
 });
+
+it('returns no rows when a host has no stored check', function () {
+	expect((new NpcHostsController())->getPerfData(12))->toBe(array());
+});
