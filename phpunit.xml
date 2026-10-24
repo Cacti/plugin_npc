@@ -29,6 +29,7 @@
     <source>
         <include>
             <file>setup.php</file>
+            <file>controllers/sync.php</file>
         </include>
     </source>
 </phpunit>

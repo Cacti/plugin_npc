@@ -2,6 +2,11 @@
 
 --- develop ---
 
+* issue: Match the Cacti devices of a Nagios host import by IPv4 and IPv6 address.
+  The address map now holds every A and AAAA address of a device in one
+  canonical text form, accepts address literals as device host names without a
+  lookup, and compares the imported address in the same form. The cache file
+  keeps its layout; files written by earlier versions are rebuilt once
 * dev: Relocate the schema provisioning function `npc_setup_tables()` from
   `setup.php` into `includes/database.php` (loaded via `require_once`) to align
   with the fleet schema/includes convention; behavior is unchanged
