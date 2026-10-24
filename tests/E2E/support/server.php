@@ -81,7 +81,7 @@ if (!function_exists('npc_server_url_path')) {
 			if ($socket !== false) {
 				fclose($socket);
 
-				return array('process' => $process, 'base' => 'http://127.0.0.1:' . $port . npc_server_url_path(), 'docroot' => $docroot);
+				return array('process' => $process, 'base' => '127.0.0.1:' . $port . npc_server_url_path(), 'docroot' => $docroot);
 			}
 
 			usleep(100000);

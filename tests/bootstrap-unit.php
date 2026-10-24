@@ -227,7 +227,10 @@ if (!function_exists('db_index_exists')) {
 if (!function_exists('db_column_exists')) {
 	function db_column_exists($table, $column, $log = true, $db_conn = false) {
 		if (isset($GLOBALS['__test_pdo'])) {
-			return $GLOBALS['__test_pdo']->query('SHOW COLUMNS FROM `' . $table . "` LIKE '" . $column . "'")->rowCount() > 0;
+			$lookup = $GLOBALS['__test_pdo']->prepare('SELECT 1 FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?');
+			$lookup->execute(array($table, $column));
+
+			return $lookup->rowCount() > 0;
 		}
 
 		return false;
@@ -237,7 +240,10 @@ if (!function_exists('db_column_exists')) {
 if (!function_exists('db_table_exists')) {
 	function db_table_exists($table, $log = true, $db_conn = false) {
 		if (isset($GLOBALS['__test_pdo'])) {
-			return $GLOBALS['__test_pdo']->query("SHOW TABLES LIKE '" . $table . "'")->rowCount() > 0;
+			$lookup = $GLOBALS['__test_pdo']->prepare('SELECT 1 FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?');
+			$lookup->execute(array($table));
+
+			return $lookup->rowCount() > 0;
 		}
 
 		return false;

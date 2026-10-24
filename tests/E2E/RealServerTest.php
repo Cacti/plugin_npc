@@ -90,13 +90,13 @@ beforeAll(function () {
 		$username = 'npc_e2e_' . $name;
 
 		$db->prepare('DELETE FROM user_auth WHERE username = ?')->execute(array($username));
-		npc_db_insert($db, 'user_auth', array('username' => $username, 'password' => password_hash($password, PASSWORD_DEFAULT), 'realm' => 0, 'must_change_password' => '', 'password_change' => '', 'enabled' => 'on', 'locked' => ''));
+		npc_db_insert($db, 'user', array($username, password_hash($password, PASSWORD_DEFAULT), 0, '', '', 'on', ''));
 
 		$id = (int) $db->lastInsertId();
 		$state['users'][] = $id;
 
 		foreach ($realms as $realm_id) {
-			npc_db_insert($db, 'user_auth_realm', array('realm_id' => $realm_id, 'user_id' => $id));
+			npc_db_insert($db, 'user_realm', array($realm_id, $id));
 		}
 
 		$state['jars'][$name] = npc_http_login($state['server'], $username, $password, 'login');
@@ -127,11 +127,15 @@ beforeAll(function () {
 	}
 
 	/* Rows the listings and the bulk comment deletion read. */
-	npc_db_insert($db, 'npc_objects', array('object_id' => 9300, 'instance_id' => 99, 'objecttype_id' => 1, 'name1' => 'e2ehost'));
-	npc_db_insert($db, 'npc_comments', array('instance_id' => 99, 'object_id' => 9300, 'comment_data' => 'e2e comment', 'author_name' => 'e2e'));
+	npc_db_insert($db, 'object', array(9300, 99, 1, 'e2ehost', ''));
+	npc_db_insert($db, 'comment', array(99, 9300, 'e2e comment', 'e2e'));
+
+	foreach (array('2026-01-01 00:00:01' => 'old=1;1;2', '2026-01-01 00:00:02' => 'rta=0.5ms;100;200;0 pl=0%;20;60;0;100 bad=U') as $time => $perfdata) {
+		npc_db_insert($db, 'host_check', array(99, 9400, $time, $perfdata));
+	}
 
 	for ($i = 0; $i < 1005; $i++) {
-		npc_db_insert($db, 'npc_logentries', array('instance_id' => 99, 'logentry_time' => '2026-01-01 00:00:00', 'entry_time' => '2026-01-01 00:00:00', 'entry_time_usec' => $i, 'logentry_data' => 'e2e entry ' . $i));
+		npc_db_insert($db, 'log_entry', array(99, '2026-01-01 00:00:00', '2026-01-01 00:00:00', $i, 'e2e entry ' . $i));
 	}
 });
 
@@ -161,6 +165,7 @@ afterAll(function () {
 		$db->prepare('DELETE FROM npc_comments WHERE instance_id = ?')->execute(array(99));
 		$db->prepare('DELETE FROM npc_objects WHERE object_id = ?')->execute(array(9300));
 		$db->prepare('DELETE FROM npc_logentries WHERE instance_id = ?')->execute(array(99));
+		$db->prepare('DELETE FROM npc_hostchecks WHERE instance_id = ?')->execute(array(99));
 		$db->prepare('DELETE FROM data_input WHERE name LIKE ?')->execute(array('NPC - Perfdata - e2e%'));
 		$db->prepare('DELETE FROM host WHERE description LIKE ?')->execute(array('e2e import%'));
 	}
@@ -456,3 +461,53 @@ it('lists the hostgroups selected for the import as JSON', function () {
 	expect($response['status'])->toBe(200);
 	expect(npc_rs_json($response))->toBe(array());
 });
+
+/** Run one of the plugin's command line scripts with Cacti's own command line bootstrap. */
+function npc_rs_cli($script, array $args) {
+	$options = array('-d', 'display_errors=stderr');
+	$env     = array('PATH' => (string) getenv('PATH'));
+
+	if (getenv('NPC_COVERAGE_DIR') !== false) {
+		$options = array_merge($options, npc_e2e_coverage_options());
+		$env    += npc_e2e_coverage_environment();
+	}
+
+	$process = proc_open(
+		array_merge(array(PHP_BINARY), $options, array($script), $args),
+		array(1 => array('pipe', 'w'), 2 => array('pipe', 'w')),
+		$pipes,
+		$GLOBALS['config']['base_path'] . '/plugins/npc',
+		$env
+	);
+
+	$output = stream_get_contents($pipes[1]);
+	$errors = stream_get_contents($pipes[2]);
+	proc_close($process);
+
+	return array($output, $errors);
+}
+
+it('prints the newest host perfdata through the Cacti command line bootstrap', function (string $script, array $args, string $expected) {
+	list($output, $errors) = npc_rs_cli($script, $args);
+
+	expect($errors)->toBe('');
+	expect($output)->toBe($expected);
+})->with(array(
+	'perfdata.php, stored checks'     => array('perfdata.php', array('--type=host', '--id=9400'), "rta:0.5 pl:0 \n"),
+	'perfdata.php, no stored checks'  => array('perfdata.php', array('--type=host', '--id=9401'), "\n"),
+	'cli.php, stored checks'          => array('cli.php', array('--perfdata', '--type=host', '--id=9400'), "rta:0.5 pl:0 \n"),
+	'cli.php, no stored checks'       => array('cli.php', array('--perfdata', '--type=host', '--id=9401'), "\n"),
+));
+
+it('treats a hostile id as a bound value in the command line scripts', function (string $id) {
+	list($output, $errors) = npc_rs_cli('perfdata.php', array('--type=host', '--id=' . $id));
+
+	/* The id is compared as a number, so the leading digits select the host and
+	   the rest is never part of the statement. */
+	expect($errors)->toBe('');
+	expect($output)->toBe("rta:0.5 pl:0 \n");
+	expect($GLOBALS['npc_rs']['db']->query("SHOW TABLES LIKE 'npc\\_hosts'")->rowCount())->toBe(1);
+})->with(array(
+	'quote'     => array("9400' OR '1'='1"),
+	'separator' => array('9400; DROP TABLE npc_hosts'),
+));

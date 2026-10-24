@@ -75,10 +75,30 @@ if (!function_exists('npc_db_connect')) {
 }
 
 if (!function_exists('npc_db_insert')) {
-	function npc_db_insert($pdo, $table, array $row) {
-		$columns = '`' . implode('`, `', array_keys($row)) . '`';
-		$marks   = implode(', ', array_fill(0, count($row), '?'));
+	/**
+	 * Insert one fixture row with one of the fixed statements below.
+	 *
+	 * @param PDO    $pdo       connection
+	 * @param string $statement key of npc_db_statements()
+	 * @param array  $values    values in the order of the statement's columns
+	 */
+	function npc_db_insert($pdo, $statement, array $values) {
+		$statements = array(
+			'user'              => 'INSERT INTO user_auth (username, password, realm, must_change_password, password_change, enabled, locked) VALUES (?, ?, ?, ?, ?, ?, ?)',
+			'user_realm'        => 'INSERT INTO user_auth_realm (realm_id, user_id) VALUES (?, ?)',
+			'instance'          => 'INSERT INTO npc_instances (instance_id, instance_name) VALUES (?, ?)',
+			'object'            => 'INSERT INTO npc_objects (object_id, instance_id, objecttype_id, name1, name2) VALUES (?, ?, ?, ?, ?)',
+			'comment'           => 'INSERT INTO npc_comments (instance_id, object_id, comment_data, author_name) VALUES (?, ?, ?, ?)',
+			'log_entry'         => 'INSERT INTO npc_logentries (instance_id, logentry_time, entry_time, entry_time_usec, logentry_data) VALUES (?, ?, ?, ?, ?)',
+			'host'              => 'INSERT INTO npc_hosts (instance_id, config_type, host_object_id, alias) VALUES (?, ?, ?, ?)',
+			'service'           => 'INSERT INTO npc_services (instance_id, config_type, host_object_id, service_object_id) VALUES (?, ?, ?, ?)',
+			'service_status'    => 'INSERT INTO npc_servicestatus (instance_id, service_object_id, current_state) VALUES (?, ?, ?)',
+			'hostgroup'         => 'INSERT INTO npc_hostgroups (hostgroup_id, instance_id, config_type, hostgroup_object_id, alias) VALUES (?, ?, ?, ?, ?)',
+			'hostgroup_member'  => 'INSERT INTO npc_hostgroup_members (instance_id, hostgroup_id, host_object_id) VALUES (?, ?, ?)',
+			'host_check'        => 'INSERT INTO npc_hostchecks (instance_id, host_object_id, start_time, perfdata) VALUES (?, ?, ?, ?)',
+			'user_settings'     => 'INSERT INTO npc_settings (user_id, settings) VALUES (?, ?)',
+		);
 
-		$pdo->prepare('INSERT INTO `' . $table . '` (' . $columns . ') VALUES (' . $marks . ')')->execute(array_values($row));
+		$pdo->prepare($statements[$statement])->execute($values);
 	}
 }

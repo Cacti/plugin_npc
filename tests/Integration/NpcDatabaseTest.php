@@ -117,7 +117,7 @@ it('pages through a listing', function () {
 	$pdo = $GLOBALS['npc_db'];
 
 	for ($i = 1; $i <= 7; $i++) {
-		npc_db_insert($pdo, 'npc_logentries', array('instance_id' => 99, 'logentry_time' => '2026-01-01 00:00:0' . $i, 'entry_time' => '2026-01-01 00:00:0' . $i, 'logentry_data' => 'entry ' . $i));
+		npc_db_insert($pdo, 'log_entry', array(99, '2026-01-01 00:00:0' . $i, '2026-01-01 00:00:0' . $i, 0, 'entry ' . $i));
 	}
 
 	$controller              = new NpcLogentriesController();
@@ -133,20 +133,20 @@ it('pages through a listing', function () {
 it('lists each service once however many hostgroups its host belongs to', function () {
 	$pdo = $GLOBALS['npc_db'];
 
-	npc_db_insert($pdo, 'npc_instances', array('instance_id' => 99, 'instance_name' => 'default'));
-	npc_db_insert($pdo, 'npc_objects', array('object_id' => 9100, 'instance_id' => 99, 'objecttype_id' => 1, 'name1' => 'web1'));
+	npc_db_insert($pdo, 'instance', array(99, 'default'));
+	npc_db_insert($pdo, 'object', array(9100, 99, 1, 'web1', ''));
 
 	foreach (array(9101 => 'Load', 9102 => 'Disk') as $id => $description) {
-		npc_db_insert($pdo, 'npc_objects', array('object_id' => $id, 'instance_id' => 99, 'objecttype_id' => 2, 'name1' => 'web1', 'name2' => $description));
-		npc_db_insert($pdo, 'npc_services', array('instance_id' => 99, 'config_type' => 1, 'host_object_id' => 9100, 'service_object_id' => $id));
-		npc_db_insert($pdo, 'npc_servicestatus', array('instance_id' => 99, 'service_object_id' => $id, 'current_state' => 0));
+		npc_db_insert($pdo, 'object', array($id, 99, 2, 'web1', $description));
+		npc_db_insert($pdo, 'service', array(99, 1, 9100, $id));
+		npc_db_insert($pdo, 'service_status', array(99, $id, 0));
 	}
 
-	npc_db_insert($pdo, 'npc_hosts', array('instance_id' => 99, 'config_type' => 1, 'host_object_id' => 9100, 'alias' => 'web1'));
+	npc_db_insert($pdo, 'host', array(99, 1, 9100, 'web1'));
 
 	foreach (array(9201 => 'web servers', 9202 => 'linux servers') as $object_id => $alias) {
-		npc_db_insert($pdo, 'npc_hostgroups', array('hostgroup_id' => $object_id, 'instance_id' => 99, 'config_type' => 1, 'hostgroup_object_id' => $object_id, 'alias' => $alias));
-		npc_db_insert($pdo, 'npc_hostgroup_members', array('instance_id' => 99, 'hostgroup_id' => $object_id, 'host_object_id' => 9100));
+		npc_db_insert($pdo, 'hostgroup', array($object_id, 99, 1, $object_id, $alias));
+		npc_db_insert($pdo, 'hostgroup_member', array(99, $object_id, 9100));
 	}
 
 	$services = new NpcServicesController();
@@ -166,7 +166,7 @@ it('returns only the newest stored check as host perfdata', function () {
 	$pdo = $GLOBALS['npc_db'];
 
 	foreach (array('2026-01-01 00:00:01' => 'old=1', '2026-01-01 00:00:02' => 'mid=2', '2026-01-01 00:00:03' => 'new=3') as $time => $perfdata) {
-		npc_db_insert($pdo, 'npc_hostchecks', array('instance_id' => 99, 'host_object_id' => 9100, 'start_time' => $time, 'perfdata' => $perfdata));
+		npc_db_insert($pdo, 'host_check', array(99, 9100, $time, $perfdata));
 	}
 
 	$rows = (new NpcHostsController())->getPerfData(9100);
@@ -188,4 +188,76 @@ it('adds the importance column to the contacts table on upgrade', function () {
 	npc_upgrade_tables();
 
 	expect(db_column_exists('npc_contacts', 'minimum_importance'))->toBeTrue();
+});
+
+/** The stored settings of every user row, keyed by user id. */
+function npc_db_settings_users($pdo) {
+	return array_map('intval', $pdo->query('SELECT user_id FROM npc_settings ORDER BY user_id')->fetchAll(PDO::FETCH_COLUMN));
+}
+
+it('removes the settings of deleted users and creates those of new users', function () {
+	$pdo = $GLOBALS['npc_db'];
+
+	if ($pdo->query("SHOW TABLES LIKE 'user_auth'")->rowCount() === 0) {
+		$this->markTestSkipped('Cacti user table is not available.');
+	}
+
+	npc_db_insert($pdo, 'user', array('npc_db_new_user', 'x', 0, '', '', 'on', ''));
+	$new = (int) $pdo->lastInsertId();
+	npc_db_insert($pdo, 'user_settings', array(987654321, 'a:0:{}'));
+
+	$_SESSION['sess_user_id']        = 1;
+	$GLOBALS['npc_default_settings'] = array('date_format' => 's:Y-m-d');
+	$GLOBALS['__test_pdo']           = $pdo;
+
+	$version = $pdo->query("SELECT version FROM plugin_config WHERE directory = 'npc'")->fetchColumn();
+
+	npc_config_settings();
+
+	unset($_SESSION['sess_user_id']);
+
+	$kept = npc_db_settings_users($pdo);
+
+	expect($kept)->toContain($new);
+	expect($kept)->not->toContain(987654321);
+	expect($pdo->query("SELECT version FROM plugin_config WHERE directory = 'npc'")->fetchColumn())->toBe($version);
+});
+
+it('runs the upgrade against the real tables when the stored version is old', function () {
+	$pdo = $GLOBALS['npc_db'];
+
+	if ($pdo->query("SHOW TABLES LIKE 'plugin_config'")->rowCount() === 0) {
+		$this->markTestSkipped('Cacti plugin table is not available.');
+	}
+
+	/* The prune step of the upgrade works on base_path/plugins/npc, so it gets a
+	   copy of the layout and never the real plugin directory. */
+	$base = sys_get_temp_dir() . '/npc-upgrade-' . uniqid();
+	mkdir($base . '/plugins/npc/tests', 0777, true);
+	file_put_contents($base . '/plugins/npc/INFO', "[info]\nversion = 9.9.9\nname = npc\nauthor = x\n");
+	file_put_contents($base . '/plugins/npc/manifest.json', json_encode(array('tombstones' => array(), 'expected' => array('INFO', 'manifest.json'), 'whitelist' => array())));
+	file_put_contents($base . '/plugins/npc/tests/marker.txt', 'x');
+
+	$realTests = dirname(__DIR__);
+
+	$pdo->prepare("UPDATE plugin_config SET version = ? WHERE directory = 'npc'")->execute(array('0.1'));
+	npc_db_insert($pdo, 'user_settings', array(987654322, 'a:0:{}'));
+
+	$restore                        = $GLOBALS['config']['base_path'];
+	$GLOBALS['config']['base_path'] = $base;
+	$GLOBALS['__test_pdo']          = $pdo;
+	$_SESSION['sess_user_id']       = 1;
+
+	try {
+		npc_config_settings();
+	} finally {
+		$GLOBALS['config']['base_path'] = $restore;
+		unset($_SESSION['sess_user_id']);
+	}
+
+	expect($pdo->query("SELECT version FROM plugin_config WHERE directory = 'npc'")->fetchColumn())->toBe('9.9.9');
+	expect(npc_db_settings_users($pdo))->not->toContain(987654322);
+	expect(file_exists($base . '/plugins/npc/tests'))->toBeFalse();
+	expect(is_dir($realTests))->toBeTrue();
+	expect(is_dir(dirname(__DIR__) . '/Integration'))->toBeTrue();
 });
