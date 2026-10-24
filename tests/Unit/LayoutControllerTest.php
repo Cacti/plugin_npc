@@ -72,3 +72,30 @@ it('never writes an unknown or malformed tab value into the script block', funct
 	'quote and statement'                  => array("x';breakout();'"),
 	'array value'                          => array(array('breakout')),
 ));
+
+it('writes empty strings for settings that were never saved', function () {
+	$GLOBALS['__test_config'] = array('npc_date_format' => null, 'npc_time_format' => null, 'npc_nagios_url' => null);
+
+	try {
+		$html = npc_layout_output('hosts');
+	} finally {
+		$GLOBALS['__test_config'] = array();
+	}
+
+	expect($html)->toContain("dateFormat:       ''");
+	expect($html)->toContain("timeFormat:       ''");
+	expect($html)->toContain("nagiosUrl:        ''");
+});
+
+it('escapes quotes in the saved date format and Nagios URL', function () {
+	$GLOBALS['__test_config'] = array('npc_date_format' => "Y'm", 'npc_time_format' => 'H:i', 'npc_nagios_url' => "https://nagios.example/'x");
+
+	try {
+		$html = npc_layout_output('hosts');
+	} finally {
+		$GLOBALS['__test_config'] = array();
+	}
+
+	expect($html)->toContain("dateFormat:       'Y\\'m'");
+	expect($html)->toContain("nagiosUrl:        'https://nagios.example/\\'x'");
+});

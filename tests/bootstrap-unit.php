@@ -298,7 +298,7 @@ if (!function_exists('api_plugin_remove_realms')) {
 
 if (!function_exists('read_config_option')) {
 	function read_config_option($config_name, $force = false) {
-		return $GLOBALS['__test_config'][$config_name] ?? '';
+		return array_key_exists($config_name, $GLOBALS['__test_config'] ?? array()) ? $GLOBALS['__test_config'][$config_name] : '';
 	}
 }
 

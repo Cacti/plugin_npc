@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* issue: Cast the date format, time format and Nagios URL settings to strings in the
+  NPC frame; unsaved settings raised the PHP 8.1 null deprecation on every page
 * dev: Run the schema and the listing, perfdata and upgrade queries against MariaDB
   in the Pest suite, and run npc.php, perfdata.php and cli.php as subprocesses
   (tests/E2E); the JavaScript front end is tested with Node's test runner
