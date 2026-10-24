@@ -93,6 +93,10 @@ $GLOBALS['__test_db_fetch_log'] = array();
 function npc_test_db_result($fn, $sql, $params, $default) {
 	$GLOBALS['__test_db_fetch_log'][] = array('fn' => $fn, 'sql' => $sql, 'params' => $params);
 
+	if (isset($GLOBALS['__test_pdo'])) {
+		return npc_test_pdo_fetch($GLOBALS['__test_pdo'], $fn, $sql, $params);
+	}
+
 	foreach (($GLOBALS['__test_db_results'][$fn] ?? array()) as $match => $result) {
 		if (strpos($sql, (string) $match) !== false) {
 			return $result;
@@ -100,6 +104,31 @@ function npc_test_db_result($fn, $sql, $params, $default) {
 	}
 
 	return $default;
+}
+
+/**
+ * Run a fetch against a real connection, the way Cacti's database layer does:
+ * the statement is prepared with PDO's defaults and the values are handed to
+ * execute() as an array, so every value reaches the server as a string.
+ * Integration tests set $GLOBALS['__test_pdo'] to turn this on.
+ */
+function npc_test_pdo_fetch($pdo, $fn, $sql, $params) {
+	$statement = $pdo->prepare($sql);
+	$statement->execute(array_values($params));
+
+	if (strpos($fn, 'assoc') !== false) {
+		return $statement->fetchAll(PDO::FETCH_ASSOC);
+	}
+
+	if (strpos($fn, 'row') !== false) {
+		$row = $statement->fetch(PDO::FETCH_ASSOC);
+
+		return $row === false ? array() : $row;
+	}
+
+	$value = $statement->fetchColumn();
+
+	return $value === false ? '' : $value;
 }
 
 /**
@@ -132,6 +161,11 @@ if (!function_exists('get_md5_include_css')) {
 if (!function_exists('db_execute')) {
 	function db_execute($sql) {
 		$GLOBALS['__test_db_calls'][] = array('fn' => 'db_execute', 'sql' => $sql, 'params' => array());
+
+		if (isset($GLOBALS['__test_pdo'])) {
+			$GLOBALS['__test_pdo']->exec($sql);
+		}
+
 		return true;
 	}
 }
@@ -139,6 +173,11 @@ if (!function_exists('db_execute')) {
 if (!function_exists('db_execute_prepared')) {
 	function db_execute_prepared($sql, $params = array()) {
 		$GLOBALS['__test_db_calls'][] = array('fn' => 'db_execute_prepared', 'sql' => $sql, 'params' => $params);
+
+		if (isset($GLOBALS['__test_pdo'])) {
+			$GLOBALS['__test_pdo']->prepare($sql)->execute(array_values($params));
+		}
+
 		return true;
 	}
 }
@@ -187,12 +226,20 @@ if (!function_exists('db_index_exists')) {
 
 if (!function_exists('db_column_exists')) {
 	function db_column_exists($table, $column) {
+		if (isset($GLOBALS['__test_pdo'])) {
+			return $GLOBALS['__test_pdo']->query('SHOW COLUMNS FROM `' . $table . "` LIKE '" . $column . "'")->rowCount() > 0;
+		}
+
 		return false;
 	}
 }
 
 if (!function_exists('db_table_exists')) {
 	function db_table_exists($table) {
+		if (isset($GLOBALS['__test_pdo'])) {
+			return $GLOBALS['__test_pdo']->query("SHOW TABLES LIKE '" . $table . "'")->rowCount() > 0;
+		}
+
 		return false;
 	}
 }

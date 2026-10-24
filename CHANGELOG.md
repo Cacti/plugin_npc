@@ -2,6 +2,9 @@
 
 --- develop ---
 
+* dev: Run the schema and the listing, perfdata and upgrade queries against MariaDB
+  in the Pest suite, and run npc.php, perfdata.php and cli.php as subprocesses
+  (tests/E2E); the JavaScript front end is tested with Node's test runner
 * issue: Write the LIMIT values of the host, service, comment, downtime, event log,
   notification and state history listings into the statement as integers;
   Cacti binds values as strings and the databases reject a quoted LIMIT, so these
