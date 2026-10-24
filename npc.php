@@ -133,7 +133,15 @@ if (is_array($_REQUEST)) {
 				continue;
 			}
 
-			$parsed = get_filter_request_var($key, FILTER_CALLBACK, array('options' => 'sanitize_search_string'));
+			if ($parm === 'searchFields' || $parm === 'data') {
+				/* JSON documents. The search sanitizer would strip their quotes; the
+				   controllers only decode them and match field names against fixed
+				   maps. */
+				$parsed = get_nfilter_request_var($key);
+				$parsed = is_string($parsed) ? $parsed : '';
+			} else {
+				$parsed = get_filter_request_var($key, FILTER_CALLBACK, array('options' => 'sanitize_search_string'));
+			}
 
 			if (in_array($parm, $request_properties, true)) {
 				$obj->$parm = $parsed;

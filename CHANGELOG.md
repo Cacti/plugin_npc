@@ -2,6 +2,10 @@
 
 --- develop ---
 
+* issue: Pass the searchFields and data request values to the controllers as
+  JSON; the search string sanitizer removed their quotes, so grid searches and the
+  host import selection never applied; the selection lookup also called a
+  non-static method statically
 * security: Copy only the known request parameters onto the NPC controllers and keep
   `start` and `limit` within bounds (at most 1000 rows per request)
 * security: Accept the state-changing NPC actions (Nagios commands, comment

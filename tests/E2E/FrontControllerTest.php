@@ -168,3 +168,41 @@ it('bounds the page size and start of a listing', function (array $query, array 
 	'second page'      => array(array('start' => '50', 'limit' => '50'), array(50, 50)),
 	'limit as p_limit' => array(array('p_limit' => '100000'), array(0, 25)),
 ));
+
+it('applies a JSON search field list to the query', function () {
+	$run = npc_e2e_run(array('get' => array(
+		'module'         => 'logentries',
+		'action'         => 'getLogs',
+		'p_searchString' => 'restart',
+		'p_searchFields' => '["logentry_data","not_a_field"]',
+	)));
+
+	$count = npc_e2e_calls($run, 'db_fetch_cell_prepared');
+
+	expect($count[0]['sql'])->toContain('l.logentry_data LIKE ?');
+	expect($count[0]['sql'])->not->toContain('not_a_field');
+	expect($count[0]['params'])->toBe(array('%restart%'));
+});
+
+it('reads the hostgroup selection of the import as JSON', function () {
+	$run = npc_e2e_run(array(
+		'get'  => array(
+			'module' => 'sync',
+			'action' => 'getHosts',
+			'p_data' => '{"g1":{"alias":"web servers","create_graphs":1,"template":2}}',
+		),
+		'rows' => array('db_fetch_assoc_prepared' => array('INNER JOIN npc_hostgroup_members' => array(
+			array('host_object_id' => 10, 'display_name' => 'web1', 'address' => '192.0.2.10'),
+		))),
+	));
+
+	expect(json_decode($run['stdout'], true))->toBe(array(
+		array('host_object_id' => 10, 'display_name' => 'web1', 'address' => '192.0.2.10', 'create_graphs' => 1, 'template' => 2),
+	));
+
+	$lookup = array_values(array_filter(npc_e2e_calls($run, 'db_fetch_assoc_prepared'), function ($call) {
+		return strpos($call['sql'], 'hg.alias = ?') !== false;
+	}));
+
+	expect($lookup[0]['params'])->toBe(array('web servers'));
+});
