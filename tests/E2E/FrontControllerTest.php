@@ -134,3 +134,37 @@ it('writes a Nagios command only for a POST request', function () {
 	expect(json_decode($run['stdout'], true))->toBe(array('success' => true));
 	expect(file_get_contents($file))->toMatch('/^\[\d+\] ENABLE_NOTIFICATIONS\n$/');
 });
+
+it('does not let a request overwrite controller properties', function () {
+	$run = npc_e2e_run(array('get' => array('module' => 'hosts', 'action' => 'summary', 'p_config_type' => '99')));
+
+	$summary = array_values(array_filter(npc_e2e_calls($run, 'db_fetch_assoc_prepared'), function ($call) {
+		return strpos($call['sql'], 'h.config_type = ?') !== false;
+	}));
+
+	expect($summary[0]['params'])->toBe(array('1'));
+});
+
+it('keeps the config parameter out of the request values', function () {
+	$run = npc_e2e_run(array('get' => array('module' => 'layout', 'action' => 'drawFrame', 'p_config' => 'x')));
+
+	expect($run['stderr'])->toBe('');
+	expect($run['stdout'])->toContain("currentTab:       'dashboard'");
+});
+
+it('bounds the page size and start of a listing', function (array $query, array $expected) {
+	$run = npc_e2e_run(array('get' => array('module' => 'logentries', 'action' => 'getLogs') + $query));
+
+	$select = array_values(array_filter(npc_e2e_calls($run, 'db_fetch_assoc_prepared'), function ($call) {
+		return strpos($call['sql'], 'LIMIT ?, ?') !== false;
+	}));
+
+	expect(array_slice($select[0]['params'], -2))->toBe($expected);
+})->with(array(
+	'default page'     => array(array(), array(0, 25)),
+	'large limit'      => array(array('limit' => '100000'), array(0, 1000)),
+	'negative limit'   => array(array('limit' => '-5'), array(0, 1)),
+	'negative start'   => array(array('start' => '-50', 'limit' => '10'), array(0, 10)),
+	'second page'      => array(array('start' => '50', 'limit' => '50'), array(50, 50)),
+	'limit as p_limit' => array(array('p_limit' => '100000'), array(0, 25)),
+));

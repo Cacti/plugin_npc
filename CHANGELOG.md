@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* security: Copy only the known request parameters onto the NPC controllers and keep
+  `start` and `limit` within bounds (at most 1000 rows per request)
 * security: Accept the state-changing NPC actions (Nagios commands, comment
   deletion, data input creation, host import, graph mapping, settings save) only
   as POST requests so Cacti's CSRF token check applies to them

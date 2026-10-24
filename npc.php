@@ -116,7 +116,10 @@ if (!class_exists($class)) {
 
 $obj = new $class;
 
-/* Collect sanitized parameters. Only allow known parameter prefixes. */
+/* Collect sanitized parameters. Only allow known parameter prefixes. Only the
+   names in $request_properties are copied onto the controller, so a request
+   cannot overwrite its other properties. */
+$request_properties = array('state', 'id', 'searchString', 'searchFields', 'hostgroup', 'unhandled');
 $params = array('config' => $config);
 
 if (is_array($_REQUEST)) {
@@ -124,11 +127,24 @@ if (is_array($_REQUEST)) {
 		/* Only accept p_ prefixed parameters, start, limit, and sort params */
 		if (preg_match('/^p_[a-zA-Z0-9_]+$/', $key)) {
 			$parm = preg_replace('/^p_/', '', $key);
-			$obj->$parm = get_filter_request_var($key, FILTER_CALLBACK, array('options' => 'sanitize_search_string'));
-			$params[$parm] = $obj->$parm;
+
+			/* $params['config'] carries the Cacti configuration */
+			if ($parm === 'config') {
+				continue;
+			}
+
+			$parsed = get_filter_request_var($key, FILTER_CALLBACK, array('options' => 'sanitize_search_string'));
+
+			if (in_array($parm, $request_properties, true)) {
+				$obj->$parm = $parsed;
+			}
+
+			$params[$parm] = $parsed;
 		} elseif (in_array($key, array('start', 'limit', 'sort', 'dir'), true)) {
-			if ($key == 'start' || $key == 'limit') {
-				$obj->$key = get_filter_request_var($key, FILTER_VALIDATE_INT);
+			if ($key == 'start') {
+				$obj->start = max(0, (int) get_filter_request_var($key, FILTER_VALIDATE_INT));
+			} elseif ($key == 'limit') {
+				$obj->limit = min(1000, max(1, (int) get_filter_request_var($key, FILTER_VALIDATE_INT)));
 			} elseif ($key == 'dir') {
 				$val = strtoupper(get_filter_request_var($key, FILTER_CALLBACK, array('options' => 'sanitize_search_string')));
 				$obj->dir = in_array($val, array('ASC', 'DESC'), true) ? $val : 'ASC';
