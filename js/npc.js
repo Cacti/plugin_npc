@@ -568,7 +568,7 @@ var npc = (function($) {
 		} else if (kind === 'comment') {
 			params.p_persistent = form.p_persistent ? 1 : 0;
 		} else if (kind === 'downtime') {
-			var minutes = parseInt(form.duration_minutes, 10);
+			var minutes = Number.parseInt(form.duration_minutes, 10);
 			var seconds = (minutes > 0 ? minutes : 60) * 60;
 
 			params.p_start_time = now;
@@ -759,3 +759,8 @@ var npc = (function($) {
 	};
 
 })(jQuery);
+
+/* The Node tests load this file with require(); browsers have no module object. */
+if (typeof module !== 'undefined' && module.exports) {
+	module.exports = npc;
+}

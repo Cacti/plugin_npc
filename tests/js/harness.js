@@ -10,11 +10,9 @@
  * stay as they are.
  */
 
-const fs = require('fs');
 const path = require('path');
-const vm = require('vm');
 
-const source = fs.readFileSync(path.join(__dirname, '../../js/npc.js'), 'utf8');
+const script = path.join(__dirname, '../../js/npc.js');
 
 function load(options) {
 	const opts = options || {};
@@ -104,42 +102,36 @@ function load(options) {
 		callback(opts.postResponse || {success: true});
 	};
 
-	const context = {
-		jQuery: jq,
-		window: {
-			npcConfig: Object.assign({npcUrl: 'npc.php', csrfToken: 'token', userName: 'admin', portletRefresh: 60}, opts.config || {})
+	/* js/npc.js reads these as globals when it is evaluated. Each load gets a
+	   fresh copy of the module so no state carries over between tests. */
+	global.jQuery = jq;
+	global.window = {
+		npcConfig: Object.assign({npcUrl: 'npc.php', csrfToken: 'token', userName: 'admin', portletRefresh: 60}, opts.config || {})
+	};
+	global.document = {
+		createElement() {
+			return {
+				appendChild(node) {
+					this.text = node.text;
+				},
+				get innerHTML() {
+					return String(this.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+				}
+			};
 		},
-		document: {
-			createElement() {
-				return {
-					appendChild(node) {
-						this.text = node.text;
-					},
-					get innerHTML() {
-						return String(this.text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-					}
-				};
-			},
-			createTextNode(text) {
-				return {text};
-			}
-		},
-		setInterval() {
-			return 1;
-		},
-		clearInterval() {},
-		confirm() {
-			return true;
-		},
-		alert(message) {
-			env.alerts.push(message);
-		},
-		console
+		createTextNode(text) {
+			return {text};
+		}
+	};
+	global.setInterval = () => 1;
+	global.clearInterval = () => {};
+	global.confirm = () => true;
+	global.alert = (message) => {
+		env.alerts.push(message);
 	};
 
-	vm.createContext(context);
-	vm.runInContext(source, context);
-	env.npc = context.npc;
+	delete require.cache[require.resolve(script)];
+	env.npc = require(script);
 	env.ready = function() {
 		ready.forEach((fn) => fn());
 	};
