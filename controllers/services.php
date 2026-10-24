@@ -166,7 +166,13 @@ class NpcServicesController extends Controller {
 			$params[] = intval($svc_id);
 		}
 
+		/* A service is listed once however many hostgroups its host is in; the
+		   membership tables are only joined to filter on one. */
+		$hostgroup_join = '';
+
 		if (isset($this->hostgroup)) {
+			$hostgroup_join = 'LEFT JOIN npc_hostgroup_members hgm ON h.host_object_id = hgm.host_object_id
+				LEFT JOIN npc_hostgroups hg ON hgm.hostgroup_id = hg.hostgroup_id';
 			$where .= ' AND hg.alias = ?';
 			$params[] = $this->hostgroup;
 		}
@@ -195,8 +201,7 @@ class NpcServicesController extends Controller {
 			LEFT JOIN npc_objects o ON ss.service_object_id = o.object_id
 			LEFT JOIN npc_services s ON ss.service_object_id = s.service_object_id
 			LEFT JOIN npc_hosts h ON s.host_object_id = h.host_object_id
-			LEFT JOIN npc_hostgroup_members hgm ON h.host_object_id = hgm.host_object_id
-			LEFT JOIN npc_hostgroups hg ON hgm.hostgroup_id = hg.hostgroup_id
+			' . $hostgroup_join . '
 			LEFT JOIN npc_instances i ON s.instance_id = i.instance_id
 			WHERE ' . $where,
 			$params);
@@ -224,8 +229,7 @@ class NpcServicesController extends Controller {
 			LEFT JOIN npc_objects o ON ss.service_object_id = o.object_id
 			LEFT JOIN npc_services s ON ss.service_object_id = s.service_object_id
 			LEFT JOIN npc_hosts h ON s.host_object_id = h.host_object_id
-			LEFT JOIN npc_hostgroup_members hgm ON h.host_object_id = hgm.host_object_id
-			LEFT JOIN npc_hostgroups hg ON hgm.hostgroup_id = hg.hostgroup_id
+			' . $hostgroup_join . '
 			LEFT JOIN npc_instances i ON s.instance_id = i.instance_id
 			LEFT JOIN npc_service_graphs sg ON ss.service_object_id = sg.service_object_id
 			WHERE ' . $where . '
