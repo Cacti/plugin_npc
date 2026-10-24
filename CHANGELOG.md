@@ -2,6 +2,7 @@
 
 --- develop ---
 
+* issue: Document the NPC Global Commands realm that gates remote commands
 * issue: Add the minimum_importance column to npc_contacts on upgrade (the upgrade
   named a table that does not exist) and remove the settings of deleted users
   (the cleanup read a column the query does not return)
