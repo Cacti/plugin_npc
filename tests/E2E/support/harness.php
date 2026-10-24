@@ -52,12 +52,20 @@ if (!function_exists('npc_e2e_run')) {
 			$scenario['post'] = $scenario['post'] + $scenario['get'];
 		}
 
+		$environment = array('NPC_E2E' => json_encode($scenario));
+		$options     = array('-d', 'display_errors=stderr');
+
+		if (getenv('NPC_COVERAGE_DIR') !== false) {
+			$environment += npc_e2e_coverage_environment();
+			$options      = array_merge($options, npc_e2e_coverage_options());
+		}
+
 		$process = proc_open(
-			array_merge(array(PHP_BINARY, '-d', 'display_errors=stderr', $script), $args),
+			array_merge(array(PHP_BINARY), $options, array($script), $args),
 			array(1 => array('pipe', 'w'), 2 => array('file', $base . '/stderr.txt', 'w')),
 			$pipes,
 			$npc,
-			array('NPC_E2E' => json_encode($scenario))
+			$environment
 		);
 
 		$stdout = stream_get_contents($pipes[1]);
@@ -72,6 +80,29 @@ if (!function_exists('npc_e2e_run')) {
 		}
 
 		return array('stdout' => $stdout, 'stderr' => (string) file_get_contents($base . '/stderr.txt'), 'calls' => $calls, 'base' => $base);
+	}
+
+	/**
+	 * Environment that makes a subprocess record line coverage when the test
+	 * process was started with NPC_COVERAGE_DIR set (see coverage-prepend.php).
+	 * The label is the name of the running test.
+	 */
+	function npc_e2e_coverage_environment() {
+		$label = 'unlabelled';
+
+		foreach (debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 20) as $frame) {
+			if (isset($frame['object']) && $frame['object'] instanceof \PHPUnit\Framework\TestCase) {
+				$label = $frame['object']->name();
+
+				break;
+			}
+		}
+
+		return array('NPC_COVERAGE_DIR' => getenv('NPC_COVERAGE_DIR'), 'NPC_COVERAGE_LABEL' => $label);
+	}
+
+	function npc_e2e_coverage_options() {
+		return array('-d', 'xdebug.mode=coverage', '-d', 'auto_prepend_file=' . __DIR__ . '/coverage-prepend.php');
 	}
 
 	function npc_e2e_calls(array $run, $kind) {
