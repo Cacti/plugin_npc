@@ -187,3 +187,19 @@ it('refuses the same state-changing action for other methods', function (string 
 	expect(json_decode($run['stdout'], true)['success'])->toBeFalse();
 	expect(npc_e2e_calls($run, 'db_execute_prepared'))->toBe(array());
 })->with(array('PUT', 'DELETE', 'HEAD', 'PATCH'));
+
+it('does nothing when a test helper is run without the test environment', function (string $file) {
+	$dir = sys_get_temp_dir() . '/npc-inert-' . uniqid();
+	mkdir($dir, 0700);
+
+	$command = 'cd ' . escapeshellarg($dir) . ' && env -u NPC_E2E -u NPC_COVERAGE_DIR ' . escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(dirname(__DIR__) . '/' . $file) . ' 2>&1';
+
+	expect((string) shell_exec($command))->toBe('');
+	expect(glob($dir . '/*'))->toBe(array());
+})->with(array(
+	'stand-in auth file' => array('E2E/support/front-controller-auth.php'),
+	'coverage recorder'  => array('E2E/support/coverage-prepend.php'),
+	'subprocess runner'  => array('E2E/support/harness.php'),
+	'web server runner'  => array('E2E/support/server.php'),
+	'database helper'    => array('Integration/support/database.php'),
+));

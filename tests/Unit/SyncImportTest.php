@@ -36,6 +36,20 @@ function npc_sync_sandbox() {
 	return $base;
 }
 
+/**
+ * Parameters of one import request.
+ */
+function npc_sync_params($base, array $override = array()) {
+	return array_merge(array(
+		'config'         => array('base_path' => $base),
+		'description'    => 'web1',
+		'host_object_id' => 10,
+		'ip'             => '192.0.2.10',
+		'cache_id'       => 'k',
+		'template_id'    => 7,
+	), $override);
+}
+
 function npc_sync_unmapped_controller() {
 	return new class extends NpcSyncController {
 		function checkHostExists($ip, $cache_id) {
@@ -47,14 +61,7 @@ function npc_sync_unmapped_controller() {
 it('reports an already mapped host without running the import', function () {
 	$GLOBALS['__test_db_results']['db_fetch_assoc_prepared']['WHERE npc_host_object_id'] = array(array('id' => 3));
 
-	$out = (new NpcSyncController())->import(array(
-		'config'         => array('base_path' => '/nonexistent'),
-		'description'    => 'web1',
-		'host_object_id' => 10,
-		'ip'             => '192.0.2.10',
-		'cache_id'       => 'k',
-		'template_id'    => 1,
-	));
+	$out = (new NpcSyncController())->import(npc_sync_params('/nonexistent', array('template_id' => 1)));
 
 	expect($out)->toBe('web1|0|0|The host already exists and is mapped');
 });
@@ -66,14 +73,7 @@ it('maps a host whose address already exists in Cacti', function () {
 		}
 	};
 
-	$out = $sync->import(array(
-		'config'         => array('base_path' => '/nonexistent'),
-		'description'    => 'web1',
-		'host_object_id' => 10,
-		'ip'             => '192.0.2.10',
-		'cache_id'       => 'k',
-		'template_id'    => 1,
-	));
+	$out = $sync->import(npc_sync_params('/nonexistent', array('template_id' => 1)));
 
 	expect($out)->toBe('web1|0|1|The host already existed in Cacti with device ID: 5');
 
@@ -85,14 +85,7 @@ it('maps a host whose address already exists in Cacti', function () {
 it('imports a new host and maps the returned device id', function () {
 	$base = npc_sync_sandbox();
 
-	$out = npc_sync_unmapped_controller()->import(array(
-		'config'         => array('base_path' => $base),
-		'description'    => 'web1',
-		'host_object_id' => 10,
-		'ip'             => '192.0.2.10',
-		'cache_id'       => 'k',
-		'template_id'    => 7,
-	));
+	$out = npc_sync_unmapped_controller()->import(npc_sync_params($base));
 
 	expect($out)->toBe('web1|1|1|Success - new device-id: (12)');
 
@@ -212,14 +205,7 @@ it('removes its temporary file when the cache cannot be moved into place', funct
 it('passes the import arguments to add_device.php as single values', function () {
 	$base = npc_sync_sandbox();
 
-	$out = npc_sync_unmapped_controller()->import(array(
-		'config'         => array('base_path' => $base),
-		'description'    => 'web 1 & echo extra',
-		'host_object_id' => 10,
-		'ip'             => '192.0.2.10',
-		'cache_id'       => 'k',
-		'template_id'    => 7,
-	));
+	$out = npc_sync_unmapped_controller()->import(npc_sync_params($base, array('description' => 'web 1 & echo extra')));
 
 	expect($out)->toBe('web 1 & echo extra|1|1|Success - new device-id: (12)');
 	expect(json_decode(file_get_contents($base . '/cli/argv.json'), true))->toBe(array(
@@ -232,14 +218,7 @@ it('passes the import arguments to add_device.php as single values', function ()
 it('rejects an import with a non-numeric template id or an empty address', function (array $override) {
 	$base = npc_sync_sandbox();
 
-	$out = npc_sync_unmapped_controller()->import(array_merge(array(
-		'config'         => array('base_path' => $base),
-		'description'    => 'web1',
-		'host_object_id' => 10,
-		'ip'             => '192.0.2.10',
-		'cache_id'       => 'k',
-		'template_id'    => 7,
-	), $override));
+	$out = npc_sync_unmapped_controller()->import(array_merge(npc_sync_params($base), $override));
 
 	expect($out)->toBe(($override['description'] ?? 'web1') . '|0|0|Invalid import parameters');
 	expect(file_exists($base . '/cli/argv.json'))->toBeFalse();
@@ -254,14 +233,7 @@ it('refuses the import to a user without device management rights', function () 
 
 	$base = npc_sync_sandbox();
 
-	$out = npc_sync_unmapped_controller()->import(array(
-		'config'         => array('base_path' => $base),
-		'description'    => 'web1',
-		'host_object_id' => 10,
-		'ip'             => '192.0.2.10',
-		'cache_id'       => 'k',
-		'template_id'    => 7,
-	));
+	$out = npc_sync_unmapped_controller()->import(npc_sync_params($base));
 
 	expect($out)->toBe('web1|0|0|You do not have permission to add devices');
 	expect($GLOBALS['__test_db_calls'])->toBe(array());
@@ -294,14 +266,7 @@ it('leaves hosts that are already mapped out of the selection', function () {
 it('passes hostile description values through as one argument', function (string $description) {
 	$base = npc_sync_sandbox();
 
-	$out = npc_sync_unmapped_controller()->import(array(
-		'config'         => array('base_path' => $base),
-		'description'    => $description,
-		'host_object_id' => 10,
-		'ip'             => '192.0.2.10',
-		'cache_id'       => 'k',
-		'template_id'    => 7,
-	));
+	$out = npc_sync_unmapped_controller()->import(npc_sync_params($base, array('description' => $description)));
 
 	expect($out)->toBe($description . '|1|1|Success - new device-id: (12)');
 	expect(json_decode(file_get_contents($base . '/cli/argv.json'), true)[0])->toBe('--description=' . $description);
@@ -322,14 +287,7 @@ it('reports a failed import when add_device.php prints no device id', function (
 	mkdir($base . '/cli', 0777, true);
 	file_put_contents($base . '/cli/add_device.php', "<?php\nprint \"ERROR: Template 7 does not exist\\n\";\nexit(1);\n");
 
-	$out = npc_sync_unmapped_controller()->import(array(
-		'config'         => array('base_path' => $base),
-		'description'    => 'web1',
-		'host_object_id' => 10,
-		'ip'             => '192.0.2.10',
-		'cache_id'       => 'k',
-		'template_id'    => 7,
-	));
+	$out = npc_sync_unmapped_controller()->import(npc_sync_params($base));
 
 	expect($out)->toBe('web1|');
 	expect($GLOBALS['__test_db_calls'])->toBe(array());
@@ -340,14 +298,7 @@ it('does not map a host when the import prints a malformed device id', function 
 	mkdir($base . '/cli', 0777, true);
 	file_put_contents($base . '/cli/add_device.php', "<?php\nprint \"Success - new device-id: ()\\n\";\n");
 
-	$out = npc_sync_unmapped_controller()->import(array(
-		'config'         => array('base_path' => $base),
-		'description'    => 'web1',
-		'host_object_id' => 10,
-		'ip'             => '192.0.2.10',
-		'cache_id'       => 'k',
-		'template_id'    => 7,
-	));
+	$out = npc_sync_unmapped_controller()->import(npc_sync_params($base));
 
 	expect($out)->toBe('web1|1|1|Success - new device-id: ()');
 })->skip(trim((string) shell_exec('command -v php')) === '', 'php binary is not on PATH');
