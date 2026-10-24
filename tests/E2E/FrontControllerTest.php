@@ -164,3 +164,26 @@ it('does nothing when its stand-in auth file is requested without the test envir
 
 	expect((string) $output)->toBe('');
 });
+
+it('treats an array given for a JSON request value as empty', function (string $name) {
+	$run = npc_e2e_run(array('get' => array('module' => 'logentries', 'action' => 'getLogs', 'p_searchString' => 'x', $name => array('a', 'b'))));
+
+	$count = npc_e2e_calls($run, 'db_fetch_cell_prepared');
+
+	expect($run['stderr'])->toBe('');
+	expect($count[0]['sql'])->not->toContain('LIKE');
+})->with(array('p_searchFields', 'p_data'));
+
+it('reports a host import selection that is not a JSON object', function () {
+	$run = npc_e2e_run(array('get' => array('module' => 'sync', 'action' => 'getHosts', 'p_data' => array('x'))));
+
+	expect($run['stderr'])->toBe('');
+	expect(json_decode($run['stdout'], true)['success'])->toBeFalse();
+});
+
+it('refuses the same state-changing action for other methods', function (string $method) {
+	$run = npc_e2e_run(array('method' => $method, 'get' => array('module' => 'nagios', 'action' => 'command', 'p_command' => 'ENABLE_NOTIFICATIONS')));
+
+	expect(json_decode($run['stdout'], true)['success'])->toBeFalse();
+	expect(npc_e2e_calls($run, 'db_execute_prepared'))->toBe(array());
+})->with(array('PUT', 'DELETE', 'HEAD', 'PATCH'));

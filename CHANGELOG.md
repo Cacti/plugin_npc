@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* issue: Treat a missing searchFields value as empty in the grid search; a search
+  string without it raised the PHP 8.1 null deprecation
 * issue: Return an empty definition for an unknown Nagios command instead of raising
   undefined index and foreach warnings before the not a valid command message
 * issue: Log a fixed message when the host import selection is not a JSON object;

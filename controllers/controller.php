@@ -380,7 +380,7 @@ class Controller {
      * @return string  The appended where clause
      */
 	function searchClause($where, $fieldMap, &$params = array()) {
-		$fields = json_decode(stripslashes($this->searchFields));
+		$fields = json_decode(stripslashes((string) $this->searchFields));
 		if (!is_array($fields)) {
 			return $where;
 		}
