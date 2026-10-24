@@ -158,7 +158,6 @@ class NpcHostsController extends Controller {
 			$params);
 
 		/* Paginated results */
-		$offset = ($this->currentPage - 1) * $this->limit;
 
 		$hosts = db_fetch_assoc_prepared(
 			'SELECT i.instance_name,
@@ -179,8 +178,8 @@ class NpcHostsController extends Controller {
 			LEFT JOIN npc_host_graphs hg ON hs.host_object_id = hg.host_object_id
 			WHERE ' . $where . '
 			ORDER BY ' . $orderBy . '
-			LIMIT ?, ?',
-			array_merge($params, array($offset, $this->limit)));
+			' . $this->limitClause(),
+			$params);
 
 		return $hosts;
 	}

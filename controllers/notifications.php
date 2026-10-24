@@ -50,7 +50,6 @@ class NpcNotificationsController extends Controller {
             WHERE ' . $where,
             $params);
 
-        $offset = ($this->currentPage - 1) * $this->limit;
 
         $results = db_fetch_assoc_prepared('SELECT i.instance_name,
                 o.name1 AS host_name,
@@ -61,8 +60,8 @@ class NpcNotificationsController extends Controller {
             LEFT JOIN npc_instances i ON n.instance_id = i.instance_id
             WHERE ' . $where . '
             ORDER BY n.start_time DESC, n.start_time_usec DESC
-            LIMIT ?, ?',
-            array_merge($params, array($offset, $this->limit)));
+            ' . $this->limitClause(),
+            $params);
 
         return($this->jsonOutput($results));
     }

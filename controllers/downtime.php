@@ -181,7 +181,6 @@ class NpcDowntimeController extends Controller {
             ' . $whereClause,
             $params);
 
-        $offset = ($this->currentPage - 1) * $this->limit;
 
         $results = db_fetch_assoc_prepared('SELECT i.instance_name,
                 o.name1 AS host_name,
@@ -192,8 +191,8 @@ class NpcDowntimeController extends Controller {
             LEFT JOIN npc_instances i ON d.instance_id = i.instance_id
             ' . $whereClause . '
             ORDER BY d.scheduled_start_time DESC, d.actual_start_time DESC, d.actual_start_time_usec DESC
-            LIMIT ?, ?',
-            array_merge($params, array($offset, $this->limit)));
+            ' . $this->limitClause(),
+            $params);
 
         return($results);
     }

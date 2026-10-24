@@ -243,7 +243,6 @@ class NpcCommentsController extends Controller {
             ' . $whereClause,
             $params);
 
-        $offset = ($this->currentPage - 1) * $this->limit;
 
         $results = db_fetch_assoc_prepared('SELECT i.instance_name,
                 o.name1 AS host_name,
@@ -260,8 +259,8 @@ class NpcCommentsController extends Controller {
             LEFT JOIN npc_hosts h ON c.object_id = h.host_object_id
             ' . $whereClause . '
             ORDER BY ' . $orderBy . '
-            LIMIT ?, ?',
-            array_merge($params, array($offset, $this->limit)));
+            ' . $this->limitClause(),
+            $params);
 
         return($results);
     }

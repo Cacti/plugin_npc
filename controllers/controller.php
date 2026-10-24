@@ -269,6 +269,22 @@ class Controller {
         $this->config_type = isset($config_type) ? $config_type : 1;
     }
 
+    /**
+     * limitClause
+     *
+     * The LIMIT clause for the current page. The values are written into the
+     * statement because Cacti's database layer sends bound values as strings,
+     * and MariaDB and MySQL reject a quoted LIMIT value.
+     *
+     * @return string  for example " LIMIT 0, 25"
+     */
+    function limitClause() {
+        $limit  = max(1, (int) $this->limit);
+        $offset = max(0, ((int) $this->currentPage - 1) * $limit);
+
+        return ' LIMIT ' . $offset . ', ' . $limit;
+    }
+
     function jsonOutput($results=array()) {
         if (!$this->numRecords) {
             $this->numRecords = count($results);

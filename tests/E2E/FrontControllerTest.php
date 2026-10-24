@@ -93,10 +93,12 @@ it('bounds the page size and start of a listing', function (array $query, array 
 	$run = npc_e2e_run(array('get' => array('module' => 'logentries', 'action' => 'getLogs') + $query));
 
 	$select = array_values(array_filter(npc_e2e_calls($run, 'db_fetch_assoc_prepared'), function ($call) {
-		return strpos($call['sql'], 'LIMIT ?, ?') !== false;
+		return strpos($call['sql'], 'LIMIT') !== false;
 	}));
 
-	expect(array_slice($select[0]['params'], -2))->toBe($expected);
+	preg_match('/LIMIT (\d+), (\d+)/', $select[0]['sql'], $limit);
+
+	expect(array((int) $limit[1], (int) $limit[2]))->toBe($expected);
 })->with(array(
 	'default page'     => array(array(), array(0, 25)),
 	'large limit'      => array(array('limit' => '100000'), array(0, 1000)),

@@ -2,6 +2,10 @@
 
 --- develop ---
 
+* issue: Write the LIMIT values of the host, service, comment, downtime, event log,
+  notification and state history listings into the statement as integers;
+  Cacti binds values as strings and the databases reject a quoted LIMIT, so these
+  listings failed with an SQL syntax error
 * issue: Send the values Acknowledge, Add Comment, Schedule Downtime and Schedule
   Check need from the host and service command dialogs; they were rejected for
   missing parameters. Sticky, notify and persistent are options in the dialog and

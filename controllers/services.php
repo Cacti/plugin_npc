@@ -206,7 +206,6 @@ class NpcServicesController extends Controller {
 			WHERE ' . $where,
 			$params);
 
-		$offset = ($this->currentPage - 1) * $this->limit;
 
 		$services = db_fetch_assoc_prepared(
 			'SELECT i.instance_name,
@@ -234,8 +233,8 @@ class NpcServicesController extends Controller {
 			LEFT JOIN npc_service_graphs sg ON ss.service_object_id = sg.service_object_id
 			WHERE ' . $where . '
 			ORDER BY ' . $orderBy . '
-			LIMIT ?, ?',
-			array_merge($params, array($offset, $this->limit)));
+			' . $this->limitClause(),
+			$params);
 
 		return $services;
 	}
