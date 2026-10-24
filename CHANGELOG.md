@@ -2,6 +2,9 @@
 
 --- develop ---
 
+* issue: Look up the stored perfdata with the plain object ID when creating a
+  perfdata data input method; the shell-quoted value never matched, so no output
+  fields were created
 * security: Require the Devices realm for the Nagios host import and the Data Input
   Methods realm for creating a perfdata data input method; both were open to any
   user with NPC access

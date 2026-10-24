@@ -389,6 +389,8 @@ if (!function_exists('is_error_message')) {
 
 if (!function_exists('sql_save')) {
 	function sql_save($array, $table, $key = 'id') {
+		$GLOBALS['__test_sql_save'][] = array('table' => $table, 'row' => $array);
+
 		return isset($array['id']) ? $array['id'] : 1;
 	}
 }
