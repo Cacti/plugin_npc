@@ -527,6 +527,102 @@ var npc = (function($) {
 
 	/* --- command dialogs --- */
 
+	/* The Nagios commands the dialogs offer need more than a host, an author and a
+	   comment: which extra values depend on the kind of command. */
+	function commandKind(cmd) {
+		if (/^ACKNOWLEDGE_/.test(cmd)) {
+			return 'ack';
+		}
+
+		if (/^ADD_(HOST|SVC)_COMMENT$/.test(cmd)) {
+			return 'comment';
+		}
+
+		if (/^SCHEDULE_(HOST|SVC)_DOWNTIME$/.test(cmd)) {
+			return 'downtime';
+		}
+
+		if (/^SCHEDULE_(HOST|SVC)_CHECK$/.test(cmd)) {
+			return 'check';
+		}
+
+		return 'plain';
+	}
+
+	/* Completes the serialized dialog form with the values the command needs.
+	   A downtime starts now, is fixed, and is not triggered by another one. */
+	function buildCommandParams(form, now) {
+		var params = {};
+		var kind   = commandKind(form.p_command);
+
+		Object.keys(form).forEach(function(name) {
+			if (name !== 'duration_minutes' && !/^p_(sticky|notify|persistent)$/.test(name)) {
+				params[name] = form[name];
+			}
+		});
+
+		if (kind === 'ack') {
+			params.p_sticky     = form.p_sticky ? 1 : 0;
+			params.p_notify     = form.p_notify ? 1 : 0;
+			params.p_persistent = form.p_persistent ? 1 : 0;
+		} else if (kind === 'comment') {
+			params.p_persistent = form.p_persistent ? 1 : 0;
+		} else if (kind === 'downtime') {
+			var minutes = parseInt(form.duration_minutes, 10);
+			var seconds = (minutes > 0 ? minutes : 60) * 60;
+
+			params.p_start_time = now;
+			params.p_end_time   = now + seconds;
+			params.p_fixed      = 1;
+			params.p_trigger_id = 0;
+			params.p_duration   = seconds;
+		} else if (kind === 'check') {
+			params.p_check_time = now;
+		}
+
+		return params;
+	}
+
+	function commandOptionRows() {
+		return '<tr class="npc-opt" data-kinds="ack"><td>Options:</td>' +
+			'<td><label><input type="checkbox" name="p_sticky" value="1" checked> Sticky</label> ' +
+			'<label><input type="checkbox" name="p_notify" value="1" checked> Notify</label></td></tr>' +
+			'<tr class="npc-opt" data-kinds="ack comment"><td>Persistent:</td>' +
+			'<td><input type="checkbox" name="p_persistent" value="1"></td></tr>' +
+			'<tr class="npc-opt" data-kinds="downtime"><td><label>Minutes:</label></td>' +
+			'<td><input type="number" name="duration_minutes" value="60" min="1" style="width:80px;"></td></tr>';
+	}
+
+	function showCommandOptions($form) {
+		var kind = commandKind($form.find('select[name="p_command"]').val());
+
+		$form.find('.npc-opt').each(function() {
+			$(this).toggle((' ' + $(this).data('kinds') + ' ').indexOf(' ' + kind + ' ') !== -1);
+		});
+	}
+
+	function bindCommandOptions($form) {
+		$form.find('select[name="p_command"]').on('change', function() {
+			showCommandOptions($form);
+		});
+
+		showCommandOptions($form);
+	}
+
+	function submitCommand($form) {
+		var formData = {};
+
+		$form.serializeArray().forEach(function(item) {
+			formData[item.name] = item.value;
+		});
+
+		npcPost(buildCommandParams(formData, Math.floor(Date.now() / 1000)), function(resp) {
+			if (resp && !resp.success) {
+				alert(resp.msg || 'Command failed');
+			}
+		});
+	}
+
 	function showHostCommandDialog(hostName) {
 		var html = '<form id="npc-host-cmd-form">' +
 			'<input type="hidden" name="module" value="nagios">' +
@@ -547,6 +643,7 @@ var npc = (function($) {
 			'<td><input type="text" id="npc-hcmd-author" name="p_author" value="' + escAttr(cfg.userName) + '" style="width:250px;"></td></tr>' +
 			'<tr><td><label for="npc-hcmd-comment">Comment:</label></td>' +
 			'<td><textarea id="npc-hcmd-comment" name="p_comment" rows="3" style="width:250px;"></textarea></td></tr>' +
+			commandOptionRows() +
 			'</table></form>';
 
 		var $dlg = $('<div title="Host Command: ' + escAttr(hostName) + '">' + html + '</div>');
@@ -555,21 +652,15 @@ var npc = (function($) {
 			modal: true,
 			buttons: {
 				'Submit': function() {
-					var formData = {};
-					$('#npc-host-cmd-form').serializeArray().forEach(function(item) {
-						formData[item.name] = item.value;
-					});
-					npcPost(formData, function(resp) {
-						if (resp && !resp.success) {
-							alert(resp.msg || 'Command failed');
-						}
-					});
+					submitCommand($('#npc-host-cmd-form'));
 					$(this).dialog('close');
 				},
 				'Cancel': function() { $(this).dialog('close'); }
 			},
 			close: function() { $(this).remove(); }
 		});
+
+		bindCommandOptions($dlg.find('form'));
 	}
 
 	function showServiceCommandDialog(hostName, svcDesc) {
@@ -594,6 +685,7 @@ var npc = (function($) {
 			'<td><input type="text" id="npc-scmd-author" name="p_author" value="' + escAttr(cfg.userName) + '" style="width:250px;"></td></tr>' +
 			'<tr><td><label for="npc-scmd-comment">Comment:</label></td>' +
 			'<td><textarea id="npc-scmd-comment" name="p_comment" rows="3" style="width:250px;"></textarea></td></tr>' +
+			commandOptionRows() +
 			'</table></form>';
 
 		var $dlg = $('<div title="Service Command: ' + escAttr(svcDesc) + '">' + html + '</div>');
@@ -602,21 +694,15 @@ var npc = (function($) {
 			modal: true,
 			buttons: {
 				'Submit': function() {
-					var formData = {};
-					$('#npc-svc-cmd-form').serializeArray().forEach(function(item) {
-						formData[item.name] = item.value;
-					});
-					npcPost(formData, function(resp) {
-						if (resp && !resp.success) {
-							alert(resp.msg || 'Command failed');
-						}
-					});
+					submitCommand($('#npc-svc-cmd-form'));
 					$(this).dialog('close');
 				},
 				'Cancel': function() { $(this).dialog('close'); }
 			},
 			close: function() { $(this).remove(); }
 		});
+
+		bindCommandOptions($dlg.find('form'));
 	}
 
 	/* --- tab routing --- */
@@ -667,6 +753,8 @@ var npc = (function($) {
 		rowsOf: rowsOf,
 		summaryRows: summaryRows,
 		escAttr: escAttr,
+		commandKind: commandKind,
+		buildCommandParams: buildCommandParams,
 		showServiceDetail: showServiceDetail
 	};
 

@@ -58,10 +58,13 @@ function load(options) {
 				return wrap(selector);
 			},
 			each(fn) {
-				((opts.elements || {})[sel] || []).forEach(fn);
+				((opts.elements || {})[sel] || []).forEach((element, index) => fn.call(element, index, element));
 				return obj;
 			},
-			toggle() {
+			toggle(show) {
+				if (target && typeof target === 'object') {
+					target.__shown = show;
+				}
 				return obj;
 			},
 			serializeArray() {
@@ -98,7 +101,7 @@ function load(options) {
 
 	jq.post = function(url, params, callback) {
 		env.requests.push({method: 'POST', params});
-		callback({success: true});
+		callback(opts.postResponse || {success: true});
 	};
 
 	const context = {

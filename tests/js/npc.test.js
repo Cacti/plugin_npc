@@ -134,3 +134,122 @@ test('keeps the user name with quotes inside the value attribute of the command 
 
 	assert.match(env.dialogs[0].markup, /name="p_author" value="a&quot;b&#39;c"/);
 });
+
+test('names the kind of each command the dialogs offer', () => {
+	const env = load({});
+	const kinds = {
+		ACKNOWLEDGE_HOST_PROBLEM: 'ack',
+		ACKNOWLEDGE_SVC_PROBLEM: 'ack',
+		ADD_HOST_COMMENT: 'comment',
+		ADD_SVC_COMMENT: 'comment',
+		SCHEDULE_HOST_DOWNTIME: 'downtime',
+		SCHEDULE_SVC_DOWNTIME: 'downtime',
+		SCHEDULE_HOST_CHECK: 'check',
+		SCHEDULE_SVC_CHECK: 'check',
+		ENABLE_HOST_NOTIFICATIONS: 'plain',
+		DISABLE_SVC_NOTIFICATIONS: 'plain'
+	};
+
+	Object.keys(kinds).forEach((cmd) => assert.strictEqual(env.npc.commandKind(cmd), kinds[cmd], cmd));
+});
+
+test('completes an acknowledgement with its flags', () => {
+	const env  = load({});
+	const base = {p_command: 'ACKNOWLEDGE_HOST_PROBLEM', p_host_name: 'web1', p_author: 'ann', p_comment: 'x'};
+
+	assert.deepStrictEqual(plain(env.npc.buildCommandParams(Object.assign({p_sticky: '1', p_notify: '1'}, base), 100)),
+		Object.assign({p_sticky: 1, p_notify: 1, p_persistent: 0}, base));
+	assert.deepStrictEqual(plain(env.npc.buildCommandParams(base, 100)),
+		Object.assign({p_sticky: 0, p_notify: 0, p_persistent: 0}, base));
+});
+
+test('completes a comment with its persistence flag', () => {
+	const env  = load({});
+	const base = {p_command: 'ADD_SVC_COMMENT', p_host_name: 'web1', p_service_description: 'Load', p_author: 'ann', p_comment: 'x'};
+
+	assert.strictEqual(env.npc.buildCommandParams(Object.assign({p_persistent: '1'}, base), 100).p_persistent, 1);
+	assert.strictEqual(env.npc.buildCommandParams(base, 100).p_persistent, 0);
+});
+
+test('completes a downtime with a fixed window starting now', () => {
+	const env    = load({});
+	const params = plain(env.npc.buildCommandParams({p_command: 'SCHEDULE_HOST_DOWNTIME', p_host_name: 'web1', duration_minutes: '30'}, 1000));
+
+	assert.deepStrictEqual(params, {
+		p_command: 'SCHEDULE_HOST_DOWNTIME',
+		p_host_name: 'web1',
+		p_start_time: 1000,
+		p_end_time: 2800,
+		p_fixed: 1,
+		p_trigger_id: 0,
+		p_duration: 1800
+	});
+	assert.strictEqual(env.npc.buildCommandParams({p_command: 'SCHEDULE_SVC_DOWNTIME', duration_minutes: ''}, 1000).p_duration, 3600);
+	assert.strictEqual(env.npc.buildCommandParams({p_command: 'SCHEDULE_SVC_DOWNTIME', duration_minutes: '-5'}, 1000).p_duration, 3600);
+});
+
+test('completes a check with the time to run it', () => {
+	const env = load({});
+
+	assert.strictEqual(env.npc.buildCommandParams({p_command: 'SCHEDULE_HOST_CHECK', p_host_name: 'web1'}, 1000).p_check_time, 1000);
+});
+
+test('leaves the other commands as the form sent them', () => {
+	const env  = load({});
+	const form = {p_command: 'ENABLE_HOST_NOTIFICATIONS', p_host_name: 'web1', p_sticky: '1'};
+
+	assert.deepStrictEqual(plain(env.npc.buildCommandParams(form, 1000)), {p_command: 'ENABLE_HOST_NOTIFICATIONS', p_host_name: 'web1'});
+});
+
+function openHostDialog(extra) {
+	const rows = [{host_object_id: 10, host_name: 'web1', address: 'x', current_state: 0, output: '', last_check: ''}];
+	const env  = load(Object.assign({responses: {'hosts/getHosts': gridResponse(rows)}}, extra));
+
+	env.npc.route('hosts');
+	env.handlers['#npc-host-table click .npc-cmd-link'].call({__data: {host: 'web1'}}, {preventDefault() {}});
+
+	return env;
+}
+
+test('sends the extra values when a host acknowledgement is submitted', () => {
+	const env = openHostDialog({forms: {'#npc-host-cmd-form': [
+		{name: 'module', value: 'nagios'},
+		{name: 'action', value: 'command'},
+		{name: 'p_command', value: 'ACKNOWLEDGE_HOST_PROBLEM'},
+		{name: 'p_host_name', value: 'web1'},
+		{name: 'p_author', value: 'admin'},
+		{name: 'p_comment', value: 'looking'},
+		{name: 'p_sticky', value: '1'}
+	]}});
+
+	env.dialogs[0].settings.buttons.Submit.call({dialog() {}});
+
+	const post = env.requests.filter((request) => request.method === 'POST')[0].params;
+	assert.strictEqual(post.p_sticky, 1);
+	assert.strictEqual(post.p_notify, 0);
+	assert.strictEqual(post.p_persistent, 0);
+	assert.strictEqual(post.module, 'nagios');
+	assert.strictEqual(post.action, 'command');
+});
+
+test('shows only the options that fit the selected command', () => {
+	const elements = [{__data: {kinds: 'ack'}}, {__data: {kinds: 'ack comment'}}, {__data: {kinds: 'downtime'}}];
+
+	openHostDialog({
+		values: {'select[name="p_command"]': 'ADD_HOST_COMMENT'},
+		elements: {'.npc-opt': elements}
+	});
+
+	assert.deepStrictEqual(elements.map((element) => element.__shown), [false, true, false]);
+});
+
+test('reports a failed command to the user', () => {
+	const env = openHostDialog({
+		postResponse: {success: false, msg: 'Missing required parameter: persistent'},
+		forms: {'#npc-host-cmd-form': [{name: 'p_command', value: 'ENABLE_HOST_NOTIFICATIONS'}]}
+	});
+
+	env.dialogs[0].settings.buttons.Submit.call({dialog() {}});
+
+	assert.deepStrictEqual(env.alerts, ['Missing required parameter: persistent']);
+});

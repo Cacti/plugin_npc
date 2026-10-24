@@ -2,6 +2,10 @@
 
 --- develop ---
 
+* issue: Send the values Acknowledge, Add Comment, Schedule Downtime and Schedule
+  Check need from the host and service command dialogs; they were rejected for
+  missing parameters. Sticky, notify and persistent are options in the dialog and
+  a downtime takes a duration in minutes
 * security: Escape quotes in values the front end places inside HTML attributes
   (host and service names, user name)
 * issue: Show the host, service, comment and event log grids and the summary and
