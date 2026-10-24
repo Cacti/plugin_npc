@@ -285,6 +285,32 @@ class Controller {
         return ' LIMIT ' . $offset . ', ' . $limit;
     }
 
+    /**
+     * perfdataOutput
+     *
+     * Reduces Nagios perfdata to the "label:value" pairs a Cacti data input
+     * method reads. Entries without a numeric value, such as label=U, are left
+     * out.
+     *
+     * @param  string $perfdata  The perfdata of a check
+     * @return string  for example "load1:0.52 load5:0.4 "
+     */
+    function perfdataOutput($perfdata) {
+        $output = '';
+
+        foreach (explode(' ', (string) $perfdata) as $perf) {
+            if (preg_match('/(\S+)=([-+]?[0-9]*\.?[0-9]+)/', $perf, $matches)) {
+                if (preg_match('/^iso./', $matches[1])) {
+                    $matches[1] = 'output';
+                }
+
+                $output .= $matches[1] . ':' . $matches[2] . ' ';
+            }
+        }
+
+        return $output;
+    }
+
     function jsonOutput($results=array()) {
         if (!$this->numRecords) {
             $this->numRecords = count($results);

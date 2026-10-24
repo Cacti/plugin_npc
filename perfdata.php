@@ -75,21 +75,7 @@ if ($type == 'host') {
 $obj = new $class;
 $results = $obj->getPerfData($objectId, $hostname, $serviceName);
 
-$perfParts = explode(' ', isset($results[0]['perfdata']) ? $results[0]['perfdata'] : '');
-
-$output = '';
-
-foreach ($perfParts as $perf) {
-    /* Entries without a numeric value, such as label=U, are left out. */
-    if (preg_match('/(\S+)=([-+]?[0-9]*\.?[0-9]+)/', $perf, $matches)) {
-        if (preg_match('/^iso./', $matches[1])) {
-                $matches[1] = 'output';
-        }
-        $output .= $matches[1] . ':' . $matches[2] . ' ';
-    }
-}
-
-echo $output . "\n";
+echo $obj->perfdataOutput(isset($results[0]['perfdata']) ? $results[0]['perfdata'] : '') . "\n";
 
 function listHosts() {
     $parms = $_SERVER["argv"];
