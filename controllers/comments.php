@@ -118,6 +118,7 @@ class NpcCommentsController extends Controller {
         require_once("plugins/npc/controllers/nagios.php");
 
         $seen = array();
+        $nagios = new NpcNagiosController();
 
         $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 1'));
 
@@ -128,7 +129,7 @@ class NpcCommentsController extends Controller {
                     'command' => 'DEL_ALL_HOST_COMMENTS',
                     'host_name' => $host
                 );
-                NpcNagiosController::command($params);
+                $nagios->command($params);
                 $seen[$host] = 1;
             }
         }
@@ -146,6 +147,7 @@ class NpcCommentsController extends Controller {
         require_once("plugins/npc/controllers/nagios.php");
 
         $seen = array();
+        $nagios = new NpcNagiosController();
 
         $results = $this->flattenArray($this->comments(null, 'o.objecttype_id = 2'));
 
@@ -158,7 +160,7 @@ class NpcCommentsController extends Controller {
                     'host_name' => $host,
                     'service_description' => $service,
                 );
-                NpcNagiosController::command($params);
+                $nagios->command($params);
                 $seen[$host][$service] = 1;
             }
         }
