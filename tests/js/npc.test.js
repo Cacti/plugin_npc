@@ -253,3 +253,176 @@ test('reports a failed command to the user', () => {
 
 	assert.deepStrictEqual(env.alerts, ['Missing required parameter: persistent']);
 });
+
+const serviceRows = [{host_name: 'web1', service_description: quoted, service_object_id: 3, current_state: 2, output: 'high', last_check: 't'}];
+
+function clickHandler(env, key, data) {
+	return env.handlers[key].call({__data: data}, {preventDefault() {}});
+}
+
+test('opens the host detail dialog with the host name escaped in its title', () => {
+	const rows = [{host_object_id: 10, host_name: quoted, address: 'x', current_state: 1, output: 'down', last_check: 't'}];
+	const env  = load({responses: {'hosts/getHosts': gridResponse(rows)}});
+
+	env.npc.route('hosts');
+	clickHandler(env, '#npc-host-table click .npc-host-link', {id: 10});
+
+	assert.strictEqual(env.requests[env.requests.length - 1].params.p_id, 10);
+	assert.match(env.dialogs[0].markup, /^<div title="Host Detail: a&quot;b&#39;c">/);
+	assert.match(env.dialogs[0].markup, /Down/);
+});
+
+test('shows nothing when the host detail request finds no host', () => {
+	const env = load({responses: {'hosts/getHosts': gridResponse([])}});
+
+	env.npc.showHostDetail(10);
+
+	assert.strictEqual(env.dialogs.length, 0);
+});
+
+test('opens the service detail dialog with the description escaped in its title', () => {
+	const env = load({responses: {'services/getServices': gridResponse(serviceRows)}});
+
+	env.npc.route('services');
+	clickHandler(env, '#npc-svc-table click .npc-svc-link', {id: 3});
+
+	assert.match(env.dialogs[0].markup, /^<div title="Service Detail: a&quot;b&#39;c">/);
+	assert.match(env.dialogs[0].markup, /Critical/);
+});
+
+test('shows nothing when the service detail request finds no service', () => {
+	const env = load({responses: {'services/getServices': gridResponse([])}});
+
+	env.npc.showServiceDetail(3);
+
+	assert.strictEqual(env.dialogs.length, 0);
+});
+
+test('submits a service command with the service and the completed values', () => {
+	const env = load({responses: {'services/getServices': gridResponse(serviceRows)}, forms: {'#npc-svc-cmd-form': [
+		{name: 'p_command', value: 'SCHEDULE_SVC_DOWNTIME'},
+		{name: 'p_host_name', value: 'web1'},
+		{name: 'p_service_description', value: 'Load'},
+		{name: 'duration_minutes', value: '15'}
+	]}});
+
+	env.npc.route('services');
+	clickHandler(env, '#npc-svc-table click .npc-svc-cmd-link', {host: 'web1', svc: 'Load'});
+
+	assert.match(env.dialogs[0].markup, /title="Service Command: Load"/);
+	assert.match(env.dialogs[0].markup, /name="p_service_description" value="Load"/);
+
+	env.dialogs[0].settings.buttons.Submit.call({dialog() {}});
+
+	const post = env.requests.filter((request) => request.method === 'POST')[0].params;
+	assert.strictEqual(post.p_duration, 900);
+	assert.strictEqual(post.p_fixed, 1);
+	assert.strictEqual(post.p_end_time - post.p_start_time, 900);
+	assert.strictEqual(post.duration_minutes, undefined);
+});
+
+test('closes a command dialog on cancel without sending anything', () => {
+	const env = openHostDialog({});
+
+	env.dialogs[0].settings.buttons.Cancel.call({dialog() {}});
+
+	assert.strictEqual(env.requests.filter((request) => request.method === 'POST').length, 0);
+});
+
+const commentRows = [{host_name: 'web1', author_name: 'ann', comment_data: 'x', comment_time: 't', is_persistent: 0, internal_comment_id: 4}];
+
+function commentEnv() {
+	return load({responses: {'comments/getHostComments': gridResponse(commentRows), 'comments/getServiceComments': gridResponse([])}});
+}
+
+test('deletes a host comment after confirmation', () => {
+	const env = commentEnv();
+
+	env.npc.route('comments');
+	clickHandler(env, '#npc-comments-table click .npc-del-comment', {id: 4});
+
+	const post = env.requests.filter((request) => request.method === 'POST')[0].params;
+	assert.strictEqual(post.p_command, 'DEL_HOST_COMMENT');
+	assert.strictEqual(post.p_comment_id, 4);
+});
+
+test('keeps a host comment when the user declines the confirmation', () => {
+	const env = commentEnv();
+
+	env.npc.route('comments');
+	global.confirm = () => false;
+	clickHandler(env, '#npc-comments-table click .npc-del-comment', {id: 4});
+
+	assert.strictEqual(env.requests.filter((request) => request.method === 'POST').length, 0);
+});
+
+test('lists host and service downtime from the grid response shape', () => {
+	const env = load({responses: {
+		'downtime/getHostDowntime': gridResponse([{host_name: 'web1', author_name: 'ann', comment_data: 'patching', scheduled_start_time: 's', scheduled_end_time: 'e', is_fixed: 1}]),
+		'downtime/getServiceDowntime': gridResponse([{host_name: 'web1', service_description: 'Load', author_name: 'bob', comment_data: 'tuning', scheduled_start_time: 's', scheduled_end_time: 'e'}])
+	}});
+
+	env.npc.route('downtime');
+
+	assert.match(env.html['#npc-downtime-table'], /patching/);
+	assert.match(env.html['#npc-downtime-table'], /tuning/);
+});
+
+test('reloads the host and service grids for the state chosen in the filter', () => {
+	const env = load({values: {'#npc-host-state': 'down', '#npc-svc-state': 'critical'}, responses: {
+		'hosts/getHosts': gridResponse(hostRows),
+		'services/getServices': gridResponse(serviceRows)
+	}});
+
+	env.npc.route('hosts');
+	env.handlers['#npc-host-filter submit '].call({}, {preventDefault() {}});
+	env.npc.route('services');
+	env.handlers['#npc-svc-filter submit '].call({}, {preventDefault() {}});
+
+	const states = env.requests.map((request) => request.params.p_state);
+	assert.ok(states.includes('down'));
+	assert.ok(states.includes('critical'));
+});
+
+test('opens the service command dialog options for each kind of command', () => {
+	const elements = [{__data: {kinds: 'ack'}}, {__data: {kinds: 'downtime'}}];
+	const env      = load({
+		values: {'select[name="p_command"]': 'SCHEDULE_SVC_DOWNTIME'},
+		elements: {'.npc-opt': elements},
+		responses: {'services/getServices': gridResponse(serviceRows)}
+	});
+
+	env.npc.route('services');
+	clickHandler(env, '#npc-svc-table click .npc-svc-cmd-link', {host: 'web1', svc: 'Load'});
+
+	assert.deepStrictEqual(elements.map((element) => element.__shown), [false, true]);
+});
+
+test('shows the options again when another command is selected in the dialog', () => {
+	const elements = [{__data: {kinds: 'ack'}}, {__data: {kinds: 'downtime'}}];
+	const values   = {'select[name="p_command"]': 'ACKNOWLEDGE_HOST_PROBLEM'};
+	const env      = openHostDialog({values, elements: {'.npc-opt': elements}});
+
+	assert.deepStrictEqual(elements.map((element) => element.__shown), [true, false]);
+
+	values['select[name="p_command"]'] = 'SCHEDULE_HOST_DOWNTIME';
+	env.handlers['select[name="p_command"] change '].call({});
+
+	assert.deepStrictEqual(elements.map((element) => element.__shown), [false, true]);
+});
+
+test('opens the tab named in the page configuration when the page is ready', () => {
+	const env = load({config: {currentTab: 'process'}, responses: {'nagios/getProcessInfoGrid': {data: [{name: 'Nagios Version', value: '4.5'}]}}});
+
+	env.ready();
+
+	assert.match(env.html['#npc-process-table'], /Nagios Version/);
+});
+
+test('opens the dashboard for a tab it does not know', () => {
+	const env = load({config: {currentTab: 'nonsense'}});
+
+	env.ready();
+
+	assert.ok(env.requests.some((request) => request.params.module === 'hosts' && request.params.action === 'summary'));
+});
