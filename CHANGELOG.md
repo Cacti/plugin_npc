@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* issue: Name the failing class and method in the generic error returned by the
+  controller logger; the message was built from an invalid property read
 * issue: Remove dispatcher actions that cannot work with the single parameter array
   they are called with (getSetting, isMapped, mapHost, getSettings, checkHostExists)
 * issue: Pass the searchFields and data request values to the controllers as

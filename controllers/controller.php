@@ -416,7 +416,7 @@ class Controller {
 
         // If this was an error send a generic response to the client
         if ($level == 'error') {
-            return(json_encode(array('success' => false, 'msg' => __('An error occurred in %s. See error logs for detail.', $class -> $method, 'npc'))));
+            return(json_encode(array('success' => false, 'msg' => sprintf(__('An error occurred in %s. See error logs for detail.', 'npc'), $class . '::' . $method))));
         }
     }
 
