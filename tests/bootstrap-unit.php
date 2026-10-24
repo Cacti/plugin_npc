@@ -226,6 +226,10 @@ if (!function_exists('db_index_exists')) {
 
 if (!function_exists('db_column_exists')) {
 	function db_column_exists($table, $column, $log = true, $db_conn = false) {
+		if (!empty($GLOBALS['__test_columns'][$table][$column])) {
+			return true;
+		}
+
 		if (isset($GLOBALS['__test_pdo'])) {
 			$lookup = $GLOBALS['__test_pdo']->prepare('SELECT 1 FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?');
 			$lookup->execute(array($table, $column));

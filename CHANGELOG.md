@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* issue: Drop the device mapping column on uninstall only when it exists; a repeated
+  uninstall logged a failed ALTER TABLE
 * issue: Treat a missing searchFields value as empty in the grid search; a search
   string without it raised the PHP 8.1 null deprecation
 * issue: Return an empty definition for an unknown Nagios command instead of raising

@@ -18,6 +18,7 @@ beforeAll(function () {
 beforeEach(function () {
 	$GLOBALS['__test_db_calls']      = array();
 	$GLOBALS['__test_removed_realms'] = array();
+	$GLOBALS['__test_columns']        = array();
 });
 
 it('parses the plugin INFO file into an info array', function () {
@@ -42,4 +43,26 @@ it('drops every table it owns and removes its realms on uninstall', function () 
 
 	expect(count($drops))->toBeGreaterThan(50);
 	expect($GLOBALS['__test_removed_realms'])->toBe(array('npc'));
+});
+
+it('removes the device mapping column on uninstall when it exists', function () {
+	$GLOBALS['__test_columns'] = array('host' => array('npc_host_object_id' => true));
+
+	plugin_npc_uninstall();
+
+	$alters = array_filter(array_column($GLOBALS['__test_db_calls'], 'sql'), function ($sql) {
+		return strpos($sql, 'ALTER TABLE `host` DROP `npc_host_object_id`') === 0;
+	});
+
+	expect($alters)->toHaveCount(1);
+});
+
+it('does not alter the device table on uninstall when the column is already gone', function () {
+	plugin_npc_uninstall();
+
+	$alters = array_filter(array_column($GLOBALS['__test_db_calls'], 'sql'), function ($sql) {
+		return stripos($sql, 'ALTER TABLE') !== false;
+	});
+
+	expect($alters)->toBe(array());
 });

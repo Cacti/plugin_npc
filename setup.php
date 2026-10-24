@@ -164,7 +164,10 @@ function plugin_npc_uninstall() {
 	db_execute('DROP TABLE IF EXISTS `npc_timeperiod_timeranges`');
 	db_execute('DROP TABLE IF EXISTS `npc_timeperiods`');
 
-	db_execute('ALTER TABLE `host` DROP `npc_host_object_id`');
+	if (db_column_exists('host', 'npc_host_object_id')) {
+		db_execute('ALTER TABLE `host` DROP `npc_host_object_id`');
+	}
+
 	db_execute('DELETE FROM `settings` WHERE `name` like "npc\_%"');
 
 	api_plugin_remove_realms('npc');
