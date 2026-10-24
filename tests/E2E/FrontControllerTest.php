@@ -91,3 +91,46 @@ it('does not echo an unknown tab value into the frame script', function () {
 	expect($run['stdout'])->toContain("currentTab:       'dashboard'");
 	expect($run['stdout'])->not->toContain('breakout');
 });
+
+it('refuses state-changing actions sent as GET requests', function (string $module, string $action) {
+	$run = npc_e2e_run(array('get' => array('module' => $module, 'action' => $action, 'p_command' => 'ENABLE_NOTIFICATIONS', 'p_object_id' => '12', 'p_host' => 'web1')));
+
+	expect(json_decode($run['stdout'], true))->toBe(array('success' => false, 'msg' => 'This action requires a POST request.'));
+	expect(npc_e2e_calls($run, 'db_execute_prepared'))->toBe(array());
+	expect(npc_e2e_calls($run, 'sql_save'))->toBe(array());
+})->with(array(
+	'nagios command'          => array('nagios', 'command'),
+	'delete host comments'    => array('comments', 'deleteAllHostComments'),
+	'delete service comments' => array('comments', 'deleteAllServiceComments'),
+	'data input method'       => array('cacti', 'addDataInputMethod'),
+	'host import'             => array('sync', 'import'),
+	'host graph mapping'      => array('hosts', 'setMappedGraph'),
+	'service graph mapping'   => array('services', 'setMappedGraph'),
+	'settings save'           => array('settings', 'save'),
+));
+
+it('accepts the same actions sent as POST', function () {
+	$run = npc_e2e_run(array(
+		'method' => 'POST',
+		'get'    => array('module' => 'cacti', 'action' => 'addDataInputMethod'),
+		'post'   => array('p_object_id' => '12', 'p_host' => 'web1'),
+	));
+
+	expect(json_decode($run['stdout'], true))->toBe(array('success' => true));
+	expect(npc_e2e_calls($run, 'sql_save'))->not->toBe(array());
+});
+
+it('writes a Nagios command only for a POST request', function () {
+	$file = sys_get_temp_dir() . '/npc-e2e-cmd-' . uniqid();
+	file_put_contents($file, '');
+
+	$options = array('npc_config_type' => '1', 'npc_nagios_commands' => '1', 'npc_nagios_cmd_path' => $file);
+	$query   = array('module' => 'nagios', 'action' => 'command', 'p_command' => 'ENABLE_NOTIFICATIONS');
+
+	npc_e2e_run(array('get' => $query, 'options' => $options));
+	expect(file_get_contents($file))->toBe('');
+
+	$run = npc_e2e_run(array('method' => 'POST', 'get' => $query, 'options' => $options));
+	expect(json_decode($run['stdout'], true))->toBe(array('success' => true));
+	expect(file_get_contents($file))->toMatch('/^\[\d+\] ENABLE_NOTIFICATIONS\n$/');
+});

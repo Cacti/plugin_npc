@@ -2,6 +2,9 @@
 
 --- develop ---
 
+* security: Accept the state-changing NPC actions (Nagios commands, comment
+  deletion, data input creation, host import, graph mapping, settings save) only
+  as POST requests so Cacti's CSRF token check applies to them
 * issue: Load the base controller class in npc.php; every NPC page failed with
   a missing Controller class before
 * security: Check the NPC command realm before the command file settings so users

@@ -71,6 +71,27 @@ if (!in_array($action, $allowed_modules[$module], true)) {
 	exit;
 }
 
+/* Actions that change state are only accepted from POST, the one method
+whose request csrf-magic validates. */
+$post_only = array(
+	'nagios'   => array('command'),
+	'comments' => array('deleteAllHostComments', 'deleteAllServiceComments'),
+	'cacti'    => array('addDataInputMethod'),
+	'sync'     => array('import'),
+	'hosts'    => array('setMappedGraph'),
+	'services' => array('setMappedGraph'),
+	'settings' => array('save'),
+);
+
+if (isset($post_only[$module]) && in_array($action, $post_only[$module], true)
+	&& (!isset($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] !== 'POST')) {
+	cacti_log('SECURITY: NPC rejected non-POST request for ' . $module . '/' . $action, false, 'NPC');
+	http_response_code(405);
+	header('Allow: POST');
+	print json_encode(array('success' => false, 'msg' => __('This action requires a POST request.', 'npc')));
+	exit;
+}
+
 /* Include the validated controller */
 require_once(dirname(__FILE__) . '/controllers/controller.php');
 
