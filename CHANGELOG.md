@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* issue: Declare the hostgroup and unhandled request properties on the base
+  controller; assigning them raised the PHP 8.2 dynamic property deprecation
 * issue: Read only the newest host check when fetching host perfdata; the query
   returned every stored check and the oldest one was used
 * issue: Name the failing class and method in the generic error returned by the

@@ -121,6 +121,22 @@ class Controller {
     var $searchString = null;
 
     /**
+     * Restricts a listing to the hostgroup with this alias
+     *
+     * @var string
+     * @access public
+     */
+    var $hostgroup = null;
+
+    /**
+     * When set, a service listing leaves out acknowledged problems
+     *
+     * @var string
+     * @access public
+     */
+    var $unhandled = null;
+
+    /**
      * json encoded list of fields to search
      *
      * @var string
