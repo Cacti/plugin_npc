@@ -187,44 +187,30 @@ class NpcSyncController extends Controller {
      * @return int   The Cacti host ID
      */
     function checkHostExists($ip, $cache_id) {
+        global $config;
 
-        $cacheFile = '/tmp/npc_address_cache.php';
+        $cacheFile = $config['base_path'] . '/cache/npc_address_cache.json';
+        $hosts     = null;
 
-        $buildCache = 0;
+        if (is_file($cacheFile) && is_readable($cacheFile)) {
+            $cache = json_decode((string) file_get_contents($cacheFile), true);
 
-        if (file_exists($cacheFile)) {
-            include($cacheFile);
-            if ($cacheKey != $cache_id) {
-                $buildCache = 1;
+            if (is_array($cache) && isset($cache['key']) && $cache['key'] === (string) $cache_id && isset($cache['hosts']) && is_array($cache['hosts'])) {
+                $hosts = $cache['hosts'];
             }
-        } else {
-            $buildCache = 1;
         }
 
-        if ($buildCache) {
-
-            $fh = fopen($cacheFile, 'w') or die("can't open file");
-
+        if ($hosts === null) {
             $hosts = array();
 
-            $string = "<?php\n\n";
-            $string .= "\$cacheKey = '" . $cache_id . "';\n";
-            $string .= "\$hosts = array(\n";
-
-            $cacti = new NpcCactiController();
+            $cacti   = new NpcCactiController();
             $results = $cacti->getHostnames();
 
             for ($i = 0; $i < count($results); $i++) {
-                $address = gethostbyname($results[$i]['hostname']);
-                $string .= "'" . $address . "' => '" . $results[$i]['id'] . "',\n";
-                $hosts[$address] = $results[$i]['id'];
+                $hosts[gethostbyname($results[$i]['hostname'])] = $results[$i]['id'];
             }
 
-            $string .= ");";
-
-            fwrite($fh, $string);
-
-            fclose($fh);
+            $this->writeAddressCache($cacheFile, $cache_id, $hosts);
         }
 
         if (isset($hosts[$ip])) {
@@ -232,6 +218,32 @@ class NpcSyncController extends Controller {
         }
 
         return(null);
+    }
+
+    /**
+     * writeAddressCache
+     *
+     * Stores the address map as JSON in the Cacti cache directory. The file is
+     * written under a temporary name and renamed so a concurrent import never
+     * reads a partial file. A cache that cannot be written only costs a rebuild
+     * on the next call.
+     *
+     * @return void
+     */
+    private function writeAddressCache($cacheFile, $cache_id, $hosts) {
+        if (!is_dir(dirname($cacheFile)) || !is_writable(dirname($cacheFile))) {
+            $this->logger('warn', get_class($this), __FUNCTION__, 'Unable to create the address cache in ' . dirname($cacheFile));
+            return;
+        }
+
+        $tmp = tempnam(dirname($cacheFile), 'npc');
+
+        $bytes = file_put_contents($tmp, json_encode(array('key' => (string) $cache_id, 'hosts' => $hosts)));
+
+        if ($bytes === false || is_dir($cacheFile) || !rename($tmp, $cacheFile)) {
+            $this->logger('warn', get_class($this), __FUNCTION__, 'Unable to write the address cache ' . $cacheFile);
+            unlink($tmp);
+        }
     }
 
 }

@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* security: Keep the host import address cache as JSON in the Cacti cache directory
+  instead of a PHP file in the system temp directory that was included on each call
 * security: Quote the description, address and template arguments of the Nagios host
   import command and reject non-numeric template IDs
 * dev: Relocate the schema provisioning function `npc_setup_tables()` from
