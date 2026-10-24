@@ -164,6 +164,10 @@ $unmeasured_allowlist = [
 	// plugin_npc_install() at install time, not exercisable in the isolated
 	// unit process.
 	'includes/database.php',
+	// Legacy web header: executes at the top level against the session and
+	// auth tables, so it cannot be loaded into the isolated unit process. Changed
+	// here only to replace a deprecated request-variable alias.
+	'top_graph_header.php',
 ];
 $unmeasured            = array_values(array_diff(array_keys($changed), array_keys($measured)));
 $unexpected_unmeasured = array_values(array_diff($unmeasured, $unmeasured_allowlist));
