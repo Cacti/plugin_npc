@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* issue: Read only the newest host check when fetching host perfdata; the query
+  returned every stored check and the oldest one was used
 * issue: Name the failing class and method in the generic error returned by the
   controller logger; the message was built from an invalid property read
 * issue: Remove dispatcher actions that cannot work with the single parameter array

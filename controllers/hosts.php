@@ -103,7 +103,9 @@ class NpcHostsController extends Controller {
 	function getPerfData($id) {
 		return db_fetch_assoc_prepared('SELECT perfdata
 			FROM npc_hostchecks
-			WHERE host_object_id = ?',
+			WHERE host_object_id = ?
+			ORDER BY hostcheck_id DESC
+			LIMIT 1',
 			array($id));
 	}
 
