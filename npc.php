@@ -72,6 +72,8 @@ if (!in_array($action, $allowed_modules[$module], true)) {
 }
 
 /* Include the validated controller */
+require_once(dirname(__FILE__) . '/controllers/controller.php');
+
 $controller_path = dirname(__FILE__) . '/controllers/' . $module . '.php';
 
 if (!file_exists($controller_path)) {

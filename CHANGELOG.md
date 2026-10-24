@@ -2,6 +2,8 @@
 
 --- develop ---
 
+* issue: Load the base controller class in npc.php; every NPC page failed with
+  a missing Controller class before
 * security: Check the NPC command realm before the command file settings so users
   without the realm no longer see the configured command file path
 * issue: Call the Nagios controller on an instance when deleting all host or service

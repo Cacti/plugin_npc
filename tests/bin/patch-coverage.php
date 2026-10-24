@@ -160,6 +160,10 @@ foreach ($clover->xpath('//file') as $file) {
  * Empty by default; add entries per repository as the need arises.
  */
 $unmeasured_allowlist = [
+	// Front controller: chdirs, includes Cacti's auth.php and dispatches at the
+	// top level, so it cannot be loaded into the isolated unit process. It runs
+	// as a subprocess in tests/E2E/FrontControllerTest.php instead.
+	'npc.php',
 	// Schema provisioning relocated verbatim from setup.php; only loaded from
 	// plugin_npc_install() at install time, not exercisable in the isolated
 	// unit process.
