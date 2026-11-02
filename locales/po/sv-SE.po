@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-09-28 16:07-0400\nPO-Revision-Date: 2026-10-20 08:18+0000\nLast-Translator: Daniel Nylander <daniel@danielnylander.se>\nLanguage-Team: Swedish <https://translate.cacti.net/projects/cacti/npc/sv/>\nLanguage: sv-SE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.11.4\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-09-28 16:07-0400\nPO-Revision-Date: 2026-10-27 13:18+0000\nLast-Translator: Daniel Nylander <daniel@danielnylander.se>\nLanguage-Team: Swedish <https://translate.cacti.net/projects/cacti/npc/sv/>\nLanguage: sv-SE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -57,11 +57,11 @@ msgstr "Processinformation"
 
 #: controllers/nagios.php
 msgid "Remote Commands must be enabled under console->Settings->NPC"
-msgstr "Fjärrkommandon måste aktiveras under konsol-> Inställningar-> NPC"
+msgstr "Fjärrkommandon måste aktiveras under Konsol → Inställningar → NPC"
 
 #: controllers/nagios.php
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr "Sökvägen till Nagios kommandofil måste ställas in under konsol-> Inställningar-> NPC"
+msgstr "Sökvägen till Nagios-kommandofilen måste anges under Konsol → Inställningar → NPC"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -73,7 +73,7 @@ msgstr "Tid för utförande av tjänstekontroll"
 
 #: controllers/nagios.php
 msgid "Service Check Latency"
-msgstr "Servicekontroll Latency"
+msgstr "Fördröjning för tjänstekontroll"
 
 #: controllers/nagios.php
 msgid "Host Check Execution Time"
@@ -81,7 +81,7 @@ msgstr "Tid för värdkontroll"
 
 #: controllers/nagios.php
 msgid "Host Check Latency"
-msgstr "Latency för värdkontroll"
+msgstr "Fördröjning för värdkontroll"
 
 #: controllers/services.php
 msgid "Host Groups"
@@ -101,15 +101,15 @@ msgstr "Styrenheten hittades inte."
 
 #: setup.php
 msgid "ERROR - Log errors only"
-msgstr "FEL - Endast loggfel"
+msgstr "FEL – logga endast fel"
 
 #: setup.php
 msgid "WARN  - Log errors and warnings"
-msgstr "VARN - Loggfel och varningar"
+msgstr "VARNING – logga fel och varningar"
 
 #: setup.php
 msgid "INFO  - Log errors, warnings, and info messages"
-msgstr "INFO - Loggfel, varningar och infomeddelanden"
+msgstr "INFO – logga fel, varningar och informationsmeddelanden"
 
 #: setup.php
 msgid "DEBUG - Log everything"
@@ -117,7 +117,7 @@ msgstr "DEBUG - Logga allt"
 
 #: setup.php
 msgid "Nagios Host Mapping"
-msgstr "Nagios värdmappning"
+msgstr "Nagios-värdmappning"
 
 #: setup.php
 msgid "Select the Nagios host that maps to this host."
@@ -133,7 +133,7 @@ msgstr "Statusdetalj"
 
 #: setup.php
 msgid "Service / Host Information"
-msgstr "Service / värdinformation"
+msgstr "Tjänst- och värdinformation"
 
 #: setup.php
 msgid "Command Execution"
@@ -181,7 +181,7 @@ msgstr "Tidsformat"
 
 #: setup.php
 msgid "Select the format you want for displaying times."
-msgstr "Välj det format du vill ha för visningstider."
+msgstr "Välj formatet som tider ska visas med."
 
 #: setup.php
 msgid "Portlet Refresh Rate"
@@ -189,7 +189,7 @@ msgstr "Uppdateringsfrekvens för portlet"
 
 #: setup.php
 msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
-msgstr "Tiden i sekunder att vänta innan portletarna uppdateras. Lägsta är 30 sekunder."
+msgstr "Tiden i sekunder mellan uppdateringar av portletarna. Minsta värde är 30 sekunder."
 
 #: setup.php
 msgid "Host/Service Config Type"
@@ -209,7 +209,7 @@ msgstr "Aktivera visning av värdikoner i värdnätet. Parametrarna icon_image o
 
 #: setup.php
 msgid "Service Icons"
-msgstr "Serviceikoner"
+msgstr "Tjänsteikoner"
 
 #: setup.php
 msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
@@ -225,7 +225,7 @@ msgstr "Loggningsnivå"
 
 #: setup.php
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr "Detaljeringsnivån du vill skicka till Cacti-loggfilen. VARNING: Att lämna DEBUG fyller snabbt kaktusloggen."
+msgstr "Detaljeringsnivån för meddelanden till Cacti-loggen. VARNING: Om DEBUG är aktiverat fylls Cacti-loggen snabbt."
 
 #~ msgid "FATAL: Unable to make NPC Connection"
 #~ msgstr "FATAL: Det går inte att göra NPC-anslutning"
