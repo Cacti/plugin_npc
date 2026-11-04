@@ -2,6 +2,10 @@
 
 --- develop ---
 
+* issue: Match the Cacti devices of a Nagios host import by IPv4 and IPv6 address.
+  The address map now holds every A and AAAA address of a device in one
+  canonical text form, accepts address literals as device host names without a
+  lookup, and compares the imported address in the same form
 * issue: Drop the device mapping column on uninstall only when it exists; a repeated
   uninstall logged a failed ALTER TABLE
 * issue: Treat a missing searchFields value as empty in the grid search; a search
