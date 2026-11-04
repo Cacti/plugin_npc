@@ -124,8 +124,9 @@ Next, there are a few NPC settings to add/update. Goto Console > Configuration >
 Settings > NPC.
 
 * **Remote Commands** - Check the checkbox to enable remote commands. At the
-  moment this is system wide so all users that can access NPC will be able to
-  execute commands.
+  moment this is system wide. A user also needs the "NPC Global Commands" realm
+  (granted in the user's Realm Permissions) to execute commands; the realm is
+  checked by name, so no page of that name exists in the plugin directory.
 
 * **Nagios Command File Path** - Add the path to the Nagios command file. It
   will be something like /usr/local/nagios/var/rw/nagios.cmd

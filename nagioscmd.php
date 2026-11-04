@@ -1643,7 +1643,7 @@ class NagiosCmd {
      */
     function getCommands($cmd=null) {
         if ($cmd) {
-            return($this->commands[$cmd]);
+            return(isset($this->commands[$cmd]) ? $this->commands[$cmd] : array());
         }
         return($this->commands);
     }
