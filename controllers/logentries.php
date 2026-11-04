@@ -52,15 +52,14 @@ class NpcLogentriesController extends Controller {
             WHERE ' . $where,
             $params);
 
-        $offset = ($this->currentPage - 1) * $this->limit;
 
         $results = db_fetch_assoc_prepared('SELECT i.instance_name, l.*
             FROM npc_logentries l
             LEFT JOIN npc_instances i ON l.instance_id = i.instance_id
             WHERE ' . $where . '
             ORDER BY l.entry_time DESC, l.entry_time_usec DESC
-            LIMIT ?, ?',
-            array_merge($params, array($offset, $this->limit)));
+            ' . $this->limitClause(),
+            $params);
 
         $results = $this->flattenArray($results);
 

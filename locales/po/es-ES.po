@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-09-28 16:07-0400\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
 "PO-Revision-Date: 2024-06-08 08:57-0400\n"
 "Last-Translator: Tadeo Briceño <tadeobriceno@vencable.com>\n"
 "Language-Team: Spanish <http://translate.cacti.net/projects/cacti/npc/es/>\n"
@@ -12,6 +12,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Poedit 3.4.4\n"
+
+#: controllers/cacti.php
+#, fuzzy
+#| msgid "You do not have permission to execute this command."
+msgid "You do not have permission to create data input methods."
+msgstr "No tiene permiso para ejecutar este comando."
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -66,16 +72,16 @@ msgid "Process Info"
 msgstr ""
 
 #: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "No tiene permiso para ejecutar este comando."
+
+#: controllers/nagios.php
 msgid "Remote Commands must be enabled under console->Settings->NPC"
 msgstr "Los comandos remotos deben estar habilitados en consola-> Configuración-> NPC"
 
 #: controllers/nagios.php
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
 msgstr "La ruta del archivo de comando de Nagios debe configurarse en consola-> Configuración-> NPC"
-
-#: controllers/nagios.php
-msgid "You do not have permission to execute this command."
-msgstr "No tiene permiso para ejecutar este comando."
 
 #: controllers/nagios.php
 msgid "Service Check Execution Time"
@@ -104,6 +110,10 @@ msgstr ""
 
 #: npc.php
 msgid "Invalid action requested."
+msgstr ""
+
+#: npc.php
+msgid "This action requires a POST request."
 msgstr ""
 
 #: npc.php
