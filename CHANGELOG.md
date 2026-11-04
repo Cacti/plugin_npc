@@ -2,6 +2,10 @@
 
 --- develop ---
 
+* issue: Rewrite the README to match the code: the screens and settings that exist,
+  the realms, the requirements, install, upgrade and uninstall behaviour, the
+  command line scripts, the translation workflow and the test commands; add a
+  known issues note
 * issue: Match the Cacti devices of a Nagios host import by IPv4 and IPv6 address.
   The address map now holds every A and AAAA address of a device in one
   canonical text form, accepts address literals as device host names without a
