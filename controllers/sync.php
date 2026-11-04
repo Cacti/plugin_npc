@@ -180,6 +180,14 @@ class NpcSyncController extends Controller {
     }
 
     /**
+     * The DNS and system lookups, as callables so a test can replace them.
+     *
+     * @var callable
+     */
+    var $dnsLookup = 'dns_get_record';
+    var $nameLookup = 'gethostbyname';
+
+    /**
      * checkHostExists
      *
      * This method checks to see if a host exists in
@@ -187,7 +195,10 @@ class NpcSyncController extends Controller {
      * found the Cacti host ID is returned.
      *
      * The first time this method is called a cache of
-     * id to ip address mappings will be built.
+     * id to ip address mappings will be built. Every address of a host is
+     * stored, IPv4 and IPv6, in the canonical text form of
+     * normalizeAddress(). The map is kept as JSON in the Cacti cache directory
+     * and is rebuilt when the key differs or the file cannot be read.
      *
      * @return int   The Cacti host ID
      */
@@ -212,17 +223,129 @@ class NpcSyncController extends Controller {
             $results = $cacti->getHostnames();
 
             for ($i = 0; $i < count($results); $i++) {
-                $hosts[gethostbyname($results[$i]['hostname'])] = $results[$i]['id'];
+                foreach ($this->resolveAddresses($results[$i]['hostname']) as $address) {
+                    $hosts[$address] = $results[$i]['id'];
+                }
             }
 
             $this->writeAddressCache($cacheFile, $cache_id, $hosts);
         }
 
-        if (isset($hosts[$ip])) {
-            return($hosts[$ip]);
+        foreach ($this->resolveAddresses($ip) as $address) {
+            if (isset($hosts[$address])) {
+                return($hosts[$address]);
+            }
         }
 
         return(null);
+    }
+
+    /**
+     * normalizeAddress
+     *
+     * Returns the canonical text form of an IPv4 or IPv6 address, or null when
+     * the text is not an address. The same address written in different ways
+     * (2001:DB8::1, 2001:db8:0:0:0:0:0:1, [2001:db8::1], fe80::1%eth0) gives
+     * the same text, and an IPv4-mapped IPv6 address gives the IPv4 text.
+     *
+     * @param  string $address
+     * @return string|null
+     */
+    function normalizeAddress($address) {
+        $address = trim((string) $address);
+
+        if (strlen($address) > 1 && $address[0] == '[' && substr($address, -1) == ']') {
+            $address = substr($address, 1, -1);
+        }
+
+        /* A scope id names the interface, not the host. */
+        $address = preg_replace('/%.*$/', '', $address);
+
+        if (filter_var($address, FILTER_VALIDATE_IP) === false) {
+            return(null);
+        }
+
+        $packed = inet_pton($address);
+
+        if (strlen($packed) == 16 && strncmp($packed, "\0\0\0\0\0\0\0\0\0\0\xff\xff", 12) == 0) {
+            $packed = substr($packed, 12);
+        }
+
+        return(inet_ntop($packed));
+    }
+
+    /**
+     * resolveAddresses
+     *
+     * Returns every address, in canonical form, that a host name or address
+     * stands for. An address is returned as it is without a lookup. A name is
+     * looked up for A and AAAA records, and for names the resolver does not
+     * return records for, the system lookup that earlier versions used.
+     *
+     * @param  string $name  host name or address
+     * @return array         canonical addresses, empty when nothing resolves
+     */
+    function resolveAddresses($name) {
+        $name = trim((string) $name);
+
+        $literal = $this->normalizeAddress($name);
+
+        if ($literal !== null) {
+            return(array($literal));
+        }
+
+        if ($name === '') {
+            return(array());
+        }
+
+        $found = array();
+
+        foreach ($this->dnsRecords($name) as $record) {
+            $address = $this->normalizeAddress(isset($record['ipv6']) ? $record['ipv6'] : (isset($record['ip']) ? $record['ip'] : ''));
+
+            if ($address !== null && !in_array($address, $found, true)) {
+                $found[] = $address;
+            }
+        }
+
+        if (!count($found)) {
+            $address = $this->normalizeAddress($this->legacyLookup($name));
+
+            if ($address !== null) {
+                $found[] = $address;
+            }
+        }
+
+        return($found);
+    }
+
+    /**
+     * dnsRecords
+     *
+     * The A and AAAA records of a name. A failed lookup gives an empty list.
+     * dns_get_record() reports a failed query as a warning, which the empty
+     * list already says.
+     *
+     * @param  string $name
+     * @return array
+     */
+    function dnsRecords($name) {
+        $records = @call_user_func($this->dnsLookup, $name, DNS_A | DNS_AAAA);
+
+        return(is_array($records) ? $records : array());
+    }
+
+    /**
+     * legacyLookup
+     *
+     * The system resolver lookup earlier versions used. It returns the name
+     * unchanged when the name does not resolve.
+     *
+     * @param  string $name
+     * @return string
+     */
+    function legacyLookup($name) {
+        return(call_user_func($this->nameLookup, $name));
     }
 
     /**
