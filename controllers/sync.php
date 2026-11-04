@@ -44,15 +44,20 @@ class NpcSyncController extends Controller {
      */
     function import($params) {
 
+        if (!api_user_realm_auth('host.php')) {
+            return($params['description'] . '|0|0|You do not have permission to add devices');
+        }
+
         $this->logger('info', get_class($this), __FUNCTION__ , "Starting import of " . $params['description']);
 
         $config = $params['config'];
         $path = $config["base_path"] . "/cli/add_device.php";
+        $cacti = new NpcCactiController();
 
         $return = $params['description'] . '|';
 
         // If the host exists and is already mapped return with notice
-        if (NpcCactiController::isMapped($params['host_object_id'])) {
+        if ($cacti->isMapped($params['host_object_id'])) {
             $this->logger('info', get_class($this), __FUNCTION__ , $params['description'] . " already exists and is mapped.");
             $return .= '0|0|The host already exists and is mapped';
             return($return);
@@ -60,16 +65,22 @@ class NpcSyncController extends Controller {
 
         // If the host already exists, map it and return.
         if ($cactiId = $this->checkHostExists($params['ip'], $params['cache_id'])) {
-            NpcCactiController::mapHost($params['host_object_id'], $cactiId);
+            $cacti->mapHost($params['host_object_id'], $cactiId);
             $this->logger('info', get_class($this), __FUNCTION__ , $params['description'] . " already existed and was mapped.");
             $return .= '0|1|The host already existed in Cacti with device ID: ' . $cactiId;
             return($return);
         }
 
-        $importCmd = 'php ' . $path
-                   . ' --description=' . $params['description']
-                   . ' --ip=' . $params['ip']
-                   . ' --template=' . $params['template_id']
+        if ($params['description'] === '' || $params['ip'] === '' || !ctype_digit((string) $params['template_id'])) {
+            $this->logger('warn', get_class($this), __FUNCTION__ , "Import rejected, invalid parameters for " . $params['description']);
+            $return .= '0|0|Invalid import parameters';
+            return($return);
+        }
+
+        $importCmd = 'php ' . cacti_escapeshellarg($path)
+                   . ' --description=' . cacti_escapeshellarg($params['description'])
+                   . ' --ip=' . cacti_escapeshellarg($params['ip'])
+                   . ' --template=' . cacti_escapeshellarg($params['template_id'])
                    . ' 2> /dev/null';
 
         $this->logger('debug', get_class($this), __FUNCTION__ , "Import command: $importCmd");
@@ -83,7 +94,7 @@ class NpcSyncController extends Controller {
 
                 if (isset($matches[1])) {
                     // Import was successful. Now map the hosts
-                    NpcCactiController::mapHost($params['host_object_id'], $matches[1]);
+                    $cacti->mapHost($params['host_object_id'], $matches[1]);
                     $this->logger('info', get_class($this), __FUNCTION__ , "Successfully imported and mapped " . $params['description'] . ": $output");
                     $return .= '1|1|' . $output;
                 } elseif (isset($matches[0])) {
@@ -111,16 +122,17 @@ class NpcSyncController extends Controller {
         $data = json_decode(stripslashes($params['data']));
 
         if (!is_object($data)) {
-            return($this->logger('error', get_class($this), __FUNCTION__ , "json_decode(".$params['data'].") returned: $data"));
+            return($this->logger('error', get_class($this), __FUNCTION__ , 'The host selection is not a JSON object'));
         }
 
         $results = array();
 
 	$hgc = new NpcHostgroupsController();
+        $cacti = new NpcCactiController();
         foreach ($data as $hostgroup) {
             $hosts = $hgc->getHostList(array('alias' => $hostgroup->alias));
             foreach ($hosts as $host) {
-                if (!NpcCactiController::isMapped($host['host_object_id'])) {
+                if (!$cacti->isMapped($host['host_object_id'])) {
                     $results[] = array(
                         'host_object_id' => $host['host_object_id'],
                         'display_name' => $host['display_name'],
@@ -168,14 +180,6 @@ class NpcSyncController extends Controller {
     }
 
     /**
-     * The file holding the address map. It is a property so a test can point
-     * it at a temporary file.
-     *
-     * @var string
-     */
-    var $addressCacheFile = '/tmp/npc_address_cache.php';
-
-    /**
      * The DNS and system lookups, as callables so a test can replace them.
      *
      * @var callable
@@ -193,54 +197,38 @@ class NpcSyncController extends Controller {
      * The first time this method is called a cache of
      * id to ip address mappings will be built. Every address of a host is
      * stored, IPv4 and IPv6, in the canonical text form of
-     * normalizeAddress(). The file layout is the one earlier versions wrote;
-     * the added $cacheVersion makes older files rebuild, because they only
-     * hold the first IPv4 address of each device.
+     * normalizeAddress(). The map is kept as JSON in the Cacti cache directory
+     * and is rebuilt when the key differs or the file cannot be read.
      *
      * @return int   The Cacti host ID
      */
     function checkHostExists($ip, $cache_id) {
+        global $config;
 
-        $cacheFile = $this->addressCacheFile;
+        $cacheFile = $config['base_path'] . '/cache/npc_address_cache.json';
+        $hosts     = null;
 
-        $buildCache = 0;
-        $cacheVersion = 1;
+        if (is_file($cacheFile) && is_readable($cacheFile)) {
+            $cache = json_decode((string) file_get_contents($cacheFile), true);
 
-        if (file_exists($cacheFile)) {
-            include($cacheFile);
-            if ($cacheKey != $cache_id || $cacheVersion < 2) {
-                $buildCache = 1;
+            if (is_array($cache) && isset($cache['key']) && $cache['key'] === (string) $cache_id && isset($cache['hosts']) && is_array($cache['hosts'])) {
+                $hosts = $cache['hosts'];
             }
-        } else {
-            $buildCache = 1;
         }
 
-        if ($buildCache) {
-
-            $fh = fopen($cacheFile, 'w') or die("can't open file");
-
+        if ($hosts === null) {
             $hosts = array();
 
-            $string = "<?php\n\n";
-            $string .= "\$cacheKey = '" . $cache_id . "';\n";
-            $string .= "\$cacheVersion = 2;\n";
-            $string .= "\$hosts = array(\n";
-
-            $cacti = new NpcCactiController();
+            $cacti   = new NpcCactiController();
             $results = $cacti->getHostnames();
 
             for ($i = 0; $i < count($results); $i++) {
                 foreach ($this->resolveAddresses($results[$i]['hostname']) as $address) {
-                    $string .= "'" . $address . "' => '" . $results[$i]['id'] . "',\n";
                     $hosts[$address] = $results[$i]['id'];
                 }
             }
 
-            $string .= ");";
-
-            fwrite($fh, $string);
-
-            fclose($fh);
+            $this->writeAddressCache($cacheFile, $cache_id, $hosts);
         }
 
         foreach ($this->resolveAddresses($ip) as $address) {
@@ -358,6 +346,32 @@ class NpcSyncController extends Controller {
      */
     function legacyLookup($name) {
         return(call_user_func($this->nameLookup, $name));
+    }
+
+    /**
+     * writeAddressCache
+     *
+     * Stores the address map as JSON in the Cacti cache directory. The file is
+     * written under a temporary name and renamed so a concurrent import never
+     * reads a partial file. A cache that cannot be written only costs a rebuild
+     * on the next call.
+     *
+     * @return void
+     */
+    private function writeAddressCache($cacheFile, $cache_id, $hosts) {
+        if (!is_dir(dirname($cacheFile)) || !is_writable(dirname($cacheFile))) {
+            $this->logger('warn', get_class($this), __FUNCTION__, 'Unable to create the address cache in ' . dirname($cacheFile));
+            return;
+        }
+
+        $tmp = tempnam(dirname($cacheFile), 'npc');
+
+        $bytes = file_put_contents($tmp, json_encode(array('key' => (string) $cache_id, 'hosts' => $hosts)));
+
+        if ($bytes === false || is_dir($cacheFile) || !rename($tmp, $cacheFile)) {
+            $this->logger('warn', get_class($this), __FUNCTION__, 'Unable to write the address cache ' . $cacheFile);
+            unlink($tmp);
+        }
     }
 
 }

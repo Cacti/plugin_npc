@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cacti\n"
 "Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-09-28 16:07-0400\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
 "PO-Revision-Date: 2024-10-17 16:22+0000\n"
 "Last-Translator: Coool (github.com/Coool) <coool@mail.lv>\n"
 "Language-Team: Latvian <http://translate.cacti.net/projects/cacti/npc/lv/>\n"
@@ -17,6 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= 19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
 "X-Generator: Weblate 4.8.1\n"
+
+#: controllers/cacti.php
+#, fuzzy
+#| msgid "You do not have permission to execute this command."
+msgid "You do not have permission to create data input methods."
+msgstr "Jums nav atļaujas izpildīt šo komandu."
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -71,16 +77,16 @@ msgid "Process Info"
 msgstr ""
 
 #: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "Jums nav atļaujas izpildīt šo komandu."
+
+#: controllers/nagios.php
 msgid "Remote Commands must be enabled under console->Settings->NPC"
 msgstr "Jāiespējo Tālvadības komandas sadaļā Konsole->Iestatījumi->NPC"
 
 #: controllers/nagios.php
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
 msgstr "Ir jāiestata Nagios komandas faila ceļš sadaļā Konsole->Iestatījumi->NPC"
-
-#: controllers/nagios.php
-msgid "You do not have permission to execute this command."
-msgstr "Jums nav atļaujas izpildīt šo komandu."
 
 #: controllers/nagios.php
 msgid "Service Check Execution Time"
@@ -109,6 +115,10 @@ msgstr ""
 
 #: npc.php
 msgid "Invalid action requested."
+msgstr ""
+
+#: npc.php
+msgid "This action requires a POST request."
 msgstr ""
 
 #: npc.php

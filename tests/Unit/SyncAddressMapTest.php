@@ -29,7 +29,7 @@ beforeEach(function () {
  * @param array $dns    name => list of A / AAAA records
  * @param array $legacy name => address answered by the system lookup
  */
-function npc_address_controller(array $dns = array(), array $legacy = array(), ?string $cache = null) {
+function npc_address_controller(array $dns = array(), array $legacy = array()) {
 	$controller = new NpcSyncController();
 
 	$GLOBALS['npc_address_lookups'] = array('dns' => 0, 'name' => 0);
@@ -45,15 +45,31 @@ function npc_address_controller(array $dns = array(), array $legacy = array(), ?
 		return $legacy[$name] ?? $name;
 	};
 
-	if ($cache !== null) {
-		$controller->addressCacheFile = $cache;
-	}
-
 	return $controller;
 }
 
-function npc_address_cache_file() {
-	return sys_get_temp_dir() . '/npc-address-' . uniqid() . '.php';
+/**
+ * Run checkHostExists() against a temporary base_path and return the result
+ * together with that path, so each test can inspect the JSON cache directory.
+ */
+function npc_address_cache_run($controller, $ip, $cache_id, $prepare = null) {
+	$base = sys_get_temp_dir() . '/npc-address-' . uniqid();
+	mkdir($base . '/cache', 0777, true);
+
+	if ($prepare !== null) {
+		$prepare($base . '/cache/npc_address_cache.json');
+	}
+
+	$restore                        = $GLOBALS['config']['base_path'];
+	$GLOBALS['config']['base_path'] = $base;
+
+	try {
+		$found = $controller->checkHostExists($ip, $cache_id);
+	} finally {
+		$GLOBALS['config']['base_path'] = $restore;
+	}
+
+	return array($found, $base);
 }
 
 /** Records of one name, as dns_get_record() returns them. */
@@ -187,14 +203,11 @@ function npc_address_devices() {
 }
 
 it('finds the Cacti device that owns an address', function (string $ip, ?string $expected) {
-	$cache      = npc_address_cache_file();
-	$controller = npc_address_controller(npc_address_devices(), array('old.example' => '192.0.2.60'), $cache);
+	$controller = npc_address_controller(npc_address_devices(), array('old.example' => '192.0.2.60'));
 
-	try {
-		expect($controller->checkHostExists($ip, 'k1'))->toBe($expected);
-	} finally {
-		unlink($cache);
-	}
+	list($found) = npc_address_cache_run($controller, $ip, 'k1');
+
+	expect($found)->toBe($expected);
 })->with(array(
 	'IPv4 of a device with both kinds'      => array('192.0.2.10', '1'),
 	'IPv6 compressed'                       => array('2001:db8::10', '1'),
@@ -215,47 +228,37 @@ it('finds the Cacti device that owns an address', function (string $ip, ?string 
 it('lets the last device win when two devices share an address', function () {
 	$GLOBALS['__test_db_results']['db_fetch_assoc']['FROM host'] = array(array('id' => '1', 'hostname' => 'a.example'), array('id' => '2', 'hostname' => 'b.example'));
 
-	$cache      = npc_address_cache_file();
-	$controller = npc_address_controller(array('a.example' => npc_address_records(array('192.0.2.10')), 'b.example' => npc_address_records(array('192.0.2.10'))), array(), $cache);
+	$controller = npc_address_controller(array('a.example' => npc_address_records(array('192.0.2.10')), 'b.example' => npc_address_records(array('192.0.2.10'))));
 
-	try {
-		expect($controller->checkHostExists('192.0.2.10', 'k1'))->toBe('2');
-	} finally {
-		unlink($cache);
-	}
+	list($found) = npc_address_cache_run($controller, '192.0.2.10', 'k1');
+
+	expect($found)->toBe('2');
 });
 
-it('stores the map in the earlier file layout with a version marker', function () {
-	$cache      = npc_address_cache_file();
-	$controller = npc_address_controller(npc_address_devices(), array(), $cache);
+it('stores every address of each device in the JSON cache', function () {
+	$controller = npc_address_controller(npc_address_devices());
 
-	try {
-		$controller->checkHostExists('192.0.2.10', 'k1');
+	list($found, $base) = npc_address_cache_run($controller, '192.0.2.10', 'k1');
 
-		$source = file_get_contents($cache);
+	$cache = json_decode(file_get_contents($base . '/cache/npc_address_cache.json'), true);
 
-		$cacheKey     = null;
-		$cacheVersion = null;
-		$hosts        = null;
-
-		include $cache;
-
-		expect($source)->toStartWith("<?php\n\n\$cacheKey = 'k1';\n\$cacheVersion = 2;\n\$hosts = array(\n");
-		expect($cacheKey)->toBe('k1');
-		expect($cacheVersion)->toBe(2);
-		expect($hosts['192.0.2.10'])->toBe('1');
-		expect($hosts['2001:db8::10'])->toBe('1');
-		expect($hosts['2001:db8::20'])->toBe('2');
-		expect($hosts['2001:db8::99'])->toBe('4');
-		expect(array_keys($hosts))->not->toContain('gone.example');
-	} finally {
-		unlink($cache);
-	}
+	expect($found)->toBe('1');
+	expect($cache['key'])->toBe('k1');
+	expect($cache['hosts']['192.0.2.10'])->toBe('1');
+	expect($cache['hosts']['2001:db8::10'])->toBe('1');
+	expect($cache['hosts']['2001:db8::20'])->toBe('2');
+	expect($cache['hosts']['2001:db8::99'])->toBe('4');
+	expect(array_keys($cache['hosts']))->not->toContain('gone.example');
 });
 
 it('reads a current map without asking Cacti or DNS again', function () {
-	$cache      = npc_address_cache_file();
-	$controller = npc_address_controller(npc_address_devices(), array(), $cache);
+	$controller = npc_address_controller(npc_address_devices());
+
+	$base = sys_get_temp_dir() . '/npc-address-' . uniqid();
+	mkdir($base . '/cache', 0777, true);
+
+	$restore                        = $GLOBALS['config']['base_path'];
+	$GLOBALS['config']['base_path'] = $base;
 
 	try {
 		$controller->checkHostExists('192.0.2.10', 'k1');
@@ -265,36 +268,19 @@ it('reads a current map without asking Cacti or DNS again', function () {
 		expect($controller->checkHostExists('2001:DB8::20', 'k1'))->toBe('2');
 		expect($GLOBALS['npc_address_lookups'])->toBe($before);
 	} finally {
-		unlink($cache);
+		$GLOBALS['config']['base_path'] = $restore;
 	}
 });
 
-it('rebuilds a map with another key or one written before IPv6 support', function (string $content, string $key) {
-	$cache = npc_address_cache_file();
-	file_put_contents($cache, $content);
+it('rebuilds the map when the cached key differs', function () {
+	$controller = npc_address_controller(npc_address_devices());
 
-	$controller = npc_address_controller(npc_address_devices(), array(), $cache);
+	list($found, $base) = npc_address_cache_run($controller, '2001:db8::20', 'k1', function ($file) {
+		file_put_contents($file, json_encode(array('key' => 'old', 'hosts' => array('192.0.2.10' => '1'))));
+	});
 
-	try {
-		expect($controller->checkHostExists('2001:db8::20', $key))->toBe('2');
-		expect(file_get_contents($cache))->toContain('$cacheVersion = 2;');
-	} finally {
-		unlink($cache);
-	}
-})->with(array(
-	'file written by an earlier version'  => array("<?php\n\n\$cacheKey = 'k1';\n\$hosts = array(\n'192.0.2.10' => '1',\n);", 'k1'),
-	'current version, another key'        => array("<?php\n\n\$cacheKey = 'old';\n\$cacheVersion = 2;\n\$hosts = array(\n'192.0.2.10' => '1',\n);", 'k1'),
-));
+	$cache = json_decode(file_get_contents($base . '/cache/npc_address_cache.json'), true);
 
-it('still answers IPv4 lookups from a map written by an earlier version of the same key', function () {
-	$cache = npc_address_cache_file();
-	file_put_contents($cache, "<?php\n\n\$cacheKey = 'k1';\n\$hosts = array(\n'192.0.2.10' => '1',\n);");
-
-	$controller = npc_address_controller(npc_address_devices(), array(), $cache);
-
-	try {
-		expect($controller->checkHostExists('192.0.2.10', 'k1'))->toBe('1');
-	} finally {
-		unlink($cache);
-	}
+	expect($found)->toBe('2');
+	expect($cache['key'])->toBe('k1');
 });

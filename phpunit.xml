@@ -29,7 +29,8 @@
     <source>
         <include>
             <file>setup.php</file>
-            <file>controllers/sync.php</file>
+            <file>nagioscmd.php</file>
+            <directory suffix=".php">controllers</directory>
         </include>
     </source>
 </phpunit>
