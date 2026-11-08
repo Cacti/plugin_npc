@@ -14,7 +14,7 @@ it('passes the js/npc.js tests', function () {
 	$output = array();
 	$status = 0;
 
-	exec('cd ' . escapeshellarg(dirname(__DIR__, 2)) . ' && node --test tests/js/npc.test.js 2>&1', $output, $status);
+	exec('cd ' . escapeshellarg(dirname(__DIR__, 2)) . ' && node --test --test-reporter=tap tests/js/npc.test.js 2>&1', $output, $status);
 
 	$report = implode("\n", $output);
 

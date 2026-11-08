@@ -203,8 +203,8 @@ class NpcHostgroupsController extends Controller {
 	}
 
 	function getHostgroups() {
-		$params = array();
-		$where  = '1 = 1';
+		$params = array($this->config_type);
+		$where  = 'hg.config_type = ?';
 
 		if ($this->id) {
 			$where .= ' AND hg.hostgroup_object_id = ?';
@@ -215,7 +215,7 @@ class NpcHostgroupsController extends Controller {
 			'SELECT DISTINCT i.instance_name,
 				o1.name1 AS hostgroup_name,
 				hs.host_object_id,
-				hs.current_state,
+				CASE WHEN hs.has_been_checked = 0 THEN -1 ELSE hs.current_state END AS current_state,
 				hs.output,
 				o2.name1 AS host_name,
 				hg.*
@@ -231,10 +231,6 @@ class NpcHostgroupsController extends Controller {
 	}
 
 	function setupResultsArray() {
-		$results = $this->getHostgroups();
-		$results = $this->flattenArray($results);
-		$results = $this->flattenNestedArray($results);
-
-		return $results;
+		return $this->getHostgroups();
 	}
 }

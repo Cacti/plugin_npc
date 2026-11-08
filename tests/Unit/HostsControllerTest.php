@@ -36,3 +36,20 @@ it('asks for only the newest stored check of a host', function () {
 it('returns no rows when a host has no stored check', function () {
 	expect((new NpcHostsController())->getPerfData(12))->toBe(array());
 });
+
+it('attaches the latest comments to hosts in one batch', function () {
+	$GLOBALS['__test_db_results']['db_fetch_assoc_prepared']['FROM npc_hoststatus'] = [
+		['host_object_id' => 1, 'problem_has_been_acknowledged' => 1],
+		['host_object_id' => 2, 'problem_has_been_acknowledged' => 0]
+	];
+	$GLOBALS['__test_db_results']['db_fetch_assoc_prepared']['FROM npc_comments'] = [
+		['object_id' => 1, 'entry_type' => 4, 'author_name' => 'operator', 'comment_data' => 'ack'],
+		['object_id' => 1, 'entry_type' => 1, 'author_name' => 'operator', 'comment_data' => 'latest'],
+		['object_id' => 1, 'entry_type' => 1, 'author_name' => 'operator', 'comment_data' => 'old']
+	];
+	$rows = json_decode((new NpcHostsController())->getHosts(), true)['response']['value']['items'];
+	expect($rows[0]['acknowledgement'])->toBe('operator*|*ack');
+	expect($rows[0]['comment'])->toBe('operator*|*latest');
+	expect($rows[1]['comment'])->toBe(0);
+	expect($GLOBALS['__test_db_fetch_log'])->toHaveCount(3);
+});

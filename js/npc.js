@@ -11,6 +11,10 @@ var npc = (function($) {
 
 	var cfg = window.npcConfig || {};
 	var refreshTimers = {};
+	var requests = {};
+	var requestVersions = {};
+	var pendingGets = {};
+	var viewVersion = 0;
 
 	/* --- state helpers --- */
 
@@ -23,10 +27,23 @@ var npc = (function($) {
 	/* --- ajax wrapper --- */
 
 	function npcGet(params, callback) {
+		var key = params.module + '/' + params.action;
+		var version = (requestVersions[key] || 0) + 1;
+		var view = viewVersion;
+		requestVersions[key] = version;
+		if (requests[key]) {
+			requests[key].abort();
+		}
+		pendingGets[key] = true;
 		params.__csrf_magic = cfg.csrfToken;
-		$.getJSON(cfg.npcUrl, params, function(data) {
-			if (data && typeof callback === 'function') {
+		requests[key] = $.getJSON(cfg.npcUrl, params, function(data) {
+			if (view === viewVersion && version === requestVersions[key] && data && typeof callback === 'function') {
 				callback(data);
+			}
+		}).always(function() {
+			if (view === viewVersion && version === requestVersions[key]) {
+				delete pendingGets[key];
+				delete requests[key];
 			}
 		});
 	}
@@ -89,10 +106,14 @@ var npc = (function($) {
 		return '<span class="npc-state ' + cls + '">' + escHtml(label) + '</span>';
 	}
 
-	function startAutoRefresh(key, fn, interval) {
+	function startAutoRefresh(key, fn, interval, requestKey) {
 		stopAutoRefresh(key);
 		var secs = interval || cfg.portletRefresh || 60;
-		refreshTimers[key] = setInterval(fn, secs * 1000);
+		refreshTimers[key] = setInterval(function() {
+			if (!pendingGets[requestKey]) {
+				fn();
+			}
+		}, secs * 1000);
 	}
 
 	function stopAutoRefresh(key) {
@@ -266,7 +287,7 @@ var npc = (function($) {
 			});
 		});
 
-		startAutoRefresh('hosts', function() { loadHostTable(filter); });
+		startAutoRefresh('hosts', function() { loadHostTable(filter); }, null, 'hosts/getHosts');
 	}
 
 	/* --- services tab --- */
@@ -327,7 +348,7 @@ var npc = (function($) {
 			});
 		});
 
-		startAutoRefresh('services', function() { loadServiceTable(filter); });
+		startAutoRefresh('services', function() { loadServiceTable(filter); }, null, 'services/getServices');
 	}
 
 	/* --- comments tab --- */
@@ -419,7 +440,7 @@ var npc = (function($) {
 			$('#npc-eventlog-table').html(html);
 		});
 
-		startAutoRefresh('eventlog', renderEventLog);
+		startAutoRefresh('eventlog', renderEventLog, null, 'logentries/getLogs');
 	}
 
 	/* --- process info tab --- */
@@ -708,6 +729,10 @@ var npc = (function($) {
 	/* --- tab routing --- */
 
 	function route(tab) {
+		viewVersion++;
+		Object.keys(requests).forEach(function(key) { requests[key].abort(); });
+		requests = {};
+		pendingGets = {};
 		/* stop any running refresh timers */
 		for (var key in refreshTimers) {
 			stopAutoRefresh(key);

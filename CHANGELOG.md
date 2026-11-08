@@ -2,6 +2,15 @@
 
 --- develop ---
 
+* issue: Classify unchecked objects as pending, read active downtime from Nagios
+  status, and avoid duplicate service rows across original and retained host configurations
+* issue: Preserve flat hostgroup and servicegroup results after the SQL migration
+* issue: Preserve IPv6 zones and reject ambiguous host matches; rebuild older address caches
+* issue: Share performance-data parsing between field creation and polling, including
+  quoted labels, unknown values and conflicting output names
+* issue: Ignore obsolete refresh responses and avoid overlapping dashboard requests
+* issue: Batch host and service comment lookups; service pages read downtime from status
+
 * issue: Rewrite the README to match the code: the screens and settings that exist,
   the realms, the requirements, install, upgrade and uninstall behaviour, the
   command line scripts, the translation workflow and the test commands; add a

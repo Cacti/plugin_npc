@@ -170,7 +170,7 @@ class NpcServicegroupsController extends Controller {
 		}
 
 		$result = db_fetch_row_prepared(
-			'SELECT hs.current_state
+			'SELECT CASE WHEN hs.has_been_checked = 0 THEN -1 ELSE hs.current_state END AS current_state
 			FROM npc_hoststatus hs
 			INNER JOIN npc_hosts h ON hs.host_object_id = h.host_object_id
 			WHERE h.display_name = ?',
@@ -188,8 +188,8 @@ class NpcServicegroupsController extends Controller {
 			'service_description' => 'o2.name2',
 			'output'              => 'ss.output'
 		);
-		$params = array();
-		$where  = '1 = 1';
+		$params = array($this->config_type);
+		$where  = 'sg.config_type = ?';
 
 		if ($this->id) {
 			$where .= ' AND sg.servicegroup_object_id = ?';
@@ -206,6 +206,7 @@ class NpcServicegroupsController extends Controller {
 				o2.name1 AS host_name,
 				o2.name2 AS service_description,
 				ss.*,
+				CASE WHEN ss.has_been_checked = 0 THEN -1 ELSE ss.current_state END AS current_state,
 				sg.*
 			FROM npc_servicegroups sg
 			INNER JOIN npc_servicegroup_members sgm ON sg.servicegroup_id = sgm.servicegroup_id
@@ -219,10 +220,6 @@ class NpcServicegroupsController extends Controller {
 	}
 
 	function setupResultsArray() {
-		$results = $this->getServicegroups();
-		$results = $this->flattenArray($results);
-		$results = $this->flattenNestedArray($results);
-
-		return $results;
+		return $this->getServicegroups();
 	}
 }
