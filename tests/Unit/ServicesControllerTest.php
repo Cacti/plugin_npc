@@ -43,3 +43,15 @@ it('joins the hostgroup tables and binds the alias when filtering by hostgroup',
 		expect($query['params'][1])->toBe('web servers');
 	}
 });
+
+it('uses three database reads for a 25-service page', function () {
+	$GLOBALS['__test_db_results'] = [];
+	$rows = [];
+	for ($i = 1; $i <= 25; $i++) {
+		$rows[] = ['service_object_id' => $i, 'problem_has_been_acknowledged' => 0, 'scheduled_downtime_depth' => 0];
+	}
+	$GLOBALS['__test_db_results']['db_fetch_assoc_prepared']['FROM npc_servicestatus'] = $rows;
+	$result = json_decode((new NpcServicesController())->getServices(), true);
+	expect($result['response']['value']['items'])->toHaveCount(25);
+	expect($GLOBALS['__test_db_fetch_log'])->toHaveCount(3);
+});

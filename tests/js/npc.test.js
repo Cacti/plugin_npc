@@ -426,3 +426,33 @@ test('opens the dashboard for a tab it does not know', () => {
 
 	assert.ok(env.requests.some((request) => request.params.module === 'hosts' && request.params.action === 'summary'));
 });
+
+test('ignores a superseded filter response even if it arrives after cancellation', () => {
+	const env = load({defer: true, values: {'#npc-host-state': 'down'}});
+	env.npc.route('hosts');
+	env.handlers['#npc-host-filter submit ']({preventDefault() {}});
+	assert.strictEqual(env.requests[0].aborted, true);
+	env.requests[1].resolve(gridResponse([{...hostRows[0], host_name: 'new-filter'}]));
+	env.requests[0].resolve(gridResponse([{...hostRows[0], host_name: 'obsolete'}]));
+	assert.match(env.html['#npc-host-table'], /new-filter/);
+	assert.doesNotMatch(env.html['#npc-host-table'], /obsolete/);
+});
+
+test('does not overlap refreshes and resumes after a failed request', () => {
+	const env = load({defer: true});
+	env.npc.route('services');
+	[...env.timers.values()][0]();
+	assert.strictEqual(env.requests.length, 1);
+	env.requests[0].reject();
+	[...env.timers.values()][0]();
+	assert.strictEqual(env.requests.length, 2);
+});
+
+test('ignores responses from a previous view and stops its refreshes', () => {
+	const env = load({defer: true});
+	env.npc.route('hosts');
+	env.npc.route('dashboard');
+	env.requests[0].resolve(gridResponse(hostRows));
+	assert.strictEqual(env.html['#npc-host-table'], undefined);
+	assert.strictEqual(env.timers.size, 0);
+});

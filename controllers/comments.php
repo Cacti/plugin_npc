@@ -26,6 +26,33 @@
 class NpcCommentsController extends Controller {
 
     /**
+     * Fetch the newest acknowledgement and ordinary comment for each page object.
+     *
+     * @param array $ids Host or service object identifiers on the current page.
+     *
+     * @return array Comment metadata indexed by object identifier.
+     */
+    function getLatestForObjects($ids) {
+        if (!count($ids)) {
+            return array();
+        }
+
+        $rows = db_fetch_assoc_prepared('SELECT object_id, entry_type, author_name, comment_data
+            FROM npc_comments WHERE object_id IN (' . implode(',', array_fill(0, count($ids), '?')) . ')
+            ORDER BY entry_time DESC, entry_time_usec DESC, comment_id DESC', $ids);
+        $latest = array();
+
+        foreach ($rows as $row) {
+            $kind = $row['entry_type'] == 4 ? 'acknowledgement' : 'comment';
+            if (!isset($latest[$row['object_id']][$kind])) {
+                $latest[$row['object_id']][$kind] = $row['author_name'] . '*|*' . $row['comment_data'];
+            }
+        }
+
+        return $latest;
+    }
+
+    /**
      * getAck
      *
      * An accessor method to retrieve an acknowledgement

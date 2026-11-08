@@ -89,7 +89,7 @@ it('writes an address in one canonical form', function (?string $input, ?string 
 	'IPv6 expanded'                => array('2001:0db8:0000:0000:0000:0000:0000:0001', '2001:db8::1'),
 	'IPv6 partly expanded'         => array('2001:db8:0:0:0:0:0:1', '2001:db8::1'),
 	'IPv6 in brackets'             => array('[2001:DB8::1]', '2001:db8::1'),
-	'IPv6 with a scope id'         => array('fe80::1%eth0', 'fe80::1'),
+	'IPv6 with a scope id'         => array('fe80::1%eth0', 'fe80::1%eth0'),
 	'IPv6 loopback'                => array('0:0:0:0:0:0:0:1', '::1'),
 	'IPv6 unspecified'             => array('0000:0000:0000:0000:0000:0000:0000:0000', '::'),
 	'IPv4 mapped IPv6'             => array('::FFFF:192.0.2.10', '192.0.2.10'),
@@ -225,14 +225,14 @@ it('finds the Cacti device that owns an address', function (string $ip, ?string 
 	'an empty address'                      => array('', null),
 ));
 
-it('lets the last device win when two devices share an address', function () {
+it('rejects a shared address instead of selecting the last device', function () {
 	$GLOBALS['__test_db_results']['db_fetch_assoc']['FROM host'] = array(array('id' => '1', 'hostname' => 'a.example'), array('id' => '2', 'hostname' => 'b.example'));
 
 	$controller = npc_address_controller(array('a.example' => npc_address_records(array('192.0.2.10')), 'b.example' => npc_address_records(array('192.0.2.10'))));
 
 	list($found) = npc_address_cache_run($controller, '192.0.2.10', 'k1');
 
-	expect($found)->toBe('2');
+	expect($found)->toBeFalse();
 });
 
 it('stores every address of each device in the JSON cache', function () {
@@ -276,11 +276,37 @@ it('rebuilds the map when the cached key differs', function () {
 	$controller = npc_address_controller(npc_address_devices());
 
 	list($found, $base) = npc_address_cache_run($controller, '2001:db8::20', 'k1', function ($file) {
-		file_put_contents($file, json_encode(array('key' => 'old', 'hosts' => array('192.0.2.10' => '1'))));
+		file_put_contents($file, json_encode(array('version' => 2, 'key' => 'old', 'hosts' => array('192.0.2.10' => '1'))));
 	});
 
 	$cache = json_decode(file_get_contents($base . '/cache/npc_address_cache.json'), true);
 
 	expect($found)->toBe('2');
 	expect($cache['key'])->toBe('k1');
+});
+
+it('keeps identical link-local addresses on separate interfaces distinct', function () {
+	$GLOBALS['__test_db_results']['db_fetch_assoc']['FROM host'] = [
+		['id' => '101', 'hostname' => 'fe80::1%eth0'],
+		['id' => '202', 'hostname' => 'fe80::1%eth1']
+	];
+	[$found] = npc_address_cache_run(npc_address_controller(), 'fe80::1%eth0', 'scope');
+	expect($found)->toBe('101');
+});
+
+it('refuses ambiguous shared addresses and conflicting multihomed matches', function ($devices, $records) {
+	$GLOBALS['__test_db_results']['db_fetch_assoc']['FROM host'] = $devices;
+	[$found] = npc_address_cache_run(npc_address_controller(['target.example' => npc_address_records($records)]), 'target.example', 'ambiguous');
+	expect($found)->toBeFalse();
+})->with([
+	'shared address' => [[['id' => '1', 'hostname' => '192.0.2.1'], ['id' => '2', 'hostname' => '192.0.2.1']], ['192.0.2.1']],
+	'different matches' => [[['id' => '1', 'hostname' => '192.0.2.1'], ['id' => '2', 'hostname' => '192.0.2.2']], ['192.0.2.1', '192.0.2.2']]
+]);
+
+it('rebuilds a pre-scope cache even when its import key matches', function () {
+	$GLOBALS['__test_db_results']['db_fetch_assoc']['FROM host'] = [['id' => '1', 'hostname' => 'fe80::1%eth0']];
+	[$found] = npc_address_cache_run(npc_address_controller(), 'fe80::1%eth0', 'same', function ($file) {
+		file_put_contents($file, json_encode(['key' => 'same', 'hosts' => ['fe80::1' => '2']]));
+	});
+	expect($found)->toBe('1');
 });

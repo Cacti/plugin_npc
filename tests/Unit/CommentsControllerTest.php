@@ -98,3 +98,9 @@ it('writes nothing when the user lacks the command realm', function () {
 
 	expect(npc_comments_commands($reader))->toBe(array());
 })->skip(!function_exists('posix_mkfifo'), 'posix extension is not loaded');
+
+it('skips comment queries for an empty page', function () {
+	$GLOBALS['__test_db_fetch_log'] = [];
+	expect((new NpcCommentsController())->getLatestForObjects([]))->toBe([]);
+	expect($GLOBALS['__test_db_fetch_log'])->toBe([]);
+});

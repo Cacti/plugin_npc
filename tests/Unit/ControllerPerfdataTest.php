@@ -26,3 +26,17 @@ it('reduces perfdata to label and value pairs', function (?string $perfdata, str
 	'empty string'               => array('', ''),
 	'null'                       => array(null, ''),
 ));
+
+it('uses the same normalized field names for quoted labels and unknown values', function () {
+	$controller = new Controller();
+	$raw = "'disk used'=12B;20;30;0;100\t'load five'=U;2;3 load15=.4";
+	expect(array_keys($controller->parsePerfdata($raw)))->toBe(['disk_used', 'load_five', 'load15']);
+	expect($controller->perfdataOutput($raw))->toBe('disk_used:12 load15:.4 ');
+});
+
+it('handles escaped quotes and rejects conflicting output labels', function () {
+	$controller = new Controller();
+	expect($controller->perfdataOutput("'it''s_used'=2 'disk used'=1 disk_used=3 disk_used=4 other=5"))
+		->toBe("it's_used:2 other:5 ");
+	expect($controller->perfdataOutput('isotherm=7 iso.1=2'))->toBe('isotherm:7 output:2 ');
+});

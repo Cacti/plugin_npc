@@ -64,7 +64,13 @@ class NpcSyncController extends Controller {
         }
 
         // If the host already exists, map it and return.
-        if ($cactiId = $this->checkHostExists($params['ip'], $params['cache_id'])) {
+        $cactiId = $this->checkHostExists($params['ip'], $params['cache_id']);
+
+        if ($cactiId === false) {
+            return $return . '0|0|The address matches more than one Cacti device';
+        }
+
+        if ($cactiId !== null) {
             $cacti->mapHost($params['host_object_id'], $cactiId);
             $this->logger('info', get_class($this), __FUNCTION__ , $params['description'] . " already existed and was mapped.");
             $return .= '0|1|The host already existed in Cacti with device ID: ' . $cactiId;
@@ -200,7 +206,7 @@ class NpcSyncController extends Controller {
      * normalizeAddress(). The map is kept as JSON in the Cacti cache directory
      * and is rebuilt when the key differs or the file cannot be read.
      *
-     * @return int   The Cacti host ID
+     * @return int|string|false|null Device ID, false for ambiguity, null if absent.
      */
     function checkHostExists($ip, $cache_id) {
         global $config;
@@ -211,7 +217,7 @@ class NpcSyncController extends Controller {
         if (is_file($cacheFile) && is_readable($cacheFile)) {
             $cache = json_decode((string) file_get_contents($cacheFile), true);
 
-            if (is_array($cache) && isset($cache['key']) && $cache['key'] === (string) $cache_id && isset($cache['hosts']) && is_array($cache['hosts'])) {
+            if (is_array($cache) && ($cache['version'] ?? 0) === 2 && isset($cache['key']) && $cache['key'] === (string) $cache_id && isset($cache['hosts']) && is_array($cache['hosts'])) {
                 $hosts = $cache['hosts'];
             }
         }
@@ -224,20 +230,28 @@ class NpcSyncController extends Controller {
 
             for ($i = 0; $i < count($results); $i++) {
                 foreach ($this->resolveAddresses($results[$i]['hostname']) as $address) {
-                    $hosts[$address] = $results[$i]['id'];
+                    if (array_key_exists($address, $hosts) && $hosts[$address] !== $results[$i]['id']) {
+                        $hosts[$address] = false;
+                    } else {
+                        $hosts[$address] = $results[$i]['id'];
+                    }
                 }
             }
 
             $this->writeAddressCache($cacheFile, $cache_id, $hosts);
         }
 
+        $match = null;
         foreach ($this->resolveAddresses($ip) as $address) {
-            if (isset($hosts[$address])) {
-                return($hosts[$address]);
+            if (array_key_exists($address, $hosts)) {
+                if ($hosts[$address] === false || ($match !== null && $match !== $hosts[$address])) {
+                    return false;
+                }
+                $match = $hosts[$address];
             }
         }
 
-        return(null);
+        return $match;
     }
 
     /**
@@ -245,8 +259,8 @@ class NpcSyncController extends Controller {
      *
      * Returns the canonical text form of an IPv4 or IPv6 address, or null when
      * the text is not an address. The same address written in different ways
-     * (2001:DB8::1, 2001:db8:0:0:0:0:0:1, [2001:db8::1], fe80::1%eth0) gives
-     * the same text, and an IPv4-mapped IPv6 address gives the IPv4 text.
+     * (2001:DB8::1, 2001:db8:0:0:0:0:0:1, [2001:db8::1]) gives the same
+     * text. IPv6 zones are retained; IPv4-mapped IPv6 gives the IPv4 text.
      *
      * @param  string $address
      * @return string|null
@@ -258,8 +272,10 @@ class NpcSyncController extends Controller {
             $address = substr($address, 1, -1);
         }
 
-        /* A scope id names the interface, not the host. */
-        $address = preg_replace('/%.*$/', '', $address);
+        // Link-local addresses on different interfaces name different endpoints.
+        $parts = explode('%', $address, 2);
+        $address = $parts[0];
+        $zone = $parts[1] ?? '';
 
         if (filter_var($address, FILTER_VALIDATE_IP) === false) {
             return(null);
@@ -271,7 +287,12 @@ class NpcSyncController extends Controller {
             $packed = substr($packed, 12);
         }
 
-        return(inet_ntop($packed));
+        $address = inet_ntop($packed);
+        if (strlen($packed) === 16 && $zone !== '') {
+            $address .= '%' . $zone;
+        }
+
+        return $address;
     }
 
     /**
@@ -366,7 +387,7 @@ class NpcSyncController extends Controller {
 
         $tmp = tempnam(dirname($cacheFile), 'npc');
 
-        $bytes = file_put_contents($tmp, json_encode(array('key' => (string) $cache_id, 'hosts' => $hosts)));
+        $bytes = file_put_contents($tmp, json_encode(array('version' => 2, 'key' => (string) $cache_id, 'hosts' => $hosts)));
 
         if ($bytes === false || is_dir($cacheFile) || !rename($tmp, $cacheFile)) {
             $this->logger('warn', get_class($this), __FUNCTION__, 'Unable to write the address cache ' . $cacheFile);

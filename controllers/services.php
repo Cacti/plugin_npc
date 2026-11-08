@@ -19,7 +19,7 @@ class NpcServicesController extends Controller {
 		$services = $this->services();
 
 		$comments = new NpcCommentsController;
-		$downtime = new NpcDowntimeController;
+		$latest = $comments->getLatestForObjects(array_column($services, 'service_object_id'));
 
 		for ($i = 0; $i < count($services); $i++) {
 			foreach ($services[$i] as $k => $v) {
@@ -32,13 +32,13 @@ class NpcServicesController extends Controller {
 			unset($services[$i]['Host']);
 
 			if ($services[$i]['problem_has_been_acknowledged']) {
-				$services[$i]['acknowledgement'] = $comments->getAck($services[$i]['service_object_id']);
+				$services[$i]['acknowledgement'] = $latest[$services[$i]['service_object_id']]['acknowledgement'] ?? 0;
 			}
 
-			$services[$i]['comment'] = $comments->getLastComment($services[$i]['service_object_id']);
+			$services[$i]['comment'] = $latest[$services[$i]['service_object_id']]['comment'] ?? 0;
 
 			$services[$i]['in_downtime'] = 0;
-			if ($downtime->inDowntime($services[$i]['service_object_id'])) {
+			if ($services[$i]['scheduled_downtime_depth'] > 0) {
 				$services[$i]['in_downtime'] = 1;
 			}
 		}
@@ -109,7 +109,7 @@ class NpcServicesController extends Controller {
 			'pending'  => 0
 		);
 
-		$services = db_fetch_assoc_prepared('SELECT ss.current_state
+		$services = db_fetch_assoc_prepared('SELECT CASE WHEN ss.has_been_checked = 0 THEN -1 ELSE ss.current_state END AS current_state
 			FROM npc_servicestatus ss
 			LEFT JOIN npc_services s ON ss.service_object_id = s.service_object_id
 			WHERE s.config_type = ?',
@@ -126,11 +126,11 @@ class NpcServicesController extends Controller {
 	}
 
 	function getServiceStatesByHost($host_object_id) {
-		return db_fetch_assoc_prepared('SELECT ss.current_state
+		return db_fetch_assoc_prepared('SELECT CASE WHEN ss.has_been_checked = 0 THEN -1 ELSE ss.current_state END AS current_state
 			FROM npc_servicestatus ss
 			INNER JOIN npc_services s ON ss.service_object_id = s.service_object_id
-			WHERE s.host_object_id = ?',
-			array($host_object_id));
+			WHERE s.host_object_id = ? AND s.config_type = ?',
+			array($host_object_id, $this->config_type));
 	}
 
 	function services($id = null, $where = null) {
@@ -152,7 +152,7 @@ class NpcServicesController extends Controller {
 
 		$states = $this->stringToState[$this->state];
 		$state_list = implode(',', array_map('intval', explode(',', $states)));
-		$where .= 'ss.current_state IN (' . $state_list . ')';
+		$where .= 'CASE WHEN ss.has_been_checked = 0 THEN -1 ELSE ss.current_state END IN (' . $state_list . ')';
 		$where .= ' AND s.config_type = ?';
 		$params[] = $this->config_type;
 
@@ -200,7 +200,7 @@ class NpcServicesController extends Controller {
 			FROM npc_servicestatus ss
 			LEFT JOIN npc_objects o ON ss.service_object_id = o.object_id
 			LEFT JOIN npc_services s ON ss.service_object_id = s.service_object_id
-			LEFT JOIN npc_hosts h ON s.host_object_id = h.host_object_id
+			LEFT JOIN npc_hosts h ON s.host_object_id = h.host_object_id AND h.config_type = s.config_type
 			' . $hostgroup_join . '
 			LEFT JOIN npc_instances i ON s.instance_id = i.instance_id
 			WHERE ' . $where,
@@ -223,11 +223,12 @@ class NpcServicesController extends Controller {
 				o.name1 AS host_name,
 				o.name2 AS service_description,
 				sg.local_graph_id,
-				ss.*
+				ss.*,
+				CASE WHEN ss.has_been_checked = 0 THEN -1 ELSE ss.current_state END AS current_state
 			FROM npc_servicestatus ss
 			LEFT JOIN npc_objects o ON ss.service_object_id = o.object_id
 			LEFT JOIN npc_services s ON ss.service_object_id = s.service_object_id
-			LEFT JOIN npc_hosts h ON s.host_object_id = h.host_object_id
+			LEFT JOIN npc_hosts h ON s.host_object_id = h.host_object_id AND h.config_type = s.config_type
 			' . $hostgroup_join . '
 			LEFT JOIN npc_instances i ON s.instance_id = i.instance_id
 			LEFT JOIN npc_service_graphs sg ON ss.service_object_id = sg.service_object_id
@@ -283,7 +284,7 @@ class NpcServicesController extends Controller {
 	function listServicesCli($host = null) {
 		$sql = 'SELECT s.*, h.display_name AS host, i.instance_name AS instance
 			FROM npc_services s
-			LEFT JOIN npc_hosts h ON s.host_object_id = h.host_object_id
+			LEFT JOIN npc_hosts h ON s.host_object_id = h.host_object_id AND h.config_type = s.config_type
 			LEFT JOIN npc_instances i ON s.instance_id = i.instance_id';
 
 		if ($host) {

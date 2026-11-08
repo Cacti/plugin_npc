@@ -34,7 +34,7 @@ it('refuses to create a data input method without the data input realm', functio
 });
 
 it('reads the stored perfdata for the plain object id and adds one output field per label', function () {
-	$GLOBALS['__test_db_results']['db_fetch_assoc_prepared']['FROM npc_hostchecks'] = array(array('perfdata' => 'rta=0.5ms;100;200;0;10;pl=0%'));
+	$GLOBALS['__test_db_results']['db_fetch_assoc_prepared']['FROM npc_hostchecks'] = array(array('perfdata' => 'rta=0.5ms;100;200;0;10 pl=0%'));
 
 	$out = json_decode((new NpcCactiController())->addDataInputMethod(array('host' => 'web1', 'object_id' => '12')), true);
 

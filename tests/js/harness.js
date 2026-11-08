@@ -90,11 +90,19 @@ function load(options) {
 	}
 
 	jq.getJSON = function(url, params, callback) {
-		env.requests.push({method: 'GET', params});
+		const request = {method: 'GET', params, aborted: false};
+		let done = false;
+		let complete = () => {};
+		request.resolve = function(data) { callback(data); done = true; complete(); };
+		request.reject = function() { done = true; complete(); };
+		request.abort = function() { request.aborted = true; request.reject(); };
+		request.always = function(fn) { complete = fn; if (done) { fn(); } return request; };
+		env.requests.push(request);
 		const key = params.module + '/' + params.action;
-		if (opts.responses && key in opts.responses) {
-			callback(opts.responses[key]);
+		if (!opts.defer && opts.responses && key in opts.responses) {
+			request.resolve(opts.responses[key]);
 		}
+		return request;
 	};
 
 	jq.post = function(url, params, callback) {
@@ -123,8 +131,10 @@ function load(options) {
 			return {text};
 		}
 	};
-	global.setInterval = () => 1;
-	global.clearInterval = () => {};
+	env.timers = new Map();
+	let timer = 0;
+	global.setInterval = fn => { env.timers.set(++timer, fn); return timer; };
+	global.clearInterval = id => env.timers.delete(id);
 	global.confirm = () => true;
 	global.alert = (message) => {
 		env.alerts.push(message);

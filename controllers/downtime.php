@@ -70,17 +70,13 @@ class NpcDowntimeController extends Controller {
      * @return boolean
      */
     function inDowntime($id) {
-        $results = $this->scheduledDowntime($id);
-	$now = date('U');
+        $depth = db_fetch_cell_prepared('SELECT MAX(depth) FROM (
+            SELECT scheduled_downtime_depth AS depth FROM npc_hoststatus WHERE host_object_id = ?
+            UNION ALL
+            SELECT scheduled_downtime_depth AS depth FROM npc_servicestatus WHERE service_object_id = ?
+        ) AS status', array($id, $id));
 
-	$start = isset($results[0]['scheduled_start_time']) ? strtotime($results[0]['scheduled_start_time']) : null;
-	$end = isset($results[0]['scheduled_end_time']) ? strtotime($results[0]['scheduled_end_time']) : null;
-
-	if ($now > $start && $now < $end) {
-        	return(1);
-	}
-
-	return(0);
+        return $depth > 0 ? 1 : 0;
     }
 
     /**

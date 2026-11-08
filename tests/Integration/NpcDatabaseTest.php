@@ -261,3 +261,94 @@ it('runs the upgrade against the real tables when the stored version is old', fu
 	expect(is_dir($realTests))->toBeTrue();
 	expect(is_dir(dirname(__DIR__) . '/Integration'))->toBeTrue();
 });
+
+/** Insert one host and service with both original and retained host configuration. */
+function npc_algorithm_fixture($pdo, $checked = 1) {
+	npc_db_insert($pdo, 'instance', [199, 'algorithm-test']);
+	npc_db_insert($pdo, 'object', [19900, 199, 1, 'algorithm-host', '']);
+	npc_db_insert($pdo, 'object', [19901, 199, 2, 'algorithm-host', 'Load']);
+	npc_db_insert($pdo, 'host', [199, 0, 19900, 'original']);
+	npc_db_insert($pdo, 'host', [199, 1, 19900, 'retained']);
+	npc_db_insert($pdo, 'service', [199, 1, 19900, 19901]);
+	$pdo->prepare('INSERT INTO npc_hoststatus (instance_id, host_object_id, current_state, has_been_checked) VALUES (199, 19900, 0, ?)')->execute([$checked]);
+	$pdo->prepare('INSERT INTO npc_servicestatus (instance_id, service_object_id, current_state, has_been_checked) VALUES (199, 19901, 0, ?)')->execute([$checked]);
+}
+
+it('shows unchecked objects as pending in summaries and listing filters', function () {
+	npc_algorithm_fixture($GLOBALS['npc_db'], 0);
+	foreach ([NpcHostsController::class => ['hosts', 'up'], NpcServicesController::class => ['services', 'ok']] as $class => [$method, $healthy]) {
+		$controller = new $class();
+		$summary = json_decode($controller->summary(), true)['data'][0];
+		expect($summary['pending'])->toBe(1);
+		expect($summary[$healthy])->toBe(0);
+		$controller->state = 'pending';
+		$rows = $controller->$method();
+		expect($rows)->toHaveCount(1);
+		expect((int) $rows[0]['current_state'])->toBe(-1);
+		$controller->state = $healthy;
+		expect($controller->$method())->toBe([]);
+	}
+});
+
+it('lists a service once with the selected host configuration', function () {
+	npc_algorithm_fixture($GLOBALS['npc_db']);
+	$controller = new NpcServicesController();
+	$rows = $controller->services();
+	expect($rows)->toHaveCount(1);
+	expect((int) $controller->numRecords)->toBe(1);
+	expect($rows[0]['host_alias'])->toBe('retained');
+	expect((int) $rows[0]['current_state'])->toBe(0);
+});
+
+it('retains flat hostgroup and servicegroup membership and pending states', function () {
+	$pdo = $GLOBALS['npc_db'];
+	npc_algorithm_fixture($pdo, 0);
+	npc_test_load(dirname(__DIR__, 2) . '/controllers/hostgroups.php');
+	npc_test_load(dirname(__DIR__, 2) . '/controllers/servicegroups.php');
+	npc_db_insert($pdo, 'object', [19902, 199, 3, 'host-group', '']);
+	npc_db_insert($pdo, 'hostgroup', [19902, 199, 1, 19902, 'host-group']);
+	npc_db_insert($pdo, 'hostgroup_member', [199, 19902, 19900]);
+	npc_db_insert($pdo, 'object', [19903, 199, 4, 'service-group', '']);
+	$pdo->exec("INSERT INTO npc_servicegroups (servicegroup_id, instance_id, config_type, servicegroup_object_id, alias) VALUES (19903, 199, 1, 19903, 'service-group')");
+	$pdo->exec('INSERT INTO npc_servicegroup_members (instance_id, servicegroup_id, service_object_id) VALUES (199, 19903, 19901)');
+	$hosts = new NpcHostgroupsController();
+	$services = new NpcServicegroupsController();
+	$pdo->exec("UPDATE npc_hosts SET display_name = 'algorithm-host' WHERE host_object_id = 19900");
+	expect($services->getServicegroupMemberHoststatus('algorithm-host'))->toBe(-1);
+	expect($hosts->setupResultsArray())->toHaveCount(1);
+	expect($services->setupResultsArray())->toHaveCount(1);
+	expect(json_decode($hosts->getHostgroupHostStatus(), true)['response']['value']['items'][0]['pending'])->toBe(1);
+	expect(json_decode($hosts->getHostgroupServiceStatus(), true)['response']['value']['items'][0]['pending'])->toBe(1);
+	expect(json_decode($services->getServicegroupServiceStatus(), true)['response']['value']['items'][0]['pending'])->toBe(1);
+});
+
+it('uses active Nagios downtime depth regardless of future or flexible schedules', function () {
+	$pdo = $GLOBALS['npc_db'];
+	npc_algorithm_fixture($pdo);
+	$pdo->exec('INSERT INTO npc_scheduleddowntime (instance_id, object_id, internal_downtime_id, scheduled_start_time, scheduled_end_time) VALUES (199, 19901, 1, NOW() - INTERVAL 1 HOUR, NOW() + INTERVAL 1 HOUR), (199, 19901, 2, NOW() + INTERVAL 1 DAY, NOW() + INTERVAL 2 DAY)');
+	$controller = new NpcDowntimeController();
+	// An eligible flexible window has not necessarily started.
+	expect($controller->inDowntime(19901))->toBe(0);
+	$pdo->exec('UPDATE npc_servicestatus SET scheduled_downtime_depth = 2 WHERE service_object_id = 19901');
+	expect($controller->inDowntime(19901))->toBe(1);
+	$response = json_decode((new NpcServicesController())->getServices(), true);
+	expect($response['response']['value']['items'][0]['in_downtime'])->toBe(1);
+	$pdo->exec('UPDATE npc_hoststatus SET scheduled_downtime_depth = 1 WHERE host_object_id = 19900');
+	expect($controller->inDowntime(19900))->toBe(1);
+	expect($controller->inDowntime(19999))->toBe(0);
+});
+
+it('batches comment metadata without changing newest comment selection', function () {
+	$pdo = $GLOBALS['npc_db'];
+	npc_algorithm_fixture($pdo);
+	$insert = $pdo->prepare('INSERT INTO npc_comments (instance_id, object_id, comment_type, entry_type, internal_comment_id, comment_time, entry_time, author_name, comment_data) VALUES (199, 19901, 2, ?, ?, ?, ?, ?, ?)');
+	foreach ([[1, 1, '2026-01-01 00:00:00', 'old'], [1, 2, '2026-01-02 00:00:00', 'latest'], [4, 3, '2026-01-03 00:00:00', 'ack']] as [$type, $id, $date, $text]) {
+		$insert->execute([$type, $id, $date, $date, 'operator', $text]);
+	}
+	$pdo->exec('UPDATE npc_servicestatus SET problem_has_been_acknowledged = 1 WHERE service_object_id = 19901');
+	$GLOBALS['__test_db_fetch_log'] = [];
+	$response = json_decode((new NpcServicesController())->getServices(), true)['response']['value'];
+	expect($response['items'][0]['comment'])->toBe('operator*|*latest');
+	expect($response['items'][0]['acknowledgement'])->toBe('operator*|*ack');
+	expect($GLOBALS['__test_db_fetch_log'])->toHaveCount(3);
+});

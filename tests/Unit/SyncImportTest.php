@@ -124,14 +124,14 @@ it('builds the address cache as JSON from Cacti devices', function () {
 	$file               = $base . '/cache/npc_address_cache.json';
 
 	expect($found)->toBe(4);
-	expect(json_decode(file_get_contents($file), true))->toBe(array('key' => 'k1', 'hosts' => array('127.0.0.1' => 4)));
+	expect(json_decode(file_get_contents($file), true))->toBe(array('version' => 2, 'key' => 'k1', 'hosts' => array('127.0.0.1' => 4)));
 	expect(substr(sprintf('%o', fileperms($file)), -4))->toBe('0600');
 	expect(glob($base . '/cache/*'))->toBe(array($file));
 });
 
 it('answers from a current cache without reading the device list', function () {
 	list($found) = npc_sync_cache_run('10.0.0.1', 'k1', function ($file) {
-		file_put_contents($file, json_encode(array('key' => 'k1', 'hosts' => array('10.0.0.1' => 7))));
+		file_put_contents($file, json_encode(array('version' => 2, 'key' => 'k1', 'hosts' => array('10.0.0.1' => 7))));
 	});
 
 	expect($found)->toBe(7);
@@ -305,7 +305,7 @@ it('does not map a host when the import prints a malformed device id', function 
 
 it('answers an unknown address with null from a current cache', function () {
 	list($found) = npc_sync_cache_run('203.0.113.9', 'k1', function ($file) {
-		file_put_contents($file, json_encode(array('key' => 'k1', 'hosts' => array('10.0.0.1' => 7))));
+		file_put_contents($file, json_encode(array('version' => 2, 'key' => 'k1', 'hosts' => array('10.0.0.1' => 7))));
 	});
 
 	expect($found)->toBeNull();
@@ -323,3 +323,12 @@ it('reports a selection that is not a JSON object', function (string $data) {
 	'a JSON list'   => array('["web servers"]'),
 	'empty string'  => array(''),
 ));
+
+it('does not create or map a device when the address match is ambiguous', function () {
+	$controller = new class extends NpcSyncController {
+		function checkHostExists($ip, $cache_id) { return false; }
+	};
+	$result = $controller->import(npc_sync_params('/nonexistent'));
+	expect($result)->toContain('|0|0|The address matches more than one Cacti device');
+	expect($GLOBALS['__test_db_calls'])->toBe([]);
+});

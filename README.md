@@ -46,6 +46,12 @@ not implemented in this version.
 Importing Nagios hosts into Cacti (N2C) and per user screen layouts have server
 side code but no screen, so neither can be used from the interface.
 
+Unchecked hosts and services are shown as pending. Active downtime comes from
+Nagios's status depth, so future schedules do not hide maintenance already in
+progress and an untriggered flexible window is not shown as active downtime.
+Host imports preserve IPv6 interface zones and reject addresses that identify
+multiple Cacti devices. Existing address caches rebuild once for this change.
+
 ## Usage
 
 With the exception of some installation notes documentation is very slim. Watch
@@ -211,9 +217,11 @@ example `php <path_cacti>/plugins/npc/perfdata.php --type=service --id=<service
 object id>`. It prints the numeric performance values of the newest stored
 service check as `label:value` pairs separated by spaces, which is the form a
 Cacti script data input method reads. A service can also be selected with
-`--host=<host name> --service=<service description>`. For a host
-(`--type=host`) the output comes from the first stored check row, not the
-newest. An entry such as `load15=U` adds a stray ` : ` to the output.
+`--host=<host name> --service=<service description>`. Host checks (`--type=host`) also use the newest stored check. Unknown values
+such as `load15=U` are omitted from poller output. Quoted labels are supported;
+spaces and colons in labels become underscores in both generated fields and
+poller output. Labels that collide after normalization are omitted rather than
+assigning one metric's value to another field.
 
 Options of `perfdata.php`:
 

@@ -106,18 +106,12 @@ class NpcCactiController extends Controller {
         $obj = new $class;
         $results = $obj->getPerfData($object_id);
 
-        $perfParts = explode(';', isset($results[0]['perfdata']) ? $results[0]['perfdata'] : '');
-
-        foreach ($perfParts as $perf) {
-            if (preg_match('/=/', $perf)) {
-                $ds = explode('=', $perf);
-
-                db_execute_prepared('INSERT INTO data_input_fields
-					(hash, data_input_id, name, data_name, input_output, update_rra, sequence)
-					VALUES (?, ?, ?, ?, "out", "on", 0)',
-					array($this->generateHash(), $data_input_id, $ds[0], $ds[0]));
-			}
-		}
+        foreach ($this->parsePerfdata($results[0]['perfdata'] ?? '') as $field => $metric) {
+            db_execute_prepared('INSERT INTO data_input_fields
+                (hash, data_input_id, name, data_name, input_output, update_rra, sequence)
+                VALUES (?, ?, ?, ?, "out", "on", 0)',
+                array($this->generateHash(), $data_input_id, $metric['label'], $field));
+        }
 
 		return(json_encode(array('success' => true)));
 	}

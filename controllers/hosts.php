@@ -19,12 +19,13 @@ class NpcHostsController extends Controller {
 
 		$comments = new NpcCommentsController;
 		$hosts = $this->flattenArray($results);
+		$latest = $comments->getLatestForObjects(array_column($hosts, 'host_object_id'));
 
 		for ($i = 0; $i < count($hosts); $i++) {
 			if ($hosts[$i]['problem_has_been_acknowledged']) {
-				$hosts[$i]['acknowledgement'] = $comments->getAck($hosts[$i]['host_object_id']);
+				$hosts[$i]['acknowledgement'] = $latest[$hosts[$i]['host_object_id']]['acknowledgement'] ?? 0;
 			}
-			$hosts[$i]['comment'] = $comments->getLastComment($hosts[$i]['host_object_id']);
+			$hosts[$i]['comment'] = $latest[$hosts[$i]['host_object_id']]['comment'] ?? 0;
 
 			$services = 0;
 			foreach ($hosts[$i] as $k => $v) {
@@ -84,7 +85,7 @@ class NpcHostsController extends Controller {
 			'pending'     => 0
 		);
 
-		$hosts = db_fetch_assoc_prepared('SELECT hs.current_state
+		$hosts = db_fetch_assoc_prepared('SELECT CASE WHEN hs.has_been_checked = 0 THEN -1 ELSE hs.current_state END AS current_state
 			FROM npc_hoststatus hs
 			LEFT JOIN npc_hosts h ON hs.host_object_id = h.host_object_id
 			WHERE h.config_type = ?',
@@ -122,7 +123,7 @@ class NpcHostsController extends Controller {
 		/* State filter */
 		$states = $this->stringToState[$this->state];
 		$state_list = implode(',', array_map('intval', explode(',', $states)));
-		$where .= 'hs.current_state IN (' . $state_list . ')';
+		$where .= 'CASE WHEN hs.has_been_checked = 0 THEN -1 ELSE hs.current_state END IN (' . $state_list . ')';
 		$where .= ' AND h.config_type = ?';
 		$params[] = $this->config_type;
 
@@ -170,7 +171,8 @@ class NpcHostsController extends Controller {
 				h.icon_image,
 				h.icon_image_alt,
 				hg.local_graph_id,
-				hs.*
+				hs.*,
+				CASE WHEN hs.has_been_checked = 0 THEN -1 ELSE hs.current_state END AS current_state
 			FROM npc_hoststatus hs
 			LEFT JOIN npc_objects o ON hs.host_object_id = o.object_id
 			LEFT JOIN npc_hosts h ON hs.host_object_id = h.host_object_id

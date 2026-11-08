@@ -298,17 +298,42 @@ class Controller {
     function perfdataOutput($perfdata) {
         $output = '';
 
-        foreach (explode(' ', (string) $perfdata) as $perf) {
-            if (preg_match('/(\S+)=([-+]?[0-9]*\.?[0-9]+)/', $perf, $matches)) {
-                if (preg_match('/^iso./', $matches[1])) {
-                    $matches[1] = 'output';
-                }
-
-                $output .= $matches[1] . ':' . $matches[2] . ' ';
+        foreach ($this->parsePerfdata($perfdata) as $field => $metric) {
+            if ($metric['value'] !== 'U') {
+                $output .= $field . ':' . $metric['value'] . ' ';
             }
         }
 
         return $output;
+    }
+
+    /**
+     * Parse Nagios metrics once for both field creation and poller output.
+     *
+     * @param string|null $perfdata Raw Nagios performance data.
+     *
+     * @return array Metrics indexed by their Cacti output field name.
+     */
+    function parsePerfdata($perfdata) {
+        $metrics = array();
+        $ambiguous = array();
+        preg_match_all("/(?:^|\\s)(?:'((?:[^']|'')*)'|([^\\s'=]+))=(U|[-+]?(?:[0-9]+(?:\\.[0-9]*)?|\\.[0-9]+))[a-zA-Z%]*(?:;[^\\s]*)?(?=\\s|$)/", (string) $perfdata, $matches, PREG_SET_ORDER);
+
+        foreach ($matches as $match) {
+            $label = $match[1] !== '' ? str_replace("''", "'", $match[1]) : $match[2];
+            $field = preg_match('/^iso\\./', $label) ? 'output' : preg_replace('/[\\s:]+/', '_', $label);
+
+            // Do not silently attach one metric's value to another label.
+            if (isset($ambiguous[$field]) || isset($metrics[$field])) {
+                unset($metrics[$field]);
+                $ambiguous[$field] = true;
+                continue;
+            }
+
+            $metrics[$field] = array('label' => $label, 'value' => $match[3]);
+        }
+
+        return $metrics;
     }
 
     function jsonOutput($results=array()) {
