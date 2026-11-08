@@ -11,6 +11,7 @@
 * issue: Ignore obsolete refresh responses and avoid overlapping dashboard requests
 * issue: Batch host and service comment lookups; service pages read downtime from status
 
+* dev: Run the CI poller with the shared runner group so RRD files and structured directories pass permission verification
 * issue: Rewrite the README to match the code: the screens and settings that exist,
   the realms, the requirements, install, upgrade and uninstall behaviour, the
   command line scripts, the translation workflow and the test commands; add a
