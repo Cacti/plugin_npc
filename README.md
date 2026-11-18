@@ -105,7 +105,8 @@ Below are the minimum requirements:
 
 - Cacti 1.2.1 or later in the 1.2 series (`compat` in the `INFO` file). The
   CI workflow tests against the Cacti 1.2.x branch only.
-- PHP 8.2 or later. The CI workflow runs PHP 8.2, 8.3 and 8.4.
+- PHP 8.2 or later. The CI workflow runs PHP 8.2 through 8.5 and includes a
+  non-blocking PHP 8.6 experimental job.
 - MySQL or MariaDB, as required by Cacti.
 - NDOUtils 1.4b7
 - Nagios 3.x
