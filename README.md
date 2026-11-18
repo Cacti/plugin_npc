@@ -8,14 +8,29 @@ will provide a single point of access for trending and alert monitoring.
 you should be using it in a non-production setup until further migration testing
 has been performed by the Cacti community.
 
+## Versions and compatibility
+
+This README describes the `develop` source branch.
+
+| Code | Plugin version | Minimum Cacti declared in `INFO` |
+| --- | --- | --- |
+| [Source branch](INFO) | 3.1 | 1.2.1 |
+
+No GitHub release is published for this repository. The source version above
+is not a published-release designation. Follow the development caveats and
+requirements in this README before deployment.
+
+Install this plugin in **`<cacti-root>/plugins/npc`**, using the directory
+name `npc` rather than `plugin_npc`.
+
+See [CHANGELOG.md](CHANGELOG.md) for the version history.
+
 ## Status
 
-**Known issue:** `npc.php` does not load the base controller class
-(`controllers/controller.php`), so opening NPC from the console tab ends in a
-fatal error (`Class "Controller" not found`). Cacti then disables the plugin
-and it has to be enabled again under Console > Configuration > Plugins. The
-settings tab, the device Nagios host mapping and the command line scripts do
-not go through `npc.php` and are not affected.
+The earlier missing-base-controller problem is fixed in this branch:
+`npc.php` loads `controllers/controller.php` before loading the selected module.
+The non-production warning above still applies; this correction is not a claim
+that every legacy workflow has been validated.
 
 The screens, settings and scripts described below are what the code provides.
 Anything that was part of the original ExtJS plugin and is not listed here is

@@ -1,5 +1,8 @@
 ## Changelog
 
+Documentation update (unreleased): Refresh README release/source compatibility,
+installation guidance and source-checked behavior.
+
 --- develop ---
 
 * issue: Classify unchecked objects as pending, read active downtime from Nagios
