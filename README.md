@@ -14,7 +14,7 @@ This README describes the `develop` source branch.
 
 | Code | Plugin version | Minimum Cacti declared in `INFO` |
 | --- | --- | --- |
-| [Source branch](INFO) | 3.1 | 1.2.1 |
+| [Source branch](https://github.com/Cacti/plugin_npc/blob/develop/INFO) | 3.1 | 1.2.1 |
 
 No GitHub release is published for this repository. The source version above
 is not a published-release designation. Follow the development caveats and
@@ -23,7 +23,7 @@ requirements in this README before deployment.
 Install this plugin in **`<cacti-root>/plugins/npc`**, using the directory
 name `npc` rather than `plugin_npc`.
 
-See [CHANGELOG.md](CHANGELOG.md) for the version history.
+See [CHANGELOG.md](https://github.com/Cacti/plugin_npc/blob/develop/CHANGELOG.md) for the version history.
 
 ## Status
 
