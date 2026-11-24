@@ -19,10 +19,9 @@ msgstr ""
 "X-Generator: Weblate 4.8.1\n"
 
 #: controllers/cacti.php
-#, fuzzy
 #| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "У вас нет разрешения на выполнение этой команды."
+msgstr "У вас нет прав на создание методов ввода данных."
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -34,47 +33,44 @@ msgid "An error occurred in %s. See error logs for detail."
 msgstr "Произошла ошибка в %s. См. Подробности в журналах ошибок."
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
-#, fuzzy
 msgid "No"
 msgstr "Нет"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr ""
+msgstr "Н/Д"
 
 #: controllers/layout.php
 msgid "Dashboard"
-msgstr ""
+msgstr "Дашборд"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "Иконки хоста"
+msgstr "Хосты"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "Иконки сервисов"
+msgstr "Сервисы"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "Комментарии"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "Время простоя"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "Журнал событий"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "Информация о процессе"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -105,25 +101,24 @@ msgid "Host Check Latency"
 msgstr "Задержка проверки хоста"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "Иконки хоста"
+msgstr "Группы хостов"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "Запрошен недопустимый модуль."
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "Запрошено недопустимое действие."
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "Для этого действия требуется POST-запрос."
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "Контроллер не найден."
 
 #: setup.php
 msgid "ERROR - Log errors only"

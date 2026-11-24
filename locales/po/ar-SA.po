@@ -18,10 +18,9 @@ msgstr ""
 "X-Generator: Poedit 3.4.4\n"
 
 #: controllers/cacti.php
-#, fuzzy
 #| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "ليس لديك إذن بتنفيذ هذا الأمر."
+msgstr "ليس لديك إذن لإنشاء طرق إدخال البيانات."
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -33,47 +32,44 @@ msgid "An error occurred in %s. See error logs for detail."
 msgstr "حدث خطأ في %s. انظر سجلات الخطأ لمزيد من التفاصيل."
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
-#, fuzzy
 msgid "No"
-msgstr "لا شيء"
+msgstr "لا"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
 msgid "Yes"
-msgstr ""
+msgstr "نعم"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #: controllers/layout.php
 msgid "Dashboard"
-msgstr ""
+msgstr "لوحة التحكم"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "أيقونات المضيف"
+msgstr "المضيفون"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "أيقونات الخدمة"
+msgstr "الخدمات"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "التعليقات"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "وقت التوقف"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "سجل الأحداث"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "معلومات العملية"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -104,25 +100,24 @@ msgid "Host Check Latency"
 msgstr "المضيف تحقق من وقت الاستجابة"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "أيقونات المضيف"
+msgstr "مجموعات المضيفين"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "تم طلب وحدة نمطية غير صالحة."
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "تم طلب إجراء غير صالح."
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "يتطلب هذا الإجراء طلب POST."
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "لم يتم العثور على وحدة التحكم (Controller)."
 
 #: setup.php
 msgid "ERROR - Log errors only"
@@ -250,7 +245,7 @@ msgstr "مستوى التسجيل"
 
 #: setup.php
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr "مستوى التفاصيل الذي تريد إرساله إلى ملف سجل Cacti. تحذير: ترك في DEBUG سيملأ سجل الصبار بسرعة."
+msgstr "مستوى التفاصيل المراد إرساله إلى ملف سجل Cacti. تحذير: تركه على وضع DEBUG سيملأ سجل Cacti بسرعة."
 
 #~ msgid "FATAL: Unable to make NPC Connection"
 #~ msgstr "FATAL: تعذر إجراء اتصال NPC"

@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-24 23:00+0000\n"
+"Last-Translator: Thomas Vincent <thomasvincent@gmail.com>\n"
+"Language-Team: Ukrainian\n"
+"Language: uk-UA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "У вас немає прав для створення методів введення даних."
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "Немає"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "Виникла помилка у %s. Докладніше див. у журналах помилок."
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "Ні"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "Так"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "(відсутній)"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "Інформаційна панель"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "Хости"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "Сервіси"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "Коментарі"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "Час простою"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "Журнал подій"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "Інформація про процес"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "У вас немає прав для виконання цієї команди."
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "Віддалені команди мають бути увімкнені в розділі Консоль->Налаштування->NPC"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "Шлях до командного файлу Nagios має бути вказано у розділі Console->Settings->NPC"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "Час виконання перевірки сервісу"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "Затримка перевірки сервісу"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "Час виконання перевірки хоста"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "Затримка перевірки хоста"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "Групи хостів"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "Запитано неприпустимий модуль."
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "Запитано неприпустиму дію."
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "Ця дія вимагає POST-запиту."
+
+#: npc.php
+msgid "Controller not found."
+msgstr "Контролер не знайдено."
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "ERROR — записувати до журналу лише помилки"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "WARN  - Журналювати помилки та попередження"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO  - Записувати в журнал помилки, попередження та інформаційні повідомлення"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG — журналювати все"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "Зіставлення хостів Nagios"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "Виберіть хост Nagios, який відповідає цьому хосту."
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "Деталі статусу"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "Інформація про сервіс / хост"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "Виконання команд"
+
+#: setup.php
+msgid "General Settings"
+msgstr "Загальні налаштування"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "Віддалені команди"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "Дозволити запис команд у файл команд Nagios."
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "Шлях до командного файлу Nagios"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "Шлях до файлу команд Nagios (nagios.cmd)."
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "URL-адреса Nagios"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "Повна URL-адреса вашої інсталяції Nagios (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "Формат дати"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "Виберіть потрібний формат відображення дат."
+
+#: setup.php
+msgid "Time Format"
+msgstr "Формат часу"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "Виберіть потрібний формат відображення часу."
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "Частота оновлення портлета"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "Час очікування в секундах перед оновленням портлетів. Мінімальне значення — 30 секунд."
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "Тип конфігурації хоста/служби"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "Тип конфігурації залежить від того, чи відновлюєте ви збережену інформацію під час запуску Nagios. Якщо ви не впевнені, залиште значення за замовчуванням. Якщо ви бачите групи вузлів і сервісів, але не бачите самі вузли чи сервіси, спробуйте змінити цей параметр."
+
+#: setup.php
+msgid "Host Icons"
+msgstr "Значки хостів"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "Увімкнути відображення значків хостів у таблиці хостів. Для задання зображення використовуються параметри icon_image та icon_image_alt визначення хоста Nagios. Для найкращого вигляду значки мають бути розміром 16x16. Цей параметр не впливає на значки стану хоста."
+
+#: setup.php
+msgid "Service Icons"
+msgstr "Піктограми сервісів"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "Увімкнути відображення значків сервісів у таблиці сервісів. Для задання зображення використовуються параметри icon_image та icon_image_alt визначення сервісу Nagios. Для найкращого вигляду значки мають бути розміром 16x16. Цей параметр не впливає на значки стану сервісу."
+
+#: setup.php
+msgid "Logging"
+msgstr "Ведення журналу подій"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "Рівень журналювання"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "Рівень деталізації повідомлень, що записуються до файлу журналу Cacti. УВАГА: увімкнений режим DEBUG швидко переповнить журнал Cacti."
+

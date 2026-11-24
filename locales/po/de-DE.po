@@ -18,10 +18,9 @@ msgstr ""
 "X-Generator: Poedit 3.4.4\n"
 
 #: controllers/cacti.php
-#, fuzzy
 #| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "Sie haben keine Berechtigung, diesen Befehl auszuführen."
+msgstr "Sie haben keine Berechtigung, Dateneingabemethoden zu erstellen."
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -33,47 +32,44 @@ msgid "An error occurred in %s. See error logs for detail."
 msgstr "In %s ist ein Fehler aufgetreten. Einzelheiten finden Sie in den Fehlerprotokollen."
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
-#, fuzzy
 msgid "No"
-msgstr "Nichts"
+msgstr "Nein"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr ""
+msgstr "Nicht verfügbar"
 
 #: controllers/layout.php
 msgid "Dashboard"
-msgstr ""
+msgstr "Dashboard"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "Host-Symbole"
+msgstr "Hosts"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "Service-Symbole"
+msgstr "Dienste"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "Kommentare"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "Ausfallzeit"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "Ereignisprotokoll"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "Prozessinfo"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -104,25 +100,24 @@ msgid "Host Check Latency"
 msgstr "Host Check Latenz"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "Host-Symbole"
+msgstr "Hostgruppen"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "Ungültiges Modul angefordert."
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "Ungültige Aktion angefordert."
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "Diese Aktion erfordert eine POST-Anfrage."
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "Controller nicht gefunden."
 
 #: setup.php
 msgid "ERROR - Log errors only"
@@ -250,7 +245,7 @@ msgstr "Protokollierungsstufe"
 
 #: setup.php
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr "Der Detaillierungsgrad, den Sie an die Cacti-Protokolldatei senden möchten. WARNUNG: Wenn Sie DEBUG verlassen, wird das Kakteenprotokoll schnell gefüllt."
+msgstr "Der Detailgrad, der in die Cacti-Protokolldatei geschrieben werden soll. WARNUNG: Bei aktiviertem DEBUG füllt sich das Cacti-Protokoll schnell."
 
 #~ msgid "FATAL: Unable to make NPC Connection"
 #~ msgstr "FATAL: NPC-Verbindung kann nicht hergestellt werden"

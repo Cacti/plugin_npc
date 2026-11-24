@@ -18,10 +18,9 @@ msgstr ""
 "X-Generator: Poedit 3.4.4\n"
 
 #: controllers/cacti.php
-#, fuzzy
 #| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "आपके पास इस आदेश को निष्पादित करने की अनुमति नहीं है।"
+msgstr "आपके पास डेटा इनपुट विधियाँ बनाने की अनुमति नहीं है।"
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -33,47 +32,44 @@ msgid "An error occurred in %s. See error logs for detail."
 msgstr "%s में एक त्रुटि हुई। विस्तार के लिए त्रुटि लॉग देखें।"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
-#, fuzzy
 msgid "No"
-msgstr "कोई नहीं"
+msgstr "नहीं"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
 msgid "Yes"
-msgstr ""
+msgstr "हाँ"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr ""
+msgstr "लागू नहीं"
 
 #: controllers/layout.php
 msgid "Dashboard"
-msgstr ""
+msgstr "डैशबोर्ड"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "होस्ट प्रतीक"
+msgstr "होस्ट"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "सेवा प्रतीक"
+msgstr "सेवाएँ"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "टिप्पणि"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "डाउनटाइम"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "ईवेंट लॉग"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "प्रक्रिया जानकारी"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -104,25 +100,24 @@ msgid "Host Check Latency"
 msgstr "होस्ट चेक लेटेंसी"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "होस्ट प्रतीक"
+msgstr "होस्ट समूह"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "अमान्य मॉड्यूल का अनुरोध किया गया।"
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "अमान्य कार्रवाई का अनुरोध किया गया।"
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "इस कार्रवाई के लिए POST अनुरोध आवश्यक है।"
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "नियंत्रक (Controller) नहीं मिला।"
 
 #: setup.php
 msgid "ERROR - Log errors only"
@@ -194,7 +189,7 @@ msgstr "आपके Nagios स्थापना का पूरा URL (http:
 
 #: setup.php
 msgid "Date Format"
-msgstr "डेटा प्रारूप"
+msgstr "दिनांक प्रारूप"
 
 #: setup.php
 msgid "Select the format you want for displaying dates."
@@ -242,7 +237,7 @@ msgstr "सेवा ग्रिड में सेवा आइकन प्�
 
 #: setup.php
 msgid "Logging"
-msgstr "लॉग कीता जा करदा ऐ"
+msgstr "लॉगिंग"
 
 #: setup.php
 msgid "Logging Level"
