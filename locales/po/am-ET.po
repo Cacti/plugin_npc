@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-24 19:00+0000\n"
+"Last-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\n"
+"Language-Team: Amharic\n"
+"Language: am-ET\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "የውሂብ ግብዓት ዘዴዎችን ለመፍጠር ፈቃድ የለዎትም።"
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "ምንም"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "በ%s ውስጥ ስህተት ተከስቷል። ለዝርዝሩ የስህተት ምዝግብ ማስታወሻዎችን ይመልከቱ።"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "አይ"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "አዎ"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "አይመለከትም"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "ዳሽቦርድ"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "አስተናጋጆች"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "አገልግሎቶች"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "አስተያየቶች"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "የተቋረጠበት ጊዜ"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "የክስተት ምዝግብ ማስታወሻ"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "የሂደት መረጃ"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "ይህን ትዕዛዝ ለማስፈጸም ፈቃድ የለዎትም።"
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "የርቀት ትዕዛዞች በconsole->ቅንብሮች->NPC ስር መንቃት አለባቸው"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "የNagios ትዕዛዝ ፋይል ዱካ በconsole->ቅንብሮች->NPC ስር መዘጋጀት አለበት"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "የአገልግሎት ፍተሻ አፈጻጸም ጊዜ"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "የአገልግሎት ፍተሻ መዘግየት"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "የአስተናጋጅ ፍተሻ የማስፈጸሚያ ጊዜ"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "የአስተናጋጅ ፍተሻ መዘግየት"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "የአስተናጋጅ ቡድኖች"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "ልክ ያልሆነ ሞጁል ተጠይቋል።"
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "ልክ ያልሆነ ድርጊት ተጠይቋል።"
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "ይህ እርምጃ የPOST ጥያቄን ይፈልጋል።"
+
+#: npc.php
+msgid "Controller not found."
+msgstr "ተቆጣጣሪ አልተገኘም።"
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "ስህተት - ስህተቶችን ብቻ መዝግብ"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "ማስጠንቀቂያ - ስህተቶችን እና ማስጠንቀቂያዎችን መዝግብ"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO  - ስህተቶችን፣ ማስጠንቀቂያዎችን እና የመረጃ መልዕክቶችን መዝግብ"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG - ሁሉንም ነገር መዝግብ"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "የNagios አስተናጋጅ ማዛመድ"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "ከዚህ አስተናጋጅ ጋር የሚዛመደውን የNagios አስተናጋጅ ይምረጡ።"
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "የሁኔታ ዝርዝር"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "የአገልግሎት / የአስተናጋጅ መረጃ"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "የትእዛዝ አፈጻጸም"
+
+#: setup.php
+msgid "General Settings"
+msgstr "አጠቃላይ ቅንብሮች"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "የርቀት ትዕዛዞች"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "ትዕዛዞች ወደ Nagios የትዕዛዝ ፋይል እንዲጻፉ ፍቀድ።"
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "የNagios ትዕዛዝ ፋይል መንገድ"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "ወደ Nagios የትእዛዝ ፋይል (nagios.cmd) የሚወስደው መንገድ።"
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "የNagios URL"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "የ Nagios ጭነትዎ ሙሉ URL (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "የቀን ቅርጸት"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "ቀናትን ለማሳየት የሚፈልጉትን ቅርጸት ይምረጡ።"
+
+#: setup.php
+msgid "Time Format"
+msgstr "የጊዜ ቅርጸት"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "ሰዓቶችን ለማሳየት የሚፈልጉትን ቅርጸት ይምረጡ።"
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "የፖርትሌት ማደስ ፍጥነት"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "ፖርትሌቶች ከመታደሳቸው በፊት በሰከንዶች የሚጠበቅ የጊዜ መጠን። ዝቅተኛው 30 ሰከንድ ነው።"
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "የአስተናጋጅ/አገልግሎት ውቅር ዓይነት"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "የውቅር ዓይነቱ Nagios ሲጀምር የተያዘ መረጃን ወደነበረበት እየመለሱ መሆን አለመሆንዎ ላይ የተመሰረተ ነው። እርግጠኛ ካልሆኑ ነባሪውን እሴት ይተዉት። የአስተናጋጅ እና የአገልግሎት ቡድኖችን ማየት ከቻሉ ነገር ግን አስተናጋጆችን ወይም አገልግሎቶችን ማየት ካልቻሉ ይህን ቅንብር ለመቀየር ይሞክሩ።"
+
+#: setup.php
+msgid "Host Icons"
+msgstr "የአስተናጋጅ አዶዎች"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "በአስተናጋጆች ፍርግርግ ውስጥ የአስተናጋጅ አዶዎችን ማሳየት አንቃ። ምስሉን ለማዘጋጀት የNagios አስተናጋጅ ትርጉም icon_image እና icon_image_alt መለኪያዎች ጥቅም ላይ ይውላሉ። ምርጡን እይታ ለማግኘት አዶዎች 16x16 መሆን አለባቸው። ይህ ቅንብር በአስተናጋጅ ሁኔታ አዶዎች ላይ ተጽዕኖ አያሳድርም።"
+
+#: setup.php
+msgid "Service Icons"
+msgstr "የአገልግሎት አዶዎች"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "በአገልግሎቶች ፍርግርግ ውስጥ የአገልግሎት አዶዎችን ማሳየት አንቃ። ምስሉን ለማዘጋጀት የNagios አገልግሎት ትርጉም icon_image እና icon_image_alt መለኪያዎች ጥቅም ላይ ይውላሉ። ምርጡን እይታ ለማግኘት አዶዎች 16x16 መሆን አለባቸው። ይህ ቅንብር በአገልግሎት ሁኔታ አዶዎች ላይ ተጽዕኖ አያሳድርም።"
+
+#: setup.php
+msgid "Logging"
+msgstr "ምዝገባ"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "የምዝገባ ደረጃ"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "ወደ Cacti የምዝግብ ማስታወሻ ፋይል እንዲላክ የሚፈልጉት የዝርዝር ደረጃ። ማስጠንቀቂያ፦ በ DEBUG ላይ መተው የ cacti ምዝግብ ማስታወሻን በፍጥነት ይሞላዋል።"
+

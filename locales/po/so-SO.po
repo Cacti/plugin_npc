@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-24 19:00+0000\n"
+"Last-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\n"
+"Language-Team: Somali\n"
+"Language: so-SO\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "Ma lihid ogolaansho aad ku abuurto hababka gelinta xogta."
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "Midna"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "Khalad ayaa ka dhacay %s. Eeg diiwaannada khaladka si aad u hesho faahfaahin."
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "Maya"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "Haa"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "Ma khuseyso"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "Guddiga Xogta"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "Martigeliyayaasha"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "Adeegyada"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "Faallooyin"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "Waqtiga maqnaanshaha"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "Diiwaanka Dhacdooyinka"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "Macluumaadka Habka"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "Ma lihid ogolaansho aad ku fuliso amarkan."
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "Amarrada Fog waa in laga hawlgeliyaa console->Dejinta->NPC"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "Jidka Faylka Amarka Nagios waa in lagu dejiyaa hoosta console->Dejinta->NPC"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "Waqtiga Fulinta Hubinta Adeegga"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "Daahitaanka Hubinta Adeegga"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "Waqtiga Fulinta Hubinta Martigeliyaha"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "Daahitaanka Hubinta Martigeliyaha"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "Kooxaha Martigeliyaha"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "Qayb aan sax ahayn ayaa la codsaday."
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "Ficil aan sax ahayn ayaa la codsaday."
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "Ficilkani wuxuu u baahan yahay codsi POST ah."
+
+#: npc.php
+msgid "Controller not found."
+msgstr "Maamulaha lama helin."
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "CILAD - Diiwaangeli ciladaha keliya"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "DIGNIIN  - Diiwaangeli khaladaadka iyo digniinaha"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO  - Diiwaangeli khaladaadka, digniinaha, iyo farriimaha xogta"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG - Diiwaangeli wax kasta"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "Khariidaynta Martigeliyaha Nagios"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "Dooro Martigeliyaha Nagios ee ku beegan Martigeliyahan."
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "Faahfaahinta Xaaladda"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "Macluumaadka Adeegga / Martigeliyaha"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "Fulinta Amarka"
+
+#: setup.php
+msgid "General Settings"
+msgstr "Dejinta Guud"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "Amarrada Fog"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "U oggolow in amarrada lagu qoro faylka amarka Nagios."
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "Jidka Faylka Amarka Nagios"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "Jidka faylka amarka Nagios (nagios.cmd)."
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "URL-ka Nagios"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "URL-ka buuxa ee rakibiddaada Nagios (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "Qaabka Taariikhda"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "Dooro qaabka aad rabto in lagu muujiyo taariikhaha."
+
+#: setup.php
+msgid "Time Format"
+msgstr "Qaabka Waqtiga"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "Dooro qaabka aad rabto in lagu muujiyo waqtiyada."
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "Xawaaraha Cusboonaysiinta Portlet-ka"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "Muddada ilbiriqsiyo ahaan ee la sugayo ka hor inta aysan portlets-ku cusboonaysiin. Ugu yaraan waa 30 ilbiriqsi."
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "Nooca Habaynta Martigeliyaha/Adeegga"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "Nooca dejinta wuxuu ku salaysan yahay haddii aad soo celinayso macluumaadka la hayay marka Nagios bilaabmo iyo in kale. Haddii aadan hubin kaliya u daa qiimaha caadiga ah. Haddii aad arki karto kooxaha martigeliyaha iyo adeegga laakiin aadan arki karin martigeliyayaasha ama adeegyada isku day inaad beddesho dejintan."
+
+#: setup.php
+msgid "Host Icons"
+msgstr "Astaamaha Martigeliyaha"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "Hawlgeli soo-bandhigidda astaamaha martigeliyaha ee shabakadda martigeliyayaasha. Halbeegyada icon_image iyo icon_image_alt ee qeexitaanka martigeliyaha Nagios ayaa loo adeegsadaa dejinta sawirka. Astaamuhu waa inay ahaadaan 16x16 si loo helo muuqaalka ugu fiican. Dejintani saameyn kuma laha astaamaha xaaladda martigeliyaha."
+
+#: setup.php
+msgid "Service Icons"
+msgstr "Astaamaha Adeegga"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "Hawlgeli soo-bandhigidda astaamaha adeegga ee shabakadda adeegyada. Halbeegyada icon_image iyo icon_image_alt ee qeexitaanka adeegga Nagios ayaa loo adeegsadaa dejinta sawirka. Astaamuhu waa inay ahaadaan 16x16 si loo helo muuqaalka ugu fiican. Dejintani saameyn kuma laha astaamaha xaaladda adeegga."
+
+#: setup.php
+msgid "Logging"
+msgstr "Diiwaangelinta"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "Heerka Diiwaangelinta"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "Heerka faahfaahinta ee aad rabto in loo diro faylka diiwaanka Cacti. DIGNIIN: Ku deynta DEBUG waxay si dhakhso ah u buuxin doontaa diiwaanka Cacti."
+

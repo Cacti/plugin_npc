@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-24 19:00+0000\n"
+"Last-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\n"
+"Language-Team: Yoruba\n"
+"Language: yo-NG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "O kò ní àṣẹ láti ṣẹ̀dá àwọn ọ̀nà ìfisí dátà."
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "Kò Sí"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "Àṣìṣe kan ṣẹlẹ̀ nínú %s. Wo àwọn àkọsílẹ̀ àṣìṣe fún àlàyé kíkún."
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "Rárá"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "Bẹ́ẹ̀ Ni"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "Kò Sí"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "Pátákó Àkóso"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "Àwọn Olùgbàlejò"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "Àwọn Iṣẹ́"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "Àwọn Àlàyé"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "Àkókò Àìṣiṣẹ́"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "Àkọsílẹ̀ Ìṣẹ̀lẹ̀"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "Àlàyé Ìṣiṣẹ́"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "O kò ní àṣẹ láti ṣe àṣẹ yìí."
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "A gbọ́dọ̀ mú kí Àwọn Àṣẹ Òkèèrè ṣiṣẹ́ lábẹ́ console->Àwọn Ètò->NPC"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "A gbọ́dọ̀ ṣètò Ipa-ọ̀nà Fáìlì Àṣẹ Nagios lábẹ́ console->Àwọn Ètò->NPC"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "Àkókò Ìṣiṣẹ́ Àyẹ̀wò Iṣẹ́"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "Ìfàsẹ́yìn Àyẹ̀wò Iṣẹ́"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "Àkókò Ìṣe Àyẹ̀wò Olùgbàlejò"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "Ìdádúró Àyẹ̀wò Olùgbàlejò"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "Àwọn Ẹgbẹ́ Olùgbàlejò"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "Módùlù tí kò tọ́ ni a béèrè."
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "Ìṣe tí kò tọ́ ni a béèrè."
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "Ìgbésẹ̀ yìí nílò ìbéèrè POST."
+
+#: npc.php
+msgid "Controller not found."
+msgstr "A kò rí olùdarí."
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "ÀṢÌṢE - Kọ àwọn àṣìṣe nìkan sílẹ̀"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "ÌKÌLỌ̀  - Kọ àwọn àṣìṣe àti ìkìlọ̀ sílẹ̀"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO  - Kọ àwọn àṣìṣe, àwọn ìkìlọ̀, àti àwọn ìránṣẹ́ ìfitónilétí sílẹ̀"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG - Kọ ohun gbogbo sílẹ̀"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "Ìṣètò Olùgbàlejò Nagios"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "Yan olùgbàlejò Nagios tí ó bá olùgbàlejò yìí mu."
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "Àlàyé Kíkún nípa Ipò"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "Àlàyé Iṣẹ́ / Olùgbàlejò"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "Ìṣiṣẹ́ Àṣẹ"
+
+#: setup.php
+msgid "General Settings"
+msgstr "Àwọn Ètò Gbogbogbòò"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "Àwọn Àṣẹ Òkèèrè"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "Gba láàyè kí a kọ àwọn àṣẹ sínú fáìlì àṣẹ Nagios."
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "Ọ̀nà Fáìlì Àṣẹ Nagios"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "Ọ̀nà sí fáìlì àṣẹ Nagios (nagios.cmd)."
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "URL Nagios"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "URL kíkún sí ibi tí a gbé Nagios rẹ kalẹ̀ (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "Ìlànà Ọjọ́"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "Yan ọ̀nà tí o fẹ́ fún ṣíṣàfihàn àwọn déètì."
+
+#: setup.php
+msgid "Time Format"
+msgstr "Ìṣètò Àkókò"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "Yan ọ̀nà tí o fẹ́ fún ṣíṣàfihàn àwọn àkókò."
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "Ìgbàgbogbo Ìsọdọ̀tun Portlet"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "Iye àkókò ní ìṣẹ́jú-àáyá láti dúró kí àwọn portlet tó sọ ara wọn dọ̀tun. Ó kéré jù ni ìṣẹ́jú-àáyá 30."
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "Irú Ìṣètò Olùgbàlejò/Iṣẹ́"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "Irú ìṣètò dá lórí bóyá o ń mú ìfitónilétí tí a dá dúró padà tàbí bẹ́ẹ̀ kọ́ nígbà tí Nagios bá bẹ̀rẹ̀. Bí o kò bá dájú, fi iye àìyípadà sílẹ̀. Bí o bá lè rí àwọn ẹgbẹ́ olùgbàlejò àti iṣẹ́ ṣùgbọ́n tí o kò rí àwọn olùgbàlejò tàbí iṣẹ́, gbìyànjú láti yí ètò yìí padà."
+
+#: setup.php
+msgid "Host Icons"
+msgstr "Àwọn Àmì Olùgbàlejò"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "Mú ìfihàn àwọn àmì olùgbàlejò ṣiṣẹ́ nínú àtòkọ àwọn olùgbàlejò. Àwọn pàrámítà icon_image àti icon_image_alt ti ìtumọ̀ olùgbàlejò Nagios ni a ń lò láti ṣètò àwòrán náà. Àwọn àmì yẹ kí ó jẹ́ 16x16 láti rí dáradára. Ètò yìí kò nípa lórí àwọn àmì ipò olùgbàlejò."
+
+#: setup.php
+msgid "Service Icons"
+msgstr "Àwọn Àmì Iṣẹ́"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "Mú ìfihàn àwọn àmì iṣẹ́ ṣiṣẹ́ nínú àtòkọ àwọn iṣẹ́. Àwọn pàrámítà icon_image àti icon_image_alt ti ìtumọ̀ iṣẹ́ Nagios ni a ń lò láti ṣètò àwòrán náà. Àwọn àmì yẹ kí ó jẹ́ 16x16 láti rí dáradára. Ètò yìí kò nípa lórí àwọn àmì ipò iṣẹ́."
+
+#: setup.php
+msgid "Logging"
+msgstr "Ìkọsílẹ̀"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "Ìpele Ìkọsílẹ̀"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "Ìwọ̀n kúlẹ̀kúlẹ̀ tí o fẹ́ fi ránṣẹ́ sí fáìlì àkọsílẹ̀ Cacti. ÌKÌLỌ̀: Fífisílẹ̀ ní DEBUG yóò tètè kún àkọsílẹ̀ cacti."
+

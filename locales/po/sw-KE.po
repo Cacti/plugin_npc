@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-24 19:00+0000\n"
+"Last-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\n"
+"Language-Team: Swahili\n"
+"Language: sw-KE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "Huna ruhusa ya kuunda mbinu za kuingiza data."
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "Hakuna"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "Hitilafu ilitokea katika %s. Tazama kumbukumbu za hitilafu kwa maelezo."
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "Hapana"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "Ndiyo"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "Haipatikani"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "Dashibodi"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "Vipangishi"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "Huduma"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "Maoni"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "Muda wa Kutopatikana"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "Kumbukumbu ya Matukio"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "Maelezo ya Mchakato"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "Huna ruhusa ya kutekeleza amri hii."
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "Amri za Mbali lazima ziwashwe chini ya kiweko->Mipangilio->NPC"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "Njia ya Faili ya Amri ya Nagios lazima iwekwe chini ya console->Mipangilio->NPC"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "Muda wa Utekelezaji wa Ukaguzi wa Huduma"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "Ucheleweshaji wa Ukaguzi wa Huduma"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "Muda wa Utekelezaji wa Ukaguzi wa Kipangishi"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "Kuchelewa kwa Ukaguzi wa Kipangishi"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "Vikundi vya Vipangishi"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "Moduli batili imeombwa."
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "Kitendo batili kimeombwa."
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "Kitendo hiki kinahitaji ombi la POST."
+
+#: npc.php
+msgid "Controller not found."
+msgstr "Kidhibiti hakikupatikana."
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "HITILAFU - Rekodi hitilafu pekee"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "ONYO  - Rekodi hitilafu na maonyo"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO  - Rekodi hitilafu, maonyo, na ujumbe wa taarifa"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG - Rekodi kila kitu"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "Ulinganishaji wa Kipangishi cha Nagios"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "Chagua kipangishi cha Nagios kinachooana na kipangishi hiki."
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "Maelezo ya Hali"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "Taarifa za Huduma / Kipangishi"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "Utekelezaji wa Amri"
+
+#: setup.php
+msgid "General Settings"
+msgstr "Mipangilio ya Jumla"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "Amri za Mbali"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "Ruhusu amri ziandikwe kwenye faili ya amri ya Nagios."
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "Njia ya Faili ya Amri ya Nagios"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "Njia ya kwenda kwenye faili ya amri ya Nagios (nagios.cmd)."
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "URL ya Nagios"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "URL kamili ya usakinishaji wako wa Nagios (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "Muundo wa Tarehe"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "Chagua umbizo unalotaka la kuonyesha tarehe."
+
+#: setup.php
+msgid "Time Format"
+msgstr "Muundo wa Muda"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "Chagua umbizo unalotaka la kuonyesha saa."
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "Kiwango cha Kuonyesha Upya cha Portlet"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "Muda katika sekunde wa kusubiri kabla ya vijidirisha kusasishwa. Kiwango cha chini ni sekunde 30."
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "Aina ya Usanidi wa Kipangishi/Huduma"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "Aina ya usanidi inategemea kama unarejesha taarifa zilizohifadhiwa au la wakati Nagios inapoanza. Ikiwa huna uhakika, acha tu thamani chaguo-msingi. Ikiwa unaweza kuona vikundi vya vipangishi na huduma lakini si vipangishi au huduma, jaribu kubadilisha mpangilio huu."
+
+#: setup.php
+msgid "Host Icons"
+msgstr "Aikoni za Kipangishi"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "Washa uonyeshaji wa aikoni za kipangishi katika gridi ya vipangishi. Vigezo vya icon_image na icon_image_alt vya ufafanuzi wa kipangishi cha Nagios hutumiwa kuweka picha. Aikoni zinapaswa kuwa 16x16 ili kupata mwonekano bora. mpangilio huu hauathiri aikoni za hali ya kipangishi."
+
+#: setup.php
+msgid "Service Icons"
+msgstr "Aikoni za Huduma"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "Washa uonyeshaji wa aikoni za huduma katika gridi ya huduma. Vigezo vya icon_image na icon_image_alt vya ufafanuzi wa huduma ya Nagios hutumiwa kuweka picha. Aikoni zinapaswa kuwa 16x16 ili kupata mwonekano bora. Mpangilio huu hauathiri aikoni za hali ya huduma."
+
+#: setup.php
+msgid "Logging"
+msgstr "Kuweka Kumbukumbu"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "Kiwango cha Kuweka Kumbukumbu"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "Kiwango cha maelezo unachotaka yatumwe kwenye faili la kumbukumbu la Cacti. ONYO: Kuiacha katika DEBUG kutajaza haraka kumbukumbu ya cacti."
+

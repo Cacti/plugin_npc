@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-24 19:00+0000\n"
+"Last-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\n"
+"Language-Team: Xhosa\n"
+"Language: xh-ZA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "Awunayo imvume yokudala iindlela zokufaka idatha."
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "Akukho"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "Kwenzeke impazamo ku-%s. Jonga iilogi zempazamo ukufumana iinkcukacha."
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "Hayi"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "Ewe"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "Akusebenzi"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "Ideshibhodi"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "Iihosti"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "Iinkonzo"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "Izimvo"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "Ixesha lokungasebenzi"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "Ilogi yeZiganeko"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "Ulwazi lwenkqubo"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "Awunayo imvume yokuphumeza lo myalelo."
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "Imiyalelo eKude kufuneka ivulwe phantsi kwe-console->Iisetingi->NPC"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "Umendo weFayile yoMyalelo we-Nagios kufuneka umiselwe phantsi kwe-console->Iisetingi->NPC"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "Ixesha lokuQhutywa koHlolo lweNkonzo"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "Ukulibaziseka koHlolo lweNkonzo"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "Ixesha lokuQhubeka koKukhangela iHosti"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "Ulibaziseko loKukhangela iHosti"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "Amaqela eeHosti"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "Imodyuli eceliweyo ayisebenzi."
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "Isenzo esiceliweyo asisebenzi."
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "Eli nyathelo lifuna isicelo se-POST."
+
+#: npc.php
+msgid "Controller not found."
+msgstr "Isilawuli asifunyenwanga."
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "IMPAZAMO - Bhala iimpazamo kuphela"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "WARN  - Bhala iimpazamo nezilumkiso kwilog"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO  - Bhala kwi-log iimpazamo, izilumkiso, kunye nemiyalezo yolwazi"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG - Rekhoda yonke into"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "Ulungelelwaniso lweHosti ye-Nagios"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "Khetha ihosti ye-Nagios enxibelelana nale hosti."
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "Iinkcukacha zoBume"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "Ulwazi lweNkonzo / lweHosti"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "Ukuqhutywa koMyalelo"
+
+#: setup.php
+msgid "General Settings"
+msgstr "Useto Ngokubanzi"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "Imiyalelo eKude"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "Vumela imiyalelo ukuba ibhalwe kwifayile yemiyalelo ye-Nagios."
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "Indlela yeFayile yoMyalelo we-Nagios"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "Umendo oya kwifayile yomyalelo we-Nagios (nagios.cmd)."
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "I-URL ye-Nagios"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "I-URL epheleleyo eya kufakelo lwakho lwe-Nagios (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "Ifomathi yoMhla"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "Khetha ifomathi oyifunayo yokubonisa imihla."
+
+#: setup.php
+msgid "Time Format"
+msgstr "Ifomathi yeXesha"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "Khetha ifomathi oyifunayo yokubonisa amaxesha."
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "Izinga lokuHlaziya i-Portlet"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "Ixesha ngemizuzwana lokulinda ngaphambi kokuba ii-portlet zihlaziye. Ubuncinci yimizuzwana engama-30."
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "Uhlobo loQwalaselo lweHosti/lweNkonzo"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "Uhlobo lwe-config lusekelwe ekubeni uyabuyisela na ulwazi olugcinwe ngaphambili xa i-Nagios iqala. Ukuba awuqinisekanga shiya nje ixabiso elingagqibekanga. Ukuba ubona amaqela eehosti neenkonzo kodwa ungaboni iihosti okanye iinkonzo zama ukutshintsha le setingi."
+
+#: setup.php
+msgid "Host Icons"
+msgstr "Ii-ayikhoni zeHosti"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "Vula ukubonisa ii-ayikhoni zehosti kwigridi yeehosti. Iiparamitha ze-icon_image kunye ne-icon_image_alt zenkcazo yehosti ye-Nagios zisetyenziselwa ukuseta umfanekiso. Ii-ayikhoni kufuneka zibe yi-16x16 ukuze zibonakale kakuhle. Le setingi ayichaphazeli ii-ayikhoni zobume behosti."
+
+#: setup.php
+msgid "Service Icons"
+msgstr "Ii-ayikhoni zeNkonzo"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "Vula ukubonisa ii-ayikhoni zenkonzo kwigridi yeenkonzo. Iiparamitha ze-icon_image kunye ne-icon_image_alt zenkcazo yenkonzo ye-Nagios zisetyenziselwa ukuseta umfanekiso. Ii-ayikhoni kufuneka zibe yi-16x16 ukuze zibonakale kakuhle. Le setingi ayichaphazeli ii-ayikhoni zobume benkonzo."
+
+#: setup.php
+msgid "Logging"
+msgstr "Ukugcinwa kweeLog"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "Inqanaba lokuRekhoda"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "Inqanaba leenkcukacha ofuna zithunyelwe kwifayile yelog ye-Cacti. ISILUMKISO: Ukuyishiya ikwi-DEBUG kuya kuyizalisa ngokukhawuleza ilog ye-Cacti."
+

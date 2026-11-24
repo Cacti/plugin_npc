@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-24 19:00+0000\n"
+"Last-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\n"
+"Language-Team: Arabic (Morocco)\n"
+"Language: ar-MA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "ليس لديك صلاحية لإنشاء طرق إدخال البيانات."
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "لا شيء"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "حدث خطأ في %s. انظر سجلات الخطأ لمزيد من التفاصيل."
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "لا"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "نعم"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "N/A"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "لوحة المؤشرات"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "Up / SNMP Hosts"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "الخدمات"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "التعليقات"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "وقت التوقف"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "سجل الأحداث"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "معلومات العملية"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "ليس لديك إذن بتنفيذ هذا الأمر."
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "يجب تمكين الأوامر عن بُعد ضمن وحدة التحكم-> الإعدادات-> NPC"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "يجب تعيين مسار ملف أوامر Nagios ضمن وحدة التحكم-> الإعدادات-> NPC"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "وقت تنفيذ فحص الخدمة"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "تأخر فحص الخدمة"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "وقت تنفيذ فحص المضيف"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "المضيف تحقق من وقت الاستجابة"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "مجموعات المستضيف Host"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "الوحدة المطلوبة غير صالحة."
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "الإجراء المطلوب غير صالح."
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "يتطلب هذا الإجراء طلب POST."
+
+#: npc.php
+msgid "Controller not found."
+msgstr "وحدة التحكم غير موجودة."
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "خطأ - سجل الأخطاء فقط"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "تحذير - سجل الأخطاء والتحذيرات"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO - تسجيل الأخطاء والتحذيرات ورسائل المعلومات"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG - سجل كل شيء"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "تعيين مضيف Nagios"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "حدد مضيف Nagios الذي يقوم بتعيين هذا المضيف."
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "تفاصيل الحالة"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "معلومات الخدمة / المضيف"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "تنفيذ الأوامر"
+
+#: setup.php
+msgid "General Settings"
+msgstr "الاعدادات العامة"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "أوامر عن بعد"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "السماح بكتابة الأوامر إلى ملف أوامر Nagios."
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "مسار ملف أوامر Nagios"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "المسار إلى ملف أوامر Nagios (nagios.cmd)."
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "رابط Nagios"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "عنوان URL الكامل لتثبيت Nagios الخاص بك (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "صيغة التاريخ"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "حدد التنسيق الذي تريده لعرض التواريخ."
+
+#: setup.php
+msgid "Time Format"
+msgstr "تنسيق الوقت"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "حدد التنسيق الذي تريده لعرض الأوقات."
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "معدل تحديث المدخل"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "مقدار الوقت بالثواني للانتظار قبل تحديث المداخل. الحد الأدنى هو 30 ثانية."
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "نوع تكوين المضيف / الخدمة"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "يعتمد نوع التكوين على ما إذا كنت تقوم باستعادة المعلومات المحتجزة عند بدء Nagios أم لا. إذا كنت غير متأكد فقط اترك القيمة الافتراضية. إذا كان بإمكانك رؤية مجموعات المضيف والخدمة ولكن لا يمكنك رؤية المضيفين أو الخدمات ، فحاول تغيير هذا الإعداد."
+
+#: setup.php
+msgid "Host Icons"
+msgstr "أيقونات المضيف"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "تفعيل عرض أيقونات المضيف في شبكة المضيفين. يتم استخدام معلمات icon_image و icon_image_alt لتعريف مضيف Nagios لتعيين الصورة. يجب أن تكون الرموز مقاس 16 × 16 للحصول على أفضل مظهر. لا يؤثر هذا الإعداد على أيقونات حالة المضيف."
+
+#: setup.php
+msgid "Service Icons"
+msgstr "أيقونات الخدمة"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "تمكين عرض رموز الخدمة في شبكة الخدمات. تُستخدم معلمات icon_image و icon_image_alt لتعريف خدمة Nagios لتعيين الصورة. يجب أن تكون الرموز مقاس 16 × 16 للحصول على أفضل مظهر. لا يؤثر هذا الإعداد على أيقونات حالة الخدمة."
+
+#: setup.php
+msgid "Logging"
+msgstr "تسجيل الدخول"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "مستوى التسجيل"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "مستوى التفاصيل الذي تريد إرساله إلى ملف سجل Cacti. تحذير: ترك في DEBUG سيملأ سجل الصبار بسرعة."
+

@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-24 19:00+0000\n"
+"Last-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\n"
+"Language-Team: Afrikaans\n"
+"Language: af-ZA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "Jy het nie toestemming om data-invoermetodes te skep nie."
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "Geen"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "'n Fout het in %s voorgekom. Sien foutlogboeke vir besonderhede."
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "Nee"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "Ja"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "N.v.t"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "Kontroleskerm"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "Gashere"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "Dienste"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "Opmerkings"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "Aftyd"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "Gebeurtenislog"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "Prosesinligting"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "Jy het nie toestemming om hierdie opdrag uit te voer nie."
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "Afstandbevele moet geaktiveer wees onder konsole->Instellings->NPC"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "Die Nagios-opdraglêerpad moet gestel word onder konsole->Instellings->NPC"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "Dienskontrole-uitvoertyd"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "Dienskontrole-latensie"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "Gasheerkontrole-uitvoeringstyd"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "Gasheerkontrole-latensie"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "Gasheergroepe"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "Ongeldige module versoek."
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "Ongeldige aksie versoek."
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "Hierdie aksie vereis 'n POST-versoek."
+
+#: npc.php
+msgid "Controller not found."
+msgstr "Beheerder nie gevind nie."
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "FOUT - Teken slegs foute aan"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "WAARSKUWING - Teken foute en waarskuwings aan"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO  - Teken foute, waarskuwings en inligtingsboodskappe aan"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG - Teken alles aan"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "Nagios-gasheerkartering"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "Kies die Nagios-gasheer wat na hierdie gasheer karteer."
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "Statusbesonderhede"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "Diens- / Gasheerinligting"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "Opdraguitvoering"
+
+#: setup.php
+msgid "General Settings"
+msgstr "Algemene instellings"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "Afstandbevele"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "Laat toe dat opdragte na die Nagios-opdraglêer geskryf word."
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "Nagios-opdraglêerpad"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "Die pad na die Nagios-opdraglêer (nagios.cmd)."
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "Nagios-URL"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "Die volledige URL na jou Nagios-installasie (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "Datumformaat"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "Kies die formaat wat u wil hê vir die vertoon van datums."
+
+#: setup.php
+msgid "Time Format"
+msgstr "Tydformaat"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "Kies die formaat wat u wil hê vir die vertoon van tye."
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "Portlet-verfrissingstempo"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "Die tyd in sekondes om te wag voordat die portlette verfris. Die minimum is 30 sekondes."
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "Gasheer-/Dienskonfigurasietipe"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "Die konfigurasietipe is gebaseer op of u behoue inligting herstel wanneer Nagios begin of nie. As u onseker is, laat net die verstekwaarde. As u Gasheer- en diensgroepe kan sien maar nie Gashere of dienste nie, probeer om hierdie instelling te verander."
+
+#: setup.php
+msgid "Host Icons"
+msgstr "Gasheerikone"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "Aktiveer die vertoon van gasheerikone in die gasheerrooster. Die icon_image- en icon_image_alt-parameters van die Nagios-gasheerdefinisie word gebruik om die beeld te stel. Ikone moet 16x16 wees vir die beste voorkoms. Hierdie instelling raak nie die gasheerstatus-ikone nie."
+
+#: setup.php
+msgid "Service Icons"
+msgstr "Diensikone"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "Aktiveer die vertoon van diensikone in die diensterooster. Die icon_image- en icon_image_alt-parameters van die Nagios-diensdefinisie word gebruik om die beeld te stel. Ikone moet 16x16 wees vir die beste voorkoms. Hierdie instelling raak nie die diensstatus-ikone nie."
+
+#: setup.php
+msgid "Logging"
+msgstr "Loghouding"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "Logvlak"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "Die vlak van detail wat jy na die Cacti-loglêer wil stuur. WAARSKUWING: As jy dit op DEBUG los, sal die Cacti-log vinnig vol word."
+

@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-24 19:00+0000\n"
+"Last-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\n"
+"Language-Team: Malagasy\n"
+"Language: mg-MG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "Tsy manana alalana hamorona fomba fampidirana angona ianao."
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "Tsy misy"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "Nisy hadisoana nitranga tao amin'ny %s. Jereo ny tantaran'ny hadisoana raha mila fanazavana fanampiny."
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "Tsia"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "Eny"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "Tsy misy"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "Takelaka fanaraha-maso"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "Mpampiantrano"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "Tolotra"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "Fanehoan-kevitra"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "Fotoana tsy fiasana"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "Firaketana hetsika"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "Fampahalalana momba ny dingana"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "Tsy manana alalana hanatanteraka ity baiko ity ianao."
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "Tsy maintsy alefa ao amin'ny console->Fandrindrana->NPC ny Baiko lavitra"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "Tsy maintsy apetraka ao amin'ny console->Fandrindrana->NPC ny lalan'ny rakitra baiko Nagios"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "Faharetan'ny fanatanterahana ny fanamarinana tolotra"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "Fahatarana amin'ny fanamarinana tolotra"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "Fotoana fanatanterahana ny fanamarinana Mpampiantrano"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "Fahatarana amin'ny fanamarinana Mpampiantrano"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "Vondrona Mpampiantrano"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "Mojoly tsy manan-kery nangatahina."
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "Hetsika tsy manan-kery nangatahina."
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "Mitaky fangatahana POST ity hetsika ity."
+
+#: npc.php
+msgid "Controller not found."
+msgstr "Tsy hita ny mpanara-maso."
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "HADISOANA - Ny hadisoana ihany no raketina"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "FAMPITANDREMANA  - Raketo ny hadisoana sy ny fampitandremana"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO  - Mirakitra ny hadisoana, fampitandremana, ary hafatra fampahafantarana"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG - Raketo ao amin'ny diarina ny zava-drehetra"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "Fampifandraisana Mpampiantrano Nagios"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "Misafidiana ny Mpampiantrano Nagios mifanaraka amin'ity Mpampiantrano ity."
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "Antsipirian'ny sata"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "Fampahalalana momba ny Tolotra / Mpampiantrano"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "Fanatanterahana baiko"
+
+#: setup.php
+msgid "General Settings"
+msgstr "Fikirana ankapobeny"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "Baiko lavitra"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "Avelao hosoratana ao amin'ny rakitra baiko Nagios ny baiko."
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "Lalan'ny rakitra baiko Nagios"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "Ny lalana mankany amin'ny rakitra baiko Nagios (nagios.cmd)."
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "URL Nagios"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "Ny URL feno mankany amin'ny fametrahana Nagios anao (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "Endriky ny daty"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "Misafidiana ny endrika tianao hanehoana ny daty."
+
+#: setup.php
+msgid "Time Format"
+msgstr "Endriky ny ora"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "Misafidiana ny endrika tianao hanehoana ny ora."
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "Fatran'ny fanavaozana Portlet"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "Ny faharetan'ny fotoana amin'ny segondra hiandrasana alohan'ny fanavaozana ny portlets. 30 segondra no farafahakeliny."
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "Karazana fanamboarana Mpampiantrano/Serivisy"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "Ny karazana fikirakirana dia miankina amin'ny hoe mamerina fampahalalana voatahiry ianao na tsia rehefa manomboka i Nagios. Raha tsy azonao antoka dia avelao fotsiny ny sanda voafaritra mialoha. Raha mahita vondrona Mpampiantrano sy tolotra ianao fa tsy mahita Mpampiantrano na tolotra, dia andramo ovaina ity fandrindrana ity."
+
+#: setup.php
+msgid "Host Icons"
+msgstr "Sary famantarana ny Mpampiantrano"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "Ataovy mavitrika ny fampisehoana ny sary famantarana ny mpampiantrano ao amin'ny tabilaon'ny mpampiantrano. Ny mari-pamantarana icon_image sy icon_image_alt ao amin'ny famaritana mpampiantrano Nagios no ampiasaina hametrahana ny sary. Tokony ho 16x16 ny haben'ny sary famantarana mba hahazoana endrika tsara indrindra. Tsy misy fiantraikany amin'ny sary famantarana ny satan'ny mpampiantrano ity fandrindrana ity."
+
+#: setup.php
+msgid "Service Icons"
+msgstr "Sary famantarana tolotra"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "Ataovy mavitrika ny fampisehoana ny sary famantarana ny tolotra ao amin'ny tabilaon'ny tolotra. Ny mari-pamantarana icon_image sy icon_image_alt ao amin'ny famaritana tolotra Nagios no ampiasaina hametrahana ny sary. Tokony ho 16x16 ny haben'ny sary famantarana mba hahazoana endrika tsara indrindra. Tsy misy fiantraikany amin'ny sary famantarana ny satan'ny tolotra ity fandrindrana ity."
+
+#: setup.php
+msgid "Logging"
+msgstr "Firaketana"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "Ambaratongan'ny firaketana"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "Ny haavon'ny antsipiriany tianao halefa any amin'ny rakitra diarin'ny Cacti. FAMPITANDREMANA: Ny famelana azy amin'ny DEBUG dia hameno haingana ny diarin'ny cacti."
+
