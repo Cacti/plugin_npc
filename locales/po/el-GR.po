@@ -4,24 +4,11 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-10-23 22:20-0600\n"
-"PO-Revision-Date: 2024-06-08 08:57-0400\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: el_GR\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.4\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-25 10:18+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Greek <https://translate.cacti.net/projects/cacti/npc/el/>\nLanguage: el-GR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php
-#, fuzzy
-#| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "Δεν έχετε άδεια εκτέλεσης αυτής της εντολής."
+msgstr "Δεν έχετε άδεια να δημιουργήσετε μεθόδους εισαγωγής δεδομένων."
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -33,47 +20,44 @@ msgid "An error occurred in %s. See error logs for detail."
 msgstr "Παρουσιάστηκε σφάλμα στο %s. Δείτε τα αρχεία καταγραφής σφαλμάτων για λεπτομέρειες."
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
-#, fuzzy
 msgid "No"
-msgstr "Κανένα"
+msgstr "Όχι"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
 msgid "Yes"
-msgstr ""
+msgstr "Ναι"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr ""
+msgstr "Μη Διαθέσιμο"
 
 #: controllers/layout.php
 msgid "Dashboard"
-msgstr ""
+msgstr "Πίνακας ελέγχου"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "Εικονίδια κεντρικού υπολογιστή"
+msgstr "Κεντρικοί υπολογιστές"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "Εικονίδια υπηρεσίας"
+msgstr "Υπηρεσίες"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "Σχόλια"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "Χρόνος διακοπής λειτουργίας"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "Αρχείο καταγραφής συμβάντων"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "Πληροφορίες διεργασίας"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -104,25 +88,24 @@ msgid "Host Check Latency"
 msgstr "Κεντρικός έλεγχος καθυστέρησης"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "Εικονίδια κεντρικού υπολογιστή"
+msgstr "Ομάδες κεντρικών υπολογιστών"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "Ζητήθηκε μη έγκυρη ενότητα."
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "Ζητήθηκε μη έγκυρη ενέργεια."
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "Αυτή η ενέργεια απαιτεί αίτημα POST."
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "Ο ελεγκτής δεν βρέθηκε."
 
 #: setup.php
 msgid "ERROR - Log errors only"
@@ -242,7 +225,7 @@ msgstr "Ενεργοποίηση εμφάνισης εικονιδίων υπη�
 
 #: setup.php
 msgid "Logging"
-msgstr "Υλοτομία"
+msgstr "Καταγραφή"
 
 #: setup.php
 msgid "Logging Level"
@@ -250,7 +233,7 @@ msgstr "Επίπεδο καταγραφής"
 
 #: setup.php
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr "Το επίπεδο λεπτομέρειας που θέλετε να σταλεί στο αρχείο καταγραφής Cacti. ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Η έξοδος στο DEBUG θα γεμίσει γρήγορα το αρχείο καταγραφής κάκτων."
+msgstr "Το επίπεδο λεπτομέρειας που θέλετε να αποστέλλεται στο αρχείο καταγραφής του Cacti. ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Η παραμονή σε λειτουργία DEBUG θα γεμίσει γρήγορα το αρχείο καταγραφής του Cacti."
 
 #~ msgid "FATAL: Unable to make NPC Connection"
 #~ msgstr "FATAL: Δεν είναι δυνατή η σύνδεση NPC"
