@@ -4,25 +4,11 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-10-23 22:20-0600\n"
-"PO-Revision-Date: 2024-06-08 09:02-0400\n"
-"Last-Translator: Junhua Huang <junhuahuang1218@gmail.com>\n"
-"Language-Team: Chinese (Simplified) <http://translate.cacti.net/projects/cacti/npc/zh_Hans/>\n"
-"Language: zh_CN\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4.4\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-25 10:18+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Chinese (Simplified Han script) <https://translate.cacti.net/projects/cacti/npc/zh_Hans/>\nLanguage: zh-CN\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php
-#, fuzzy
-#| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "您没有权限执行此命令."
+msgstr "您没有权限创建数据输入方法。"
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -34,47 +20,44 @@ msgid "An error occurred in %s. See error logs for detail."
 msgstr "%s中发生错误。有关详细信息，请参阅错误日志。"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
-#, fuzzy
 msgid "No"
-msgstr "无"
+msgstr "否"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
 msgid "Yes"
-msgstr ""
+msgstr "是"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr ""
+msgstr "不可用"
 
 #: controllers/layout.php
 msgid "Dashboard"
-msgstr ""
+msgstr "仪表板"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "主机图标"
+msgstr "主机"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "服务图标"
+msgstr "服务"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "注释"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "宕机时间"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "事件日志"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "进程信息"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -105,25 +88,24 @@ msgid "Host Check Latency"
 msgstr "主机检查延迟"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "主机图标"
+msgstr "主机组"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "请求的模块无效。"
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "请求的操作无效。"
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "此操作需要 POST 请求。"
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "未找到控制器。"
 
 #: setup.php
 msgid "ERROR - Log errors only"
@@ -151,7 +133,7 @@ msgstr "选择映射到该主机的Nagios主机。"
 
 #: setup.php
 msgid "NPC"
-msgstr "人大"
+msgstr "NPC"
 
 #: setup.php
 msgid "Status Detail"
@@ -191,7 +173,7 @@ msgstr "Nagios网址"
 
 #: setup.php
 msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
-msgstr "Nagios安装的完整URL（http://nagios.company.com/nagios/）"
+msgstr "您的 Nagios 安装的完整 URL (http://nagios.company.com/nagios/)"
 
 #: setup.php
 msgid "Date Format"
@@ -251,7 +233,7 @@ msgstr "日志级别"
 
 #: setup.php
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr "您要发送到Cacti日志文件的详细程度。警告：保留调试将快速填充仙人掌日志。"
+msgstr "要发送到 Cacti 日志文件的详细级别。警告：保持在 DEBUG 级别将迅速填满 Cacti 日志。"
 
 #~ msgid "FATAL: Unable to make NPC Connection"
 #~ msgstr "严重：无法建立NPC连接"
