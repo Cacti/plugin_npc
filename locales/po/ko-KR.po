@@ -4,24 +4,11 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-10-23 22:20-0600\n"
-"PO-Revision-Date: 2024-06-08 08:59-0400\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: ko_KR\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.4\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-25 10:18+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Korean <https://translate.cacti.net/projects/cacti/npc/ko/>\nLanguage: ko-KR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php
-#, fuzzy
-#| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "이 명령을 실행할 권한이 없습니다."
+msgstr "데이터 입력 방법을 생성할 권한이 없습니다."
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -33,47 +20,44 @@ msgid "An error occurred in %s. See error logs for detail."
 msgstr "%s에서 오류가 발생했습니다. 자세한 내용은 오류 로그를 참조하십시오."
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
-#, fuzzy
 msgid "No"
-msgstr "없음"
+msgstr "아니오"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
 msgid "Yes"
-msgstr ""
+msgstr "예"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #: controllers/layout.php
 msgid "Dashboard"
-msgstr ""
+msgstr "대시보드"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "호스트 아이콘"
+msgstr "호스트"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "서비스 아이콘"
+msgstr "서비스"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "댓글"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "다운타임"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "이벤트 로그"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "프로세스 정보"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -81,11 +65,11 @@ msgstr "이 명령을 실행할 권한이 없습니다."
 
 #: controllers/nagios.php
 msgid "Remote Commands must be enabled under console->Settings->NPC"
-msgstr "콘솔-> 설정-> NPC에서 원격 명령을 활성화해야합니다."
+msgstr "콘솔-> 설정-> NPC에서 원격 명령을 활성화해야합니다"
 
 #: controllers/nagios.php
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr "Nagios 명령 파일 경로는 콘솔-> 설정-> NPC에서 설정해야합니다."
+msgstr "Nagios 명령 파일 경로는 콘솔-> 설정-> NPC에서 설정해야합니다"
 
 #: controllers/nagios.php
 msgid "Service Check Execution Time"
@@ -104,25 +88,24 @@ msgid "Host Check Latency"
 msgstr "호스트 확인 지연"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "호스트 아이콘"
+msgstr "호스트 그룹"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "잘못된 모듈이 요청되었습니다."
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "잘못된 작업이 요청되었습니다."
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "이 작업을 수행하려면 POST 요청이 필요합니다."
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "컨트롤러를 찾을 수 없습니다."
 
 #: setup.php
 msgid "ERROR - Log errors only"
@@ -250,7 +233,7 @@ msgstr "로깅 수준"
 
 #: setup.php
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr "Cacti 로그 파일에 보낼 세부 정보 수준입니다. 경고 : DEBUG에두면 선인장 로그가 빠르게 채워집니다."
+msgstr "Cacti 로그 파일에 기록할 세부 수준입니다. 경고: DEBUG 상태로 두면 Cacti 로그가 빠르게 가득 찹니다."
 
 #~ msgid "FATAL: Unable to make NPC Connection"
 #~ msgstr "치명적 : NPC 연결을 할 수 없음"
