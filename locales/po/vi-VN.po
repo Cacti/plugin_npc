@@ -4,24 +4,11 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-10-23 22:20-0600\n"
-"PO-Revision-Date: 2024-06-08 09:01-0400\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: vi_VN\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.4\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-25 10:18+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Vietnamese <https://translate.cacti.net/projects/cacti/npc/vi/>\nLanguage: vi-VN\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php
-#, fuzzy
-#| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "Bạn không có quyền thực hiện lệnh này."
+msgstr "Bạn không có quyền tạo phương thức nhập dữ liệu."
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -33,47 +20,44 @@ msgid "An error occurred in %s. See error logs for detail."
 msgstr "Đã xảy ra lỗi trong %s. Xem nhật ký lỗi để biết chi tiết."
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
-#, fuzzy
 msgid "No"
 msgstr "Không"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
 msgid "Yes"
-msgstr ""
+msgstr "Có"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr ""
+msgstr "N/A"
 
 #: controllers/layout.php
 msgid "Dashboard"
-msgstr ""
+msgstr "Bảng tổng quan"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "Biểu tượng máy chủ"
+msgstr "Máy chủ"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "Biểu tượng dịch vụ"
+msgstr "Dịch vụ"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "Bình luận"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "Thời gian ngừng hoạt động"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "Nhật ký sự kiện"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "Thông tin tiến trình"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -104,25 +88,24 @@ msgid "Host Check Latency"
 msgstr "Độ trễ kiểm tra máy chủ"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "Biểu tượng máy chủ"
+msgstr "Nhóm máy chủ"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "Yêu cầu mô-đun không hợp lệ."
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "Yêu cầu hành động không hợp lệ."
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "Thao tác này yêu cầu một yêu cầu POST."
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "Không tìm thấy bộ điều khiển (Controller)."
 
 #: setup.php
 msgid "ERROR - Log errors only"
@@ -250,7 +233,7 @@ msgstr "Mức độ ghi nhật ký"
 
 #: setup.php
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr "Mức độ chi tiết bạn muốn được gửi đến tệp nhật ký Cacti. CẢNH BÁO: Để lại trong DEBUG sẽ nhanh chóng lấp đầy nhật ký xương rồng."
+msgstr "Mức độ chi tiết bạn muốn gửi tới tệp nhật ký Cacti. CẢNH BÁO: Để ở chế độ DEBUG sẽ nhanh chóng làm đầy nhật ký Cacti."
 
 #~ msgid "FATAL: Unable to make NPC Connection"
 #~ msgstr "FATAL: Không thể kết nối NPC"
