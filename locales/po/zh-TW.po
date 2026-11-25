@@ -4,44 +4,28 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-10-23 22:20-0600\n"
-"PO-Revision-Date: 2026-10-06 09:18+0000\n"
-"Last-Translator: YU HAO HUANG <mix@b51.tw>\n"
-"Language-Team: Chinese (Traditional Han script) <https://translate.cacti.net/projects/cacti/npc/zh_Hant/>\n"
-"Language: zh-TW\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11.4\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-25 10:18+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Chinese (Traditional Han script) <https://translate.cacti.net/projects/cacti/npc/zh_Hant/>\nLanguage: zh-TW\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=1; plural=0;\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php
-#, fuzzy
-#| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "您沒有執行此命令的權限。"
+msgstr "您沒有權限建立資料輸入方法。"
 
 #: controllers/cacti.php setup.php
-#, fuzzy
 msgid "None"
 msgstr "無"
 
 #: controllers/controller.php
 #, php-format
 msgid "An error occurred in %s. See error logs for detail."
-msgstr "%s中發生錯誤。有關詳細信息，請參見錯誤日誌。"
+msgstr "%s 發生錯誤。請參閱錯誤記錄以取得詳細資訊。"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
-#, fuzzy
 msgid "No"
-msgstr "無"
+msgstr "否"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
 msgid "Yes"
-msgstr ""
+msgstr "是"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
@@ -49,33 +33,31 @@ msgstr "N/A"
 
 #: controllers/layout.php
 msgid "Dashboard"
-msgstr ""
+msgstr "儀表板"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "主機圖標"
+msgstr "主機"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "服務圖標"
+msgstr "服務"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "評論"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "停機時間"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "事件日誌"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "處理程序資訊"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -87,7 +69,7 @@ msgstr "必須在console-> Settings-> NPC下啟用遠程命令"
 
 #: controllers/nagios.php
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr "Nagios命令文件路徑必須在console-> Settings-> NPC下設置"
+msgstr "必須在 console->Settings->NPC 下設定 Nagios 命令檔案路徑"
 
 #: controllers/nagios.php
 msgid "Service Check Execution Time"
@@ -106,25 +88,24 @@ msgid "Host Check Latency"
 msgstr "主機檢查延遲"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "主機圖標"
+msgstr "主機群組"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "要求的模組無效。"
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "要求的操作無效。"
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "此動作需要 POST 請求。"
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "找不到控制器。"
 
 #: setup.php
 msgid "ERROR - Log errors only"
@@ -136,7 +117,7 @@ msgstr "警告-記錄錯誤和警告"
 
 #: setup.php
 msgid "INFO  - Log errors, warnings, and info messages"
-msgstr "INFO-記錄錯誤，警告和信息消息"
+msgstr "INFO  - 記錄錯誤、警告與資訊訊息"
 
 #: setup.php
 msgid "DEBUG - Log everything"
@@ -152,7 +133,7 @@ msgstr "選擇映射到該主機的Nagios主機。"
 
 #: setup.php
 msgid "NPC"
-msgstr "人大"
+msgstr "NPC"
 
 #: setup.php
 msgid "Status Detail"
@@ -160,14 +141,13 @@ msgstr "狀態詳情"
 
 #: setup.php
 msgid "Service / Host Information"
-msgstr "服務/主機信息"
+msgstr "服務 / 主機資訊"
 
 #: setup.php
 msgid "Command Execution"
 msgstr "命令執行"
 
 #: setup.php
-#, fuzzy
 msgid "General Settings"
 msgstr "一般設定"
 
@@ -193,7 +173,7 @@ msgstr "Nagios網址"
 
 #: setup.php
 msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
-msgstr "Nagios安裝的完整URL（http://nagios.company.com/nagios/）"
+msgstr "您的 Nagios 安裝位置的完整 URL (http://nagios.company.com/nagios/)"
 
 #: setup.php
 msgid "Date Format"
@@ -213,11 +193,11 @@ msgstr "選擇您想要顯示時間的格式。"
 
 #: setup.php
 msgid "Portlet Refresh Rate"
-msgstr "Portlet刷新率"
+msgstr "Portlet 重新整理頻率"
 
 #: setup.php
 msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
-msgstr "Portlet刷新之前等待的時間（以秒為單位）。最小為30秒。"
+msgstr "Portlet 重新整理前等待的時間（以秒為單位）。最小值為 30 秒。"
 
 #: setup.php
 msgid "Host/Service Config Type"
@@ -225,7 +205,7 @@ msgstr "主機/服務配置類型"
 
 #: setup.php
 msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
-msgstr "配置類型取決於Nagios啟動時是否恢復保留的信息。如果不確定，請保留默認值。如果您可以看到主機和服務組，但看不到主機或服務，請嘗試更改此設置。"
+msgstr "組態類型取決於 Nagios 啟動時是否還原保留的資訊。如果不確定，請保留預設值。如果您看得到主機與服務群組，但看不到主機或服務，請嘗試變更此設定。"
 
 #: setup.php
 msgid "Host Icons"
@@ -233,7 +213,7 @@ msgstr "主機圖標"
 
 #: setup.php
 msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
-msgstr "啟用在主機網格中顯示主機圖標。 Nagios主機定義的icon_image和icon_image_alt參數用於設置圖像。圖標應為16x16，以獲得最佳外觀。此設置不會影響主機狀態圖標。"
+msgstr "啟用並在主機資料格中顯示主機圖示。將使用 Nagios 主機定義的 icon_image 與 icon_image_alt 參數來設定圖片。圖示建議為 16x16 以獲得最佳顯示效果。此設定不會影響主機狀態圖示。"
 
 #: setup.php
 msgid "Service Icons"
@@ -241,20 +221,19 @@ msgstr "服務圖標"
 
 #: setup.php
 msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
-msgstr "啟用在服務網格中顯示服務圖標。 Nagios服務定義的icon_image和icon_image_alt參數用於設置圖像。圖標應為16x16，以獲得最佳外觀。此設置不會影響服務狀態圖標。"
+msgstr "啟用並在服務資料格中顯示服務圖示。將使用 Nagios 服務定義的 icon_image 與 icon_image_alt 參數來設定圖片。圖示建議為 16x16 以獲得最佳顯示效果。此設定不會影響服務狀態圖示。"
 
 #: setup.php
-#, fuzzy
 msgid "Logging"
 msgstr "記錄"
 
 #: setup.php
 msgid "Logging Level"
-msgstr "紀錄等級"
+msgstr "日誌層級"
 
 #: setup.php
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr "您要發送到Cacti日誌文件的詳細程度。警告：保留調試將快速填充仙人掌日誌。"
+msgstr "您要傳送至 Cacti 記錄檔的詳細程度。警告：保持在 DEBUG 模式會迅速填滿 Cacti 記錄檔。"
 
 #~ msgid "FATAL: Unable to make NPC Connection"
 #~ msgstr "嚴重：無法建立NPC連接"
