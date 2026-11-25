@@ -4,24 +4,11 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-10-23 22:20-0600\n"
-"PO-Revision-Date: 2024-06-08 09:01-0400\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: tr_TR\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.4\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-25 10:18+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Turkish <https://translate.cacti.net/projects/cacti/npc/tr/>\nLanguage: tr-TR\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php
-#, fuzzy
-#| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "Bu komutu yürütme izniniz yok."
+msgstr "Veri giriş yöntemleri oluşturma izniniz yok."
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -33,47 +20,44 @@ msgid "An error occurred in %s. See error logs for detail."
 msgstr "%s içinde bir hata oluştu. Ayrıntılar için hata günlüklerine bakın."
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
-#, fuzzy
 msgid "No"
-msgstr "Yok"
+msgstr "Hayır"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
 msgid "Yes"
-msgstr ""
+msgstr "Evet"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr ""
+msgstr "Yok"
 
 #: controllers/layout.php
 msgid "Dashboard"
-msgstr ""
+msgstr "Pano"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "Ana Bilgisayar Simgeleri"
+msgstr "Sunucular"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "Hizmet Simgeleri"
+msgstr "Servisler"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "Yorumlar"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "Kesinti Süresi"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "Olay Günlüğü"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "İşlem Bilgisi"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -85,7 +69,7 @@ msgstr "Uzaktan Komutlar konsol-> Ayarlar-> NPC altında etkinleştirilmelidir"
 
 #: controllers/nagios.php
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr "Nagios Komut Dosyası Yolu konsol-> Ayarlar-> NPC altında ayarlanmalıdır."
+msgstr "Nagios Komut Dosyası Yolu konsol-> Ayarlar-> NPC altında ayarlanmalıdır"
 
 #: controllers/nagios.php
 msgid "Service Check Execution Time"
@@ -104,25 +88,24 @@ msgid "Host Check Latency"
 msgstr "Ana Bilgisayar Kontrol Gecikmesi"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "Ana Bilgisayar Simgeleri"
+msgstr "Sunucu Grupları"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "Geçersiz modül istendi."
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "Geçersiz işlem istendi."
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "Bu işlem bir POST isteği gerektirir."
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "Denetleyici bulunamadı."
 
 #: setup.php
 msgid "ERROR - Log errors only"
@@ -246,11 +229,11 @@ msgstr "Günlükleme"
 
 #: setup.php
 msgid "Logging Level"
-msgstr "Günlük Seviyesi"
+msgstr "Günlükleme Düzeyi"
 
 #: setup.php
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr "Cacti günlük dosyasına gönderilmesini istediğiniz ayrıntı düzeyi. UYARI: DEBUG'tan çıkmak, kaktüs günlüğünü hızla dolduracaktır."
+msgstr "Cacti günlük dosyasına gönderilmesini istediğiniz ayrıntı düzeyi. UYARI: DEBUG düzeyinde bırakmak Cacti günlüğünü hızla dolduracaktır."
 
 #~ msgid "FATAL: Unable to make NPC Connection"
 #~ msgstr "FATAL: NPC Bağlantısı yapılamıyor"
