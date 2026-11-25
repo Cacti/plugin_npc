@@ -4,24 +4,11 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr ""
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: developers@cacti.net\n"
-"POT-Creation-Date: 2026-10-23 22:20-0600\n"
-"PO-Revision-Date: 2024-06-08 09:00-0400\n"
-"Last-Translator: \n"
-"Language-Team: \n"
-"Language: pt_PT\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 3.4.4\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-25 10:18+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Portuguese (Portugal) <https://translate.cacti.net/projects/cacti/npc/pt_PT/>\nLanguage: pt-PT\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n > 1;\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php
-#, fuzzy
-#| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "Você não tem permissão para executar este comando."
+msgstr "Não tem permissão para criar métodos de entrada de dados."
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -33,51 +20,48 @@ msgid "An error occurred in %s. See error logs for detail."
 msgstr "Ocorreu um erro em %s. Consulte os logs de erros para obter detalhes."
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
-#, fuzzy
 msgid "No"
-msgstr "Nenhum"
+msgstr "Não"
 
 #: controllers/hosts.php controllers/nagios.php controllers/services.php
 msgid "Yes"
-msgstr ""
+msgstr "Sim"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr ""
+msgstr "N/D"
 
 #: controllers/layout.php
 msgid "Dashboard"
-msgstr ""
+msgstr "Painel de controlo"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "Ícones de host"
+msgstr "Anfitriões"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "Ícones de serviço"
+msgstr "Serviços"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "Comentários"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "Tempo de inatividade"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "Registo de eventos"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "Informação do processo"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
-msgstr "Você não tem permissão para executar este comando."
+msgstr "Não tem permissão para executar este comando."
 
 #: controllers/nagios.php
 msgid "Remote Commands must be enabled under console->Settings->NPC"
@@ -85,7 +69,7 @@ msgstr "Os comandos remotos devem ser ativados em console-> Configurações-> NP
 
 #: controllers/nagios.php
 msgid "The Nagios Command File Path must be set under console->Settings->NPC"
-msgstr "O caminho do arquivo de comando do Nagios deve ser definido em console-> Configurações-> NPC"
+msgstr "O caminho do ficheiro de comandos do Nagios tem de ser definido em Consola->Definições->NPC"
 
 #: controllers/nagios.php
 msgid "Service Check Execution Time"
@@ -104,25 +88,24 @@ msgid "Host Check Latency"
 msgstr "Latência de verificação de host"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "Ícones de host"
+msgstr "Grupos de anfitriões"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "Módulo solicitado inválido."
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "Ação solicitada inválida."
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "Esta ação requer um pedido POST."
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "Controlador não encontrado."
 
 #: setup.php
 msgid "ERROR - Log errors only"
@@ -174,15 +157,15 @@ msgstr "Comandos Remotos"
 
 #: setup.php
 msgid "Allow commands to be written to the Nagios command file."
-msgstr "Permite que comandos sejam gravados no arquivo de comando do Nagios."
+msgstr "Permitir que os comandos sejam gravados no ficheiro de comandos do Nagios."
 
 #: setup.php
 msgid "Nagios Command File Path"
-msgstr "Caminho do arquivo de comando Nagios"
+msgstr "Caminho do ficheiro de comandos do Nagios"
 
 #: setup.php
 msgid "The path to the Nagios command file (nagios.cmd)."
-msgstr "O caminho para o arquivo de comando Nagios (nagios.cmd)."
+msgstr "O caminho para o ficheiro de comandos do Nagios (nagios.cmd)."
 
 #: setup.php
 msgid "Nagios URL"
@@ -222,7 +205,7 @@ msgstr "Tipo de configuração de host / serviço"
 
 #: setup.php
 msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
-msgstr "O tipo de configuração é baseado em se você está ou não restaurando as informações retidas quando o Nagios é iniciado. Se você não tiver certeza, deixe o valor padrão. Se você pode ver os grupos de host e serviço, mas não os hosts ou serviços, tente alterar esta configuração."
+msgstr "O tipo de configuração baseia-se no facto de estar ou não a restaurar informação retida quando o Nagios inicia. Se não tiver a certeza, deixe a predefinição. Se conseguir ver grupos de anfitriões e de serviços mas não anfitriões ou serviços, experimente alterar esta definição."
 
 #: setup.php
 msgid "Host Icons"
@@ -250,7 +233,7 @@ msgstr "Nível de registro"
 
 #: setup.php
 msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
-msgstr "O nível de detalhe que você deseja enviar para o arquivo de log do Cacti. AVISO: Sair em DEBUG preencherá rapidamente o registro de cactos."
+msgstr "O nível de detalhe que pretende enviar para o ficheiro de registo do Cacti. AVISO: Deixar em DEBUG preencherá rapidamente o registo do Cacti."
 
 #~ msgid "FATAL: Unable to make NPC Connection"
 #~ msgstr "FATAL: Impossível fazer conexão NPC"
