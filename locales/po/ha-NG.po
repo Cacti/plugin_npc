@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-24 19:00+0000\n"
+"Last-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\n"
+"Language-Team: Hausa\n"
+"Language: ha-NG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "Ba ka da izinin ƙirƙirar hanyoyin shigar da bayanai."
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "Babu"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "Kuskure ya faru a cikin %s. Duba rajistar kurakurai don ƙarin bayani."
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "A'a"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "Eh"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "Babu"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "Allon Kulawa"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "Masu Masauki"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "Ayyukan sabis"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "Sharhi"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "Lokacin Daina Aiki"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "Rajistar Lamari"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "Bayanin Tsari"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "Ba ka da izinin aiwatar da wannan umarnin."
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "Dole ne a kunna Umarnin Nesa a ƙarƙashin console->Saituna->NPC"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "Dole ne a saita Hanyar Fayil ɗin Umarni na Nagios a ƙarƙashin console->Saituna->NPC"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "Lokacin Gudanar da Binciken Sabis"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "Jinkirin Binciken Sabis"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "Lokacin Gudanar da Binciken Mai Masauki"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "Jinkirin Binciken Mai Masauki"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "Ƙungiyoyin Mai Masauki"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "An nemi ɓangaren da ba daidai ba."
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "An nemi aikin da ba daidai ba."
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "Wannan aikin yana buƙatar buƙatar POST."
+
+#: npc.php
+msgid "Controller not found."
+msgstr "Ba a sami mai sarrafawa ba."
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "KUSKURE - Ajiye kurakurai kaɗai a rajista"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "GARGAƊI  - Yi rajistar kurakurai da gargaɗi"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO  - Yi rajistar kurakurai, gargaɗi, da saƙonnin bayani"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG - Yi rajistar komai"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "Taswirar Mai Masauki na Nagios"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "Zaɓi Mai Masauki na Nagios da ya dace da wannan Mai Masaukin."
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "Cikakken Bayanin Matsayi"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "Bayanan Sabis / Mai Masauki"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "Aiwatar da Umarni"
+
+#: setup.php
+msgid "General Settings"
+msgstr "Saitunan Gabaɗaya"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "Umarnin Nesa"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "Ba da izin rubuta umarnai zuwa fayil ɗin umarnin Nagios."
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "Hanyar Fayil ɗin Umarnin Nagios"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "Hanyar zuwa fayil ɗin umarnin Nagios (nagios.cmd)."
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "URL na Nagios"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "Cikakken URL zuwa inda aka shigar da Nagios naka (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "Tsarin Kwanan Wata"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "Zaɓi tsarin da kake so don nuna kwanan wata."
+
+#: setup.php
+msgid "Time Format"
+msgstr "Tsarin Lokaci"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "Zaɓi tsarin da kake so don nuna lokuta."
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "Yawan Sabunta Ƙaramin Rukuni"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "Adadin lokaci a cikin daƙiƙa da za a jira kafin portlets su sabunta. Mafi ƙaranci shi ne daƙiƙa 30."
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "Nau'in Tsarin Mai Masauki/Sabis"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "Nau'in tsari ya dogara ne akan ko kana dawo da bayanan da aka riƙe lokacin da Nagios ya fara ko a'a. Idan ba ka da tabbas kawai bar ƙimar tsoho. Idan kana iya ganin rukunin mai masauki da na sabis amma ba masu masauki ko sabis ba, gwada canza wannan saitin."
+
+#: setup.php
+msgid "Host Icons"
+msgstr "Alamomin Mai Masauki"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "Kunna nuna alamun mai masauki a cikin grid ɗin masu masauki. Ana amfani da sigogin icon_image da icon_image_alt na ma'anar mai masauki na Nagios don saita hoton. Ya kamata alamun su zama 16x16 don samun kyan gani mafi kyau. Wannan saitin ba ya shafar alamun matsayin mai masauki."
+
+#: setup.php
+msgid "Service Icons"
+msgstr "Alamomin Sabis"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "Kunna nuna alamun sabis a cikin grid ɗin sabis. Ana amfani da sigogin icon_image da icon_image_alt na ma'anar sabis na Nagios don saita hoton. Ya kamata alamun su zama 16x16 don samun kyan gani mafi kyau. Wannan saitin ba ya shafar alamun matsayin sabis."
+
+#: setup.php
+msgid "Logging"
+msgstr "Rajista"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "Matakin Adawa Rajista"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "Matakin cikakken bayanin da kake son a aika zuwa fayil ɗin rajistar Cacti. GARGAƊI: Barin shi a DEBUG zai cika rajistar cacti da sauri."
+

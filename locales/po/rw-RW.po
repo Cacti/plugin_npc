@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-24 19:00+0000\n"
+"Last-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\n"
+"Language-Team: Kinyarwanda\n"
+"Language: rw-RW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "Ntabwo ufite uburenganzira bwo gukora uburyo bwo kwinjiza amakuru."
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "Nta na kimwe"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "Habaye ikosa muri %s. Reba mu nyandiko z'amakosa kugira ngo umenye ibisobanuro."
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "Oya"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "Yego"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "Ntibihari"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "Ikibaho cy'ibikorwa"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "Ba Mwakirizi"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "Serivisi"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "Ibisobanuro"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "Igihe cyo guhagarara"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "Igitabo cy'ibikorwa"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "Amakuru y'igikorwa"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "Ntabwo ufite uburenganzira bwo gukoresha iri bwiriza."
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "Amabwiriza yo Kure agomba kuba afunguwe munsi ya Console->Amagenamiterere->NPC"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "Inzira ya Dosiye y'Amategeko ya Nagios igomba gushyirwaho munsi ya console->Amagenamiterere->NPC"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "Igihe igenzura rya serivisi rimara"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "Gutinda kw'igenzura rya serivisi"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "Igihe cyo gukora igenzura rya Mwakirizi"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "Ubukererwe bw'igenzura rya Mwakirizi"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "Amatsinda ya Mwakirizi"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "Igice kitari cyo cyasabwe."
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "Igikorwa kitari cyo cyasabwe."
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "Iki gikorwa gisaba ubusabe bwa POST."
+
+#: npc.php
+msgid "Controller not found."
+msgstr "Umugenzuzi ntiyabonetse."
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "IKOSA - Andika amakosa gusa"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "IBURIRA  - Andika amakosa n'amaburira"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO  - Bika amakosa, amaburira, n'ubutumwa bw'amakuru"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG - Andika ibintu byose mu nyandiko y'ibikorwa"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "Ihuza rya Mwakirizi wa Nagios"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "Hitamo Mwakirizi wa Nagios uhuye n'uyu Mwakirizi."
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "Ibisobanuro birambuye by'imiterere"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "Amakuru ya Serivisi / Mwakirizi"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "Ishyirwa mu bikorwa ry'itegeko"
+
+#: setup.php
+msgid "General Settings"
+msgstr "Igenamiterere rusange"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "Amabwiriza yo Kure"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "Emera ko amabwiriza yandikwa muri dosiye y'amabwiriza ya Nagios."
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "Inzira y'Idosiye y'Amabwiriza ya Nagios"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "Inzira igana ku idosiye y'amabwiriza ya Nagios (nagios.cmd)."
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "URL ya Nagios"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "URL yuzuye igana aho Nagios yawe yashyizwe (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "Imiterere y'itariki"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "Hitamo imiterere wifuza yo kwerekana amatariki."
+
+#: setup.php
+msgid "Time Format"
+msgstr "Imiterere y'Igihe"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "Hitamo imiterere wifuza yo kwerekana amasaha."
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "Umuvuduko wo kuvugurura Portlet"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "Igihe mu masegonda cyo gutegereza mbere y'uko portlets zivugururwa. Igihe gito ntarengwa ni amasegonda 30."
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "Ubwoko bw'Iboneza rya Mwakirizi/Serivisi"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "Ubwoko bw'igenamiterere bushingiye ku kuba usubizaho amakuru yabitswe cyangwa utabikora igihe Nagios itangiye. Niba utabizi neza siga agaciro gasanzwe. Niba ubona amatsinda ya ba mwakirizi na serivisi ariko ntubone ba mwakirizi cyangwa serivisi gerageza guhindura iri genamiterere."
+
+#: setup.php
+msgid "Host Icons"
+msgstr "Udushusho twa Mwakirizi"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "Fungura kwerekana udushusho twa mwakirizi mu mbonerahamwe ya ba mwakirizi. Ibipimo bya icon_image na icon_image_alt mu mwirondoro wa mwakirizi wa Nagios bikoreshwa mu kugena ishusho. Udushusho tugomba kuba dufite ingano ya 16x16 kugira ngo tugaragare neza. Iri genamiterere ntacyo rihindura ku dushusho tw'imiterere ya mwakirizi."
+
+#: setup.php
+msgid "Service Icons"
+msgstr "Udushusho twa serivisi"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "Fungura kwerekana udushusho twa serivisi mu mbonerahamwe ya serivisi. Ibipimo bya icon_image na icon_image_alt mu mwirondoro wa serivisi wa Nagios bikoreshwa mu kugena ishusho. Udushusho tugomba kuba dufite ingano ya 16x16 kugira ngo tugaragare neza. Iri genamiterere ntacyo rihindura ku dushusho tw'imiterere ya serivisi."
+
+#: setup.php
+msgid "Logging"
+msgstr "Inyandiko z'ibikorwa"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "Urwego rwo Kwandika Ibikorwa"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "Urwego rw'ibisobanuro birambuye wifuza ko byoherezwa muri dosiye y'imyandikire ya Cacti. IBURIRA: Kubisiga muri DEBUG bizuzuza vuba dosiye y'imyandikire ya cacti."
+

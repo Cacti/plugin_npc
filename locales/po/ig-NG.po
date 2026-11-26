@@ -1,0 +1,248 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-24 19:00+0000\n"
+"Last-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\n"
+"Language-Team: Igbo\n"
+"Language: ig-NG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "Ị nweghị ikike imepụta ụzọ ntinye data."
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "Ọ Dịghị Nke Ọ Bụla"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "Mperi mere na %s. Lee ndekọ mperi maka nkọwa."
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "Mba"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "Ee"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "Ọ dịghị"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "Bọọdụ njikwa"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "Ndị nnabata"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "Ọrụ Gasị"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "Okwu"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "Oge Nkwụsị"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "Ndekọ Ihe Omume"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "Ozi Usoro Ọrụ"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "Ị nweghị ikike ime iwu a."
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "A ga-agbanyerịrị Iwu Dị N'ebe Dị Anya n'okpuru console->Ntọala->NPC"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "A ga-edozi Ụzọ Faịlụ Iwu Nagios n'okpuru console->Ntọala->NPC"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "Oge Mmezu Nnyocha Ọrụ"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "Oge Nchere Nnyocha Ọrụ"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "Oge Mmemme Nlele Onye nnabata"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "Nkwụsịtụ Nlele Onye nnabata"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "Otu Onye nnabata"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "Arịọrọ modul na-ezighị ezi."
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "Arịọrọ omume na-ezighị ezi."
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "Omume a chọrọ arịrịọ POST."
+
+#: npc.php
+msgid "Controller not found."
+msgstr "Ahụghị njikwa."
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "NJỌ - Dekọọ njọ naanị"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "ỊDỌ AKA NÁ NTỊ  - Debanye njehie na ịdọ aka ná ntị"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO  - Dekọọ mperi, ịdọ aka ná ntị, na ozi nkọwa"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG - Debanye ihe niile"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "Nhazi Onye nnabata Nagios"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "Họrọ onye nnabata Nagios nke kwekọrọ na onye nnabata a."
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "Nkọwa Ọnọdụ"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "Ozi Ọrụ / Onye nnabata"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "Mmezu Iwu"
+
+#: setup.php
+msgid "General Settings"
+msgstr "Ntọala Izugbe"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "Iwu Dị N'ebe Dị Anya"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "Kwe ka e dee iwu n'ime faịlụ iwu Nagios."
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "Ụzọ Faịlụ Iwu Nagios"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "Ụzọ e si aga faịlụ iwu Nagios (nagios.cmd)."
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "URL Nagios"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "URL zuru ezu maka nrụnye Nagios gị (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "Ụdị Ụbọchị"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "Họrọ usoro ị chọrọ maka igosipụta ụbọchị."
+
+#: setup.php
+msgid "Time Format"
+msgstr "Ụdị Oge"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "Họrọ usoro ị chọrọ maka igosipụta oge."
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "Ọnụego Mmelite Portlet"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "Oge na sekọnd a ga-eche tupu portlet emeliteghachi. Nke kacha nta bụ sekọnd 30."
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "Ụdị Nhazi Onye nnabata/Ọrụ"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "Ụdị nhazi ahụ dabere ma ị na-eweghachi ozi e chekwara mgbe Nagios malitere ma ọ bụ na ị naghị eweghachi. Ọ bụrụ na ị maghị nke ọma, hapụ uru ndabara. Ọ bụrụ na ị nwere ike ịhụ otu onye nnabata na ọrụ mana ị hụghị ndị nnabata ma ọ bụ ọrụ, nwaa ịgbanwe ntọala a."
+
+#: setup.php
+msgid "Host Icons"
+msgstr "Akara Onye nnabata"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "Gbanye igosipụta akara ngosi onye nnabata na grid nke ndị nnabata. A na-eji paramita icon_image na icon_image_alt nke nkọwa onye nnabata Nagios setịpụ onyonyo ahụ. Akara ngosi kwesịrị ịbụ 16x16 iji mee ka ọ dị mma karịa. Ntọala a anaghị emetụta akara ngosi ọnọdụ onye nnabata."
+
+#: setup.php
+msgid "Service Icons"
+msgstr "Akara Ngosi Ọrụ Gasị"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "Gbanye igosipụta akara ngosi ọrụ na grid nke ọrụ. A na-eji paramita icon_image na icon_image_alt nke nkọwa ọrụ Nagios setịpụ onyonyo ahụ. Akara ngosi kwesịrị ịbụ 16x16 iji mee ka ọ dị mma karịa. Ntọala a anaghị emetụta akara ngosi ọnọdụ ọrụ."
+
+#: setup.php
+msgid "Logging"
+msgstr "Ndekọ"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "Ọkwa Ndekọ"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "Ọkwa nkọwa ịchọrọ ka e ziga na faịlụ ndekọ Cacti. ỊDỌ AKA NÁ NTỊ: Ịhapụ ya na DEBUG ga-eju faịlụ ndekọ cacti ngwa ngwa."
+
