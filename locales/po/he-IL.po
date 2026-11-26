@@ -4,7 +4,7 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-25 10:18+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Hebrew (Israel) <https://translate.cacti.net/projects/cacti/npc/he_IL/>\nLanguage: he-IL\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && n % 10 == 0) ? 2 : 3));\nX-Generator: Weblate 5.11.4\n"
+msgstr "Project-Id-Version: \nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-26 05:53+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Hebrew (Israel) <https://translate.cacti.net/projects/cacti/npc/he_IL/>\nLanguage: he-IL\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && n % 10 == 0) ? 2 : 3));\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php
 msgid "You do not have permission to create data input methods."
@@ -29,7 +29,7 @@ msgstr "כן"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr "לא זמין"
+msgstr "לא רלוונטי"
 
 #: controllers/layout.php
 msgid "Dashboard"
