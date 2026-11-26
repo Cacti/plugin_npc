@@ -324,7 +324,13 @@ if (!function_exists('html_escape')) {
 }
 
 if (!function_exists('__')) {
-	function __($text, $domain = '') {
+	function __($text, ...$args) {
+		$count = substr_count($text, '%') - 2 * substr_count($text, '%%');
+
+		if ($count > 0 && count($args) >= $count) {
+			return vsprintf($text, array_slice($args, 0, $count));
+		}
+
 		return $text;
 	}
 }
