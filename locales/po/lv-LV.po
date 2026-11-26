@@ -4,13 +4,11 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: Cacti\nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-25 10:18+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Latvian <https://translate.cacti.net/projects/cacti/npc/lv/>\nLanguage: lv-LV\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= 19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\nX-Generator: Weblate 5.11.4\n"
+msgstr "Project-Id-Version: Cacti\nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-26 05:53+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Latvian <https://translate.cacti.net/projects/cacti/npc/lv/>\nLanguage: lv-LV\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= 19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php
-#, fuzzy
-#| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "Jums nav atļaujas izpildīt šo komandu."
+msgstr "Jums nav atļaujas izveidot datu ievades metodes."
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -31,37 +29,35 @@ msgstr "Jā"
 
 #: controllers/hosts.php controllers/services.php
 msgid "N/A"
-msgstr ""
+msgstr "Nav pieejams"
 
 #: controllers/layout.php
 msgid "Dashboard"
-msgstr ""
+msgstr "Informācijas panelis"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Hosts"
-msgstr "Resursdatora ikonas"
+msgstr "Resursdatori"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "Pakalpojumu ikonas"
+msgstr "Pakalpojumi"
 
 #: controllers/layout.php
 msgid "Comments"
-msgstr ""
+msgstr "Komentāri"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "Dīkstāve"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "Notikumu žurnāls"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "Procesu informācija"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -92,25 +88,24 @@ msgid "Host Check Latency"
 msgstr "Resursdatora pārbaudes aizkave"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "Resursdatora ikonas"
+msgstr "Resursdatoru grupas"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "Pieprasīts nederīgs modulis."
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "Pieprasīta nederīga darbība."
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "Šai darbībai nepieciešams POST pieprasījums."
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "Kontrolieris nav atrasts."
 
 #: setup.php
 msgid "ERROR - Log errors only"
