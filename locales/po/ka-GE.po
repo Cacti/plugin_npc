@@ -4,13 +4,11 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 msgid ""
-msgstr "Project-Id-Version: Cacti\nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-25 10:18+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Georgian <https://translate.cacti.net/projects/cacti/npc/ka/>\nLanguage: ka-GE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.11.4\n"
+msgstr "Project-Id-Version: Cacti\nReport-Msgid-Bugs-To: developers@cacti.net\nPOT-Creation-Date: 2026-10-23 22:20-0600\nPO-Revision-Date: 2026-11-26 05:53+0000\nLast-Translator: Thomas Vincent <balder.infuser.6n@icloud.com>\nLanguage-Team: Georgian <https://translate.cacti.net/projects/cacti/npc/ka/>\nLanguage: ka-GE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nPlural-Forms: nplurals=2; plural=n != 1;\nX-Generator: Weblate 5.11.4\n"
 
 #: controllers/cacti.php
-#, fuzzy
-#| msgid "You do not have permission to execute this command."
 msgid "You do not have permission to create data input methods."
-msgstr "თქვენ არ გაქვთ ამ ბრძანების შესრულების უფლება."
+msgstr "თქვენ არ გაქვთ მონაცემთა შეყვანის მეთოდების შექმნის უფლება."
 
 #: controllers/cacti.php setup.php
 msgid "None"
@@ -42,9 +40,8 @@ msgid "Hosts"
 msgstr "ჰოსტები"
 
 #: controllers/layout.php
-#, fuzzy
 msgid "Services"
-msgstr "სერვისის ხატულები"
+msgstr "სერვისები"
 
 #: controllers/layout.php
 msgid "Comments"
@@ -52,15 +49,15 @@ msgstr "კომენტარები"
 
 #: controllers/layout.php
 msgid "Downtime"
-msgstr ""
+msgstr "უმოქმედობის დრო"
 
 #: controllers/layout.php
 msgid "Event Log"
-msgstr ""
+msgstr "მოვლენების ჟურნალი"
 
 #: controllers/layout.php
 msgid "Process Info"
-msgstr ""
+msgstr "პროცესის ინფორმაცია"
 
 #: controllers/nagios.php
 msgid "You do not have permission to execute this command."
@@ -91,25 +88,24 @@ msgid "Host Check Latency"
 msgstr "ჰოსტის შემოწმების დაყოვნება"
 
 #: controllers/services.php
-#, fuzzy
 msgid "Host Groups"
-msgstr "ჰოსტის ხატულები"
+msgstr "ჰოსტების ჯგუფები"
 
 #: npc.php
 msgid "Invalid module requested."
-msgstr ""
+msgstr "მოთხოვნილია არასწორი მოდული."
 
 #: npc.php
 msgid "Invalid action requested."
-msgstr ""
+msgstr "მოთხოვნილია არასწორი მოქმედება."
 
 #: npc.php
 msgid "This action requires a POST request."
-msgstr ""
+msgstr "ეს მოქმედება მოითხოვს POST მოთხოვნას."
 
 #: npc.php
 msgid "Controller not found."
-msgstr ""
+msgstr "კონტროლერი ვერ მოიძებნა."
 
 #: setup.php
 msgid "ERROR - Log errors only"
