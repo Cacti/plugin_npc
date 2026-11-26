@@ -1,0 +1,246 @@
+# Croatian translation for Cacti.
+# Copyright (C) 2004-2026 The Cacti Group
+# This file is distributed under the same license as the Cacti package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Cacti\n"
+"Report-Msgid-Bugs-To: developers@cacti.net\n"
+"POT-Creation-Date: 2026-10-23 22:20-0600\n"
+"PO-Revision-Date: 2026-11-26 18:57+0000\n"
+"Last-Translator: Thomas Vincent <thomasvincent@gmail.com>\n"
+"Language-Team: Croatian <developers@cacti.net>\n"
+"Language: hr-HR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+#: controllers/cacti.php
+msgid "You do not have permission to create data input methods."
+msgstr "Nemate dopuštenje za stvaranje metoda unosa podataka."
+
+#: controllers/cacti.php setup.php
+msgid "None"
+msgstr "Nijedan"
+
+#: controllers/controller.php
+#, php-format
+msgid "An error occurred in %s. See error logs for detail."
+msgstr "Došlo je do pogreške u %s. Za pojedinosti pogledajte zapisnike pogrešaka."
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "No"
+msgstr "Ne"
+
+#: controllers/hosts.php controllers/nagios.php controllers/services.php
+msgid "Yes"
+msgstr "Da"
+
+#: controllers/hosts.php controllers/services.php
+msgid "N/A"
+msgstr "N/P"
+
+#: controllers/layout.php
+msgid "Dashboard"
+msgstr "Nadzorna ploča"
+
+#: controllers/layout.php
+msgid "Hosts"
+msgstr "Glavna računala"
+
+#: controllers/layout.php
+msgid "Services"
+msgstr "Usluge"
+
+#: controllers/layout.php
+msgid "Comments"
+msgstr "Komentari"
+
+#: controllers/layout.php
+msgid "Downtime"
+msgstr "Vrijeme nedostupnosti"
+
+#: controllers/layout.php
+msgid "Event Log"
+msgstr "Zapisnik događaja"
+
+#: controllers/layout.php
+msgid "Process Info"
+msgstr "Podaci o procesu"
+
+#: controllers/nagios.php
+msgid "You do not have permission to execute this command."
+msgstr "Nemate dopuštenje za izvršavanje ove naredbe."
+
+#: controllers/nagios.php
+msgid "Remote Commands must be enabled under console->Settings->NPC"
+msgstr "Udaljene naredbe moraju biti omogućene pod Konzola->Postavke->NPC"
+
+#: controllers/nagios.php
+msgid "The Nagios Command File Path must be set under console->Settings->NPC"
+msgstr "Putanja datoteke naredbi sustava Nagios mora biti postavljena pod Konzola->Postavke->NPC"
+
+#: controllers/nagios.php
+msgid "Service Check Execution Time"
+msgstr "Vrijeme izvršavanja provjere usluge"
+
+#: controllers/nagios.php
+msgid "Service Check Latency"
+msgstr "Latencija provjere usluge"
+
+#: controllers/nagios.php
+msgid "Host Check Execution Time"
+msgstr "Vrijeme izvršavanja provjere glavnog računala"
+
+#: controllers/nagios.php
+msgid "Host Check Latency"
+msgstr "Latencija provjere glavnog računala"
+
+#: controllers/services.php
+msgid "Host Groups"
+msgstr "Grupe glavnih računala"
+
+#: npc.php
+msgid "Invalid module requested."
+msgstr "Zatražen je nevažeći modul."
+
+#: npc.php
+msgid "Invalid action requested."
+msgstr "Zatražena je nevažeća radnja."
+
+#: npc.php
+msgid "This action requires a POST request."
+msgstr "Ova radnja zahtijeva POST zahtjev."
+
+#: npc.php
+msgid "Controller not found."
+msgstr "Kontroler nije pronađen."
+
+#: setup.php
+msgid "ERROR - Log errors only"
+msgstr "ERROR - Zapisuj samo pogreške"
+
+#: setup.php
+msgid "WARN  - Log errors and warnings"
+msgstr "WARN  - Zapisuj pogreške i upozorenja"
+
+#: setup.php
+msgid "INFO  - Log errors, warnings, and info messages"
+msgstr "INFO  - Zapisuj pogreške, upozorenja i informativne poruke"
+
+#: setup.php
+msgid "DEBUG - Log everything"
+msgstr "DEBUG - Zapisuj sve"
+
+#: setup.php
+msgid "Nagios Host Mapping"
+msgstr "Mapiranje glavnog računala sustava Nagios"
+
+#: setup.php
+msgid "Select the Nagios host that maps to this host."
+msgstr "Odaberite glavno računalo sustava Nagios koje se mapira na ovo glavno računalo."
+
+#: setup.php
+msgid "NPC"
+msgstr "NPC"
+
+#: setup.php
+msgid "Status Detail"
+msgstr "Pojedinosti statusa"
+
+#: setup.php
+msgid "Service / Host Information"
+msgstr "Informacije o usluzi / glavnom računalu"
+
+#: setup.php
+msgid "Command Execution"
+msgstr "Izvršavanje naredbi"
+
+#: setup.php
+msgid "General Settings"
+msgstr "Opće postavke"
+
+#: setup.php
+msgid "Remote Commands"
+msgstr "Udaljene naredbe"
+
+#: setup.php
+msgid "Allow commands to be written to the Nagios command file."
+msgstr "Dopusti zapisivanje naredbi u Nagios datoteku naredbi."
+
+#: setup.php
+msgid "Nagios Command File Path"
+msgstr "Putanja do Nagios datoteke naredbi"
+
+#: setup.php
+msgid "The path to the Nagios command file (nagios.cmd)."
+msgstr "Putanja do datoteke naredbi za Nagios (nagios.cmd)."
+
+#: setup.php
+msgid "Nagios URL"
+msgstr "Nagios URL"
+
+#: setup.php
+msgid "The full URL to your Nagios installation (http://nagios.company.com/nagios/)"
+msgstr "Puni URL vaše Nagios instalacije (http://nagios.company.com/nagios/)"
+
+#: setup.php
+msgid "Date Format"
+msgstr "Format datuma"
+
+#: setup.php
+msgid "Select the format you want for displaying dates."
+msgstr "Odaberite format koji želite za prikaz datuma."
+
+#: setup.php
+msgid "Time Format"
+msgstr "Format vremena"
+
+#: setup.php
+msgid "Select the format you want for displaying times."
+msgstr "Odaberite format koji želite za prikaz vremena."
+
+#: setup.php
+msgid "Portlet Refresh Rate"
+msgstr "Učestalost osvježavanja portleta"
+
+#: setup.php
+msgid "The amount of time in seconds to wait before the portlets refresh. The minimum is 30 seconds."
+msgstr "Vrijeme u sekundama koje treba pričekati prije osvježavanja portleta. Najmanje je 30 sekundi."
+
+#: setup.php
+msgid "Host/Service Config Type"
+msgstr "Vrsta konfiguracije hosta/usluge"
+
+#: setup.php
+msgid "The config type is based on whether or not you are restoring retained information when Nagios starts. If you are unsure just leave the default value. If you can see host and service groups but not hosts or services try changing this setting."
+msgstr "Vrsta konfiguracije temelji se na tome vraćate li zadržane podatke kada se Nagios pokrene. Ako niste sigurni, jednostavno ostavite zadanu vrijednost. Ako vidite grupe hostova i usluga, ali ne i hostove ili usluge, pokušajte promijeniti ovu postavku."
+
+#: setup.php
+msgid "Host Icons"
+msgstr "Ikone hostova"
+
+#: setup.php
+msgid "Enable displaying host icons in the hosts grid. The icon_image and icon_image_alt parameters of the Nagios host definition are used to set the image. Icons should be 16x16 to get the best look. this setting does not affect the host status icons."
+msgstr "Omogući prikaz ikona hostova u mreži hostova. Parametri icon_image i icon_image_alt iz Nagios definicije hosta koriste se za postavljanje slike. Ikone bi trebale biti 16x16 za najbolji izgled. Ova postavka ne utječe na ikone statusa hosta."
+
+#: setup.php
+msgid "Service Icons"
+msgstr "Ikone usluga"
+
+#: setup.php
+msgid "Enable displaying service icons in the services grid. The icon_image and icon_image_alt parameters of the Nagios service definition are used to set the image. Icons should be 16x16 to get the best look. This setting does not affect the service status icons."
+msgstr "Omogući prikaz ikona usluga u mreži usluga. Parametri icon_image i icon_image_alt iz Nagios definicije usluge koriste se za postavljanje slike. Ikone bi trebale biti 16x16 za najbolji izgled. Ova postavka ne utječe na ikone statusa usluge."
+
+#: setup.php
+msgid "Logging"
+msgstr "Zapisivanje"
+
+#: setup.php
+msgid "Logging Level"
+msgstr "Razina zapisivanja"
+
+#: setup.php
+msgid "The level of detail you want sent to the Cacti log file. WARNING: Leaving in DEBUG will quickly fill the cacti log."
+msgstr "Razina pojedinosti koju želite slati u Cacti datoteku zapisnika. UPOZORENJE: Ostavljanje na DEBUG brzo će ispuniti Cacti zapisnik."
